@@ -18,7 +18,6 @@
 
 import os
 import sys
-import glob
 import subprocess
 
 BASE_DIR = os.path.dirname(os.path.abspath('.'))
