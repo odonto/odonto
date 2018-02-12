@@ -6,6 +6,9 @@ from .message import Message
 class BCDS1Message(Message):
     class Meta:
         schema = 'xml_bcds1.xsd'
+        fields = (
+            'clrn',
+        )
 
     def generate_xml(self):
         root = etree.Element('bcds1')
