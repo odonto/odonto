@@ -13,7 +13,7 @@ class BCDS1Message(Message):
     def generate_xml(self):
         root = etree.Element('bcds1')
 
-        root.attrib['clrn'] = '123456'
+        root.attrib['clrn'] = self.data['clrn']
         root.attrib['schvn'] = '1.0'
         root.attrib['perf'] = '123456'
         root.attrib['pin'] = '123456'
