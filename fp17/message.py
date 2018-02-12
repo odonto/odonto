@@ -1,45 +1,40 @@
 import os
+import inspect
 import xmlschema
-import collections
+
+
+class Field(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class Message(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self._fields = inspect.getmembers(self, lambda x: isinstance(x, Field))
         self._errors = None
 
-        self.data = DataDict(self.Meta.fields)
+        self.data = {}
 
     def add_error(self, field, error):
         self._errors.setdefault(field, []).append(error)
 
+    def set_value(self, field, value):
+        self.data[field] = value
+        self._errors = None
+
     @property
     def errors(self):
-        if self._errors is None or self.data.modified:
+        if self._errors is None:
             self._errors = {}
-
-            for x in self.Meta.fields:
-                if self.data[x] is None:
-                    self.add_error(x, "Missing field '{}'".format(x))
+            for k, v in self._fields:
+                if k not in self.data:
+                    self.add_error(k, "Missing field '{}'".format(k))
 
         return self._errors
 
     @classmethod
     def validate_xml(cls, root):
         schema = xmlschema.XMLSchema(os.path.join('xsd', cls.Meta.schema))
-
         schema.validate(root)
-
-
-class DataDict(dict):
-    def __init__(self, fields):
-        self.data = {x: None for x in fields}
-        self.modified = False
-
-    def __getitem__(self, k):
-        return self.data[k]
-
-    def __setitem__(self, k, v):
-        self.data[k] = v
-        self.modified = True

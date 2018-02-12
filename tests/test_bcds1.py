@@ -5,7 +5,7 @@ def test_simple():
     msg = BCDS1Message()
     assert 'clrn' in msg.errors
 
-    msg.data['clrn'] = '123456'
+    msg.set_value('clrn', '123456')
     assert not msg.errors
 
     root = msg.generate_xml()

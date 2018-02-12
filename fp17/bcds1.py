@@ -1,14 +1,13 @@
 from lxml import etree
 
-from .message import Message
+from .message import Message, Field
 
 
 class BCDS1Message(Message):
+    clrn = Field()
+
     class Meta:
         schema = 'xml_bcds1.xsd'
-        fields = (
-            'clrn',
-        )
 
     def generate_xml(self):
         root = etree.Element('bcds1')
