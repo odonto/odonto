@@ -14,7 +14,6 @@ class Message(object):
     @property
     def errors(self):
         if not self._errors:
-            self.clean()
         return self._errors
 
     def full_clean(self):

@@ -7,9 +7,6 @@ class BCDS1Message(Message):
     class Meta:
         schema = 'xml_bcds1.xsd'
 
-    def clean(self):
-        self.add_error(None, "Test.")
-
     def generate_xml(self):
         root = etree.Element('bcds1')
 
