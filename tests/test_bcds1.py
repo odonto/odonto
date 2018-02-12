@@ -1,12 +1,7 @@
-import xmlschema
-
-from fp17.bcds1 import generate_bcds1
-
-XSD_FILENAME = 'xsd/xml_bcds1.xsd'
+from fp17.bcds1 import BCDS1Message
 
 
 def test_simple():
-    xml = generate_bcds1()
-    schema = xmlschema.XMLSchema(XSD_FILENAME)
-
-    schema.validate(xml)
+    msg = BCDS1Message()
+    root = msg.generate_xml()
+    BCDS1Message.validate_xml(root)
