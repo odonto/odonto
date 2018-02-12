@@ -5,6 +5,15 @@ def test_simple():
     msg = BCDS1Message()
     assert 'clrn' in msg.errors
 
+    msg.set_value('clrn', '')
+    assert 'clrn' in msg.errors
+
+    msg.set_value('clrn', '12345')
+    assert 'clrn' in msg.errors
+
+    msg.set_value('clrn', '1234567')
+    assert 'clrn' in msg.errors
+
     msg.set_value('clrn', '123456')
     assert not msg.errors
 

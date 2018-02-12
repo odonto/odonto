@@ -6,11 +6,19 @@ from .exc import ValidationError
 
 
 class Field(object):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, min_length=None, max_length=None, *args, **kwargs):
+        self.min_length = min_length
+        self.max_length = max_length
+
         super().__init__(*args, **kwargs)
 
     def validate(self, value):
-        pass
+        if self.min_length is not None and len(value) < self.min_length:
+            raise ValidationError("Required at least {} characters (saw {})".format(
+                                  self.min_length, len(value)))
+        if self.max_length is not None and len(value) > self.max_length:
+            raise ValidationError("Required at most {} characters (saw {})".format(
+                                  self.max_length, len(value)))
 
 
 class Message(object):

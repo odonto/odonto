@@ -4,7 +4,7 @@ from .message import Message, Field
 
 
 class BCDS1Message(Message):
-    clrn = Field()
+    clrn = Field(min_length=6, max_length=6)
 
     class Meta:
         schema = 'xml_bcds1.xsd'
