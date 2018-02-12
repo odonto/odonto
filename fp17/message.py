@@ -2,10 +2,15 @@ import os
 import inspect
 import xmlschema
 
+from .exc import ValidationError
+
 
 class Field(object):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def validate(self, value):
+        pass
 
 
 class Message(object):
@@ -29,7 +34,11 @@ class Message(object):
         if self._errors is None:
             self._errors = {}
             for k, v in self._fields:
-                if k not in self.data:
+                try:
+                     v.validate(self.data[k])
+                except ValidationError as exc:
+                    self.add_error(k, exc.message)
+                except KeyError:
                     self.add_error(k, "Missing field '{}'".format(k))
 
         return self._errors
