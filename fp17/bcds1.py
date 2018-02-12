@@ -4,7 +4,8 @@ from .message import Message
 
 
 class BCDS1Message(Message):
-    SCHEMA = 'xml_bcds1.xsd'
+    class Meta:
+        schema = 'xml_bcds1.xsd'
 
     def generate_xml(self):
         root = etree.Element('bcds1')
