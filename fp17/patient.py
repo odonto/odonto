@@ -29,4 +29,33 @@ class Patient(Message):
                 'maxlength': 4,
                 'required': False,
             },
+
+            # Patient forename
+            #
+            # First forename.
+            'forename': {
+                'type': 'string',
+                'minlength': 2,
+                'maxlength': 20,
+                'required': True,
+            },
+
+            # Patient surname
+            #
+            # Surname of patient.
+            'surname': {
+                'type': 'string',
+                'minlength': 2,
+                'maxlength': 20,
+                'required': True,
+            },
+
+            # Previous surname
+            #
+            'previous_surname': {
+                'type': 'string',
+                'minlength': 2,
+                'maxlength': 20,
+                'required': False,
+            },
         }
