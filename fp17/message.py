@@ -4,6 +4,8 @@ import cerberus
 import datetime
 import xmlschema
 
+KNOWN_TYPES = (int, str, list)
+
 
 class Message(object):
     @staticmethod
@@ -22,7 +24,7 @@ class Message(object):
     def get_validator(self):
         x = cerberus.Validator(self.Meta.schema)
         x.validate({
-            k: v if isinstance(v, (int, str, datetime.date)) else v.__dict__
+            k: v if isinstance(v, KNOWN_TYPES) else v.__dict__
             for k, v in self.__dict__.items()
         })
 
