@@ -11,4 +11,12 @@ class Patient(Message):
                 'allowed': ('M', 'F'),
                 'required': True,
             },
+
+            # Date of birth
+            #
+            # Patient's date of birth.
+            'date_of_birth': {
+                'type': 'date',
+                'required': True,
+            },
         }

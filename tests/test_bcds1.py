@@ -1,3 +1,5 @@
+import datetime
+
 from fp17.bcds1 import BCDS1Message
 from fp17.patient import Patient
 
@@ -12,6 +14,7 @@ def test_valid():
 
     msg.patient = Patient()
     msg.patient.sex = 'M'
+    msg.patient.date_of_birth = datetime.date(1985, 12, 16)
 
     v = msg.get_validator()
 
