@@ -18,8 +18,8 @@ def test_valid():
     msg.patient.title = "Mr"
     msg.patient.forename = "Chris"
     msg.patient.surname = "Lamb"
-    msg.patient.nhs_number = 123456789
-    msg.patient.national_insurance_number = 123456789
+    msg.patient.nhs_number = 'A123456789'
+    msg.patient.national_insurance_number = 'J12345679'
 
     v = msg.get_validator()
 

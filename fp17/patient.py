@@ -64,9 +64,9 @@ class Patient(Message):
             #
             # The patient's unique new NHS number.
             'nhs_number': {
-                'type': 'number',
-                'minlength': min_digits(1),
-                'maxlength': max_digits(17),
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 17,
                 'required': False,
             },
 
@@ -74,9 +74,9 @@ class Patient(Message):
             #
             # The patient's unique National Insurance Number
             'national_insurance_number': {
-                'type': 'number',
-                'minlength': min_digits(1),
-                'maxlength': max_digits(9),
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 9,
                 'required': False,
             },
         }
