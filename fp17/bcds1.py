@@ -68,7 +68,7 @@ class BCDS1Message(Message):
                 'type': 'number',
                 'min': min_digits(1),
                 'max': max_digits(2),
-                'required': True,
+                'default': 1,
             },
         }
 
