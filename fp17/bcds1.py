@@ -114,9 +114,9 @@ class BCDS1Message(Message):
 
         adrdet = etree.SubElement(pat, 'adrdet')
         adrdet.attrib['pc'] = 'N1 1AA'
-        for x in range(5):
+        for idx in range(5):
             adrln = etree.SubElement(adrdet, 'adrln')
-            adrln.text = 'Address {}'.format(x)
+            adrln.text = 'Address {}'.format(idx)
 
         tda = etree.SubElement(root, 'tda')
         tda.attrib['dtdec'] = '67'
