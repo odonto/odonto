@@ -11,6 +11,7 @@ def test_valid():
     msg.location = 123456
 
     msg.patient = Patient()
+    msg.patient.sex = 'M'
 
     v = msg.get_validator()
 

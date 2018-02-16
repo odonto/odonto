@@ -97,7 +97,7 @@ class BCDS1Message(Message):
         root.attrib['noseg'] = '5'  # calculated
 
         pat = etree.SubElement(root, 'pat')
-        pat.attrib['sex'] = 'M'
+        pat.attrib['sex'] = x['patient']['sex']
         pat.attrib['dob'] = '19991231'  # YYYYMMDD
         pat.attrib['ptttl'] = 'Mr'
         pat.attrib['ptfn'] = 'John'
