@@ -12,9 +12,20 @@ class BCDS1Message(Message):
             # within contract number (9105) uniquely identifies a message.
             'message_reference_number': {
                 'type': 'number',
-                'required': True,
                 'min': 100000,
                 'max': 999999,
+                'required': True,
+            },
+
+            # Performer number
+            #
+            # Performer number issued by NHSDS.  This will be existing personal
+            # number if the dentist has already been issued with one.
+            'performer_number': {
+                'type': 'number',
+                'min': 100000,
+                'max': 999999,
+                'required': True,
             },
         }
         xsd_schema = 'xml_bcds1.xsd'
@@ -22,9 +33,11 @@ class BCDS1Message(Message):
     def generate_xml(self):
         root = etree.Element('bcds1')
 
-        root.attrib['clrn'] = str(self.message_reference_number)
         root.attrib['schvn'] = '1.0'
-        root.attrib['perf'] = '123456'
+
+        root.attrib['clrn'] = str(self.message_reference_number)
+        root.attrib['perf'] = str(self.performer_number)
+
         root.attrib['pin'] = '123456'
         root.attrib['cno'] = '1234567890'
         root.attrib['noseg'] = '5'
