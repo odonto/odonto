@@ -4,6 +4,9 @@ from .utils import min_digits, max_digits
 from .message import Message
 from .patient import Patient
 
+SCHEDULE_QUERY_TRUE = 0
+SCHEDULE_QUERY_FALSE = 1
+SCHEDULE_QUERY_DELETE = 3
 
 class BCDS1Message(Message):
     class Meta:
@@ -86,6 +89,17 @@ class BCDS1Message(Message):
                 'allowed': (0, 1, 2, 3, 64, 65, 66, 67),
                 'required': False,
             },
+
+            # Schedule query
+            'schedule_query': {
+                'type': 'number',
+                'allowed': (
+                    SCHEDULE_QUERY_TRUE,
+                    SCHEDULE_QUERY_FALSE,
+                    SCHEDULE_QUERY_DELETE,
+                ),
+                'required': False,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -128,9 +142,9 @@ class BCDS1Message(Message):
             adrdet.attrib['pc'] = x['patient']['postcode']
 
         tda = etree.SubElement(root, 'tda')
-        tda.attrib['sqind'] = '3'
         for k, v in {
             'dtdec': 'provider_declaration',
+            'sqind': 'schedule_query',
         }.items():
             if v in x:
                 tda.attrib[k] = str(x[v])
@@ -139,6 +153,7 @@ class BCDS1Message(Message):
         trtdatgrp.attrib['datacc'] = '991231'  # acceptance (YYMMDD)
         trtdatgrp.attrib['datcp'] = '991231'  # completion (YYMMDD)
         trtdatgrp.attrib['datexm'] = '991231'  # examination (YYMMDD)
+
         clty = etree.SubElement(tda, 'clty')
         clty.attrib['inireg'] = 'false'
         clty.attrib['rereg'] = 'false'

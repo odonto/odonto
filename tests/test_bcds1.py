@@ -1,6 +1,6 @@
 import datetime
 
-from fp17.bcds1 import BCDS1Message
+from fp17.bcds1 import BCDS1Message, SCHEDULE_QUERY_TRUE
 from fp17.patient import Patient
 
 
@@ -24,6 +24,7 @@ def test_valid():
     msg.patient.postcode = 'NW1 1AA'
 
     msg.provider_declaration = 65
+    msg.schedule_query = SCHEDULE_QUERY_TRUE
 
     v = msg.get_validator()
 
