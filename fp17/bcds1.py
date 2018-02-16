@@ -75,7 +75,7 @@ class BCDS1Message(Message):
         xsd_schema = 'xml_bcds1.xsd'
 
     @staticmethod
-    def generate_xml(x):
+    def get_root_xml_element(x):
         root = etree.Element('bcds1')
 
         root.attrib['schvn'] = '1.0'

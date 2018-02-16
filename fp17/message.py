@@ -6,7 +6,7 @@ import xmlschema
 
 class Message(object):
     @staticmethod
-    def generate_xml(msg):
+    def generate_root(msg):
         raise NotImplementedError()
 
     @classmethod
@@ -23,3 +23,8 @@ class Message(object):
         x.validate(self.__dict__)
 
         return x
+
+    def generate_xml(self):
+        x = self.get_validator()
+
+        return self.get_root_xml_element(x.document)

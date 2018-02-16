@@ -13,7 +13,7 @@ def test_valid():
 
     assert not v.errors
 
-    root = BCDS1Message.generate_xml(v.document)
+    root = msg.generate_xml()
     BCDS1Message.validate_xml(root)
 
 def test_validation():
