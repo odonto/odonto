@@ -30,6 +30,15 @@ def test_valid():
     msg.date_of_completion = datetime.date(2018, 1, 2)
     msg.date_of_examination = datetime.date(2018, 1, 3)
 
+    msg.types_of_claims = [{
+        'initial_registration': False,
+        'reregistration': False,
+        'care_of_other_dentist': False,
+        'occasional_treatment_only': False,
+        'treatment_on_referral': False,
+        'part_nhs_private': False,
+    }]
+
     v = msg.get_validator()
 
     assert not v.errors

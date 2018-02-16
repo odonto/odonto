@@ -121,6 +121,60 @@ class BCDS1Message(Message):
                 'type': 'date',
                 'required': False,
             },
+
+            # Types of claims
+            #
+            'types_of_claims': {
+                'type': 'list',
+                'schema': {
+                    'type': 'dict',
+                    'schema': {
+                        # Initial registration
+                        #
+                        'initial_registration': {
+                            'type': 'boolean',
+                            'required': True,
+                        },
+
+                        # Re-registration
+                        #
+                        'reregistration': {
+                            'type': 'boolean',
+                            'required': True,
+                        },
+
+                        # Patient under care of other dentist
+                        #
+                        'care_of_other_dentist': {
+                            'type': 'boolean',
+                            'required': True,
+                        },
+
+                        # Occasional treatment only
+                        #
+                        'occasional_treatment_only': {
+                            'type': 'boolean',
+                            'required': True,
+                        },
+
+                        # Treatment on referral
+                        #
+                        'treatment_on_referral': {
+                            'type': 'boolean',
+                            'required': True,
+                        },
+
+                        # Part NHS/private
+                        #
+                        'part_nhs_private': {
+                            'type': 'boolean',
+                            'required': True,
+                        },
+                    },
+                },
+                'default': [],
+                'minlength': 0,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -179,13 +233,18 @@ class BCDS1Message(Message):
             if v in x:
                 trtdatgrp.attrib[k] = x[v].strftime('%y%m%d')
 
-        clty = etree.SubElement(tda, 'clty')
-        clty.attrib['inireg'] = 'false'
-        clty.attrib['rereg'] = 'false'
-        clty.attrib['ptothdt'] = 'false'
-        clty.attrib['octrt'] = 'false'
-        clty.attrib['trtrfl'] = 'false'
-        clty.attrib['nhspri'] = 'false'
+        for vals in x['types_of_claims']:
+            clty = etree.SubElement(tda, 'clty')
+            for k, v in {
+                'inireg': 'initial_registration',
+                'rereg': 'reregistration',
+                'ptothdt': 'care_of_other_dentist',
+                'octrt': 'occasional_treatment_only',
+                'trtrfl': 'treatment_on_referral',
+                'nhspri': 'part_nhs_private',
+            }.items():
+                clty.attrib[k] = 'true' if vals[v] else 'false'
+
         trtarr = etree.SubElement(tda, 'trtarr')
         trtarr.attrib['cc18'] = 'false'
         trtarr.attrib['trttra'] = 'false'
