@@ -20,6 +20,7 @@ def test_valid():
     msg.patient.surname = "Lamb"
     msg.patient.nhs_number = 'A123456789'
     msg.patient.national_insurance_number = 'J12345679'
+    msg.patient.address = ["Address line {}".format(x) for x in range(5)]
     msg.patient.postcode = 'NW1 1AA'
 
     v = msg.get_validator()

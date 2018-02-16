@@ -80,6 +80,20 @@ class Patient(Message):
                 'required': False,
             },
 
+            # Address lines
+            #
+            'address': {
+                'type': 'list',
+                'schema': {
+                    'type': 'string',
+                    'minlength': 1,
+                    'maxlength': 32,
+                },
+                'required': True,
+                'minlength': 1,
+                'maxlength': 5,
+            },
+
             # Post code
             #
             # Patient's post code
