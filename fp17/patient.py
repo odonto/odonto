@@ -27,5 +27,6 @@ class Patient(Message):
                 'type': 'string',
                 'minlength': 1,
                 'maxlength': 4,
+                'required': False,
             },
         }

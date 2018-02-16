@@ -100,7 +100,9 @@ class BCDS1Message(Message):
         pat = etree.SubElement(root, 'pat')
         pat.attrib['sex'] = x['patient']['sex']
         pat.attrib['dob'] = x['patient']['date_of_birth'].strftime('%Y%m%d')
-        pat.attrib['ptttl'] = 'Mr'
+        if 'title' in x['patient']:
+            pat.attrib['ptttl'] = x['patient']['title']
+
         pat.attrib['ptfn'] = 'John'
         pat.attrib['ptsur'] = 'Smith'
         pat.attrib['prvsur'] = 'Smythe'  # previous
