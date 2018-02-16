@@ -66,8 +66,8 @@ class BCDS1Message(Message):
             # amendment by the site. Increment by 1 for each resubmission.
             'resubmission_count': {
                 'type': 'number',
-                'min': min_digits(1),
-                'max': max_digits(2),
+                'min': 1,
+                'max': 99,
                 'default': 1,
             },
         }
