@@ -1,7 +1,15 @@
 from fp17.bcds1 import BCDS1Message
 
 
-def test_simple():
+def test_valid():
+    msg = BCDS1Message()
+    msg.message_reference_number = 123456
+    msg.performer_number = 123456
+
+    root = msg.generate_xml()
+    msg.validate_xml(root)
+
+def test_validation():
     msg = BCDS1Message()
 
     errors = msg.get_errors()
@@ -16,7 +24,5 @@ def test_simple():
     assert 'max value is 999999' in errors['message_reference_number']
 
     msg.message_reference_number = 123456
-    assert not msg.get_errors()
+    assert 'clrn' not in msg.get_errors()
 
-    root = msg.generate_xml()
-    msg.validate_xml(root)
