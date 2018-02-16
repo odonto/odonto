@@ -31,4 +31,3 @@ def test_validation():
 
     msg.message_reference_number = 123456
     assert 'clrn' not in msg.get_errors()
-
