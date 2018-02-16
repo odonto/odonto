@@ -76,6 +76,7 @@ class BCDS1Message(Message):
             'patient': {
                 'type': 'dict',
                 'schema': Patient.Meta.schema,
+                'required': True,
             },
         }
 
