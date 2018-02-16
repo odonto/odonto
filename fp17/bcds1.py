@@ -69,6 +69,7 @@ class BCDS1Message(Message):
                 'min': 1,
                 'max': 99,
                 'default': 1,
+                'required': False,
             },
         }
 
