@@ -3,19 +3,20 @@ from fp17.bcds1 import BCDS1Message
 
 def test_simple():
     msg = BCDS1Message()
-    assert 'clrn' in msg.errors
 
-    msg.set_value('clrn', '')
-    assert 'clrn' in msg.errors
+    errors = msg.get_errors()
+    assert 'required field' in errors['clrn']
 
-    msg.set_value('clrn', '12345')
-    assert 'clrn' in msg.errors
+    msg.clrn = '12345'
+    errors = msg.get_errors()
+    assert 'min length is 6' in errors['clrn']
 
-    msg.set_value('clrn', '1234567')
-    assert 'clrn' in msg.errors
+    msg.clrn = '1234567'
+    errors = msg.get_errors()
+    assert 'max length is 6' in errors['clrn']
 
-    msg.set_value('clrn', '123456')
-    assert not msg.errors
+    msg.clrn = '123456'
+    assert not msg.get_errors()
 
     root = msg.generate_xml()
-    BCDS1Message.validate_xml(root)
+    msg.validate_xml(root)

@@ -1,18 +1,24 @@
 from lxml import etree
 
-from .message import Message, Field
+from .message import Message
 
 
 class BCDS1Message(Message):
-    clrn = Field(min_length=6, max_length=6)
-
     class Meta:
-        schema = 'xml_bcds1.xsd'
+        schema = {
+            'clrn': {
+                'type': 'string',
+                'required': True,
+                'minlength': 6,
+                'maxlength': 6,
+            },
+        }
+        xsd_schema = 'xml_bcds1.xsd'
 
     def generate_xml(self):
         root = etree.Element('bcds1')
 
-        root.attrib['clrn'] = self.data['clrn']
+        root.attrib['clrn'] = self.clrn
         root.attrib['schvn'] = '1.0'
         root.attrib['perf'] = '123456'
         root.attrib['pin'] = '123456'
