@@ -15,6 +15,7 @@ def test_valid():
     msg.patient = Patient()
     msg.patient.sex = 'M'
     msg.patient.date_of_birth = datetime.date(1985, 12, 16)
+    msg.patient.title = "Mr"
 
     v = msg.get_validator()
 

@@ -19,4 +19,13 @@ class Patient(Message):
                 'type': 'date',
                 'required': True,
             },
+
+            # Patient's title
+            #
+            # (eg. "Mr")
+            'title': {
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 4,
+            },
         }
