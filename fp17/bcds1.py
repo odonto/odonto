@@ -78,6 +78,14 @@ class BCDS1Message(Message):
                 'schema': Patient.Meta.schema,
                 'required': True,
             },
+
+            # Dentist / provider declaration
+            #
+            'provider_declaration': {
+                'type': 'number',
+                'allowed': (0, 1, 2, 3, 64, 65, 66, 67),
+                'required': False,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -120,8 +128,13 @@ class BCDS1Message(Message):
             adrdet.attrib['pc'] = x['patient']['postcode']
 
         tda = etree.SubElement(root, 'tda')
-        tda.attrib['dtdec'] = '67'
         tda.attrib['sqind'] = '3'
+        for k, v in {
+            'dtdec': 'provider_declaration',
+        }.items():
+            if v in x:
+                tda.attrib[k] = str(x[v])
+
         trtdatgrp = etree.SubElement(tda, 'trtdatgrp')
         trtdatgrp.attrib['datacc'] = '991231'  # acceptance (YYMMDD)
         trtdatgrp.attrib['datcp'] = '991231'  # completion (YYMMDD)

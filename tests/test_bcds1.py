@@ -23,6 +23,8 @@ def test_valid():
     msg.patient.address = ["Address line {}".format(x) for x in range(5)]
     msg.patient.postcode = 'NW1 1AA'
 
+    msg.provider_declaration = 65
+
     v = msg.get_validator()
 
     assert not v.errors
