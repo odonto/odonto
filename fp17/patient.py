@@ -79,4 +79,14 @@ class Patient(Message):
                 'maxlength': 9,
                 'required': False,
             },
+
+            # Post code
+            #
+            # Patient's post code
+            'postcode': {
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 8,
+                'required': False,
+            },
         }
