@@ -1,5 +1,6 @@
 from lxml import etree
 
+from .utils import min_digits, max_digits
 from .message import Message
 
 
@@ -12,8 +13,8 @@ class BCDS1Message(Message):
             # within contract number (9105) uniquely identifies a message.
             'message_reference_number': {
                 'type': 'number',
-                'min': 100000,
-                'max': 999999,
+                'min': min_digits(6),
+                'max': max_digits(6),
                 'required': True,
             },
 
@@ -23,8 +24,8 @@ class BCDS1Message(Message):
             # number if the dentist has already been issued with one.
             'performer_number': {
                 'type': 'number',
-                'min': 100000,
-                'max': 999999,
+                'min': min_digits(6),
+                'max': max_digits(6),
                 'required': True,
             },
         }
