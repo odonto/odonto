@@ -195,6 +195,7 @@ class BCDS1Message(Message):
         chx = etree.SubElement(root, 'chx')
         chx.attrib['ptchg'] = '100'
         chx.attrib['curcd'] = 'GBP'
+
         exrmdet = etree.SubElement(chx, 'exrmdet')
         exrmdet.attrib['exrmcd'] = '00'
         exrmdet.attrib['sdet'] = 'Supporting details'
