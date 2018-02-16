@@ -1,3 +1,4 @@
+from .utils import min_digits, max_digits
 from .message import Message
 
 class Patient(Message):
@@ -56,6 +57,26 @@ class Patient(Message):
                 'type': 'string',
                 'minlength': 2,
                 'maxlength': 20,
+                'required': False,
+            },
+
+            # NHS number
+            #
+            # The patient's unique new NHS number.
+            'nhs_number': {
+                'type': 'number',
+                'minlength': min_digits(1),
+                'maxlength': max_digits(17),
+                'required': False,
+            },
+
+            # NI number
+            #
+            # The patient's unique National Insurance Number
+            'national_insurance_number': {
+                'type': 'number',
+                'minlength': min_digits(1),
+                'maxlength': max_digits(9),
                 'required': False,
             },
         }

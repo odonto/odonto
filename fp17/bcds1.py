@@ -107,8 +107,10 @@ class BCDS1Message(Message):
         pat.attrib['ptsur'] = x['patient']['surname']
         if 'previous_surname' in x['patient']:
             pat.attrib['prvsur'] = x['patient']['previous_surname']
-        pat.attrib['nhsno'] = '1234'
-        pat.attrib['nino'] = '123456789'
+        if 'nhs_number' in x['patient']:
+            pat.attrib['nhsno'] = str(x['patient']['nhs_number'])
+        if 'national_insurance_number' in x['patient']:
+            pat.attrib['nino'] = str(x['patient']['national_insurance_number'])
         adrdet = etree.SubElement(pat, 'adrdet')
         for x in range(5):
             adrln = etree.SubElement(adrdet, 'adrln')
