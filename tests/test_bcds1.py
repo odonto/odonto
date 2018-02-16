@@ -5,17 +5,17 @@ def test_simple():
     msg = BCDS1Message()
 
     errors = msg.get_errors()
-    assert 'required field' in errors['clrn']
+    assert 'required field' in errors['message_reference_number']
 
-    msg.clrn = '12345'
+    msg.message_reference_number = 12345
     errors = msg.get_errors()
-    assert 'min length is 6' in errors['clrn']
+    assert 'min value is 100000' in errors['message_reference_number']
 
-    msg.clrn = '1234567'
+    msg.message_reference_number = 1234567
     errors = msg.get_errors()
-    assert 'max length is 6' in errors['clrn']
+    assert 'max value is 999999' in errors['message_reference_number']
 
-    msg.clrn = '123456'
+    msg.message_reference_number = 123456
     assert not msg.get_errors()
 
     root = msg.generate_xml()

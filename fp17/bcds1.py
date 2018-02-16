@@ -6,11 +6,15 @@ from .message import Message
 class BCDS1Message(Message):
     class Meta:
         schema = {
-            'clrn': {
-                'type': 'string',
+            # Message reference number
+            #
+            # Sequential number assigned by the practice application that
+            # within contract number (9105) uniquely identifies a message.
+            'message_reference_number': {
+                'type': 'number',
                 'required': True,
-                'minlength': 6,
-                'maxlength': 6,
+                'min': 100000,
+                'max': 999999,
             },
         }
         xsd_schema = 'xml_bcds1.xsd'
@@ -18,7 +22,7 @@ class BCDS1Message(Message):
     def generate_xml(self):
         root = etree.Element('bcds1')
 
-        root.attrib['clrn'] = self.clrn
+        root.attrib['clrn'] = str(self.message_reference_number)
         root.attrib['schvn'] = '1.0'
         root.attrib['perf'] = '123456'
         root.attrib['pin'] = '123456'
