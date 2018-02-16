@@ -1,4 +1,5 @@
 from fp17.bcds1 import BCDS1Message
+from fp17.patient import Patient
 
 
 def test_valid():
@@ -8,6 +9,8 @@ def test_valid():
     msg.dpb_pin = 123456
     msg.contract_number = 1234567890
     msg.location = 123456
+
+    msg.patient = Patient()
 
     v = msg.get_validator()
 

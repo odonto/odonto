@@ -2,6 +2,7 @@ from lxml import etree
 
 from .utils import min_digits, max_digits
 from .message import Message
+from .patient import Patient
 
 
 class BCDS1Message(Message):
@@ -70,6 +71,11 @@ class BCDS1Message(Message):
                 'max': 99,
                 'default': 1,
                 'required': False,
+            },
+
+            'patient': {
+                'type': 'dict',
+                'schema': Patient.Meta.schema,
             },
         }
 

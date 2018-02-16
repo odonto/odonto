@@ -20,7 +20,10 @@ class Message(object):
 
     def get_validator(self):
         x = cerberus.Validator(self.Meta.schema)
-        x.validate(self.__dict__)
+        x.validate({
+            k: v if isinstance(v, (int, str)) else v.__dict__
+            for k, v in self.__dict__.items()
+        })
 
         return x
 
