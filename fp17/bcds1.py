@@ -74,17 +74,18 @@ class BCDS1Message(Message):
 
         xsd_schema = 'xml_bcds1.xsd'
 
-    def generate_xml(self):
+    @staticmethod
+    def generate_xml(x):
         root = etree.Element('bcds1')
 
         root.attrib['schvn'] = '1.0'
 
-        root.attrib['clrn'] = str(self.message_reference_number)
-        root.attrib['perf'] = str(self.performer_number)
-        root.attrib['pin'] = str(self.dpb_pin)
-        root.attrib['cno'] = str(self.contract_number)
-        root.attrib['loc'] = str(self.location)
-        root.attrib['resct'] = str(self.resubmission_count)
+        root.attrib['clrn'] = str(x['message_reference_number'])
+        root.attrib['perf'] = str(x['performer_number'])
+        root.attrib['pin'] = str(x['dpb_pin'])
+        root.attrib['cno'] = str(x['contract_number'])
+        root.attrib['loc'] = str(x['location'])
+        root.attrib['resct'] = str(x['resubmission_count'])
 
         root.attrib['noseg'] = '5'  # calculated
 

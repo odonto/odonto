@@ -8,12 +8,13 @@ def test_valid():
     msg.dpb_pin = 123456
     msg.contract_number = 1234567890
     msg.location = 123456
-    msg.resubmission_count = 1
 
-    assert not msg.get_errors()
+    v = msg.get_validator()
 
-    root = msg.generate_xml()
-    msg.validate_xml(root)
+    assert not v.errors
+
+    root = BCDS1Message.generate_xml(v.document)
+    BCDS1Message.validate_xml(root)
 
 def test_validation():
     msg = BCDS1Message()
