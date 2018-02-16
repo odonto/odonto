@@ -113,6 +113,7 @@ class BCDS1Message(Message):
                 pat.attrib[k] = x['patient'][v]
 
         adrdet = etree.SubElement(pat, 'adrdet')
+        adrdet.attrib['pc'] = 'N1 1AA'
         for x in range(5):
             adrln = etree.SubElement(adrdet, 'adrln')
             adrln.text = 'Address {}'.format(x)
