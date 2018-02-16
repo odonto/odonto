@@ -26,6 +26,10 @@ def test_valid():
     msg.provider_declaration = 65
     msg.schedule_query = SCHEDULE_QUERY_TRUE
 
+    msg.date_of_acceptance = datetime.date(2018, 1, 1)
+    msg.date_of_completion = datetime.date(2018, 1, 2)
+    msg.date_of_examination = datetime.date(2018, 1, 3)
+
     v = msg.get_validator()
 
     assert not v.errors

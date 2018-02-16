@@ -100,6 +100,27 @@ class BCDS1Message(Message):
                 ),
                 'required': False,
             },
+
+            # Date (of acceptance or registration)
+            #
+            'date_of_acceptance': {
+                'type': 'date',
+                'required': True,
+            },
+
+            # Date of completion
+            #
+            'date_of_completion': {
+                'type': 'date',
+                'required': False,
+            },
+
+            # Date of examination
+            #
+            'date_of_examination': {
+                'type': 'date',
+                'required': False,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -150,9 +171,13 @@ class BCDS1Message(Message):
                 tda.attrib[k] = str(x[v])
 
         trtdatgrp = etree.SubElement(tda, 'trtdatgrp')
-        trtdatgrp.attrib['datacc'] = '991231'  # acceptance (YYMMDD)
-        trtdatgrp.attrib['datcp'] = '991231'  # completion (YYMMDD)
-        trtdatgrp.attrib['datexm'] = '991231'  # examination (YYMMDD)
+        for k, v in {
+            'datacc': 'date_of_acceptance',
+            'datcp': 'date_of_completion',
+            'datexm': 'date_of_examination',
+        }.items():
+            if v in x:
+                trtdatgrp.attrib[k] = x[v].strftime('%y%m%d')
 
         clty = etree.SubElement(tda, 'clty')
         clty.attrib['inireg'] = 'false'

@@ -1,6 +1,7 @@
 import os
 import inspect
 import cerberus
+import datetime
 import xmlschema
 
 
@@ -21,7 +22,7 @@ class Message(object):
     def get_validator(self):
         x = cerberus.Validator(self.Meta.schema)
         x.validate({
-            k: v if isinstance(v, (int, str)) else v.__dict__
+            k: v if isinstance(v, (int, str, datetime.date)) else v.__dict__
             for k, v in self.__dict__.items()
         })
 
