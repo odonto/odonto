@@ -5,6 +5,12 @@ def test_valid():
     msg = BCDS1Message()
     msg.message_reference_number = 123456
     msg.performer_number = 123456
+    msg.dpb_pin = 123456
+    msg.contract_number = 1234567890
+    msg.location = 123456
+    msg.resubmission_count = 1
+
+    assert not msg.get_errors()
 
     root = msg.generate_xml()
     msg.validate_xml(root)

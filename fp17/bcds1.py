@@ -28,7 +28,50 @@ class BCDS1Message(Message):
                 'max': max_digits(6),
                 'required': True,
             },
+
+            # DPB PIN
+            #
+            # Personal identification number assigned to a dentist by the NHSDS
+            # used to authorise message transmission.
+            'dpb_pin': {
+                'type': 'number',
+                'min': min_digits(6),
+                'max': max_digits(6),
+                'required': True,
+            },
+
+            # Contract number
+            #
+            # The provider’s unique contract number.
+            'contract_number': {
+                'type': 'number',
+                'min': min_digits(10),
+                'max': max_digits(15),
+                'required': True,
+            },
+
+            # Location
+            #
+            # Unique code issued by NSHDS to show main location of address.
+            'location': {
+                'type': 'number',
+                'min': min_digits(6),
+                'max': max_digits(6),
+                'required': True,
+            },
+
+            # Rebsubmission count
+            #
+            # Indicates that a claimhas been resubmitted to NHSDS following
+            # amendment by the site. Increment by 1 for each resubmission.
+            'resubmission_count': {
+                'type': 'number',
+                'min': min_digits(1),
+                'max': max_digits(2),
+                'required': True,
+            },
         }
+
         xsd_schema = 'xml_bcds1.xsd'
 
     def generate_xml(self):
@@ -38,12 +81,12 @@ class BCDS1Message(Message):
 
         root.attrib['clrn'] = str(self.message_reference_number)
         root.attrib['perf'] = str(self.performer_number)
+        root.attrib['pin'] = str(self.dpb_pin)
+        root.attrib['cno'] = str(self.contract_number)
+        root.attrib['loc'] = str(self.location)
+        root.attrib['resct'] = str(self.resubmission_count)
 
-        root.attrib['pin'] = '123456'
-        root.attrib['cno'] = '1234567890'
-        root.attrib['noseg'] = '5'
-        root.attrib['loc'] = '123456'
-        root.attrib['resct'] = '99'
+        root.attrib['noseg'] = '5'  # calculated
 
         pat = etree.SubElement(root, 'pat')
         pat.attrib['sex'] = 'M'
