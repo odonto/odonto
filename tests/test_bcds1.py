@@ -46,6 +46,9 @@ def test_valid():
         'disability_fee': False,
     }
 
+    msg.patient_charge_pence = 1
+    msg.patient_charge_currency = 'GBP'
+
     v = msg.get_validator()
 
     assert not v.errors

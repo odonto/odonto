@@ -211,6 +211,23 @@ class BCDS1Message(Message):
                 },
                 'required': True,
             },
+
+            # Amount of patient charge in pence. (Zero if no charge)
+            #
+            'patient_charge_pence': {
+                'type': 'number',
+                'min': 0,
+                'required': True,
+            },
+
+            # Currency code of patient charge
+            #
+            'patient_charge_currency': {
+                'type': 'string',
+                'default': 'GBP',
+                'minlength': 3,
+                'maxlength': 3,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -291,8 +308,8 @@ class BCDS1Message(Message):
             trtarr.attrib[k] = strbool(x['treatment_arrangements'][v])
 
         chx = etree.SubElement(root, 'chx')
-        chx.attrib['ptchg'] = '100'
-        chx.attrib['curcd'] = 'GBP'
+        chx.attrib['ptchg'] = str(x['patient_charge_pence'])
+        chx.attrib['curcd'] = x['patient_charge_currency'].lower()
 
         exrmdet = etree.SubElement(chx, 'exrmdet')
         exrmdet.attrib['exrmcd'] = '00'
