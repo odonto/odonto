@@ -12,6 +12,7 @@ def min_digits(x):
 
     return 10 ** (x - 1)
 
+
 def max_digits(x):
     """
     Return the maximum integer that has at most ``x`` digits:
