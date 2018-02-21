@@ -23,3 +23,16 @@ def max_digits(x):
         0
     """
     return (10 ** x) - 1
+
+
+def strbool(x):
+    """
+    Return an string representation of the specified boolean for an XML
+    document.
+
+        >>> strbool(False)
+        'false'
+        >>> strbool(True)
+        'true'
+    """
+    return 'true' if x else 'false'
