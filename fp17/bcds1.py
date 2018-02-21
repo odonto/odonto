@@ -1,6 +1,6 @@
 from lxml import etree
 
-from .utils import min_digits, max_digits
+from .utils import min_digits, max_digits, strbool
 from .message import Message
 from .patient import Patient
 
@@ -243,7 +243,7 @@ class BCDS1Message(Message):
                 'trtrfl': 'treatment_on_referral',
                 'nhspri': 'part_nhs_private',
             }.items():
-                clty.attrib[k] = 'true' if vals[v] else 'false'
+                clty.attrib[k] = strbool(vals[v])
 
         trtarr = etree.SubElement(tda, 'trtarr')
         trtarr.attrib['cc18'] = 'false'
