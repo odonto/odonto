@@ -4,7 +4,7 @@ import cerberus
 import datetime
 import xmlschema
 
-KNOWN_TYPES = (int, str, list, datetime.date)
+KNOWN_TYPES = (int, str, list, dict, datetime.date)
 
 
 class Message(object):

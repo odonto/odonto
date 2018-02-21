@@ -39,6 +39,13 @@ def test_valid():
         'part_nhs_private': False,
     }]
 
+    msg.treatment_arrangements = {
+        'transfer_to_continuing_care': False,
+        'treatment_necessitated_by_trauma': False,
+        'orthodontic_radiographs_or_study_casts': False,
+        'disability_fee': False,
+    }
+
     v = msg.get_validator()
 
     assert not v.errors

@@ -175,6 +175,42 @@ class BCDS1Message(Message):
                 'default': [],
                 'minlength': 0,
             },
+
+            # Treatment arrangements
+            #
+            'treatment_arrangements': {
+                'type': 'dict',
+                'schema': {
+                    # Transfer to continuing care
+                    #
+                    'transfer_to_continuing_care': {
+                        'type': 'boolean',
+                        'required': True,
+                    },
+
+                    # Treatment necessitated by trauma
+                    #
+                    'treatment_necessitated_by_trauma': {
+                        'type': 'boolean',
+                        'required': True,
+                    },
+
+                    # Orthodontic radiographs / study casts
+                    #
+                    'orthodontic_radiographs_or_study_casts': {
+                        'type': 'boolean',
+                        'required': True,
+                    },
+
+                    # Disability fee
+                    #
+                    'disability_fee': {
+                        'type': 'boolean',
+                        'required': True,
+                    },
+                },
+                'required': True,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -246,10 +282,13 @@ class BCDS1Message(Message):
                 clty.attrib[k] = strbool(vals[v])
 
         trtarr = etree.SubElement(tda, 'trtarr')
-        trtarr.attrib['cc18'] = 'false'
-        trtarr.attrib['trttra'] = 'false'
-        trtarr.attrib['radmod'] = 'false'
-        trtarr.attrib['disfee'] = 'false'
+        for k, v in {
+            'cc18': 'transfer_to_continuing_care',
+            'trttra': 'treatment_necessitated_by_trauma',
+            'radmod': 'orthodontic_radiographs_or_study_casts',
+            'disfee': 'disability_fee',
+        }.items():
+            trtarr.attrib[k] = strbool(x['treatment_arrangements'][v])
 
         chx = etree.SubElement(root, 'chx')
         chx.attrib['ptchg'] = '100'
