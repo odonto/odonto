@@ -1,4 +1,3 @@
-from .utils import min_digits, max_digits
 from .message import Message
 
 class Patient(Message):
