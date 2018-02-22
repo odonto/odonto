@@ -1,6 +1,7 @@
 from .utils import min_digits, max_digits
 from .message import Message
 
+
 class Treatment(Message):
     """
     Repeating treatment type (used in tst and cur segments).
