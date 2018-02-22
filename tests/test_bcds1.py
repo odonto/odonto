@@ -50,7 +50,7 @@ def test_valid():
     msg.patient_charge_currency = 'GBP'
 
     msg.exception_remission = {
-        'code': '00',
+        'code': 10,
         'supporting_details': "Supporting details",
     }
 
