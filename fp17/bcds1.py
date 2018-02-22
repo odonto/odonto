@@ -2,12 +2,160 @@ from lxml import etree
 
 from .utils import min_digits, max_digits, strbool
 from .message import Message
-from .patient import Patient
-from .treatment import Treatment
 
 SCHEDULE_QUERY_TRUE = 0
 SCHEDULE_QUERY_FALSE = 1
 SCHEDULE_QUERY_DELETE = 3
+
+
+class Patient(Message):
+    class Meta:
+        schema = {
+            # Sex
+            #
+            # Sex of patient.
+            'sex': {
+                'type': 'string',
+                'allowed': ('M', 'F'),
+                'required': True,
+            },
+
+            # Date of birth
+            #
+            # Patient's date of birth.
+            'date_of_birth': {
+                'type': 'date',
+                'required': True,
+            },
+
+            # Patient's title
+            #
+            # (eg. "Mr")
+            'title': {
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 4,
+                'required': False,
+            },
+
+            # Patient forename
+            #
+            # First forename.
+            'forename': {
+                'type': 'string',
+                'minlength': 2,
+                'maxlength': 20,
+                'required': True,
+            },
+
+            # Patient surname
+            #
+            # Surname of patient.
+            'surname': {
+                'type': 'string',
+                'minlength': 2,
+                'maxlength': 20,
+                'required': True,
+            },
+
+            # Previous surname
+            #
+            'previous_surname': {
+                'type': 'string',
+                'minlength': 2,
+                'maxlength': 20,
+                'required': False,
+            },
+
+            # NHS number
+            #
+            # The patient's unique new NHS number.
+            'nhs_number': {
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 17,
+                'required': False,
+            },
+
+            # NI number
+            #
+            # The patient's unique National Insurance Number
+            'national_insurance_number': {
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 9,
+                'required': False,
+            },
+
+            # Address lines
+            #
+            'address': {
+                'type': 'list',
+                'schema': {
+                    'type': 'string',
+                    'minlength': 1,
+                    'maxlength': 32,
+                },
+                'required': True,
+                'minlength': 1,
+                'maxlength': 5,
+            },
+
+            # Post code
+            #
+            # Patient's post code
+            'postcode': {
+                'type': 'string',
+                'minlength': 1,
+                'maxlength': 8,
+                'required': False,
+            },
+        }
+
+
+class Treatment(Message):
+    """
+    Repeating treatment type (used in tst and cur segments).
+    """
+
+    class Meta:
+        schema = {
+            # Treatment code
+            #
+            'code': {
+                'type': 'number',
+                'min': min_digits(4),
+                'max': max_digits(4),
+                'required': True,
+            },
+
+            # Number of instances
+            #
+            # The number of times the treatment code occurs in the
+            # course of treatment.
+            'instance_count': {
+                'type': 'number',
+                'min': min_digits(0),
+                'max': max_digits(2),
+                'required': True,
+            },
+
+            # Tooth identification code
+            #
+            'teeth': {
+                'type': 'list',
+                'schema': {
+                    'type': 'string',
+                    'regex': '^[1-8][1-9]$',
+                    'required': True,
+                },
+                'required': True,
+                'minlength': 0,
+                'maxlength': 36,
+            },
+
+        }
+
 
 class BCDS1Message(Message):
     class Meta:

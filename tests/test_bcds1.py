@@ -1,8 +1,6 @@
 import datetime
 
-from fp17.bcds1 import BCDS1Message, SCHEDULE_QUERY_TRUE
-from fp17.patient import Patient
-from fp17.treatment import Treatment
+from fp17.bcds1 import BCDS1Message, Patient, Treatment, SCHEDULE_QUERY_TRUE
 
 
 def test_valid():
