@@ -286,6 +286,48 @@ class BCDS1Message(Message):
                 'maxlength': 8,
                 'required': True,
             },
+
+
+            # Dental chart
+            #
+            'dental_chart': {
+                'type': 'list',
+                'schema': {
+                    'type': 'dict',
+                    'schema': {
+                        # Tooth identification code
+                        #
+                        'tooth': {
+                            'type': 'string',
+                            'regex': '^[1-8][1-9]$',
+                            'required': True,
+                        },
+
+                        # Annotation code
+                        #
+                        #   M: Tooth missing
+                        #   Z: Tooth missing and space closed
+                        #   R: Root present
+                        #   E: Tooth to be extracted
+                        #   A: Artificial tooth present
+                        #   C: Crown present
+                        #   BR: Bridge retainer present
+                        #   BP: Bridge pontic present
+                        #
+                        'annotation': {
+                            'type': 'string',
+                            'allowed': ('M', 'Z', 'R', 'E', 'A', 'C',
+                                        'BR', 'BP'),
+                            'required': True,
+                        },
+                    },
+                    'required': True,
+                },
+                'default': [],
+                'minlength': 0,
+                'maxlength': 32,
+                'required': True,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -396,10 +438,11 @@ class BCDS1Message(Message):
         create_treatments('tst', x['treatments'])
         create_treatments('cur', x['treatments_specific'])
 
-        cht = etree.SubElement(root, 'cht')
-        todata = etree.SubElement(cht, 'todata')
-        todata.attrib['toid'] = '89'
-        todata.attrib['ancd'] = 'BR'
-        todata.attrib['xtvl'] = '01'
+        if x['dental_chart']:
+            cht = etree.SubElement(root, 'cht')
+            for entry in x['dental_chart']:
+                todata = etree.SubElement(cht, 'todata')
+                todata.attrib['toid'] = entry['tooth']
+                todata.attrib['ancd'] = entry['annotation']
 
         return root

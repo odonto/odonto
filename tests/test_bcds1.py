@@ -68,6 +68,11 @@ def test_valid():
     msg.treatments = [t1, t2]
     msg.treatments_specific = [t2, t1]
 
+    msg.dental_chart = [{
+        'tooth': '89',
+        'annotation': 'BP',
+    }]
+
     v = msg.get_validator()
 
     assert not v.errors
