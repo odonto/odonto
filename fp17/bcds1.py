@@ -412,7 +412,8 @@ class BCDS1Message(Message):
         chx.attrib['curcd'] = x['patient_charge_currency'].lower()
 
         exrmdet = etree.SubElement(chx, 'exrmdet')
-        exrmdet.attrib['exrmcd'] = str(x['exception_remission']['code'])
+        exrmdet.attrib['exrmcd'] = \
+            '{:02d}'.format(x['exception_remission']['code'])
         try:
             exrmdet.attrib['sdet'] = \
                 x['exception_remission']['supporting_details']
