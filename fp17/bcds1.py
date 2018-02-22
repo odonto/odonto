@@ -380,9 +380,7 @@ class BCDS1Message(Message):
             #
             'exception_remission': {
                 'type': 'dict',
-                'required': True,
                 'schema': {
-
                     # Exemption and remission code
                     #
                     'code': {
@@ -399,6 +397,7 @@ class BCDS1Message(Message):
                         'required': False,
                     },
                 },
+                'required': False,
             },
 
             # Tooth specific treatments - specifies treatment relating to
@@ -557,14 +556,14 @@ class BCDS1Message(Message):
         chx.attrib['ptchg'] = str(x['patient_charge_pence'])
         chx.attrib['curcd'] = x['patient_charge_currency'].lower()
 
-        exrmdet = etree.SubElement(chx, 'exrmdet')
-        exrmdet.attrib['exrmcd'] = \
-            '{:02d}'.format(x['exception_remission']['code'])
-        try:
-            exrmdet.attrib['sdet'] = \
-                x['exception_remission']['supporting_details']
-        except KeyError:
-            pass
+        if 'exception_remission' in x:
+            exrmdet = etree.SubElement(chx, 'exrmdet')
+            exrmdet.attrib['exrmcd'] = \
+                '{:02d}'.format(x['exception_remission']['code'])
+
+            if 'supporting_details' in x['exception_remission']:
+                exrmdet.attrib['sdet'] = \
+                    x['exception_remission']['supporting_details']
 
         def create_treatments(name, data):
             if not data:
