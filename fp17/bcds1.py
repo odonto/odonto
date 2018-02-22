@@ -227,6 +227,7 @@ class BCDS1Message(Message):
                 'default': 'GBP',
                 'minlength': 3,
                 'maxlength': 3,
+                'required': True,
             },
         }
 
