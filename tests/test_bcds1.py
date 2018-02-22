@@ -49,6 +49,11 @@ def test_valid():
     msg.patient_charge_pence = 1
     msg.patient_charge_currency = 'GBP'
 
+    msg.exception_remission = {
+        'code': '00',
+        'supporting_details': "Supporting details",
+    }
+
     v = msg.get_validator()
 
     assert not v.errors

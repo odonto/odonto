@@ -229,6 +229,31 @@ class BCDS1Message(Message):
                 'maxlength': 3,
                 'required': True,
             },
+
+            # Exemption and remission information
+            #
+            'exception_remission': {
+                'type': 'dict',
+                'required': True,
+                'schema': {
+
+                    # Exemption and remission code
+                    #
+                    'code': {
+                        'type': 'string',
+                        'minlength': 2,
+                        'maxlength': 2,
+                        'required': True,
+                    },
+
+                    # Supporting details
+                    #
+                    'supporting_details': {
+                        'type': 'string',
+                        'required': False,
+                    },
+                },
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -313,8 +338,12 @@ class BCDS1Message(Message):
         chx.attrib['curcd'] = x['patient_charge_currency'].lower()
 
         exrmdet = etree.SubElement(chx, 'exrmdet')
-        exrmdet.attrib['exrmcd'] = '00'
-        exrmdet.attrib['sdet'] = 'Supporting details'
+        exrmdet.attrib['exrmcd'] = x['exception_remission']['code']
+        try:
+            exrmdet.attrib['sdet'] = \
+                x['exception_remission']['supporting_details']
+        except KeyError:
+            pass
 
         def create_reptrtty(parent):
             reptrtty = etree.SubElement(parent, 'reptrtty')
