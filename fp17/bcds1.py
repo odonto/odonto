@@ -334,31 +334,28 @@ class BCDS1Message(Message):
                     #
                     'transfer_to_continuing_care': {
                         'type': 'boolean',
-                        'required': True,
                     },
 
                     # Treatment necessitated by trauma
                     #
                     'treatment_necessitated_by_trauma': {
                         'type': 'boolean',
-                        'required': True,
                     },
 
                     # Orthodontic radiographs / study casts
                     #
                     'orthodontic_radiographs_or_study_casts': {
                         'type': 'boolean',
-                        'required': True,
                     },
 
                     # Disability fee
                     #
                     'disability_fee': {
                         'type': 'boolean',
-                        'required': True,
                     },
                 },
-                'required': True,
+                'default': {},
+                'required': False,
             },
 
             # Amount of patient charge in pence. (Zero if no charge)
@@ -553,7 +550,8 @@ class BCDS1Message(Message):
             'radmod': 'orthodontic_radiographs_or_study_casts',
             'disfee': 'disability_fee',
         }.items():
-            trtarr.attrib[k] = strbool(x['treatment_arrangements'][v])
+            trtarr.attrib[k] = \
+                strbool(x['treatment_arrangements'].get(v, False))
 
         chx = etree.SubElement(root, 'chx')
         chx.attrib['ptchg'] = str(x['patient_charge_pence'])
