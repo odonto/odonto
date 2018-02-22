@@ -3,6 +3,7 @@ from lxml import etree
 from .utils import min_digits, max_digits, strbool
 from .message import Message
 from .patient import Patient
+from .treatment import Treatment
 
 SCHEDULE_QUERY_TRUE = 0
 SCHEDULE_QUERY_FALSE = 1
@@ -254,6 +255,37 @@ class BCDS1Message(Message):
                     },
                 },
             },
+
+            # Tooth specific treatments - specifies treatment relating to
+            # specific teeth or non-specific teeth completed or proposed.
+            #
+            'treatments': {
+                'type': 'list',
+                'schema': {
+                    'type': 'dict',
+                    'schema': Treatment.Meta.schema,
+                },
+                'default': [],
+                'minlength': 0,
+                'maxlength': 30,
+                'required': True,
+            },
+
+            # Claims under specific regulation - claim for work done under
+            # specific provision and not included in "tooth treatment" (TST)
+            # segment.
+            #
+            'treatments_specific': {
+                'type': 'list',
+                'schema': {
+                    'type': 'dict',
+                    'schema': Treatment.Meta.schema,
+                },
+                'default': [],
+                'minlength': 0,
+                'maxlength': 8,
+                'required': True,
+            },
         }
 
         xsd_schema = 'xml_bcds1.xsd'
@@ -345,18 +377,24 @@ class BCDS1Message(Message):
         except KeyError:
             pass
 
-        def create_reptrtty(parent):
-            reptrtty = etree.SubElement(parent, 'reptrtty')
-            reptrtty.attrib['trtcd'] = '1234'
-            reptrtty.attrib['noins'] = '01'
-            toid = etree.SubElement(reptrtty, 'toid')
-            toid.text = '89'
+        def create_treatments(name, data):
+            if not data:
+                return
 
-        tst = etree.SubElement(root, 'tst')
-        create_reptrtty(tst)
+            elem = etree.SubElement(root, name)
 
-        cur = etree.SubElement(root, 'cur')
-        create_reptrtty(cur)
+            for treatment in data:
+                reptrtty = etree.SubElement(elem, 'reptrtty')
+                reptrtty.attrib['trtcd'] = '{:04d}'.format(treatment['code'])
+                reptrtty.attrib['noins'] = \
+                    '{:02d}'.format(treatment['instance_count'])
+
+                for x in treatment['teeth']:
+                    toid = etree.SubElement(reptrtty, 'toid')
+                    toid.text = str(x)
+
+        create_treatments('tst', x['treatments'])
+        create_treatments('cur', x['treatments_specific'])
 
         cht = etree.SubElement(root, 'cht')
         todata = etree.SubElement(cht, 'todata')

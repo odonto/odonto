@@ -2,6 +2,7 @@ import datetime
 
 from fp17.bcds1 import BCDS1Message, SCHEDULE_QUERY_TRUE
 from fp17.patient import Patient
+from fp17.treatment import Treatment
 
 
 def test_valid():
@@ -53,6 +54,19 @@ def test_valid():
         'code': 10,
         'supporting_details': "Supporting details",
     }
+
+    t1 = Treatment()
+    t1.code = 1234
+    t1.instance_count = 1
+    t1.teeth = ['12']
+
+    t2 = Treatment()
+    t2.code = 5678
+    t2.instance_count = 3
+    t2.teeth = ['12']
+
+    msg.treatments = [t1, t2]
+    msg.treatments_specific = [t2, t1]
 
     v = msg.get_validator()
 
