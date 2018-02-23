@@ -36,6 +36,6 @@ def flatten(val):
         return val
     if isinstance(val, list):
         return [flatten(x) for x in val]
-    if isinstance(val, (int, str, datetime.date)):
+    if isinstance(val, (int, str, datetime.date, datetime.time)):
         return val
     return val.__dict__

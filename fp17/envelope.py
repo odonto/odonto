@@ -41,8 +41,8 @@ class Envelope(Message):
                 'required': True,
             },
 
-            #
-            'tim': {
+            # Time of release of interchange for transmission
+            'time_of_release': {
                 'required': True,
             },
 
@@ -68,5 +68,6 @@ class Envelope(Message):
         root.attrib['ori'] = x['origin']
         root.attrib['dest'] = x['destination']
         root.attrib['datrel'] = x['date_of_release'].strftime('%Y%m%d')
+        root.attrib['tim'] = x['time_of_release'].strftime('%H%M')
 
         return root
