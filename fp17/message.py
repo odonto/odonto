@@ -12,7 +12,7 @@ class Message(object):
 
     @classmethod
     def validate_xml(cls, root):
-        schema = xmlschema.XMLSchema(os.path.join('xsd', cls.Meta.xsd_schema))
+        schema = xmlschema.XMLSchema(os.path.join('xsd', cls.Meta.xsd))
 
         schema.validate(root)
 

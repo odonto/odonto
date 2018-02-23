@@ -154,6 +154,7 @@ class Treatment(Message):
 
 class BCDS1(Message):
     class Meta:
+        xsd = 'xml_bcds1.xsd'
         schema = {
             # Message reference number
             #
@@ -445,8 +446,6 @@ class BCDS1(Message):
                 'required': True,
             },
         }
-
-        xsd_schema = 'xml_bcds1.xsd'
 
     @staticmethod
     def get_root_xml_element(x):
