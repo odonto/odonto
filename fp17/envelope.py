@@ -84,7 +84,7 @@ class Envelope(Message):
         root.attrib['synv'] = '1'
         root.attrib['ori'] = x['origin']
         root.attrib['dest'] = x['destination']
-        root.attrib['datrel'] = x['release_timestamp'].strftime('%Y%m%d')
+        root.attrib['datrel'] = x['release_timestamp'].strftime('%y%m%d')
         root.attrib['tim'] = x['release_timestamp'].strftime('%H%M')
         root.attrib['seq'] = '{:06d}'.format(x['serial_number'])
         root.attrib['swname'] = x['software_name']
