@@ -39,8 +39,12 @@ class Envelope(Message):
                 'maxlength': 35,
             },
 
-            #
-            'swname': {
+            # Practice system software package version
+            'software_name': {
+                'type': 'string',
+                'default': 'python-fp17',
+                'minlength': 1,
+                'maxlength': 50,
                 'required': True,
             },
 
@@ -83,6 +87,7 @@ class Envelope(Message):
         root.attrib['datrel'] = x['release_timestamp'].strftime('%Y%m%d')
         root.attrib['tim'] = x['release_timestamp'].strftime('%H%M')
         root.attrib['seq'] = '{:06d}'.format(x['serial_number'])
+        root.attrib['swname'] = x['software_name']
         root.attrib['swver'] = x['software_version']
 
         return root
