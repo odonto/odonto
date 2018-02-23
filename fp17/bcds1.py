@@ -542,15 +542,19 @@ class BCDS1Message(Message):
             }.items():
                 clty.attrib[k] = strbool(vals[v])
 
-        trtarr = etree.SubElement(tda, 'trtarr')
+        trtarr = None
         for k, v in {
             'cc18': 'transfer_to_continuing_care',
             'trttra': 'treatment_necessitated_by_trauma',
             'radmod': 'orthodontic_radiographs_or_study_casts',
             'disfee': 'disability_fee',
         }.items():
-            trtarr.attrib[k] = \
-                strbool(x['treatment_arrangements'].get(v, False))
+            if not x['treatment_arrangements'].get(v, False):
+                continue
+            # Create <trtarr/> element lazily as everything defaults to false
+            if trtarr is None:
+                trtarr = etree.SubElement(tda, 'trtarr')
+            trtarr.attrib[k] = strbool(True)
 
         chx = etree.SubElement(root, 'chx')
         chx.attrib['ptchg'] = str(x['patient_charge_pence'])
