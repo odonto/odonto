@@ -59,7 +59,6 @@ class Patient(Message):
             },
 
             # Previous surname
-            #
             'previous_surname': {
                 'type': 'string',
                 'minlength': 2,
@@ -88,7 +87,6 @@ class Patient(Message):
             },
 
             # Address lines
-            #
             'address': {
                 'type': 'list',
                 'schema': {
@@ -121,7 +119,6 @@ class Treatment(Message):
     class Meta:
         schema = {
             # Treatment code
-            #
             'code': {
                 'type': 'number',
                 'min': min_digits(4),
@@ -141,7 +138,6 @@ class Treatment(Message):
             },
 
             # Tooth identification code
-            #
             'teeth': {
                 'type': 'list',
                 'schema': {
@@ -153,7 +149,6 @@ class Treatment(Message):
                 'minlength': 0,
                 'maxlength': 36,
             },
-
         }
 
 
@@ -232,7 +227,6 @@ class BCDS1Message(Message):
             },
 
             # Dentist / provider declaration
-            #
             'provider_declaration': {
                 'type': 'number',
                 'allowed': (0, 1, 2, 3, 64, 65, 66, 67),
@@ -251,70 +245,60 @@ class BCDS1Message(Message):
             },
 
             # Date (of acceptance or registration)
-            #
             'date_of_acceptance': {
                 'type': 'date',
                 'required': True,
             },
 
             # Date of completion
-            #
             'date_of_completion': {
                 'type': 'date',
                 'required': False,
             },
 
             # Date of examination
-            #
             'date_of_examination': {
                 'type': 'date',
                 'required': False,
             },
 
             # Types of claims
-            #
             'types_of_claims': {
                 'type': 'list',
                 'schema': {
                     'type': 'dict',
                     'schema': {
                         # Initial registration
-                        #
                         'initial_registration': {
                             'type': 'boolean',
                             'required': True,
                         },
 
                         # Re-registration
-                        #
                         'reregistration': {
                             'type': 'boolean',
                             'required': True,
                         },
 
                         # Patient under care of other dentist
-                        #
                         'care_of_other_dentist': {
                             'type': 'boolean',
                             'required': True,
                         },
 
                         # Occasional treatment only
-                        #
                         'occasional_treatment_only': {
                             'type': 'boolean',
                             'required': True,
                         },
 
                         # Treatment on referral
-                        #
                         'treatment_on_referral': {
                             'type': 'boolean',
                             'required': True,
                         },
 
                         # Part NHS/private
-                        #
                         'part_nhs_private': {
                             'type': 'boolean',
                             'required': True,
@@ -326,30 +310,25 @@ class BCDS1Message(Message):
             },
 
             # Treatment arrangements
-            #
             'treatment_arrangements': {
                 'type': 'dict',
                 'schema': {
                     # Transfer to continuing care
-                    #
                     'transfer_to_continuing_care': {
                         'type': 'boolean',
                     },
 
                     # Treatment necessitated by trauma
-                    #
                     'treatment_necessitated_by_trauma': {
                         'type': 'boolean',
                     },
 
                     # Orthodontic radiographs / study casts
-                    #
                     'orthodontic_radiographs_or_study_casts': {
                         'type': 'boolean',
                     },
 
                     # Disability fee
-                    #
                     'disability_fee': {
                         'type': 'boolean',
                     },
@@ -359,7 +338,6 @@ class BCDS1Message(Message):
             },
 
             # Amount of patient charge in pence. (Zero if no charge)
-            #
             'patient_charge_pence': {
                 'type': 'number',
                 'min': 0,
@@ -367,7 +345,6 @@ class BCDS1Message(Message):
             },
 
             # Currency code of patient charge
-            #
             'patient_charge_currency': {
                 'type': 'string',
                 'default': 'GBP',
@@ -377,12 +354,10 @@ class BCDS1Message(Message):
             },
 
             # Exemption and remission information
-            #
             'exception_remission': {
                 'type': 'dict',
                 'schema': {
                     # Exemption and remission code
-                    #
                     'code': {
                         'type': 'number',
                         'minlength': min_digits(2),
@@ -391,7 +366,6 @@ class BCDS1Message(Message):
                     },
 
                     # Supporting details
-                    #
                     'supporting_details': {
                         'type': 'string',
                         'required': False,
@@ -400,9 +374,10 @@ class BCDS1Message(Message):
                 'required': False,
             },
 
-            # Tooth specific treatments - specifies treatment relating to
-            # specific teeth or non-specific teeth completed or proposed.
+            # Tooth specific treatments
             #
+            # Specifies treatment relating to specific teeth or non-specific
+            # teeth completed or proposed.
             'treatments': {
                 'type': 'list',
                 'schema': {
@@ -415,10 +390,10 @@ class BCDS1Message(Message):
                 'required': True,
             },
 
-            # Claims under specific regulation - claim for work done under
-            # specific provision and not included in "tooth treatment" (TST)
-            # segment.
+            # Claims under specific regulation
             #
+            # Claim for work done under specific provision and not included in
+            # "tooth treatment" (TST) segment.
             'treatments_specific': {
                 'type': 'list',
                 'schema': {
@@ -433,14 +408,12 @@ class BCDS1Message(Message):
 
 
             # Dental chart
-            #
             'dental_chart': {
                 'type': 'list',
                 'schema': {
                     'type': 'dict',
                     'schema': {
                         # Tooth identification code
-                        #
                         'tooth': {
                             'type': 'string',
                             'regex': '^[1-8][1-9]$',
@@ -457,7 +430,6 @@ class BCDS1Message(Message):
                         #   C: Crown present
                         #   BR: Bridge retainer present
                         #   BP: Bridge pontic present
-                        #
                         'annotation': {
                             'type': 'string',
                             'allowed': ('M', 'Z', 'R', 'E', 'A', 'C',
