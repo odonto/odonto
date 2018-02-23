@@ -31,18 +31,13 @@ class Envelope(Message):
             },
 
             # Date of release of interchange for transmission
-            'date_of_release': {
-                'type': 'date',
+            'release_timestamp': {
+                'type': 'datetime',
                 'required': True,
             },
 
             #
             'swver': {
-                'required': True,
-            },
-
-            # Time of release of interchange for transmission
-            'time_of_release': {
                 'required': True,
             },
 
@@ -67,7 +62,7 @@ class Envelope(Message):
         root.attrib['synv'] = '1'
         root.attrib['ori'] = x['origin']
         root.attrib['dest'] = x['destination']
-        root.attrib['datrel'] = x['date_of_release'].strftime('%Y%m%d')
-        root.attrib['tim'] = x['time_of_release'].strftime('%H%M')
+        root.attrib['datrel'] = x['release_timestamp'].strftime('%Y%m%d')
+        root.attrib['tim'] = x['release_timestamp'].strftime('%H%M')
 
         return root

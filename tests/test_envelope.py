@@ -9,8 +9,7 @@ def envelope():
     msg = Envelope()
     msg.origin = '01009'
     msg.destination = '01009'
-    msg.date_of_release = datetime.date(1985, 12, 16)
-    msg.time_of_release = datetime.time(16, 40)
+    msg.release_timestamp = datetime.datetime(1985, 12, 16, 16, 40)
 
     return msg
 
