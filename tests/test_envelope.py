@@ -14,6 +14,8 @@ def envelope():
     msg.release_timestamp = datetime.datetime(1985, 12, 16, 16, 40)
     msg.serial_number = 0
     msg.approval_number = 16
+    msg.revision_level = 1
+    msg.transmission_category = 1
 
     return msg
 

@@ -78,6 +78,12 @@ class Envelope(Message):
                 'type': 'number',
                 'allowed': (1,),
                 'required': False,
+            },
+
+            # Transmission category
+            'transmission_category': {
+                'type': 'number',
+                'allowed': (1, 2, 3),
                 'required': False,
             },
 
@@ -117,6 +123,8 @@ class Envelope(Message):
 
         if 'revision_level' in x:
             root.attrib['rev'] = str(x['revision_level'])
+        if 'transmission_category' in x:
+            root.attrib['xmcat'] = str(x['transmission_category'])
 
         return root
 
