@@ -2,7 +2,7 @@ import pkg_resources
 
 from lxml import etree
 
-from .utils import min_digits, max_digits
+from .utils import min_digits, max_digits, strbool
 from .message import Message
 
 
@@ -87,6 +87,11 @@ class Envelope(Message):
                 'required': False,
             },
 
+            # Test indicator
+            'test': {
+                'type': 'boolean',
+            },
+
             # Practice system software package version
             'software_name': {
                 'type': 'string',
@@ -125,6 +130,8 @@ class Envelope(Message):
             root.attrib['rev'] = str(x['revision_level'])
         if 'transmission_category' in x:
             root.attrib['xmcat'] = str(x['transmission_category'])
+        if 'test' in x:
+            root.attrib['teind'] = strbool(x['test'])
 
         return root
 

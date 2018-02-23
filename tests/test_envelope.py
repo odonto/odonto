@@ -16,6 +16,7 @@ def envelope():
     msg.approval_number = 16
     msg.revision_level = 1
     msg.transmission_category = 1
+    msg.test = True
 
     return msg
 
