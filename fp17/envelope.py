@@ -39,27 +39,9 @@ class Envelope(Message):
                 'maxlength': 35,
             },
 
-            # Practice system software package version
-            'software_name': {
-                'type': 'string',
-                'default': 'python-fp17',
-                'minlength': 1,
-                'maxlength': 50,
-                'required': True,
-            },
-
             # Date of release of interchange for transmission
             'release_timestamp': {
                 'type': 'datetime',
-                'required': True,
-            },
-
-            # Practice system software package version
-            'software_version': {
-                'type': 'string',
-                'default': VERSION,
-                'minlength': 1,
-                'maxlength': 50,
                 'required': True,
             },
 
@@ -73,6 +55,24 @@ class Envelope(Message):
                 'required': True,
                 'minlength': 1,
                 'maxlength': 35,
+            },
+
+            # Practice system software package version
+            'software_name': {
+                'type': 'string',
+                'default': 'python-fp17',
+                'minlength': 1,
+                'maxlength': 50,
+                'required': True,
+            },
+
+            # Practice system software package version
+            'software_version': {
+                'type': 'string',
+                'default': VERSION,
+                'minlength': 1,
+                'maxlength': 50,
+                'required': True,
             },
         }
 
