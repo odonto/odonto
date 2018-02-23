@@ -41,6 +41,7 @@ class Envelope(Message):
             # number issued by the service. Messages originated by a user use
             # the code appropriate to the service.
             'destination': {
+                'type': 'string',
                 'required': True,
                 'required': True,
                 'minlength': 1,
