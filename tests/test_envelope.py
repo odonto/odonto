@@ -3,6 +3,8 @@ import datetime
 
 from fp17.envelope import Envelope
 
+from test_bcds1 import bcds1
+
 
 @pytest.fixture
 def envelope():
@@ -21,6 +23,7 @@ def test_valid(envelope):
     assert not v.errors
 
     root = envelope.generate_xml()
+    assert len(root.getchildren()) == 0
 
     Envelope.validate_xml(root)
 
@@ -34,3 +37,14 @@ def test_validation():
     msg.origin = '01'
     errors = msg.get_errors()
     assert 'origin' not in errors
+
+
+def test_add_message(envelope, bcds1):
+    envelope.add_message(bcds1)
+    root = envelope.generate_xml()
+    children = root.getchildren()
+
+    assert len(children) == 1
+    assert children[0].tag == 'bcds1'
+
+    envelope.validate_xml(root)

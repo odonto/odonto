@@ -13,6 +13,14 @@ except pkg_resources.DistributionNotFound:
 
 
 class Envelope(Message):
+    def __init__(self):
+        super().__init__()
+
+        self._messages = []
+
+    def add_message(self, message):
+        self._messages.append(message)
+
     class Meta:
         xsd = 'xml_envelope.xsd'
 
@@ -91,3 +99,11 @@ class Envelope(Message):
         root.attrib['swver'] = x['software_version']
 
         return root
+
+    def generate_xml(self):
+        elem = super().generate_xml()
+
+        for x in self._messages:
+            elem.append(x.generate_xml())
+
+        return elem
