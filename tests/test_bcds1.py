@@ -1,9 +1,11 @@
+import pytest
 import datetime
 
 from fp17.bcds1 import BCDS1Message, Patient, Treatment, SCHEDULE_QUERY_TRUE
 
 
-def test_valid():
+@pytest.fixture
+def bcds1():
     msg = BCDS1Message()
     msg.message_reference_number = 123456
     msg.performer_number = 123456
@@ -71,14 +73,19 @@ def test_valid():
         'annotation': 'BP',
     }]
 
-    v = msg.get_validator()
+    return msg
+
+
+def test_valid(bcds1):
+    v = bcds1.get_validator()
 
     assert not v.errors
 
-    root = msg.generate_xml()
+    root = bcds1.generate_xml()
     assert root.attrib['noseg'] == '8'
 
     BCDS1Message.validate_xml(root)
+
 
 def test_validation():
     msg = BCDS1Message()
@@ -92,6 +99,7 @@ def test_validation():
 
     msg.message_reference_number = 1234567
     errors = msg.get_errors()
+
     assert 'max value is 999999' in errors['message_reference_number']
 
     msg.message_reference_number = 123456
