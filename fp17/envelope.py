@@ -1,7 +1,15 @@
+import pkg_resources
+
 from lxml import etree
 
 from .utils import min_digits, max_digits
 from .message import Message
+
+
+try:
+    VERSION = pkg_resources.require('fp17').version
+except pkg_resources.DistributionNotFound:
+    VERSION = '(unknown)'
 
 
 class Envelope(Message):
@@ -42,9 +50,13 @@ class Envelope(Message):
                 'required': True,
             },
 
-            #
-            'swver': {
-                'required': True,
+            # Practice system software package version
+            'software_version': {
+                'type': 'string',
+                'default': VERSION,
+                'minlength': 1,
+                'maxlength': 50,
+                'required': False,
             },
 
             # Origin
@@ -71,5 +83,6 @@ class Envelope(Message):
         root.attrib['datrel'] = x['release_timestamp'].strftime('%Y%m%d')
         root.attrib['tim'] = x['release_timestamp'].strftime('%H%M')
         root.attrib['seq'] = '{:06d}'.format(x['serial_number'])
+        root.attrib['swver'] = x['software_version']
 
         return root
