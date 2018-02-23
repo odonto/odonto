@@ -487,7 +487,7 @@ class BCDS1Message(Message):
         root.attrib['pin'] = str(x['dpb_pin'])
         root.attrib['cno'] = str(x['contract_number'])
         root.attrib['loc'] = str(x['location'])
-        root.attrib['resct'] = str(x['resubmission_count'])
+        root.attrib['resct'] = '{:02d}'.format(x['resubmission_count'])
 
         root.attrib['noseg'] = '5'  # calculated
 
