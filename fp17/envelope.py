@@ -137,13 +137,13 @@ class Envelope(Message):
         root.attrib['seq'] = '{:06d}'.format(x['serial_number'])
         root.attrib['swname'] = x['software_name']
         root.attrib['swver'] = x['software_version']
-        root.attrib['pmsno'] = '{:08d}'.format(x['approval_number'])
 
         for k, v, fn in (
             ('icct', 'interchange_control_count', str),
             ('rev', 'revision_level', str),
             ('xmcat', 'transmission_category', str),
             ('teind', 'test', strbool),
+            ('pmsno', 'approval_number', lambda val: '{:08d}'.format(val)),
         ):
             try:
                 root.attrib[k] = fn(x[v])
