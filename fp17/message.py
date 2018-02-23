@@ -21,8 +21,7 @@ class Message(object):
 
     def get_validator(self):
         x = cerberus.Validator(self.Meta.schema)
-        x.validate({k: flatten(v) for k, v in self.__dict__.items()})
-
+        x.validate(flatten(self))
         return x
 
     def generate_xml(self):
@@ -33,9 +32,11 @@ class Message(object):
 
 def flatten(val):
     if isinstance(val, dict):
-        return val
+        return {
+            k: flatten(v) for k, v in val.items() if not k.startswith('_')
+        }
     if isinstance(val, list):
         return [flatten(x) for x in val]
     if isinstance(val, (int, str, datetime.datetime, datetime.date)):
         return val
-    return val.__dict__
+    return flatten(val.__dict__)
