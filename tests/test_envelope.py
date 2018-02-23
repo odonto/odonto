@@ -6,6 +6,7 @@ from fp17.envelope import Envelope
 @pytest.fixture
 def envelope():
     msg = Envelope()
+    msg.origin = '01009'
 
     return msg
 
