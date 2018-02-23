@@ -1,4 +1,5 @@
 import pytest
+import datetime
 
 from fp17.envelope import Envelope
 
@@ -8,6 +9,7 @@ def envelope():
     msg = Envelope()
     msg.origin = '01009'
     msg.destination = '01009'
+    msg.date_of_release = datetime.date(1985, 12, 16)
 
     return msg
 

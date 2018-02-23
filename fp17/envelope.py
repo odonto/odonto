@@ -30,8 +30,9 @@ class Envelope(Message):
                 'required': True,
             },
 
-            #
-            'datrel': {
+            # Date of release of interchange for transmission
+            'date_of_release': {
+                'type': 'date',
                 'required': True,
             },
 
@@ -66,5 +67,6 @@ class Envelope(Message):
         root.attrib['synv'] = '1'
         root.attrib['ori'] = x['origin']
         root.attrib['dest'] = x['destination']
+        root.attrib['datrel'] = x['date_of_release'].strftime('%Y%m%d')
 
         return root
