@@ -9,11 +9,6 @@ class Envelope(Message):
 
         schema = {
             #
-            'schvn': {
-                'required': True,
-            },
-
-            #
             'synv': {
                 'required': True,
             },
@@ -57,5 +52,7 @@ class Envelope(Message):
     @staticmethod
     def get_root_xml_element(x):
         root = etree.Element('ic')
+
+        root.attrib['schvn'] = '1.0'
 
         return root
