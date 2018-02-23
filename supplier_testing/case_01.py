@@ -5,6 +5,12 @@ from lxml import etree
 from fp17.bcds1 import BCDS1, Patient, Treatment, SCHEDULE_QUERY_TRUE
 from fp17.envelope import Envelope
 
+"""
+FIXME:
+#Treatment Category	Clinical Data Set
+    #   Band 1	Examination (9317), Recall Interval (9172 9), Scale & Polish, Ethnic Origin 1
+"""
+
 def generate():
     bcds1 = BCDS1()
     bcds1.message_reference_number = 123456
@@ -25,9 +31,6 @@ def generate():
 
     bcds1.patient_charge_pence = 2060
     bcds1.patient_charge_currency = 'GBP'
-
-    #Treatment Category	Clinical Data Set
-    #   Band 1	Examination (9317), Recall Interval (9172 9), Scale & Polish, Ethnic Origin 1
 
     BCDS1.validate_xml(bcds1.generate_xml())
     assert not bcds1.get_errors(), bcds1.get_errors()
