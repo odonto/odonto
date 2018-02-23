@@ -494,8 +494,8 @@ class BCDS1Message(Message):
         pat = etree.SubElement(root, 'pat')
         pat.attrib['sex'] = x['patient']['sex']
         pat.attrib['dob'] = x['patient']['date_of_birth'].strftime('%Y%m%d')
-        pat.attrib['ptfn'] = x['patient']['forename']
-        pat.attrib['ptsur'] = x['patient']['surname']
+        pat.attrib['ptfn'] = x['patient']['forename'].upper()
+        pat.attrib['ptsur'] = x['patient']['surname'].upper()
 
         for k, v in {
             'nino': 'national_insurance_number',
@@ -504,7 +504,7 @@ class BCDS1Message(Message):
             'prvsur': 'previous_surname',
         }.items():
             if v in x['patient']:
-                pat.attrib[k] = x['patient'][v]
+                pat.attrib[k] = x['patient'][v].upper()
 
         adrdet = etree.SubElement(pat, 'adrdet')
         for text in x['patient']['address']:
