@@ -90,6 +90,7 @@ class Envelope(Message):
             # Test indicator
             'test': {
                 'type': 'boolean',
+                'required': False,
             },
 
             # Practice system software package version
