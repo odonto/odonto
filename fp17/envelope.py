@@ -138,14 +138,16 @@ class Envelope(Message):
         root.attrib['swver'] = x['software_version']
         root.attrib['pmsno'] = '{:08d}'.format(x['approval_number'])
 
-        if 'interchange_control_count' in x:
-            root.attrib['icct'] = str(x['interchange_control_count'])
-        if 'revision_level' in x:
-            root.attrib['rev'] = str(x['revision_level'])
-        if 'transmission_category' in x:
-            root.attrib['xmcat'] = str(x['transmission_category'])
-        if 'test' in x:
-            root.attrib['teind'] = strbool(x['test'])
+        for k, v, fn in (
+            ('icct', 'interchange_control_count', str),
+            ('rev', 'revision_level', str),
+            ('xmcat', 'transmission_category', str),
+            ('teind', 'test', strbool),
+        ):
+            try:
+                root.attrib[k] = fn(x[v])
+            except KeyError:
+                pass
 
         return root
 
