@@ -76,9 +76,9 @@ def test_valid():
     assert not v.errors
 
     root = msg.generate_xml()
-    BCDS1Message.validate_xml(root)
-
     assert root.attrib['noseg'] == '8'
+
+    BCDS1Message.validate_xml(root)
 
 def test_validation():
     msg = BCDS1Message()
