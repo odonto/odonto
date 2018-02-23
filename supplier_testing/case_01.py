@@ -1,5 +1,7 @@
 import datetime
 
+from lxml import etree
+
 from fp17.bcds1 import BCDS1Message, Patient, Treatment, SCHEDULE_QUERY_TRUE
 
 def generate():
@@ -28,9 +30,11 @@ def generate():
 
     assert not msg.get_errors(), msg.get_errors()
 
-
     root = msg.generate_xml()
     BCDS1Message.validate_xml(root)
 
+    return root
+
 if __name__ == '__main__':
-    generate()
+    root = generate()
+    print(etree.tostring(root, encoding='unicode', pretty_print=True).strip())
