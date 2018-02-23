@@ -30,3 +30,7 @@ def test_validation():
 
     errors = msg.get_errors()
     assert 'required field' in errors['origin']
+
+    msg.origin = '01'
+    errors = msg.get_errors()
+    assert 'origin' not in errors
