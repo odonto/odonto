@@ -17,6 +17,7 @@ def envelope():
     msg.revision_level = 1
     msg.transmission_category = 1
     msg.test = True
+    msg.interchange_control_count = 2
 
     return msg
 

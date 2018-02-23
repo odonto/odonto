@@ -93,6 +93,17 @@ class Envelope(Message):
                 'required': False,
             },
 
+            # Interchange control count.
+            #
+            # Number of messages in the interchange. Required for interchanges
+            # in the END service.
+            'interchange_control_count': {
+                'type': 'number',
+                'min': 0,
+                'max': 999999,
+                'required': False,
+            },
+
             # Practice system software package version
             'software_name': {
                 'type': 'string',
@@ -127,6 +138,8 @@ class Envelope(Message):
         root.attrib['swver'] = x['software_version']
         root.attrib['pmsno'] = '{:08d}'.format(x['approval_number'])
 
+        if 'interchange_control_count' in x:
+            root.attrib['icct'] = str(x['interchange_control_count'])
         if 'revision_level' in x:
             root.attrib['rev'] = str(x['revision_level'])
         if 'transmission_category' in x:
