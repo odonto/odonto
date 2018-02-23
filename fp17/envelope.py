@@ -73,6 +73,14 @@ class Envelope(Message):
                 'required': False,
             },
 
+            # Revision level
+            'revision_level': {
+                'type': 'number',
+                'allowed': (1,),
+                'required': False,
+                'required': False,
+            },
+
             # Practice system software package version
             'software_name': {
                 'type': 'string',
@@ -106,6 +114,9 @@ class Envelope(Message):
         root.attrib['swname'] = x['software_name']
         root.attrib['swver'] = x['software_version']
         root.attrib['pmsno'] = '{:08d}'.format(x['approval_number'])
+
+        if 'revision_level' in x:
+            root.attrib['rev'] = str(x['revision_level'])
 
         return root
 
