@@ -9,11 +9,6 @@ class Envelope(Message):
 
         schema = {
             #
-            'synv': {
-                'required': True,
-            },
-
-            #
             'seq': {
                 'required': True,
             },
@@ -54,5 +49,6 @@ class Envelope(Message):
         root = etree.Element('ic')
 
         root.attrib['schvn'] = '1.0'
+        root.attrib['synv'] = '1'
 
         return root
