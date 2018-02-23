@@ -155,6 +155,7 @@ class Treatment(Message):
 class BCDS1(Message):
     class Meta:
         xsd = 'xml_bcds1.xsd'
+
         schema = {
             # Message reference number
             #
