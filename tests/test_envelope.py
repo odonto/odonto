@@ -10,6 +10,7 @@ def envelope():
     msg.origin = '01009'
     msg.destination = '01009'
     msg.release_timestamp = datetime.datetime(1985, 12, 16, 16, 40)
+    msg.serial_number = 1
 
     return msg
 

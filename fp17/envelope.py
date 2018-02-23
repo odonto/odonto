@@ -1,5 +1,6 @@
 from lxml import etree
 
+from .utils import min_digits, max_digits
 from .message import Message
 
 
@@ -8,8 +9,13 @@ class Envelope(Message):
         xsd = 'xml_envelope.xsd'
 
         schema = {
+            # Serial number
             #
-            'seq': {
+            # Sequential, unique number from site for each interchange.
+            'serial_number': {
+                'type': 'number',
+                'min': min_digits(0),
+                'max': max_digits(6),
                 'required': True,
             },
 
@@ -64,5 +70,6 @@ class Envelope(Message):
         root.attrib['dest'] = x['destination']
         root.attrib['datrel'] = x['release_timestamp'].strftime('%Y%m%d')
         root.attrib['tim'] = x['release_timestamp'].strftime('%H%M')
+        root.attrib['seq'] = '{:06d}'.format(x['serial_number'])
 
         return root
