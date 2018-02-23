@@ -56,7 +56,7 @@ class Envelope(Message):
                 'default': VERSION,
                 'minlength': 1,
                 'maxlength': 50,
-                'required': False,
+                'required': True,
             },
 
             # Origin
