@@ -509,9 +509,9 @@ class BCDS1Message(Message):
         adrdet = etree.SubElement(pat, 'adrdet')
         for text in x['patient']['address']:
             adrln = etree.SubElement(adrdet, 'adrln')
-            adrln.text = text
+            adrln.text = text.upper()
         if 'postcode' in x['patient']:
-            adrdet.attrib['pc'] = x['patient']['postcode']
+            adrdet.attrib['pc'] = x['patient']['postcode'].upper()
 
         tda = etree.SubElement(root, 'tda')
         for k, v in {
