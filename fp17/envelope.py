@@ -13,9 +13,16 @@ class Envelope(Message):
                 'required': True,
             },
 
+            # Destination
             #
-            'dest': {
+            # For messages orginated by the system, the unique five digit site
+            # number issued by the service. Messages originated by a user use
+            # the code appropriate to the service.
+            'destination': {
                 'required': True,
+                'required': True,
+                'minlength': 1,
+                'maxlength': 35,
             },
 
             #
@@ -58,5 +65,6 @@ class Envelope(Message):
         root.attrib['schvn'] = '1.0'
         root.attrib['synv'] = '1'
         root.attrib['ori'] = x['origin']
+        root.attrib['dest'] = x['destination']
 
         return root

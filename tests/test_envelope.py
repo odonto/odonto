@@ -7,6 +7,7 @@ from fp17.envelope import Envelope
 def envelope():
     msg = Envelope()
     msg.origin = '01009'
+    msg.destination = '01009'
 
     return msg
 
