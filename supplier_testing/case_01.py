@@ -2,10 +2,10 @@ import datetime
 
 from lxml import etree
 
-from fp17.bcds1 import BCDS1Message, Patient, Treatment, SCHEDULE_QUERY_TRUE
+from fp17.bcds1 import BCDS1, Patient, Treatment, SCHEDULE_QUERY_TRUE
 
 def generate():
-    msg = BCDS1Message()
+    msg = BCDS1()
     msg.message_reference_number = 123456
     msg.performer_number = 123456
     msg.dpb_pin = 123456
@@ -31,7 +31,7 @@ def generate():
     assert not msg.get_errors(), msg.get_errors()
 
     root = msg.generate_xml()
-    BCDS1Message.validate_xml(root)
+    BCDS1.validate_xml(root)
 
     return root
 

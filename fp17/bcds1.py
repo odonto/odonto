@@ -152,7 +152,7 @@ class Treatment(Message):
         }
 
 
-class BCDS1Message(Message):
+class BCDS1(Message):
     class Meta:
         schema = {
             # Message reference number
