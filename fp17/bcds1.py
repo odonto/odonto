@@ -478,18 +478,18 @@ class BCDS1Message(Message):
 
     @staticmethod
     def get_root_xml_element(x):
+        # There are 5 mandatory segments, including the </bcds1> closing tag.
+        num_segments = 5
+
         root = etree.Element('bcds1')
 
         root.attrib['schvn'] = '1.0'
-
         root.attrib['clrn'] = str(x['message_reference_number'])
         root.attrib['perf'] = str(x['performer_number'])
         root.attrib['pin'] = str(x['dpb_pin'])
         root.attrib['cno'] = str(x['contract_number'])
         root.attrib['loc'] = '{:06d}'.format(x['location'])
         root.attrib['resct'] = '{:02d}'.format(x['resubmission_count'])
-
-        root.attrib['noseg'] = '5'  # calculated
 
         pat = etree.SubElement(root, 'pat')
         pat.attrib['sex'] = x['patient']['sex']
@@ -570,10 +570,13 @@ class BCDS1Message(Message):
                     x['exception_remission']['supporting_details']
 
         def create_treatments(name, data):
+            nonlocal num_segments
+
             if not data:
                 return
 
             elem = etree.SubElement(root, name)
+            num_segments += 1
 
             for treatment in data:
                 reptrtty = etree.SubElement(elem, 'reptrtty')
@@ -590,9 +593,12 @@ class BCDS1Message(Message):
 
         if x['dental_chart']:
             cht = etree.SubElement(root, 'cht')
+            num_segments += 1
             for entry in x['dental_chart']:
                 todata = etree.SubElement(cht, 'todata')
                 todata.attrib['toid'] = entry['tooth']
                 todata.attrib['ancd'] = entry['annotation']
+
+        root.attrib['noseg'] = str(num_segments)
 
         return root
