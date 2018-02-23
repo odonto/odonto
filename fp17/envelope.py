@@ -65,6 +65,14 @@ class Envelope(Message):
                 'maxlength': 35,
             },
 
+            # Practice system approval number
+            'approval_number': {
+                'type': 'number',
+                'min': min_digits(0),
+                'max': max_digits(6),
+                'required': False,
+            },
+
             # Practice system software package version
             'software_name': {
                 'type': 'string',
@@ -97,6 +105,7 @@ class Envelope(Message):
         root.attrib['seq'] = '{:06d}'.format(x['serial_number'])
         root.attrib['swname'] = x['software_name']
         root.attrib['swver'] = x['software_version']
+        root.attrib['pmsno'] = '{:08d}'.format(x['approval_number'])
 
         return root
 
