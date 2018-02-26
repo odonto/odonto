@@ -119,7 +119,8 @@ class Treatment(Message):
     concatentation of the `code` and `instance_count` attributes.
 
     For example, ie. `91501` (Band 1) is constructed via a `code` of `9150` and
-    an `instance_count` of `1`.
+    an `instance_count` of `1`, and `9317` is constructed via `code` of `9317`
+    without an `instance_count` being specified.
 
     See "FP17 FP170 Processing rules" document for more information.
     """
@@ -142,7 +143,7 @@ class Treatment(Message):
                 'type': 'number',
                 'min': min_digits(0),
                 'max': max_digits(2),
-                'required': True,
+                'required': False,
             },
 
             # Tooth identification code
