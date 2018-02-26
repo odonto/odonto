@@ -2,6 +2,7 @@ import datetime
 
 from lxml import etree
 
+from fp17 import treatments
 from fp17.bcds1 import BCDS1, Patient, Treatment, SCHEDULE_QUERY_TRUE
 from fp17.envelope import Envelope
 
@@ -28,11 +29,11 @@ def generate():
     bcds1.patient_charge_currency = 'GBP'
 
     bcds1.treatments = [
-        Treatment(code=9160, instance_count=1),  # Treatment Category: Band 1
-        Treatment(code=9317),  # Examination
-        Treatment(code=9172, instance_count=9),  # Recall Interval
-        Treatment(code=9301),  # Scale & Polish
-        Treatment(code=9025, instance_count=1),  # Ethnic Origin 1
+        treatments.TREATMENT_CATEGORY_BAND_1,
+        treatments.EXAMINATION,
+        treatments.RECALL_INTERVAL,
+        treatments.SCALE_AND_POLISH,
+        treatments.ETHNIC_ORIGIN_WHITE_BRITISH,
     ]
 
     assert not bcds1.get_errors(), bcds1.get_errors()
