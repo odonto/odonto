@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eu
+
+for X in supplier_testing/case_*.py
+do
+	echo "I: ${X}"
+
+	PYTHONPATH=. python ${X} > supplier_testing/$(basename ${X} .py).xml
+done
