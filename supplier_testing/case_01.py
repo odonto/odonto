@@ -16,9 +16,9 @@ def generate():
     bcds1.location = 123456
 
     bcds1.patient = Patient()
-    bcds1.patient.surname = "Barlaston"
-    bcds1.patient.forename = "Sally"
-    bcds1.patient.address = ["1 High Street"]
+    bcds1.patient.surname = "BARLASTON"
+    bcds1.patient.forename = "SALLY"
+    bcds1.patient.address = ["1 HIGH STREET"]
     bcds1.patient.sex = 'F'
     bcds1.patient.date_of_birth = datetime.date(1958, 1, 23)
 

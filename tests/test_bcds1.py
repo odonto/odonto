@@ -16,12 +16,12 @@ def bcds1():
     msg.patient = Patient()
     msg.patient.sex = 'M'
     msg.patient.date_of_birth = datetime.date(1985, 12, 16)
-    msg.patient.title = "Mr"
-    msg.patient.forename = "Chris"
-    msg.patient.surname = "Lamb"
+    msg.patient.title = "MR"
+    msg.patient.forename = "CHRIS"
+    msg.patient.surname = "LAMB"
     msg.patient.nhs_number = 'A123456789'
     msg.patient.national_insurance_number = 'J12345679'
-    msg.patient.address = ["Address line {}".format(x) for x in range(5)]
+    msg.patient.address = ["ADDRESS LINE {}".format(x) for x in range(5)]
     msg.patient.postcode = 'NW1 1AA'
 
     msg.provider_declaration = 65

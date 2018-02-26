@@ -33,8 +33,7 @@ class Patient(Message):
             # (eg. "Mr")
             'title': {
                 'type': 'string',
-                'minlength': 1,
-                'maxlength': 4,
+                'regex': '^[A-Z]{1,4}$',
                 'required': False,
             },
 
@@ -43,8 +42,7 @@ class Patient(Message):
             # First forename.
             'forename': {
                 'type': 'string',
-                'minlength': 2,
-                'maxlength': 20,
+                'regex': '^[A-Z0-9]{2,20}$',
                 'required': True,
             },
 
@@ -53,16 +51,14 @@ class Patient(Message):
             # Surname of patient.
             'surname': {
                 'type': 'string',
-                'minlength': 2,
-                'maxlength': 20,
+                'regex': '^[A-Z0-9]{2,20}$',
                 'required': True,
             },
 
             # Previous surname
             'previous_surname': {
                 'type': 'string',
-                'minlength': 2,
-                'maxlength': 20,
+                'regex': '^[A-Z0-9]{2,20}$',
                 'required': False,
             },
 
@@ -91,8 +87,7 @@ class Patient(Message):
                 'type': 'list',
                 'schema': {
                     'type': 'string',
-                    'minlength': 1,
-                    'maxlength': 32,
+                    'regex': '^[A-Z0-9 ]{1,32}$',
                 },
                 'required': True,
                 'minlength': 1,
@@ -104,8 +99,7 @@ class Patient(Message):
             # Patient's post code
             'postcode': {
                 'type': 'string',
-                'minlength': 1,
-                'maxlength': 8,
+                'regex': '^[A-Z0-9 ]{1,8}$',
                 'required': False,
             },
         }
@@ -476,8 +470,8 @@ class BCDS1(Message):
         pat = etree.SubElement(root, 'pat')
         pat.attrib['sex'] = x['patient']['sex']
         pat.attrib['dob'] = x['patient']['date_of_birth'].strftime('%Y%m%d')
-        pat.attrib['ptfn'] = x['patient']['forename'].upper()
-        pat.attrib['ptsur'] = x['patient']['surname'].upper()
+        pat.attrib['ptfn'] = x['patient']['forename']
+        pat.attrib['ptsur'] = x['patient']['surname']
 
         for k, v in {
             'nino': 'national_insurance_number',
@@ -486,14 +480,14 @@ class BCDS1(Message):
             'prvsur': 'previous_surname',
         }.items():
             if v in x['patient']:
-                pat.attrib[k] = x['patient'][v].upper()
+                pat.attrib[k] = x['patient'][v]
 
         adrdet = etree.SubElement(pat, 'adrdet')
         for text in x['patient']['address']:
             adrln = etree.SubElement(adrdet, 'adrln')
-            adrln.text = text.upper()
+            adrln.text = text
         if 'postcode' in x['patient']:
-            adrdet.attrib['pc'] = x['patient']['postcode'].upper()
+            adrdet.attrib['pc'] = x['patient']['postcode']
 
         tda = etree.SubElement(root, 'tda')
         for k, v in {
