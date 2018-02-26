@@ -563,8 +563,10 @@ class BCDS1(Message):
             for treatment in data:
                 reptrtty = etree.SubElement(elem, 'reptrtty')
                 reptrtty.attrib['trtcd'] = '{:04d}'.format(treatment['code'])
-                reptrtty.attrib['noins'] = \
-                    '{:02d}'.format(treatment['instance_count'])
+
+                if 'instance_count' in treatment:
+                    reptrtty.attrib['noins'] = \
+                        '{:02d}'.format(treatment['instance_count'])
 
                 for x in treatment['teeth']:
                     toid = etree.SubElement(reptrtty, 'toid')
