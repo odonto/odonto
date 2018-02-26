@@ -134,6 +134,7 @@ class Treatment(Message):
                 'type': 'number',
                 'min': min_digits(0),
                 'max': max_digits(2),
+                'default': 1,
                 'required': True,
             },
 
@@ -145,6 +146,7 @@ class Treatment(Message):
                     'regex': '^[1-8][1-9]$',
                     'required': True,
                 },
+                'default': [],
                 'required': True,
                 'minlength': 0,
                 'maxlength': 36,
