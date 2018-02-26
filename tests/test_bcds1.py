@@ -55,15 +55,8 @@ def bcds1():
         'supporting_details': "Supporting details",
     }
 
-    t1 = Treatment()
-    t1.code = 1234
-    t1.instance_count = 1
-    t1.teeth = ['12']
-
-    t2 = Treatment()
-    t2.code = 5678
-    t2.instance_count = 3
-    t2.teeth = ['12']
+    t1 = Treatment(code=1234, instance_count=1, teeth=['12'])
+    t2 = Treatment(code=5678, instance_count=3, teeth=['12'])
 
     msg.treatments = [t1, t2]
     msg.treatments_specific = [t2, t1]

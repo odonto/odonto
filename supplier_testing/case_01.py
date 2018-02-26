@@ -32,10 +32,9 @@ def generate():
     bcds1.patient_charge_pence = 2060
     bcds1.patient_charge_currency = 'GBP'
 
-    treatment = Treatment()
-    treatment.code = 9150
-    treatment.instance_count = 1
-    bcds1.treatments = [treatment]
+    bcds1.treatments = [
+        Treatment(code=9160, instance_count=1),
+    ]
 
     assert not bcds1.get_errors(), bcds1.get_errors()
     BCDS1.validate_xml(bcds1.generate_xml())
