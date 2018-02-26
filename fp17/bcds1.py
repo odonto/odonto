@@ -114,6 +114,12 @@ class Patient(Message):
 class Treatment(Message):
     """
     Repeating treatment type (used in tst and cur segments).
+
+    Note that the Treatment Category is seemingly determined as a
+    concatentation of the `code` and `instance_count` attributes.
+
+    For example, ie. `91501` (Band 1) is constructed via a `code` of `9150` and
+    an `instance_count` of `1`.
     """
 
     class Meta:
@@ -134,7 +140,6 @@ class Treatment(Message):
                 'type': 'number',
                 'min': min_digits(0),
                 'max': max_digits(2),
-                'default': 1,
                 'required': True,
             },
 
