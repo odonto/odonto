@@ -375,6 +375,7 @@ class BCDS1(Message):
                     'supporting_details': {
                         'type': 'string',
                         'required': False,
+                        'regex': '^[A-Z0-9 ]{1,50}$',
                     },
                 },
                 'required': False,
