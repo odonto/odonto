@@ -122,7 +122,7 @@ class Treatment(Message):
     an `instance_count` of `1`, and `9317` is constructed via `code` of `9317`
     without an `instance_count` being specified.
 
-    See "FP17 FP170 Processing rules" document for more information.
+    See "Validation Rules for FP17 forms" document for more information.
     """
 
     class Meta:
