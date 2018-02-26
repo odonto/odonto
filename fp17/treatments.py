@@ -9,7 +9,15 @@ TREATMENT_CATEGORY_CONTRACT_PILOT_INTERIM_CARE_APPOINTMENT = \
     Treatment(code=9150, instance_count=5)
 
 EXAMINATION = Treatment(code=9317)
-RECALL_INTERVAL = Treatment(code=9172, instance_count=9)
+
+class RECALL_INTERVAL(Treatment):
+    """
+    The number of months recommended recall period [..] between 1 - 24.
+    """
+
+    def __init__(self, months):
+        super().__init__(code=9172, instance_count=months)
+
 SCALE_AND_POLISH = Treatment(code=9301)
 
 ETHNIC_ORIGIN_WHITE_BRITISH = Treatment(code=9025, instance_count=1)

@@ -31,7 +31,7 @@ def generate():
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_1,
         treatments.EXAMINATION,
-        treatments.RECALL_INTERVAL,
+        treatments.RECALL_INTERVAL(months=9),
         treatments.SCALE_AND_POLISH,
         treatments.ETHNIC_ORIGIN_WHITE_BRITISH,
     ]
