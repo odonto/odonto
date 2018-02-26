@@ -18,6 +18,25 @@ class RECALL_INTERVAL(Treatment):
     def __init__(self, months):
         super().__init__(code=9172, instance_count=months)
 
+class RADIOGRAPHS(Treatment):
+    def __init__(self, num_radiographs):
+        super().__init__(code=9304, instance_count=num_radiographs)
+
+class CROWN(Treatment):
+    def __init__(self, num_crowns):
+        super().__init__(code=9308, instance_count=num_crowns)
+
+class FILLED_TEETH_DECIDUOUS(Treatment):
+    """
+    A count of deciduous teeth where any direct or indirect restoration is
+    present [..] between 0 - 20.
+
+    Any tooth should only be counted once.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9325, instance_count=num_teeth)
+
 SCALE_AND_POLISH = Treatment(code=9301)
 
 ETHNIC_ORIGIN_WHITE_BRITISH = Treatment(code=9025, instance_count=1)
