@@ -17,7 +17,6 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 4, 1)
 
     bcds1.patient_charge_pence = 5630
-    bcds1.patient_charge_currency = 'GBP'
 
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_2,
