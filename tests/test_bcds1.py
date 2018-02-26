@@ -52,7 +52,7 @@ def bcds1():
 
     msg.exception_remission = {
         'code': 10,
-        'supporting_details': "Supporting details",
+        'supporting_details': "SUPPORTING DETAILS",
     }
 
     t1 = Treatment(code=1234, instance_count=1, teeth=['12'])
