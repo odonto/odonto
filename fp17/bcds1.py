@@ -347,6 +347,7 @@ class BCDS1(Message):
             'patient_charge_pence': {
                 'type': 'number',
                 'min': 0,
+                'default': 0,
                 'required': True,
             },
 
