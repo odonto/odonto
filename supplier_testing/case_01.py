@@ -37,8 +37,8 @@ def generate():
     treatment.instance_count = 1
     bcds1.treatments = [treatment]
 
-    BCDS1.validate_xml(bcds1.generate_xml())
     assert not bcds1.get_errors(), bcds1.get_errors()
+    BCDS1.validate_xml(bcds1.generate_xml())
 
     envelope = Envelope()
     envelope.origin = "1234"
