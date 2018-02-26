@@ -5,11 +5,6 @@ from lxml import etree
 from fp17.bcds1 import BCDS1, Patient, Treatment, SCHEDULE_QUERY_TRUE
 from fp17.envelope import Envelope
 
-"""
-FIXME:
-#Treatment Category	Clinical Data Set
-    #   Band 1	Examination (9317), Recall Interval (9172 9), Scale & Polish, Ethnic Origin 1
-"""
 
 def generate():
     bcds1 = BCDS1()
@@ -33,7 +28,11 @@ def generate():
     bcds1.patient_charge_currency = 'GBP'
 
     bcds1.treatments = [
-        Treatment(code=9160, instance_count=1),
+        Treatment(code=9160, instance_count=1),  # Treatment Category: Band 1
+        Treatment(code=9317),  # Examination
+        Treatment(code=9172, instance_count=9),  # Recall Interval
+        Treatment(code=9301),  # Scale & Polish
+        Treatment(code=9025, instance_count=1),  # Ethnic Origin 1
     ]
 
     assert not bcds1.get_errors(), bcds1.get_errors()
