@@ -1,7 +1,7 @@
 from .bcds1 import Treatment
 
 
-TREATMENT_CATEGORY_BAND_1 = Treatment(code=9160, instance_count=1)
+TREATMENT_CATEGORY_BAND_1 = Treatment(code=9150, instance_count=1)
 EXAMINATION = Treatment(code=9317)
 RECALL_INTERVAL = Treatment(code=9172, instance_count=9)
 SCALE_AND_POLISH = Treatment(code=9301)
