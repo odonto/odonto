@@ -6,6 +6,12 @@ import xmlschema
 
 
 class Message(object):
+    def __init__(self, **kwargs):
+        super().__init__()
+
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
     @staticmethod
     def generate_root(msg):
         raise NotImplementedError()
