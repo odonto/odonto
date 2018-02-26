@@ -120,6 +120,8 @@ class Treatment(Message):
 
     For example, ie. `91501` (Band 1) is constructed via a `code` of `9150` and
     an `instance_count` of `1`.
+
+    See "FP17 FP170 Processing rules" document for more information.
     """
 
     class Meta:
