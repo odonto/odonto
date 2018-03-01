@@ -172,13 +172,13 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'compressor',
+    'odontotheme',
     'opal',
     'opal.core.search',
     'opal.core.pathway',
     'opal.core.referencedata',
     'odonto',
     'django.contrib.admin',
-    'odontotheme',
 )
 
 # A sample logging configuration. The only tangible logging
