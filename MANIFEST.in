@@ -1,0 +1,3 @@
+recursive-include openodonto/static *
+recursive-include openodonto/assets *
+recursive-include openodonto/templates *
