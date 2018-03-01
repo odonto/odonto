@@ -1,5 +1,5 @@
 from opal.core import pathway
-from openodonto import models
+from odonto import models
 
 
 class Fp17Pathway(pathway.PagePathway):

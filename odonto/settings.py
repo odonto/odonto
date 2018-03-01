@@ -1,4 +1,4 @@
-# Django settings for openodonto project.
+# Django settings for odonto project.
 import os
 import sys
 
@@ -124,10 +124,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'openodonto.urls'
+ROOT_URLCONF = 'odonto.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'openodonto.wsgi.application'
+WSGI_APPLICATION = 'odonto.wsgi.application'
 
 TEMPLATES = [
     {
@@ -176,7 +176,7 @@ INSTALLED_APPS = (
     'opal.core.search',
     'opal.core.pathway',
     'opal.core.referencedata',
-    'openodonto',
+    'odonto',
     'django.contrib.admin',
     'odontotheme',
 )
@@ -237,8 +237,8 @@ else:
     EMAIL_PORT = 1025
     EMAIL_HOST = 'localhost'
 
-COVERAGE_EXCLUDE_MODULES = ('openodonto.migrations', 'openodonto.tests',
-                            'openodonto.local_settings',
+COVERAGE_EXCLUDE_MODULES = ('odonto.migrations', 'odonto.tests',
+                            'odonto.local_settings',
                             'opal.migrations', 'opal.tests',
                             'opal.wsgi')
 
@@ -271,7 +271,7 @@ DEFAULT_DOMAIN = 'http://openodonto.com/'
 
 # Begins OPAL Settings you should edit !
 
-OPAL_BRAND_NAME = 'openodonto'
+OPAL_BRAND_NAME = 'Open Odonto'
 VERSION_NUMBER = '0.1.0'
 
 REST_FRAMEWORK = {

@@ -1,9 +1,9 @@
 """
-Unittests for openodonto
+Unittests for odonto
 """
 from opal.core.test import OpalTestCase
 
-from openodonto import models, patient_lists
+from odonto import models, patient_lists
 
 class WeHaveSomeModelsTestCase(OpalTestCase):
     def test_there_is_a_model(self):

@@ -1,5 +1,5 @@
 """
-openodonto - Our Opal Application
+odonto - Our Opal Application
 """
 from opal.core import application
 

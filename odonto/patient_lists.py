@@ -4,7 +4,7 @@ Defining Opal PatientLists
 from opal import core
 from opal.models import Episode
 
-from openodonto import models
+from odonto import models
 
 class AllPatientsList(core.patient_lists.PatientList):
     display_name = 'All Patients'
