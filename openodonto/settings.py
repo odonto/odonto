@@ -178,6 +178,7 @@ INSTALLED_APPS = (
     'opal.core.referencedata',
     'openodonto',
     'django.contrib.admin',
+    'odontotheme',
 )
 
 # A sample logging configuration. The only tangible logging

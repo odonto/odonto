@@ -19,3 +19,6 @@ celery==3.1.19
 
 # Open Health Care repositories on GitHub
 -e git+https://github.com/openhealthcare/opal.git@v0.10.0#egg=opal
+
+# Odonto repositories on GitHub
+-e git+https://github.com/odonto/opal-odontotheme.git@master#egg=odontotheme
