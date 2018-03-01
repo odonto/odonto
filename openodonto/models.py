@@ -2,21 +2,21 @@
 openodonto models.
 """
 from django.db.models import fields
-from django.db import models
-from opal import models as omodels
+
+from opal import models
 
 """
 Core Opal models - these inherit from the abstract data models in
 opal.models but can be customised here with extra / altered fields.
 """
-class Location(omodels.Location): pass
-class Allergies(omodels.Allergies): pass
-class Diagnosis(omodels.Diagnosis): pass
-class PastMedicalHistory(omodels.PastMedicalHistory): pass
-class Treatment(omodels.Treatment): pass
-class Investigation(omodels.Investigation): pass
-class SymptomComplex(omodels.SymptomComplex): pass
-class PatientConsultation(omodels.PatientConsultation): pass
+class Location(models.Location): pass
+class Allergies(models.Allergies): pass
+class Diagnosis(models.Diagnosis): pass
+class PastMedicalHistory(models.PastMedicalHistory): pass
+class Treatment(models.Treatment): pass
+class Investigation(models.Investigation): pass
+class SymptomComplex(models.SymptomComplex): pass
+class PatientConsultation(models.PatientConsultation): pass
 
 # we commonly need a referral route, ie how the patient
 # came to the service, but not always.
@@ -28,18 +28,7 @@ End Opal core models
 """
 
 
-class Fp17DentalCareProvider(models.Model):
-
-    # the following provider information is not currently in an Opal model
-    # ^^^ consider splitting this into a Provider Model
-    provider_name = fields.CharField(max_length=255)
-    provider_location_number = fields.IntegerField()
-    provider_address = fields.CharField(max_length=255)
-    performer_number_is_same_as_provider = fields.BooleanField(default=False)
-    performer_number = fields.IntegerField()
-
-
-class Demographics(omodels.Demographics):
+class Demographics(models.Demographics):
     # patient_nhs_number = fields.IntegerField()
     # ^^^ covered by Opal Demographics.nhs_number
     # title = fields.CharField(max_length=255)  # => opal.Demographics.title
@@ -62,7 +51,21 @@ class Demographics(omodels.Demographics):
     # postcode = fields.CharField(max_length=255)  # => opal.Demographics.postcode
 
 
-class Fp17IncompleteTreatment(models.Model):
+class Fp17DentalCareProvider(models.PatientSubrecord):
+    _is_singleton = True
+    # I'm pretty sure this should not be handled as a PatientSubrecord
+    # but I'm not sure what it /should/ be
+    # the following provider information is not currently in an Opal model
+    # ^^^ consider splitting this into a Provider Model
+    provider_name = fields.CharField(max_length=255)
+    provider_location_number = fields.IntegerField()
+    provider_address = fields.CharField(max_length=255)
+    performer_number_is_same_as_provider = fields.BooleanField(default=False)
+    performer_number = fields.IntegerField()
+
+
+class Fp17IncompleteTreatment(models.EpisodeSubrecord):
+    _is_singleton = True
     incomplete_treatment_band_1 = fields.BooleanField(default=False)
     incomplete_treatment_band_2 = fields.BooleanField(default=False)
     incomplete_treatment_band_3 = fields.BooleanField(default=False)
@@ -71,7 +74,8 @@ class Fp17IncompleteTreatment(models.Model):
     completion_or_last_visit = fields.DateField()
 
 
-class Fp17Exemptions(models.Model):
+class Fp17Exemptions(models.EpisodeSubrecord):
+    _is_singleton = True
     patient_under_18 = fields.BooleanField(default=False)
     full_remission_hc2_cert = fields.BooleanField(default=False)
     partial_remission_hc3_cert = fields.BooleanField(default=False)
@@ -92,7 +96,8 @@ class Fp17Exemptions(models.Model):
     patient_charge_collected = fields.DecimalField(decimal_places=2, max_digits=5)
 
 
-class Fp17TreatmentCategory(models.Model):
+class Fp17TreatmentCategory(models.EpisodeSubrecord):
+    _is_singleton = True
     treatment_category_band_1 = fields.BooleanField(default=False)
     treatment_category_band_2 = fields.BooleanField(default=False)
     treatment_category_band_3 = fields.BooleanField(default=False)
@@ -105,7 +110,8 @@ class Fp17TreatmentCategory(models.Model):
     removal_of_sutures = fields.BooleanField(default=False)
 
 
-class Fp17ClinicalDataSet(models.Model):
+class Fp17ClinicalDataSet(models.EpisodeSubrecord):
+    _is_singleton = True
     scale_and_polish = fields.BooleanField(default=False)
     fluoride_varnish = fields.BooleanField(default=False)
     fissure_sealants = fields.IntegerField()
@@ -139,7 +145,8 @@ class Fp17ClinicalDataSet(models.Model):
     filled_teeth_deciduous = fields.IntegerField()
 
 
-class Fp17OtherDentalServices(models.Model):
+class Fp17OtherDentalServices(models.EpisodeSubrecord):
+    _is_singleton = True
     treatment_on_referral = fields.BooleanField(default=False)
     free_repair_or_replacement = fields.BooleanField(default=False)
     further_treatment_within_2_months = fields.BooleanField(default=False)
@@ -147,18 +154,21 @@ class Fp17OtherDentalServices(models.Model):
     sedation_services = fields.BooleanField(default=False)
 
 
-class Fp17Recall(models.Model):
+class Fp17Recall(models.EpisodeSubrecord):
+    _is_singleton = True
     number_of_months = fields.IntegerField()
 
 
-class Fp17NHSBSAFields(models.Model):
+class Fp17NHSBSAFields(models.EpisodeSubrecord):
+    _is_singleton = True
     Fp17_NHSBSA_field_1 = fields.CharField(max_length=255)
     Fp17_NHSBSA_field_2 = fields.CharField(max_length=255)
     Fp17_NHSBSA_field_3 = fields.CharField(max_length=255)
     Fp17_NHSBSA_field_4 = fields.DecimalField(decimal_places=2, max_digits=5)
 
 
-class Fp17Declaration(models.Model):
+class Fp17Declaration(models.EpisodeSubrecord):
+    _is_singleton = True
     necessary_care_provided = fields.BooleanField(default=False)
     necessary_care_carried_out = fields.BooleanField(default=False)
 
