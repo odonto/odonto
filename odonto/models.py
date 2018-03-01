@@ -57,11 +57,11 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
     # ^^^ consider splitting this into a Provider Model
-    provider_name = fields.CharField(max_length=255)
-    provider_location_number = fields.IntegerField()
-    provider_address = fields.CharField(max_length=255)
+    provider_name = fields.CharField(max_length=255, blank=True, null=True)
+    provider_location_number = fields.IntegerField(blank=True, null=True)
+    provider_address = fields.CharField(max_length=255, blank=True, null=True)
     performer_number_is_same_as_provider = fields.BooleanField(default=False)
-    performer_number = fields.IntegerField()
+    performer_number = fields.IntegerField(blank=True, null=True)
 
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
@@ -69,9 +69,9 @@ class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     incomplete_treatment_band_1 = fields.BooleanField(default=False)
     incomplete_treatment_band_2 = fields.BooleanField(default=False)
     incomplete_treatment_band_3 = fields.BooleanField(default=False)
-    date_of_acceptance = fields.DateField()
+    date_of_acceptance = fields.DateField(blank=True, null=True)
     completion_same_as_acceptance_date = fields.BooleanField(default=False)
-    completion_or_last_visit = fields.DateField()
+    completion_or_last_visit = fields.DateField(blank=True, null=True)
 
 
 class Fp17Exemptions(models.EpisodeSubrecord):
@@ -93,7 +93,7 @@ class Fp17Exemptions(models.EpisodeSubrecord):
 
     # logically I'd like to split this into its own PatientRemittance model
     # to keep all the Exemptions cleanly together in their own Model.
-    patient_charge_collected = fields.DecimalField(decimal_places=2, max_digits=5)
+    patient_charge_collected = fields.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)
 
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
@@ -114,35 +114,35 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     _is_singleton = True
     scale_and_polish = fields.BooleanField(default=False)
     fluoride_varnish = fields.BooleanField(default=False)
-    fissure_sealants = fields.IntegerField()
-    radiographs_taken = fields.IntegerField()
+    fissure_sealants = fields.IntegerField(blank=True, null=True)
+    radiographs_taken = fields.IntegerField(blank=True, null=True)
 
     endodontic_treatment = fields.BooleanField(default=False)
-    permanent_fillings_and_sealant_restorations = fields.IntegerField()
-    extractions = fields.IntegerField()
-    crowns_provided = fields.IntegerField()
+    permanent_fillings_and_sealant_restorations = fields.IntegerField(blank=True, null=True)
+    extractions = fields.IntegerField(blank=True, null=True)
+    crowns_provided = fields.IntegerField(blank=True, null=True)
 
-    upper_denture_acrylic = fields.IntegerField()
-    lower_denture_acrylic = fields.IntegerField()
-    upper_denture_metal = fields.IntegerField()
-    lower_denture_metal = fields.IntegerField()
+    upper_denture_acrylic = fields.IntegerField(blank=True, null=True)
+    lower_denture_acrylic = fields.IntegerField(blank=True, null=True)
+    upper_denture_metal = fields.IntegerField(blank=True, null=True)
+    lower_denture_metal = fields.IntegerField(blank=True, null=True)
 
-    veneers_applied = fields.IntegerField()
-    inlays = fields.IntegerField()
-    bridges_fitted = fields.IntegerField()
-    referral_for_advanced_mandatory_services_band = fields.IntegerField()
+    veneers_applied = fields.IntegerField(blank=True, null=True)
+    inlays = fields.IntegerField(blank=True, null=True)
+    bridges_fitted = fields.IntegerField(blank=True, null=True)
+    referral_for_advanced_mandatory_services_band = fields.IntegerField(blank=True, null=True)
 
     examination = fields.BooleanField(default=False)
-    antibiotic_items_prescribed = fields.IntegerField()
+    antibiotic_items_prescribed = fields.IntegerField(blank=True, null=True)
     other_treatment = fields.BooleanField(default=False)
     best_practice_prevention_according_to_delivering_better_oral_health_offered = fields.BooleanField(default=False)
 
-    decayed_teeth_permanent = fields.IntegerField()
-    decayed_teeth_deciduous = fields.IntegerField()
-    missing_teeth_permanent = fields.IntegerField()
-    missing_teeth_deciduous = fields.IntegerField()
-    filled_teeth_permanent = fields.IntegerField()
-    filled_teeth_deciduous = fields.IntegerField()
+    decayed_teeth_permanent = fields.IntegerField(blank=True, null=True)
+    decayed_teeth_deciduous = fields.IntegerField(blank=True, null=True)
+    missing_teeth_permanent = fields.IntegerField(blank=True, null=True)
+    missing_teeth_deciduous = fields.IntegerField(blank=True, null=True)
+    filled_teeth_permanent = fields.IntegerField(blank=True, null=True)
+    filled_teeth_deciduous = fields.IntegerField(blank=True, null=True)
 
 
 class Fp17OtherDentalServices(models.EpisodeSubrecord):
@@ -156,15 +156,15 @@ class Fp17OtherDentalServices(models.EpisodeSubrecord):
 
 class Fp17Recall(models.EpisodeSubrecord):
     _is_singleton = True
-    number_of_months = fields.IntegerField()
+    number_of_months = fields.IntegerField(blank=True, null=True)
 
 
 class Fp17NHSBSAFields(models.EpisodeSubrecord):
     _is_singleton = True
-    Fp17_NHSBSA_field_1 = fields.CharField(max_length=255)
-    Fp17_NHSBSA_field_2 = fields.CharField(max_length=255)
-    Fp17_NHSBSA_field_3 = fields.CharField(max_length=255)
-    Fp17_NHSBSA_field_4 = fields.DecimalField(decimal_places=2, max_digits=5)
+    Fp17_NHSBSA_field_1 = fields.CharField(max_length=255, blank=True, null=True)
+    Fp17_NHSBSA_field_2 = fields.CharField(max_length=255, blank=True, null=True)
+    Fp17_NHSBSA_field_3 = fields.CharField(max_length=255, blank=True, null=True)
+    Fp17_NHSBSA_field_4 = fields.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)
 
 
 class Fp17Declaration(models.EpisodeSubrecord):
@@ -172,5 +172,5 @@ class Fp17Declaration(models.EpisodeSubrecord):
     necessary_care_provided = fields.BooleanField(default=False)
     necessary_care_carried_out = fields.BooleanField(default=False)
 
-    signature = fields.CharField(max_length=255)
-    signature_date = fields.DateField()
+    signature = fields.CharField(max_length=255, blank=True, null=True)
+    signature_date = fields.DateField(blank=True, null=True)
