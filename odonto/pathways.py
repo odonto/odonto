@@ -15,7 +15,7 @@ class Fp17Pathway(pathway.PagePathway):
             display_name="Care Provider"),
         pathway.Step(
             model=models.Fp17IncompleteTreatment,
-            display_name="Incomplete Treatment"),
+            display_name="Incomplete Treatment and Treatment Dates"),
         pathway.Step(
             model=models.Fp17Exemptions,
             display_name="Exemptions and Remissions"),
