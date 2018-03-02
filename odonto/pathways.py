@@ -2,6 +2,13 @@ from opal.core import pathway
 from odonto import models
 
 
+class AddPatientPathway(pathway.PagePathway):
+    display_name = "Add Patient"
+    slug = "add_patient"
+    steps = (
+        models.Demographics
+    )
+
 class Fp17Pathway(pathway.PagePathway):
     display_name = 'FP17 Claim Form'
     slug = 'fp17'
