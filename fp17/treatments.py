@@ -8,6 +8,13 @@ TREATMENT_CATEGORY_URGENT = Treatment(code=9150, instance_count=4)
 TREATMENT_CATEGORY_CONTRACT_PILOT_INTERIM_CARE_APPOINTMENT = \
     Treatment(code=9150, instance_count=5)
 
+REGULATION_11_APPLIANCE = Treatment(code=9162)
+PRESCRIPTION = Treatment(code=9158)
+DENTURE_REPAIRS = Treatment(code=9154)
+BRIDGE_REPAIRS = Treatment(code=9157)
+ARREST_OF_BLEEDING = Treatment(code=9155)
+REMOVAL_OF_SUTURES = Treatment(code=9155)
+
 EXAMINATION = Treatment(code=9317)
 
 class RECALL_INTERVAL(Treatment):
