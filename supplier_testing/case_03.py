@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # "Under 18"
     bcds1.excemption_remission = {'code': 28}
 
-    # Treatments: "Radiographs x 2, Crown x 1, Filled Deciduous 2, Ethnic Origin 3 "
+    # Treatments: "Radiographs x 2, Crown x 1, Filled Deciduous 2, Ethnic Origin 3"
     bcds1.treatments = [
         treatments.RADIOGRAPHS(2),
         treatments.CROWN(1),
