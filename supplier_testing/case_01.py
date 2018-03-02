@@ -19,6 +19,7 @@ if __name__ == '__main__':
 
     bcds1.patient_charge_pence = 2060
 
+    # "Examination (9317), Recall Interval (9172 9), Scale & Polish, Ethnic Origin 1"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_1,
         treatments.EXAMINATION,
