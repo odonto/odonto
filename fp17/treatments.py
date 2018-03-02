@@ -107,6 +107,42 @@ class FILLED_DECIDUOUS(Treatment):
     def __init__(self, num_teeth):
         super().__init__(code=9324, instance_count=num_teeth)
 
+class UPPER_DENTURE_ACRYLIC(Treatment):
+    """
+    An acrylic or resin based denture was provided (i.e. full or partial
+    denture). The number of teeth present on the denture should be provided.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9309, instance_count=num_teeth)
+
+class LOWER_DENTURE_ACRYLIC(Treatment):
+    """
+    An acrylic or resin based denture was provided (i.e. full or partial
+    denture). The number of teeth present on the denture should be provided.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9310, instance_count=num_teeth)
+
+class UPPER_DENTURE_METAL(Treatment):
+    """
+    A metal based denture was provided (i.e. full or partial denture). The
+    number of teeth present on the denture should be provided.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9311, instance_count=num_teeth)
+
+class LOWER_DENTURE_METAL(Treatment):
+    """
+    A metal based denture was provided (i.e. full or partial denture). The
+    number of teeth present on the denture should be provided.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9312, instance_count=num_teeth)
+
 ETHNIC_ORIGIN_1_WHITE_BRITISH = Treatment(code=9025, instance_count=1)
 ETHNIC_ORIGIN_2_WHITE_IRISH = Treatment(code=9025, instance_count=2)
 ETHNIC_ORIGIN_3_WHITE_OTHER = Treatment(code=9025, instance_count=3)
