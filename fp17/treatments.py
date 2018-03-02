@@ -46,6 +46,67 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
 
 SCALE_AND_POLISH = Treatment(code=9301)
 
+class ANTIBIOTIC_ITEMS(Treatment):
+    def __init__(self, num_prescribed):
+        super().__init__(code=9318, instance_count=num_prescribed)
+
+class DECAYED_PERMANENT(Treatment):
+    """
+    Permanent teeth where established caries is charted on any surface (between
+    0 and 32).
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9320, instance_count=num_teeth)
+
+class MISSING_PERMANENT(Treatment):
+    """
+    Permanent teeth charted as missing including those replaced by bridge
+    pontics and dentures but excluding teeth charted as unerupted (between 0
+    and 32).
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9321, instance_count=num_teeth)
+
+class FILLED_PERMANENT(Treatment):
+    """
+    Permanent teeth charted as restored on any surface with direct restorations
+    (fillings) or with indirect restorations of the following types: crowns,
+    inlays, bridge retainers (between 0 and 32).
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9322, instance_count=num_teeth)
+
+class DECAYED_DECIDUOUS(Treatment):
+    """
+    Deciduous teeth where established caries is charted on any surface (between
+    0 and 20).
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9323, instance_count=num_teeth)
+
+class MISSING_DECIDUOUS(Treatment):
+    """
+    Missing deciduous teeth, where "missing" means where a tooth has been
+    extracted (between 0 and 12). ULA, ULB, URA, URB, LLA, LLB, LRA, LRB should
+    be excluded from the count.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9324, instance_count=num_teeth)
+
+class FILLED_DECIDUOUS(Treatment):
+    """
+    Deciduous teeth where any direct or indirect restoration is present
+    extracted (between 0 and 20). Any tooth should only be counted once.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9324, instance_count=num_teeth)
+
 ETHNIC_ORIGIN_1_WHITE_BRITISH = Treatment(code=9025, instance_count=1)
 ETHNIC_ORIGIN_2_WHITE_IRISH = Treatment(code=9025, instance_count=2)
 ETHNIC_ORIGIN_3_WHITE_OTHER = Treatment(code=9025, instance_count=3)
