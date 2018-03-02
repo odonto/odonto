@@ -23,7 +23,10 @@ if __name__ == '__main__':
     # Permanent 1, Filled Permanent 12, Ethnic Origin 4"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_URGENT,
-
+        treatments.ANTIBIOTIC_ITEMS(1),
+        treatments.DECAYED_PERMANENT(0),
+        treatments.MISSING_PERMANENT(1),
+        treatments.FILLED_PERMANENT(12),
         treatments.ETHNIC_ORIGIN_4_WHITE_AND_BLACK_CARIBBEAN,
     ]
 
