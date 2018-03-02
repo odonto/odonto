@@ -1,5 +1,13 @@
 {% load forms %}
-{% checkbox field="Fp17Declaration.necessary_care_provided" %}
-{% checkbox field="Fp17Declaration.necessary_care_carried_out" %}
-{% input field="Fp17Declaration.signature" %}
-{% datepicker field="Fp17Declaration.signature_date" %}
+<div class="row">
+  <div class="col-md-6">
+    {% checkbox field="Fp17Declaration.necessary_care_provided" %}
+  </div>
+  <div class="col-md-6">
+    {% checkbox field="Fp17Declaration.necessary_care_carried_out" %}
+  </div>
+</div>
+<div class="row">
+  {% input label="All the necessary care and treatment that the patient is willing to undergo will be provided." field="Fp17Declaration.signature" %}
+  {% datepicker label="All the currently necessary care and treatment that the patient is willing to undergo has been carried out." field="Fp17Declaration.signature_date" %}
+</div>

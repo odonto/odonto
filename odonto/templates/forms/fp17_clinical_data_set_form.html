@@ -1,8 +1,8 @@
 {% load forms %}
-{% checkbox field="Fp17ClinicalDataSet.scale_and_polish" %}
-{% checkbox field="Fp17ClinicalDataSet.fluoride_varnish" %}
-{% input field="Fp17ClinicalDataSet.fissure_sealants" %}
-{% input field="Fp17ClinicalDataSet.radiographs_taken" %}
+{% checkbox field="Fp17ClinicalDataSet.scale_and_polish" style="vertical" %}
+{% checkbox field="Fp17ClinicalDataSet.fluoride_varnish" style="vertical" %}
+{% input field="Fp17ClinicalDataSet.fissure_sealants" maxlength="2" unit="teeth" %}
+{% input field="Fp17ClinicalDataSet.radiographs_taken" maxlength="2" %}
 {% checkbox field="Fp17ClinicalDataSet.endodontic_treatment" %}
 {% input field="Fp17ClinicalDataSet.permanent_fillings_and_sealant_restorations" %}
 {% input field="Fp17ClinicalDataSet.extractions" %}

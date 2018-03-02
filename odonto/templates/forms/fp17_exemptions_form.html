@@ -1,15 +1,26 @@
 {% load forms %}
-{% checkbox field="Fp17Exemptions.patient_under_18" %}
-{% checkbox field="Fp17Exemptions.full_remission_hc2_cert" %}
-{% checkbox field="Fp17Exemptions.partial_remission_hc3_cert" %}
-{% checkbox field="Fp17Exemptions.expectant_mother" %}
-{% checkbox field="Fp17Exemptions.nursing_mother" %}
-{% checkbox field="Fp17Exemptions.aged_18_in_full_time_education" %}
-{% checkbox field="Fp17Exemptions.income_support" %}
-{% checkbox field="Fp17Exemptions.nhs_tax_credit_exemption" %}
-{% checkbox field="Fp17Exemptions.income_based_jobseekers_allowance" %}
-{% checkbox field="Fp17Exemptions.pension_credit_guarantee_credit" %}
-{% checkbox field="Fp17Exemptions.prisoner" %}
-{% checkbox field="Fp17Exemptions.income_related_employment_and_support_allowance" %}
-{% checkbox field="Fp17Exemptions.universal_credit" %}
-{% checkbox field="Fp17Exemptions.evidence_of_exception_or_remission_seen" %}
+<div class="row">
+  <div class="col-md-4">
+    {% checkbox field="Fp17Exemptions.patient_under_18" style="vertical" %}
+    {% checkbox label="Full Remission - HC2 cert." field="Fp17Exemptions.full_remission_hc2_cert" style="vertical" %}
+    {% checkbox label="Partial Remission - HC3 cert." field="Fp17Exemptions.partial_remission_hc3_cert" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.expectant_mother" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.nursing_mother" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% checkbox field="Fp17Exemptions.aged_18_in_full_time_education" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.income_support" style="vertical" %}
+    {% checkbox label="NHS Tax Credit Exemption" field="Fp17Exemptions.nhs_tax_credit_exemption" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.income_based_jobseekers_allowance" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% checkbox field="Fp17Exemptions.pension_credit_guarantee_credit" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.prisoner" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.income_related_employment_and_support_allowance" style="vertical" %}
+    {% checkbox field="Fp17Exemptions.universal_credit" style="vertical" %}
+  </div>
+</div>
+<hr>
+<div class="row">
+  {% checkbox field="Fp17Exemptions.evidence_of_exception_or_remission_seen" style="vertical" %}
+</div>

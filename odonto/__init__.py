@@ -18,6 +18,11 @@ class Application(application.OpalApplication):
                 href="#TODO",
                 display="Add Patient",
                 icon="fa fa-user",
+            ),
+            menus.MenuItem(
+                href="/pathway/#/fp17",
+                display="File FP17 Claim",
+                icon="fa fa-money",
             )
         ]
         return menu_items

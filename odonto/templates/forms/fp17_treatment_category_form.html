@@ -1,11 +1,19 @@
 {% load forms %}
-{% checkbox field="Fp17TreatmentCategory.treatment_category_band_1" %}
-{% checkbox field="Fp17TreatmentCategory.treatment_category_band_2" %}
-{% checkbox field="Fp17TreatmentCategory.treatment_category_band_3" %}
-{% checkbox field="Fp17TreatmentCategory.urgent_treatment" %}
-{% checkbox field="Fp17TreatmentCategory.regulation_11_replacement_appliance" %}
-{% checkbox field="Fp17TreatmentCategory.prescription_only" %}
-{% checkbox field="Fp17TreatmentCategory.denture_repairs" %}
-{% checkbox field="Fp17TreatmentCategory.bridge_repairs" %}
-{% checkbox field="Fp17TreatmentCategory.arrest_of_bleeding" %}
-{% checkbox field="Fp17TreatmentCategory.removal_of_sutures" %}
+<div class="row">
+  <div class="col-md-4">
+    {% checkbox field="Fp17TreatmentCategory.treatment_category_band_1" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.treatment_category_band_2" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.treatment_category_band_3" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% checkbox field="Fp17TreatmentCategory.urgent_treatment" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.regulation_11_replacement_appliance" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.prescription_only" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.denture_repairs" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% checkbox field="Fp17TreatmentCategory.bridge_repairs" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.arrest_of_bleeding" style="vertical" %}
+    {% checkbox field="Fp17TreatmentCategory.removal_of_sutures" style="vertical" %}
+  </div>
+</div>
