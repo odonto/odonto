@@ -20,7 +20,6 @@ if __name__ == '__main__':
     # Treatments: "Ethnic Origin 2"
     bcds1.treatments = [
         treatments.DENTURE_REPAIRS,
-
         treatments.ETHNIC_ORIGIN_2_WHITE_IRISH,
     ]
 
