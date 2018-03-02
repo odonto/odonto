@@ -1,0 +1,19 @@
+{% load panels %}
+
+<div class="row">
+  <div class="col-md-4">
+    {% record_panel models.Fp17DentalCareProvider %}
+    {% record_panel models.Fp17IncompleteTreatment %}
+    {% record_panel models.Fp17Exemptions %}
+  </div>
+  <div class="col-md-4">
+    {% record_panel models.Fp17TreatmentCategory %}
+    {% record_panel models.Fp17ClinicalDataSet %}
+    {% record_panel models.Fp17OtherDentalServices %}
+  </div>
+  <div class="col-md-4">
+    {% record_panel models.Fp17Recall %}
+    {% record_panel models.Fp17NHSBSAFields %}
+    {% record_panel models.Fp17Declaration %}
+  </div>
+</div>
