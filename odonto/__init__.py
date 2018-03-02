@@ -15,7 +15,7 @@ class Application(application.OpalApplication):
     def get_menu_items(cls, user=None):
         menu_items = [
             menus.MenuItem(
-                href="#TODO",
+                href="/pathway/#/add_patient",
                 display="Add Patient",
                 icon="fa fa-user",
             ),

@@ -6,7 +6,7 @@ class AddPatientPathway(pathway.PagePathway):
     display_name = "Add Patient"
     slug = "add_patient"
     steps = (
-        models.Demographics
+        models.Demographics,
     )
 
 class Fp17Pathway(pathway.PagePathway):
