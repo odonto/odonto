@@ -24,7 +24,7 @@ if __name__ == '__main__':
         treatments.RADIOGRAPHS(2),
         treatments.CROWN(1),
         treatments.FILLED_TEETH_DECIDUOUS(2),
-        treatments.ETHNIC_ORIGIN_WHITE_OTHER,
+        treatments.ETHNIC_ORIGIN_3_WHITE_OTHER,
     ]
 
     output(bcds1)

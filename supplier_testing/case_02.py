@@ -22,7 +22,7 @@ if __name__ == '__main__':
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_2,
         treatments.RECALL_INTERVAL(months=6),
-        treatments.ETHNIC_ORIGIN_WHITE_IRISH,
+        treatments.ETHNIC_ORIGIN_2_WHITE_IRISH,
     ]
 
     output(bcds1)

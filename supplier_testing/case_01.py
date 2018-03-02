@@ -25,7 +25,7 @@ if __name__ == '__main__':
         treatments.EXAMINATION,
         treatments.RECALL_INTERVAL(months=9),
         treatments.SCALE_AND_POLISH,
-        treatments.ETHNIC_ORIGIN_WHITE_BRITISH,
+        treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
     ]
 
     output(bcds1)
