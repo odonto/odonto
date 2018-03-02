@@ -4,6 +4,7 @@ from fp17 import treatments
 
 from common import get_base, output
 
+
 if __name__ == '__main__':
     bcds1 = get_base()
 
