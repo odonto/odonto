@@ -4,7 +4,7 @@ from .bcds1 import Treatment
 TREATMENT_CATEGORY_BAND_1 = Treatment(code=9150, instance_count=1)
 TREATMENT_CATEGORY_BAND_2 = Treatment(code=9150, instance_count=2)
 TREATMENT_CATEGORY_BAND_3 = Treatment(code=9150, instance_count=3)
-TREATMENT_CATEGORY_URGENT_TREATMENT = Treatment(code=9150, instance_count=4)
+TREATMENT_CATEGORY_URGENT = Treatment(code=9150, instance_count=4)
 TREATMENT_CATEGORY_CONTRACT_PILOT_INTERIM_CARE_APPOINTMENT = \
     Treatment(code=9150, instance_count=5)
 
