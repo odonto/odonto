@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # Treatments: "Ethnic Origin 8, Missing Permanent 0"
     bcds1.treatments = [
         treatments.BRIDGE_REPAIRS,
-
+        treatments.MISSING_PERMANENT(0),
         treatments.ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN,
     ]
 

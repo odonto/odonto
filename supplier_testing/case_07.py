@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # Treatments: "Missing Deciduous 10, Ethnic Origin 7"
     bcds1.treatments = [
         treatments.DENTURE_REPAIRS,
-
+        treatments.MISSING_DECIDUOUS(10),
         treatments.ETHNIC_ORIGIN_7_OTHER_MIXED_BACKGROUND,
     ]
 

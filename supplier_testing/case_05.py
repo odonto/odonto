@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # Treatments: "Upper Acrylic Denture 12, Ethnic Origin 5"
     bcds1.treatments = [
         treatments.REGULATION_11_APPLIANCE,
-
+        treatments.UPPER_DENTURE_ACRYLIC(12),
         treatments.ETHNIC_ORIGIN_5_WHITE_AND_BLACK_AFRICAN,
     ]
 
