@@ -17,7 +17,7 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 5, 1)
 
     # "Under 18"
-    bcds1.exception_remission = {'code': 28}
+    bcds1.excemption_remission = {'code': 28}
 
     bcds1.treatments = [
         treatments.RADIOGRAPHS(2),

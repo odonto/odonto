@@ -50,7 +50,7 @@ def bcds1():
     msg.patient_charge_pence = 1
     msg.patient_charge_currency = 'GBP'
 
-    msg.exception_remission = {
+    msg.excemption_remission = {
         'code': 10,
         'supporting_details': "SUPPORTING DETAILS",
     }
