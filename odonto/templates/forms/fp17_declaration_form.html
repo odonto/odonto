@@ -1,13 +1,14 @@
 {% load forms %}
 <div class="row">
   <div class="col-md-6">
-    {% checkbox field="Fp17Declaration.necessary_care_provided" %}
+    {% checkbox label="All the necessary care and treatment that the patient is willing to undergo will be provided." field="Fp17Declaration.necessary_care_provided" style="vertical" %}
   </div>
   <div class="col-md-6">
-    {% checkbox field="Fp17Declaration.necessary_care_carried_out" %}
+    {% checkbox label="All the currently necessary care and treatment that the patient is willing to undergo has been carried out." field="Fp17Declaration.necessary_care_carried_out" style="vertical" %}
   </div>
 </div>
 <div class="row">
-  {% input label="All the necessary care and treatment that the patient is willing to undergo will be provided." field="Fp17Declaration.signature" %}
-  {% datepicker label="All the currently necessary care and treatment that the patient is willing to undergo has been carried out." field="Fp17Declaration.signature_date" %}
+  <p>I declare that I am properly entitled to practise under the current dental regulations and that the information I have given on this form is correct and complete. I understand that if it is not, appropriate action may be taken. For the purpose of verification of this and the prevention and detection of fraud and incorrectness, I consent to the disclosure of relevant information from this form to and by the NHS Business Services Authority.</p>
+  {% input field="Fp17Declaration.signature" %}
+  {% datepicker field="Fp17Declaration.signature_date" %}
 </div>

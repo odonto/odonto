@@ -1,6 +1,9 @@
 {% load forms %}
 <div class="row">
-  <div class="col-sm-4">
-    {% input field="Fp17Recall.number_of_months" maxlength="2" %}
+  <div class="col-md-7">
+    <p>I have given preventative advice and recommended a recall interval, taking into account NICE guidance, that I regard as appropriate to the patient’s current oral health.</p>
+  </div>
+  <div class="col-md-5">
+    {% input label="Recall interval" field="Fp17Recall.number_of_months" maxlength="2" unit="months" %}
   </div>
 </div>
