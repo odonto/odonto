@@ -34,6 +34,24 @@ class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
         super().__init__(code=9304, instance_count=num_radiographs)
 
+class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
+    """
+    The number of teeth (not the total number of individual restorations) that
+    have been therapeutically treated by the placement of directly applied
+    permanent restorations, namely:
+
+    Permanent fillings in amalgam, composite resin, synthetic resin, glass
+    ionomer, compomers, silicate or silico-phosphate materials (includes any
+    acid-etch or pin retention.
+
+    Sealant restorations involving the placement of composite resin, glass
+    ionomer or compomer material.
+    """
+
+    def __init__(self, num_fillings):
+        super().__init__(code=9306, instance_count=num_fillings)
+
+
 class CROWN(Treatment):
     def __init__(self, num_crowns):
         super().__init__(code=9308, instance_count=num_crowns)
