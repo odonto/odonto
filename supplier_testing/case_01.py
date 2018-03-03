@@ -24,7 +24,7 @@ if __name__ == '__main__':
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_1,
         treatments.EXAMINATION,
-        treatments.RECALL_INTERVAL(months=9),
+        treatments.RECALL_INTERVAL(num_months=9),
         treatments.SCALE_AND_POLISH,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
     ]
