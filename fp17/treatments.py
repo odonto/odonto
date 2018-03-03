@@ -51,6 +51,15 @@ class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
     def __init__(self, num_fillings):
         super().__init__(code=9306, instance_count=num_fillings)
 
+class EXTRACTIONS(Treatment):
+    """
+    The number of teeth extracted should provided. This also includes surgical
+    removal of a buried root, unerupted tooth, impacted tooth or exostosed
+    tooth.
+    """
+
+    def __init__(self, num_extractions):
+        super().__init__(code=9307, instance_count=num_extractions)
 
 class CROWN(Treatment):
     def __init__(self, num_crowns):
