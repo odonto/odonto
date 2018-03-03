@@ -51,6 +51,26 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
 
 SCALE_AND_POLISH = Treatment(code=9301)
 
+# For date of acceptance prior to 1 April 2014 for England and 1 May 2014 for
+# Wales. Isle of Man will continue to use this code.
+REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY = Treatment(code=9316)
+
+class REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES(Treatment):
+    """
+    For date of acceptance on or after 1 April 2014 for England and 1 May 2014
+    for Wales (see `REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY`).
+
+    The treatment band for treatment should be provided under referral for
+    advanced mandatory services.
+
+    Value must be band 1, 2 or 3 presented by 01, 02 or 03. Code 9150
+    (`TREATMENT_CATEGORY_CONTRACT_PILOT_INTERIM_CARE_APPOINTMENT`) must also be
+    present representing the band of treatment provided by referring dentist.
+    """
+
+    def __init__(self, treatment_band):
+        super().__init__(code=9319, instance_count=treatment_band)
+
 class ANTIBIOTIC_ITEMS(Treatment):
     def __init__(self, num_prescribed):
         super().__init__(code=9318, instance_count=num_prescribed)
