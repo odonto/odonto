@@ -19,11 +19,16 @@ EXAMINATION = Treatment(code=9317)
 
 class RECALL_INTERVAL(Treatment):
     """
-    The number of months recommended recall period [..] between 1 - 24.
+        "I have given preventative advice and recommended a recall interval,
+        taking into account NICE guidance, that I regard as appropriate to the
+        patient’s oral health."
+
+    The number of months recommended recall period [..] between 1 - 24 should
+    be provided.
     """
 
-    def __init__(self, months):
-        super().__init__(code=9172, instance_count=months)
+    def __init__(self, num_months):
+        super().__init__(code=9172, instance_count=num_months)
 
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
