@@ -21,12 +21,33 @@
           {% block heading %}{% icon 'fa-user' %}[[ patient.demographics[0].first_name ]] [[ patient.demographics[0].surname ]]{% endblock %}
           <small>
             {% block subheading %}
-            ([[ patient.demographics[0].date_of_birth | shortDate ]])
-            [[ patient.demographics[0].hospital_number ]]
+              [[ patient.demographics[0].date_of_birth | shortDate ]]
+              ([[ patient.demographics[0].date_of_birth | age ]])
             {% endblock %}
           </small>
           {% button_to "Start new treatment course" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
         </h1>
+        <div class="row"> <!-- Start demographics banner -->
+          <div class="col-md-4">
+            <p>
+              NHS Number: <b>[[ patient.demographics[0].nhs_number ]]</b>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p>
+              Sex: <b>[[ patient.demographics[0].sex ]]</b>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p>
+              Ethnicity: <b>[[ patient.demographics[0].ethnicity ]]</b>
+            </p>
+          </div>
+          <div class="col-md-1">
+            <i class="fa fa-pencil edit pull-right"
+               ng-click="patient.recordEditor.editItem('demographics', 0)"></i>
+          </div>
+        </div> <!-- end demographics banner -->
       </div>
 
       <div class="panel-body {% block panel_body_classes %}{% endblock %}">

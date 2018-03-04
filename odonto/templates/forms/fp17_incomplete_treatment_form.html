@@ -1,23 +1,28 @@
 {% load forms %}
+<p>
+  Banding of the ACTUAL treatment provided:
+</p>
 <div class="row">
   <div class="col-md-4">
-    Banding of the ACTUAL treatment provided:
-    <div class="row">
-      <div class="col-md-4">
-        {% checkbox label="Band 1" field="Fp17IncompleteTreatment.incomplete_treatment_band_1" style="vertical" %}
-      </div>
-      <div class="col-md-4">
-        {% checkbox label="Band 2" field="Fp17IncompleteTreatment.incomplete_treatment_band_2" style="vertical" %}
-      </div>
-      <div class="col-md-4">
-        {% checkbox label="Band 3" field="Fp17IncompleteTreatment.incomplete_treatment_band_3" style="vertical" %}
-      </div>
-    </div>
+    {% checkbox label="Band 1" field="Fp17IncompleteTreatment.incomplete_treatment_band_1" style="vertical" %}
   </div>
-  <div class="col-md-3">
+  <div class="col-md-4">
+    {% checkbox label="Band 2" field="Fp17IncompleteTreatment.incomplete_treatment_band_2" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% checkbox label="Band 3" field="Fp17IncompleteTreatment.incomplete_treatment_band_3" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
     {% datepicker field="Fp17IncompleteTreatment.date_of_acceptance" style="vertical" %}
   </div>
-  <div class="col-md-3 col-md-offset-1">
+  <div class="col-md-5 col-md-offset-1">
     {% datepicker field="Fp17IncompleteTreatment.completion_or_last_visit" style="vertical" %}
+    <center>
+      <button class="btn btn-secondary" ng-click="completion_same_as_acceptance()">
+        Same as acceptance
+      </button>
+    </center>
   </div>
 </div>
