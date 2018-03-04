@@ -53,6 +53,7 @@ class Demographics(models.Demographics):
 
 class Fp17DentalCareProvider(models.PatientSubrecord):
     _is_singleton = True
+    _title = "Provider details"
     # I'm pretty sure this should not be handled as a PatientSubrecord
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
@@ -65,7 +66,7 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
-    _title = 'FP17 Treatment'
+    _title = 'FP17 Treatment Course'
 
     incomplete_treatment_band_1 = fields.BooleanField(default=False)
     incomplete_treatment_band_2 = fields.BooleanField(default=False)
@@ -76,6 +77,8 @@ class Fp17IncompleteTreatment(models.EpisodeSubrecord):
 
 class Fp17Exemptions(models.EpisodeSubrecord):
     _is_singleton = True
+    _title = "Exemptions and Remissions"
+
     patient_under_18                  = fields.BooleanField(default=False)
     full_remission_hc2_cert           = fields.BooleanField(default=False)
     partial_remission_hc3_cert        = fields.BooleanField(default=False)
@@ -98,6 +101,8 @@ class Fp17Exemptions(models.EpisodeSubrecord):
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
+    _title = "Treatment Category"
+
     treatment_category_band_1           = fields.BooleanField(default=False)
     treatment_category_band_2           = fields.BooleanField(default=False)
     treatment_category_band_3           = fields.BooleanField(default=False)
@@ -112,6 +117,8 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
 
 class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     _is_singleton = True
+    _title = "FP17 Clinical Data Set"
+
     scale_and_polish  = fields.BooleanField(default=False)
     fluoride_varnish  = fields.BooleanField(default=False)
     fissure_sealants  = fields.IntegerField(blank=True, null=True)
@@ -147,6 +154,7 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
 
 class Fp17OtherDentalServices(models.EpisodeSubrecord):
     _is_singleton = True
+    _title = "FP17 Other Dental Services"
 
     treatment_on_referral             = fields.BooleanField(default=False)
     free_repair_or_replacement        = fields.BooleanField(default=False)
