@@ -165,6 +165,7 @@ class Fp17OtherDentalServices(models.EpisodeSubrecord):
 
 class Fp17Recall(models.EpisodeSubrecord):
     _is_singleton = True
+    _title = "Recall"
 
     number_of_months = fields.IntegerField(blank=True, null=True)
 
