@@ -1,6 +1,15 @@
 {% load panels %}
-
-<div class="row">
+{% load links %}
+<!-- Empty Episode View -->
+<div class="row content-offset" ng-hide="episode.fp17_incomplete_treatment.date_of_acceptance">
+  <p class="lead text-center">
+    This treatment course has not yet started.
+    <br />
+    {% link_to "Open an FP17 now" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" %}
+  <p>
+</div>
+<!-- mid Treatment View -->
+<div class="row" ng-show="episode.fp17_incomplete_treatment.date_of_acceptance">
   <div class="col-md-4">
     {% record_panel models.Fp17DentalCareProvider %}
     {% record_panel models.Fp17IncompleteTreatment %}
