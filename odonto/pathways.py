@@ -20,12 +20,11 @@ class PathwayUrlMixin(object):
                 if 'episode' in kwargs:
                     target = target + '{0}/'.format(kwargs['episode'].id)
                 else:
-                    target = base + '[[ {0} ]]/'.format(kwargs['ngepisode'])
+                    target = target + '[[ {0} ]]/'.format(kwargs['ngepisode'])
             return target
 
         else:
             return base
-
 
 
 
@@ -82,13 +81,6 @@ class AddPatientPathway(OdontoPagePathway):
         models.Demographics,
     )
 
-    def save(self, data, user=None, patient=None, episode=None):
-        p, e = super(AddPatientPathway, self).save(
-            data, user=user, patient=patient, episode=episode
-        )
-        e.delete()
-        return p, None
-
     def redirect_url(self, user=None, patient=None, episode=None):
         return "/#/patient/{0}/".format(patient.id)
 
@@ -103,10 +95,13 @@ class Fp17Pathway(OdontoPagePathway):
             ),
         pathway.Step(
             model=models.Fp17DentalCareProvider,
-            display_name="Care Provider"),
+            display_name="Care Provider",
+            step_controller="CareProviderStepCtrl"
+        ),
         pathway.Step(
             model=models.Fp17IncompleteTreatment,
-            display_name="Incomplete Treatment and Treatment Dates"),
+            step_controller="FP17TreatmentStepCtrl"
+        ),
         pathway.Step(
             model=models.Fp17Exemptions,
             display_name="Exemptions and Remissions"),
@@ -122,9 +117,6 @@ class Fp17Pathway(OdontoPagePathway):
         pathway.Step(
             model=models.Fp17Recall,
             display_name="NICE Guidance"),
-        pathway.Step(
-            model=models.Fp17NHSBSAFields,
-            display_name="NHS BSA Use Only"),
         pathway.Step(
             model=models.Fp17Declaration,
             display_name="Declaration"),

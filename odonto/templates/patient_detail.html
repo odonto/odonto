@@ -25,9 +25,7 @@
             [[ patient.demographics[0].hospital_number ]]
             {% endblock %}
           </small>
-          <span class="pull-right">
-            {% link_to "Start new treatment course" pathways.Fp17Pathway ngpatient="patient.id" %}
-          </span>
+          {% button_to "Start new treatment course" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
         </h1>
       </div>
 

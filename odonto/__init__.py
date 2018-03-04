@@ -11,6 +11,8 @@ class Application(application.OpalApplication):
     javascripts  = [
         'js/openodonto/routes.js',
         'js/opal/controllers/discharge.js',
+        'js/openodonto/controllers/careprovider.step.controller.js',
+        'js/openodonto/controllers/fp17treatment.step.controller.js',
         # Uncomment this if you want to implement custom dynamic flows.
         # 'js/openodonto/flow.js',
     ]
