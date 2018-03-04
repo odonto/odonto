@@ -60,55 +60,69 @@
     </div>
 
     <div class="panel-body {% block panel_body_classes %}{% endblock %}">
-      <tabset justified="true">
-        <tab heading="Treatment Details">
-          <div class="row">
-            {% block content %}
-                <div class="col-md-12">
-                  {% for episode_category in episode_categories %}
-                    {% if episode_category.detail_template %}
-                      <div class="row" ng-show="view == null && episode.category_name == '{{ episode_category.display_name }}'">
-                        {% include episode_category.detail_template %}
-                      </div>
-                    {% endif %}
-                  {% endfor %}
-                  {% for detail in detail_views %}
-                    <div class="row" ng-show="view == '{{ detail.get_slug }}'">
-                      {% include detail.template %}
-                    </div>
-                  {% endfor %}
-                  {% block viewtemplates %}{% endblock %}
+
+      <h3 ng-init="historyCollapsed=true">
+
+        <!-- TODO replace this with non-hard coded category -->
+        Current Band 1 Treatment:
+        [[ episode.fp17_incomplete_treatment[0].date_of_acceptance | momentDateFormat:'DD/MM/YYYY' ]] -
+        [[ episode.fp17_incomplete_treatment[0].completion_or_last_visit | momentDateFormat:'DD/MM/YYYY' ]]
+        <button class="btn btn-secondary pull-right" ng-click="historyCollapsed = !historyCollapsed">
+          {% icon "fa-history" %}
+          Show treatment history
+        </button>
+      </h3>
+
+      <!-- Begin Treatment history display -->
+      <div class="row content-offset-25" uib-collapse="historyCollapsed">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading ">
+              <h3>
+                {% icon "fa-history" %}
+                Courses of Treatment
+              </h3>
+            </div>
+            <div class="list-group">
+              <a class="list-group-item episodelist pointer"
+                 ng-class="{'bg-active': view == null && e.id == episode.id}"
+                 ng-repeat="e in patient.episodes"
+                 href="[[ '/#' + e.link]]"
+                 ng-click="switch_to_episode($index, $event)"
+                 >
+                Treatment
+                [[ e.fp17_incomplete_treatment[0].date_of_acceptance | momentDateFormat:'DD/MM/YYYY' ]] -
+                [[ e.fp17_incomplete_treatment[0].completion_or_last_visit | momentDateFormat:'DD/MM/YYYY' ]]
+                <span ng-show="e.start">
+                  [[ e.start | shortDate ]] - [[ e.end | shortDate ]]<span ng-show="!e.end">Current</span>
+                </span>
+              </a>
+            </div>
+          </div> <!-- Panel -->
+        </div> <!-- col6 -->
+      </div> <!-- row -->
+      <!-- End Treatment history -->
+      <hr />
+      <!-- Begin Current Episode Display -->
+      <div class="row content-offset-25">
+        {% block content %}
+          <div class="col-md-12">
+            {% for episode_category in episode_categories %}
+              {% if episode_category.detail_template %}
+                <div class="row" ng-show="view == null && episode.category_name == '{{ episode_category.display_name }}'">
+                  {% include episode_category.detail_template %}
                 </div>
-          </div> <!-- Ends Main Panel -->
-        </tab>
-        <tab heading="History">
-          <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-              <div class="panel panel-default">
-                <div class="panel-heading ">
-                  <h3>
-                    <i class="fa fa-history"></i>
-                    Episodes
-                  </h3>
-                </div>
-                <div class="list-group">
-                  <a class="list-group-item episodelist pointer"
-                     ng-class="{'bg-active': view == null && e.id == episode.id}"
-                     ng-repeat="e in patient.episodes"
-                     href="[[ '/#' + e.link]]"
-                     ng-click="switch_to_episode($index, $event)"
-                     >
-                    [[ e.category_name ]]
-                    <span ng-show="e.start">
-                      [[ e.start | shortDate ]] - [[ e.end | shortDate ]]<span ng-show="!e.end">Current</span>
-                    </span>
-                  </a>
-                </div>
-              </div> <!-- Panel -->
-            </div> <!-- col6 -->
-          </div> <!-- row -->
-        </tab>
-      </tabset>
+              {% endif %}
+            {% endfor %}
+            {% for detail in detail_views %}
+              <div class="row" ng-show="view == '{{ detail.get_slug }}'">
+                {% include detail.template %}
+              </div>
+            {% endfor %}
+            {% block viewtemplates %}{% endblock %}
+          </div>
+      </div> <!-- Ends Current Episode Display -->
+
 
 
 {% endblock content %}
