@@ -22,6 +22,9 @@ if __name__ == '__main__':
 
     # Treatments: "Examination, Extraction 1"
     bcds1.treatments = [
+        treatments.EXAMINATION,
+        treatments.EXTRACTION(1),
+
         # FIXME: Spreadsheet refers to unknown 'Band 4'
     ]
 
