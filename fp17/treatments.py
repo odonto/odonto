@@ -1,14 +1,6 @@
 from .bcds1 import Treatment
 
 
-# Constants for "Part 4 Exemptions and remissions"
-PATIENT_UNDER_18_NO_EVIDENCE_SEEN = 27
-PATIENT_UNDER_18_EVIDENCE_SEEN = 28
-FULL_REMISSION_NO_EVIDENCE_SEEN = 13
-FULL_REMISSION_EVIDENCE_SEEN = 14
-PARTIAL_REMISSION_NO_EVIDENCE_SEEN = 15
-PARTIAL_REMISSION_EVIDENCE_SEEN = 16
-
 class TREATMENT_CATEGORY(Treatment):
     def __init__(self, band):
         super().__init__(code=9150, instance_count=band)
