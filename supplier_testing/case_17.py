@@ -20,7 +20,7 @@ if __name__ == '__main__':
     bcds1.patient_charge_pence = 14640
 
     # "Under 18"
-    bcds1.excemption_remission = {
+    bcds1.exemption_remission = {
         'code': exemptions.PATIENT_UNDER_18.EVIDENCE_SEEN,
     }
 

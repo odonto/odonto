@@ -18,7 +18,7 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 4, 1)
 
     # "Employment Support Allowance"
-    bcds1.excemption_remission = {
+    bcds1.exemption_remission = {
         'code': exemptions.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE.EVIDENCE_SEEN,
     }
 

@@ -18,8 +18,8 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 4, 10)
 
     # "18 in full time education"
-    bcds1.excemption_remission = {
-        'code': excemptions.AGED_18_IN_FULL_TIME_EDUCATION.EVIDENCE_SEEN,
+    bcds1.exemption_remission = {
+        'code': exemptions.AGED_18_IN_FULL_TIME_EDUCATION.EVIDENCE_SEEN,
     }
 
     # Treatments: "Examination (9317), Scale and Polish, Radiographs x 1,

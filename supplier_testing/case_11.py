@@ -18,7 +18,7 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 5, 1)
 
     # "Nursing Mother (Evidence Not Seen)"
-    bcds1.excemption_remission = {
+    bcds1.exemption_remission = {
         'code': exemptions.NURSING_MOTHER.NO_EVIDENCE_SEEN,
     }
 

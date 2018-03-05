@@ -361,7 +361,7 @@ class BCDS1(Message):
             },
 
             # Exemption and remission information
-            'excemption_remission': {
+            'exemption_remission': {
                 'type': 'dict',
                 'schema': {
                     # Exemption and remission code
@@ -538,14 +538,14 @@ class BCDS1(Message):
         chx.attrib['ptchg'] = str(x['patient_charge_pence'])
         chx.attrib['curcd'] = x['patient_charge_currency'].lower()
 
-        if 'excemption_remission' in x:
+        if 'exemption_remission' in x:
             exrmdet = etree.SubElement(chx, 'exrmdet')
             exrmdet.attrib['exrmcd'] = \
-                '{:02d}'.format(x['excemption_remission']['code'])
+                '{:02d}'.format(x['exemption_remission']['code'])
 
-            if 'supporting_details' in x['excemption_remission']:
+            if 'supporting_details' in x['exemption_remission']:
                 exrmdet.attrib['sdet'] = \
-                    x['excemption_remission']['supporting_details']
+                    x['exemption_remission']['supporting_details']
 
         def create_treatments(name, data):
             nonlocal num_segments

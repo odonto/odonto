@@ -18,7 +18,7 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 4, 1)
 
     # "Under 18"
-    bcds1.excemption_remission = {
+    bcds1.exemption_remission = {
         'code': exemptions.PATIENT_UNDER_18.EVIDENCE_SEEN,
     }
 
