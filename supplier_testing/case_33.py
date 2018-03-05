@@ -24,8 +24,15 @@ if __name__ == '__main__':
     # Recall Interval (9172 18), Ethnic Origin 1, Best Practice Prevention"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-
+        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(2),
+        treatments.SCALE_AND_POLISH,
+        treatments.RADIOGRAPHS(2),
+        treatments.EXAMINATION,
+        treatments.ANTIBIOTIC_ITEMS(1),
+        treatments.OTHER_TREATMENT,
+        treatments.RECALL_INTERVAL(18),
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
+        treatments.BEST_PRACTICE_PREVENTION,
     ]
 
     output(bcds1)
