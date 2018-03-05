@@ -23,7 +23,7 @@ if __name__ == '__main__':
         treatments.TREATMENT_CATEGORY_BAND_2,
         treatments.SCALE_AND_POLISH,
         treatments.RADIOGRAPHS(1),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS),
+        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS,
         treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY,
         treatments.ETHNIC_ORIGIN_6_WHITE_AND_ASIAN,
     ]
