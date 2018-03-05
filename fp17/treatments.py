@@ -90,6 +90,7 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
         super().__init__(code=9325, instance_count=num_teeth)
 
 SCALE_AND_POLISH = Treatment(code=9301)
+OTHER_TREATMENT = Treatment(code=9399)
 
 # For date of acceptance prior to 1 April 2014 for England and 1 May 2014 for
 # Wales. Isle of Man will continue to use this code.
