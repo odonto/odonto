@@ -2,9 +2,13 @@
 
 set -eu
 
+rm -f supplier_testing/*.xml supplier_testing/supplier_testing.zip
+
 for X in supplier_testing/case_*.py
 do
 	echo "I: ${X}"
 
 	PYTHONPATH=. python ${X} > supplier_testing/$(basename ${X} .py).xml
 done
+
+zip -r supplier_testing/supplier_testing.zip supplier_testing/*.xml
