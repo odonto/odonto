@@ -23,7 +23,8 @@ if __name__ == '__main__':
         treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
         treatments.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
 
-        # FIXME: "Free Repair Replacement" service
+        # "Free Repair Replacement" service
+        treatments.FREE_REPAIR_REPLACEMENT,
     ]
 
     output(bcds1)
