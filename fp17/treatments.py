@@ -214,4 +214,5 @@ ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP = Treatment(code=9025, instance_count=16)
 ETHNIC_ORIGIN_PATIENT_DECLINED = Treatment(code=9025, instance_count=99)
 
 # "Part 6 Other Services"
+DOMICILIARY_SERVICES = Treatment(code=9152)
 SEDATION_SERVICES = Treatment(code=9166)
