@@ -23,6 +23,7 @@ if __name__ == '__main__':
     # Treatments: "Examination"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(1),
+        treatments.EXAMINATION,
     ]
 
     output(bcds1)
