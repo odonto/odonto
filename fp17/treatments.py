@@ -43,6 +43,15 @@ class RECALL_INTERVAL(Treatment):
     def __init__(self, num_months):
         super().__init__(code=9172, instance_count=num_months)
 
+class FISSURE_SEALANTS(Treatment):
+    """
+    Provide the number of permanent teeth where sealant material has been
+    applied to the pit and fissure systems as a primary preventive measure.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9303, instance_count=num_teeth)
+
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
         super().__init__(code=9304, instance_count=num_radiographs)
