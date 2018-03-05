@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # Treatments: "Other Treatment (9399), Ethnic Origin 99"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_URGENT,
-
+        treatments.OTHER_TREATMENT,
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]
 
