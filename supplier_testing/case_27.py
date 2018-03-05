@@ -27,7 +27,8 @@ if __name__ == '__main__':
 
         treatments.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
 
-        # FIXME: "Treatment on referral" service
+        # "Treatment on referral" service
+        treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY,
     ]
 
     output(bcds1)
