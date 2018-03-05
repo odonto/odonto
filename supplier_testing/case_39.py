@@ -22,7 +22,8 @@ if __name__ == '__main__':
 
     # Treatments: "None"
     bcds1.treatments = [
-        # FIXME: Spreadsheet refers to unknown 'Band 4'
+        # 'Band 4'
+        treatments.TREATMENT_CATEGORY_URGENT,
     ]
 
     output(bcds1)

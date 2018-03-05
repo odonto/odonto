@@ -24,7 +24,8 @@ if __name__ == '__main__':
     bcds1.treatments = [
         treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
 
-        # FIXME: Spreadsheet refers to unknown 'Band 4'
+        # 'Band 4'
+        treatments.TREATMENT_CATEGORY_URGENT,
     ]
 
     output(bcds1)

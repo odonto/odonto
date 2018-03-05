@@ -25,7 +25,8 @@ if __name__ == '__main__':
         treatments.EXAMINATION,
         treatments.EXTRACTION(1),
 
-        # FIXME: Spreadsheet refers to unknown 'Band 4'
+        # 'Band 4'
+        treatments.TREATMENT_CATEGORY_URGENT,
     ]
 
     output(bcds1)
