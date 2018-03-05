@@ -1,6 +1,6 @@
 import datetime
 
-from fp17 import treatments
+from fp17 import treatments, exemptions
 
 from common import get_base, output
 
@@ -18,7 +18,9 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 4, 10)
 
     # "18 in full time education"
-    bcds1.excemption_remission = {'code': 0}  # FIXME
+    bcds1.excemption_remission = {
+        'code': excemptions.AGED_18_IN_FULL_TIME_EDUCATION.EVIDENCE_SEEN,
+    }
 
     # Treatments: "Examination (9317), Scale and Polish, Radiographs x 1,
     # Fillings x 3, Recall Interval 24, Decayed Deciduous 4, Ethnic Origin 12"

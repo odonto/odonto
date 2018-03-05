@@ -1,6 +1,6 @@
 import datetime
 
-from fp17 import treatments
+from fp17 import treatments, exemptions
 
 from common import get_base, output
 
@@ -18,7 +18,9 @@ if __name__ == '__main__':
     bcds1.date_of_completion = datetime.date(2017, 4, 1)
 
     # "Prisoner"
-    bcds1.excemption_remission = {'code': 0}  # FIXME
+    bcds1.excemption_remission = {
+        'code': exemptions.PRISONER,
+    }
 
     # Treatments: "None"
     bcds1.treatments = [

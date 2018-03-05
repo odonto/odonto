@@ -1,6 +1,6 @@
 import datetime
 
-from fp17 import treatments
+from fp17 import treatments, exemptions
 
 from common import get_base, output
 
@@ -20,7 +20,9 @@ if __name__ == '__main__':
     bcds1.patient_charge_pence = 14640
 
     # "Under 18"
-    bcds1.excemption_remission = {'code': 0}  # FIXME
+    bcds1.excemption_remission = {
+        'code': exemptions.PATIENT_UNDER_18.EVIDENCE_SEEN,
+    }
 
     # Treatments: "Upper Metal Denture 10, Lower Metal Denture 6, Decayed
     # Deciduous 0, Ethnic Origin 99"
