@@ -27,7 +27,7 @@ if __name__ == '__main__':
         treatments.TREATMENT_CATEGORY_BAND_3,
         treatments.RADIOGRAPHS(2),
         treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(2),
-        treatments.EXTRACTIONS(6),
+        treatments.EXTRACTION(6),
         treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY,
         treatments.RECALL_INTERVAL(num_months=12),
         treatments.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
