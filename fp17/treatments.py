@@ -46,6 +46,8 @@ class RECALL_INTERVAL(Treatment):
     def __init__(self, num_months):
         super().__init__(code=9172, instance_count=num_months)
 
+BEST_PRACTICE_PREVENTION = Treatment(code=9173)
+
 class FISSURE_SEALANTS(Treatment):
     """
     Provide the number of permanent teeth where sealant material has been
