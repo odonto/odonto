@@ -19,9 +19,8 @@ if __name__ == '__main__':
 
     # Treatments: "Ethnic Origin 8"
     bcds1.treatments = [
-        # FIXME: "Sedation Services" service
-
         treatments.ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN,
+        treatments.SEDATION_SERVICES,
     ]
 
     output(bcds1)
