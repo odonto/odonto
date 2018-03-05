@@ -22,7 +22,8 @@ if __name__ == '__main__':
     # Treatments: "Fillings x 1, Examination (9317), Ethnic Origin 16"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-
+        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
+        treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP,
     ]
 
