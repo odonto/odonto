@@ -23,7 +23,8 @@ if __name__ == '__main__':
         treatments.OTHER_TREATMENT,
         treatments.ETHNIC_ORIGIN_13_BLACK_OR_BLACK_BRITISH_AFRICAN,
 
-        # FIXME: "Further treatment within 2 months" service
+        # "Further treatment within 2 months" service
+        treatments.FURTHER_TREATMENT_WITHIN_TWO_MONTHS
     ]
 
     output(bcds1)
