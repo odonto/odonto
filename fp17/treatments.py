@@ -17,6 +17,19 @@ REMOVAL_OF_SUTURES = Treatment(code=9155)
 
 EXAMINATION = Treatment(code=9317)
 
+class BRIDGES_FITTED(Treatment):
+    """
+    When a bridge or more than one bridge is fitted. The number provided is the
+    total number of units that the bridge(s) spans (i.e. include the number of
+
+    Adhesive bridges are provided in a similar manner and the total number of
+    units includes the pontic(s) and any associated 'wings'.
+    """
+
+    def __init__(self, num_units):
+        super().__init__(code=9315, instance_count=num_units)
+
+
 class RECALL_INTERVAL(Treatment):
     """
         "I have given preventative advice and recommended a recall interval,
