@@ -23,7 +23,8 @@ if __name__ == '__main__':
     # 9), Ethnic Origin 13 "
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_2,
-
+        treatments.EXTRACTION(1),
+        treatments.RECALL_INTERVAL(9),
         treatments.ETHNIC_ORIGIN_13_BLACK_OR_BLACK_BRITISH_AFRICAN,
     ]
 
