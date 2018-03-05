@@ -23,7 +23,10 @@ if __name__ == '__main__':
     # Antibiotic Items (9318 1), Recall Interval (9172 6), Ethnic Origin 9"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_3,
-
+        treatments.RADIOGRAPHS(4),
+        treatments.BRIDGES_FITTED(2),
+        treatments.ANTIBIOTIC_ITEMS(1),
+        treatments.RECALL_INTERVAL(6),
         treatments.ETHNIC_ORIGIN_9_ASIAN_OR_ASIAN_BRITISH_PAKISTANI,
     ]
 
