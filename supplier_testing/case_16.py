@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # Origin 16"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_URGENT,
-
+        treatments.ANTIBIOTIC_ITEMS(1),
         treatments.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP,
     ]
 
