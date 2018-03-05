@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # Treatments: "Fissure Sealants x 2, Ethnic Origin (9025 99)"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_BAND_2,
-
+        treatments.FISSURE_SEALANTS(2),
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
 
         # FIXME: "Treatment on referral" service
