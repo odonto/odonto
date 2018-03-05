@@ -26,7 +26,9 @@ if __name__ == '__main__':
     # Deciduous 0, Ethnic Origin 99"
     bcds1.treatments = [
         treatments.REGULATION_11_APPLIANCE,
-
+        treatments.UPPER_DENTURE_METAL(10),
+        treatments.LOWER_DENTURE_METAL(6),
+        treatments.DECAYED_DECIDUOUS(0),
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]
 
