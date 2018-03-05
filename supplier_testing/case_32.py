@@ -23,7 +23,8 @@ if __name__ == '__main__':
         treatments.FISSURE_SEALANTS(2),
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
 
-        # FIXME: "Treatment on referral" service
+        # "Treatment on referral" service
+        treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY,
     ]
 
     output(bcds1)
