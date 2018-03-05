@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     # Treatments: "None"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_1,
+        treatments.TREATMENT_CATEGORY(1),
     ]
 
     output(bcds1)

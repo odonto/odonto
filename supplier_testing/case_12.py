@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # Treatments: "Examination (9317), Scale and Polish, Radiographs x 1,
     # Fillings x 3, Recall Interval 24, Decayed Deciduous 4, Ethnic Origin 12"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_2,
+        treatments.TREATMENT_CATEGORY(2),
         treatments.EXAMINATION,
         treatments.SCALE_AND_POLISH,
         treatments.RADIOGRAPHS(1),

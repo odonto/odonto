@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     # Treatments: "Other Treatment (9399), Ethnic Origin 13"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_1,
+        treatments.TREATMENT_CATEGORY(1),
         treatments.OTHER_TREATMENT,
         treatments.ETHNIC_ORIGIN_13_BLACK_OR_BLACK_BRITISH_AFRICAN,
 

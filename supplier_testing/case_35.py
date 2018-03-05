@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Treatments: "Scale & polish, Domicilliary Visit, Ethnic Origin 99"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_1,
+        treatments.TREATMENT_CATEGORY(1),
 
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]

@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Treatments: "Crowns x 2, Missing Permanent 8"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_3,
+        treatments.TREATMENT_CATEGORY(3),
     ]
 
     output(bcds1)

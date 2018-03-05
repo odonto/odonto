@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Treatments: "Scale and Polish,Examination (9317), Fluoride Varnish, Other Treatment (9399), Ethnic Origin 99 "
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_3,
+        treatments.TREATMENT_CATEGORY(3),
     ]
 
     output(bcds1)

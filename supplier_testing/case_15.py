@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # Treatments: "Extraction x 2, Upper Denture Acrylic 2 teeth, Recall
     # Interval 8, Ethnic Origin 15"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_3,
+        treatments.TREATMENT_CATEGORY(3),
         treatments.EXTRACTION(2),
         treatments.UPPER_DENTURE_ACRYLIC(2),
         treatments.RECALL_INTERVAL(8),

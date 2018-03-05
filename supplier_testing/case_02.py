@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # Treatments: "Filling x 1, Recall Interval 6, Ethnic Origin 2"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_2,
+        treatments.TREATMENT_CATEGORY(2),
         treatments.RECALL_INTERVAL(num_months=6),
         treatments.ETHNIC_ORIGIN_2_WHITE_IRISH,
     ]

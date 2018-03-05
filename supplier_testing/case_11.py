@@ -24,7 +24,7 @@ if __name__ == '__main__':
     # Extractions x 6, Referral for Advanced Mandatory Services,Recall Interval
     # (9172 12), Ethic Origin 11"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_BAND_3,
+        treatments.TREATMENT_CATEGORY(3),
         treatments.RADIOGRAPHS(2),
         treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(2),
         treatments.EXTRACTION(6),
