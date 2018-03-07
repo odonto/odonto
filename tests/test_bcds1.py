@@ -86,9 +86,9 @@ def test_validation():
     errors = msg.get_errors()
     assert 'required field' in errors['message_reference_number']
 
-    msg.message_reference_number = 12345
+    msg.message_reference_number = 0
     errors = msg.get_errors()
-    assert 'min value is 100000' in errors['message_reference_number']
+    assert 'min value is 1' in errors['message_reference_number']
 
     msg.message_reference_number = 1234567
     errors = msg.get_errors()
