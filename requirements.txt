@@ -2,3 +2,4 @@ requests==2.18.4
 xmlschema==0.9.20
 lxml==4.1.1
 cerberus==1.1
+click==6.7
