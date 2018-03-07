@@ -167,7 +167,7 @@ class BCDS1(Message):
             # within contract number (9105) uniquely identifies a message.
             'message_reference_number': {
                 'type': 'number',
-                'min': min_digits(6),
+                'min': min_digits(1),
                 'max': max_digits(6),
                 'required': True,
             },
