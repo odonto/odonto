@@ -6,4 +6,4 @@ install:
   - pip install -r requirements.txt
 script:
   - PYTHONPATH=. pytest -vv -r sxX -l
-  - supplier_testing/generate
+  - PYTHONPATH=. supplier_testing/generate --site-number=01009 --contract-number=2371750001 --performer-number=237175 --location-id=008023 --pin=179056 --serial-number=160900 --start-claim-number=69800 --surname-prefix="OHA" > supplier_testing_$(date +%s).xml
