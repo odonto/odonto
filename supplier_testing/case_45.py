@@ -2,12 +2,8 @@ import datetime
 
 from fp17 import treatments
 
-from common import get_base, output
 
-
-if __name__ == '__main__':
-    bcds1 = get_base()
-
+def annotate(bcds1):
     bcds1.patient.surname = "HATTON"
     bcds1.patient.forename = "TONY"
     bcds1.patient.address = ["34 HIGH STREET"]
@@ -24,4 +20,4 @@ if __name__ == '__main__':
         treatments.TREATMENT_CATEGORY(3),
     ]
 
-    output(bcds1)
+    return bcds1

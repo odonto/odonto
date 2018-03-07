@@ -2,12 +2,8 @@ import datetime
 
 from fp17 import treatments, exemptions
 
-from common import get_base, output
 
-
-if __name__ == '__main__':
-    bcds1 = get_base()
-
+def annotate(bcds1):
     bcds1.patient.surname = "BORDESLEY"
     bcds1.patient.forename = "ANGELA"
     bcds1.patient.address = ["12 HIGH STREET"]
@@ -35,4 +31,4 @@ if __name__ == '__main__':
         treatments.ETHNIC_ORIGIN_12_BLACK_OR_BLACK_BRITISH_CARIBBEAN,
     ]
 
-    output(bcds1)
+    return bcds1

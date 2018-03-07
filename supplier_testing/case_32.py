@@ -2,12 +2,8 @@ import datetime
 
 from fp17 import treatments
 
-from common import get_base, output
 
-
-if __name__ == '__main__':
-    bcds1 = get_base()
-
+def annotate(bcds1):
     bcds1.patient.surname = "ALFRETON"
     bcds1.patient.forename = "RAY"
     bcds1.patient.address = ["30 HIGH STREET"]
@@ -27,4 +23,4 @@ if __name__ == '__main__':
         treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY,
     ]
 
-    output(bcds1)
+    return bcds1
