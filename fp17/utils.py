@@ -31,8 +31,8 @@ def strbool(x):
     document.
 
         >>> strbool(False)
-        'false'
+        '0'
         >>> strbool(True)
-        'true'
+        '1'
     """
-    return 'true' if x else 'false'
+    return '1' if x else '0'

@@ -14,8 +14,8 @@ def test_max_digits():
 
 
 def test_strbool():
-    assert strbool(True) == 'true'
-    assert strbool(False) == 'false'
+    assert strbool(True) == '1'
+    assert strbool(False) == '0'
 
-    assert strbool([]) == 'false'
-    assert strbool([1]) == 'true'
+    assert strbool([]) == '0'
+    assert strbool([1]) == '1'
