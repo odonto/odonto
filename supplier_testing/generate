@@ -38,19 +38,17 @@ def main(site_number, contract_number, performer_number, location_id, pin,
     result = ""
     start_claim_number = int(start_claim_number)
 
+    envelope = Envelope()
+    envelope.origin = site_number
+    envelope.destination = "1234"
+    envelope.release_timestamp = datetime.datetime.utcnow()
+    envelope.test = True
+    envelope.serial_number = int(serial_number)
+
     for filename in sorted(glob.glob(os.path.join(BASE_DIR, 'case_*.py'))):
         name = os.path.splitext(os.path.basename(filename))[0]
 
-        print("I: Processing {}: ".format(name), end='', file=sys.stderr)
-
-        fn = from_dotted_path('supplier_testing.{}.annotate'.format(name))
-
-        envelope = Envelope()
-        envelope.origin = site_number
-        envelope.destination = "1234"
-        envelope.release_timestamp = datetime.datetime.utcnow()
-        envelope.test = True
-        envelope.serial_number = int(serial_number)
+        print("I: Processing {} ...".format(name), file=sys.stderr)
 
         bcds1 = BCDS1()
         bcds1.message_reference_number = start_claim_number
@@ -60,32 +58,23 @@ def main(site_number, contract_number, performer_number, location_id, pin,
         bcds1.location = int(location_id)
         bcds1.patient = Patient()
 
-        print("[annotating] ", end='', file=sys.stderr)
+        fn = from_dotted_path('supplier_testing.{}.annotate'.format(name))
         bcds1 = fn(bcds1)
 
         # Prepend the surname prefix.
         bcds1.patient.surname = '{}{}'.format(surname_prefix,
                                               bcds1.patient.surname)
 
+        start_claim_number += 1
         envelope.add_message(bcds1)
         assert not bcds1.get_errors(), bcds1.get_errors()
-        assert not envelope.get_errors(), envelope.get_errors()
 
-        print("[generating DOM] ", end='', file=sys.stderr)
-        root = envelope.generate_xml()
+    assert not envelope.get_errors(), envelope.get_errors()
 
-        print("[validating DOM] ", end='', file=sys.stderr)
-        Envelope.validate_xml(root)
+    root = envelope.generate_xml()
+    Envelope.validate_xml(root)
 
-        print("[generating XML]", end='', file=sys.stderr)
-        x = etree.tostring(root, encoding='unicode', pretty_print=True).strip()
-
-        print(".", file=sys.stderr)
-
-        result += x + '\n'
-        start_claim_number += 1
-
-    print(result.strip())
+    print(etree.tostring(root, encoding='unicode', pretty_print=True).strip())
 
     return 0
 
