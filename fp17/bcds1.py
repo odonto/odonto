@@ -462,7 +462,7 @@ class BCDS1(Message):
         root = etree.Element('bcds1')
 
         root.attrib['schvn'] = '1.0'
-        root.attrib['clrn'] = str(x['message_reference_number'])
+        root.attrib['clrn'] = '{:06d}'.format(x['message_reference_number'])
         root.attrib['perf'] = str(x['performer_number'])
         root.attrib['pin'] = str(x['dpb_pin'])
         root.attrib['cno'] = str(x['contract_number'])
