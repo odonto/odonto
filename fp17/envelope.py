@@ -108,9 +108,8 @@ class Envelope(Message):
             # Practice system software package version
             'software_name': {
                 'type': 'string',
-                'default': 'python-fp17',
-                'minlength': 1,
-                'maxlength': 50,
+                'default': 'pythonfp17',
+                'regex': '^[a-zA-Z0-9]{1,50}$',
                 'required': True,
             },
 
@@ -118,8 +117,7 @@ class Envelope(Message):
             'software_version': {
                 'type': 'string',
                 'default': VERSION,
-                'minlength': 1,
-                'maxlength': 50,
+                'regex': '^[a-zA-Z0-9]{1,50}$',
                 'required': True,
             },
         }
