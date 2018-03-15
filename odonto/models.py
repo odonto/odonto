@@ -142,7 +142,7 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     examination                 = fields.BooleanField(default=False)
     antibiotic_items_prescribed = fields.IntegerField(blank=True, null=True)
     other_treatment             = fields.BooleanField(default=False)
-    best_practice_prevention_according_to_delivering_better_oral_health_offered = fields.BooleanField(default=False)
+    best_practice_prevention    = fields.BooleanField(default=False)
 
     decayed_teeth_permanent = fields.IntegerField(blank=True, null=True)
     decayed_teeth_deciduous = fields.IntegerField(blank=True, null=True)
