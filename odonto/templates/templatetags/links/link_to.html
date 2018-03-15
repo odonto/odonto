@@ -1,0 +1,5 @@
+{% load forms %}
+<a href="{{ href }}" {% if classes %}class="{{ classes }}" {% endif %}>
+  {% if iconname %}{% icon iconname %}{% endif %}
+  {{ link_text }}
+</a>

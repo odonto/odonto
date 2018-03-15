@@ -1,19 +1,37 @@
 {% load panels %}
+{% load links %}
+<!-- Empty Episode View -->
+<div class="row content-offset" ng-hide="episode.fp17_incomplete_treatment[0].date_of_acceptance">
+  <p class="lead text-center">
+    This treatment course has not yet started.
+    <br />
+    {% link_to "Open an FP17 now" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" %}
+  <p>
+</div>
+<!-- mid Treatment View -->
+<div ng-show="episode.fp17_incomplete_treatment[0].date_of_acceptance">
+  <div class="row">
+    <div class="col-md-6">
+      {% record_panel models.Fp17DentalCareProvider %}
+    </div>
+    <div class="col-md-6">
+      {% record_panel models.Fp17IncompleteTreatment %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      {% record_panel models.Fp17Exemptions %}
+    </div>
+    <div class="col-md-6">
+      {% record_panel models.Fp17TreatmentCategory %}
+    </div>
+  </div>
 
-<div class="row">
-  <div class="col-md-4">
-    {% record_panel models.Fp17DentalCareProvider %}
-    {% record_panel models.Fp17IncompleteTreatment %}
-    {% record_panel models.Fp17Exemptions %}
-  </div>
-  <div class="col-md-4">
-    {% record_panel models.Fp17TreatmentCategory %}
-    {% record_panel models.Fp17ClinicalDataSet %}
-    {% record_panel models.Fp17OtherDentalServices %}
-  </div>
-  <div class="col-md-4">
+  {% record_panel models.Fp17ClinicalDataSet %}
+  {% record_panel models.Fp17OtherDentalServices %}
+
+  <div ng-show="episode.fp17_incomplete_treatment[0].completion_or_last_visit">
     {% record_panel models.Fp17Recall %}
-    {% record_panel models.Fp17NHSBSAFields %}
-    {% record_panel models.Fp17Declaration %}
   </div>
+
 </div>

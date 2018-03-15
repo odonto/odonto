@@ -281,6 +281,8 @@ REST_FRAMEWORK = {
     )
 }
 
+ODONTO_LOGIN_MESSAGE = 'Log in to get started'
+
 # if you want sass, uncomment the below and gem install sass
 # COMPRESS_PRECOMPILERS = (
 #     ('text/x-scss', 'sass --scss {infile} {outfile}'),

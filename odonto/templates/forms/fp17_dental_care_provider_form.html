@@ -4,15 +4,8 @@
     {% input field="Fp17DentalCareProvider.provider_name" style="vertical" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% input field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
-  </div>
-</div>
-{% input field="Fp17DentalCareProvider.provider_address" style="vertical" %}
-<div class="row">
-  <div class="col-md-6">
-    {% checkbox field="Fp17DentalCareProvider.performer_number_is_same_as_provider" style="vertical" %}
-  </div>
-  <div class="col-md-5 col-md-offset-1">
     {% input field="Fp17DentalCareProvider.performer_number" style="vertical" %}
   </div>
 </div>
+{% input field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
+{% textarea field="Fp17DentalCareProvider.provider_address" style="vertical" %}

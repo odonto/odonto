@@ -1,1 +1,1 @@
-web: gunicorn openodonto.wsgi
+web: gunicorn odonto.wsgi

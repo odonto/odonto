@@ -129,7 +129,7 @@ class Migration(migrations.Migration):
                 ('examination', models.BooleanField(default=False)),
                 ('antibiotic_items_prescribed', models.IntegerField()),
                 ('other_treatment', models.BooleanField(default=False)),
-                ('best_practice_prevention_according_to_delivering_better_oral_health_offered', models.BooleanField(default=False)),
+                ('best_practice_prevention', models.BooleanField(default=False)),
                 ('decayed_teeth_permanent', models.IntegerField()),
                 ('decayed_teeth_deciduous', models.IntegerField()),
                 ('missing_teeth_permanent', models.IntegerField()),

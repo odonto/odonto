@@ -1,0 +1,130 @@
+{% load panels %}
+{% load forms %}
+{% load links %}
+<div ng-show="patient == null" class="container-fluid content-offset">
+  <h1 class="text-center content-offset">
+    Patient not found
+  </h1>
+  <p class="lead text-center content-offset">
+    We're sorry but we couldn't find the patient you're looking for.
+    <br />
+    Perhaps try searching for them instead?
+  </p>
+</div>
+
+<div class="container-fluid content-offset {% block container_classes %}{% endblock %}"
+     ng-hide="patient == null">
+  <div class="panel panel-primary panel-container patient-detail {% block panel_classes %}{% endblock %}">
+    <!-- Default panel contents -->
+    <div class="panel-heading patient-detail-heading">
+      <h1>
+        {% block heading %}{% icon 'fa-user' %}[[ patient.demographics[0].first_name ]] [[ patient.demographics[0].surname ]]{% endblock %}
+        <small>
+          {% block subheading %}
+            [[ patient.demographics[0].date_of_birth | shortDate ]]
+            ([[ patient.demographics[0].date_of_birth | age ]])
+          {% endblock %}
+        </small>
+
+        <!-- Key Action buttons : We can probably only have one of these at a time. -->
+        <span ng-show="episode.fp17_incomplete_treatment[0].date_of_acceptance">
+          {% button_to "Complete FP17" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
+        </span>
+        <span ng-hide="episode.fp17_incomplete_treatment[0].date_of_acceptance">
+          {% button_to "Start new treatment course" pathways.Fp17Pathway ngpatient="patient.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
+        </span>
+        <!-- End Key Action Buttons -->
+
+      </h1>
+      <div class="row"> <!-- Start demographics banner -->
+        <div class="col-md-4">
+          <p>
+            NHS Number: <b>[[ patient.demographics[0].nhs_number ]]</b>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <p>
+            Sex: <b>[[ patient.demographics[0].sex ]]</b>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <p>
+            Ethnicity: <b>[[ patient.demographics[0].ethnicity ]]</b>
+          </p>
+        </div>
+        <div class="col-md-1">
+          <i class="fa fa-pencil edit pull-right"
+             ng-click="patient.recordEditor.editItem('demographics', 0)"></i>
+        </div>
+      </div> <!-- end demographics banner -->
+    </div>
+
+    <div class="panel-body {% block panel_body_classes %}{% endblock %}">
+
+      <h3 ng-init="historyCollapsed=true">
+
+        <!-- TODO replace this with non-hard coded category -->
+        [[ episode.fp17_incomplete_treatment[0].date_of_acceptance | momentDateFormat:'DD/MM/YYYY' ]] -
+        [[ episode.fp17_incomplete_treatment[0].completion_or_last_visit | momentDateFormat:'DD/MM/YYYY' ]]
+        <button class="btn btn-secondary pull-right" ng-click="historyCollapsed = !historyCollapsed">
+          {% icon "fa-history" %}
+          Show treatment history
+        </button>
+      </h3>
+
+      <!-- Begin Treatment history display -->
+      <div class="row content-offset-25" uib-collapse="historyCollapsed">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-default">
+            <div class="panel-heading ">
+              <h3>
+                {% icon "fa-history" %}
+                Courses of Treatment
+              </h3>
+            </div>
+            <div class="list-group">
+              <a class="list-group-item episodelist pointer"
+                 ng-class="{'bg-active': view == null && e.id == episode.id}"
+                 ng-repeat="e in patient.episodes"
+                 href="[[ '/#' + e.link]]"
+                 ng-click="switch_to_episode($index, $event)"
+                 >
+                Treatment
+                [[ e.fp17_incomplete_treatment[0].date_of_acceptance | momentDateFormat:'DD/MM/YYYY' ]] -
+                [[ e.fp17_incomplete_treatment[0].completion_or_last_visit | momentDateFormat:'DD/MM/YYYY' ]]
+                <span ng-show="e.start">
+                  [[ e.start | shortDate ]] - [[ e.end | shortDate ]]<span ng-show="!e.end">Current</span>
+                </span>
+              </a>
+            </div>
+          </div> <!-- Panel -->
+        </div> <!-- col6 -->
+      </div> <!-- row -->
+      <!-- End Treatment history -->
+      <hr />
+      <!-- Begin Current Episode Display -->
+      <div class="row content-offset-25">
+        {% block content %}
+          <div class="col-md-12">
+            {% for episode_category in episode_categories %}
+              {% if episode_category.detail_template %}
+                <div class="row" ng-show="view == null && episode.category_name == '{{ episode_category.display_name }}'">
+                  {% include episode_category.detail_template %}
+                </div>
+              {% endif %}
+            {% endfor %}
+            {% for detail in detail_views %}
+              <div class="row" ng-show="view == '{{ detail.get_slug }}'">
+                {% include detail.template %}
+              </div>
+            {% endfor %}
+            {% block viewtemplates %}{% endblock %}
+          </div>
+      </div> <!-- Ends Current Episode Display -->
+
+
+
+{% endblock content %}
+    </div> <!-- Panel body -->
+  </div>   <!-- Panel -->
+</div>     <!-- Container -->
