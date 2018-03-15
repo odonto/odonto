@@ -64,7 +64,6 @@
       <h3 ng-init="historyCollapsed=true">
 
         <!-- TODO replace this with non-hard coded category -->
-        Current Band 1 Treatment:
         [[ episode.fp17_incomplete_treatment[0].date_of_acceptance | momentDateFormat:'DD/MM/YYYY' ]] -
         [[ episode.fp17_incomplete_treatment[0].completion_or_last_visit | momentDateFormat:'DD/MM/YYYY' ]]
         <button class="btn btn-secondary pull-right" ng-click="historyCollapsed = !historyCollapsed">
