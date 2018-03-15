@@ -9,7 +9,7 @@ from .message import Message
 try:
     VERSION = pkg_resources.require('fp17').version
 except pkg_resources.DistributionNotFound:
-    VERSION = '(unknown)'
+    VERSION = 'unknown'
 
 
 class Envelope(Message):
