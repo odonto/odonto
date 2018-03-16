@@ -41,6 +41,7 @@ def main(site_number, contract_number, performer_number, location_id, pin,
     envelope = Envelope()
     envelope.origin = site_number
     envelope.destination = "1234"
+    envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.test = True
     envelope.serial_number = int(serial_number)
