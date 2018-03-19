@@ -1,3 +1,5 @@
+import datetime
+
 from .bcds1 import Treatment
 
 
@@ -108,7 +110,14 @@ OTHER_TREATMENT = Treatment(code=9399)
 
 # For date of acceptance prior to 1 April 2014 for England and 1 May 2014 for
 # Wales. Isle of Man will continue to use this code.
-REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY = Treatment(code=9316)
+class REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY(Treatment):
+    def __init__(self):
+        super().__init__(code=9316)
+
+    def validate(self, document):
+        if document['date_of_acceptance'] >= datetime.date(2014, 4, 1):
+            yield "Legacy Advanced Mandatory Services used after 01/04/2014"
+
 
 class REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES(Treatment):
     """

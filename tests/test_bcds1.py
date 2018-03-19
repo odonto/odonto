@@ -1,6 +1,7 @@
 import pytest
 import datetime
 
+from fp17 import treatments
 from fp17.bcds1 import BCDS1, Patient, Treatment, SCHEDULE_QUERY_TRUE
 
 
@@ -96,3 +97,15 @@ def test_validation():
 
     msg.message_reference_number = 123456
     assert 'clrn' not in msg.get_errors()
+
+
+def test_treatment_validation(bcds1):
+    v = bcds1.get_validator()
+
+    bcds1.treatments.append(
+        treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY()
+    )
+
+    errors = bcds1.get_errors()
+    assert 'Legacy Advanced Mandatory Services used after 01/04/2014' in \
+        errors['treatments']
