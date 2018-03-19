@@ -26,7 +26,7 @@ def annotate(bcds1):
         treatments.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
 
         # "Treatment on referral" service
-        treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY,
+        treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES(2),
     ]
 
     return bcds1
