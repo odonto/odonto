@@ -6,6 +6,8 @@ import xmlschema
 
 
 class Message(object):
+    Validator = cerberus.Validator
+
     def __init__(self, **kwargs):
         super().__init__()
 
@@ -26,7 +28,7 @@ class Message(object):
         return self.get_validator().errors
 
     def get_validator(self):
-        x = cerberus.Validator(self.Meta.schema)
+        x = self.Validator(self.Meta.schema)
         x.validate(flatten(self))
         return x
 

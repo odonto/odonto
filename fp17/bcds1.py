@@ -1,3 +1,5 @@
+import cerberus
+
 from lxml import etree
 
 from .utils import min_digits, max_digits, strbool
@@ -119,6 +121,17 @@ class Treatment(Message):
     See "Validation Rules for FP17 forms" document for more information.
     """
 
+    _lookup_by_code = {}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self._lookup_by_code[self.code] = self
+
+    def validate(self, document):
+        return
+        yield
+
     class Meta:
         schema = {
             # Treatment code
@@ -157,6 +170,19 @@ class Treatment(Message):
 
 
 class BCDS1(Message):
+    class Validator(cerberus.Validator):
+        def _validate_treatments(self, treatments, field, value):
+            from . import treatments
+
+            if not treatments:
+                return
+
+            for x in value:
+                instance = Treatment._lookup_by_code[x['code']]
+
+                for y in instance.validate(self.document):
+                    self._error(field, y)
+
     class Meta:
         xsd = 'xml_bcds1.xsd'
 
@@ -396,6 +422,7 @@ class BCDS1(Message):
                 'minlength': 0,
                 'maxlength': 30,
                 'required': True,
+                'treatments': True,
             },
 
             # Claims under specific regulation
