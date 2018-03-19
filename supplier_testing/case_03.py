@@ -20,6 +20,7 @@ def annotate(bcds1):
 
     # Treatments: "Radiographs x 2, Crown x 1, Filled Deciduous 2, Ethnic Origin 3"
     bcds1.treatments = [
+        treatments.TREATMENT_CATEGORY(3),
         treatments.RADIOGRAPHS(2),
         treatments.CROWN(1),
         treatments.FILLED_TEETH_DECIDUOUS(2),
