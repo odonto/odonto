@@ -92,7 +92,6 @@ def test_validation():
 
     msg.message_reference_number = 1234567
     errors = msg.get_errors()
-
     assert 'max value is 999999' in errors['message_reference_number']
 
     msg.message_reference_number = 123456

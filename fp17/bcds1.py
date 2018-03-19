@@ -441,7 +441,6 @@ class BCDS1(Message):
                 'required': True,
             },
 
-
             # Dental chart
             'dental_chart': {
                 'type': 'list',
