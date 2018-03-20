@@ -4,4 +4,4 @@
 
     $ pip install -r requirements.txt
 
-![supported\_by\_apperta\_lores.png](https://github.com/AppertaFoundation/apperta-image-assets/blob/master/supported_by_apperta_lores.png)
+![](https://raw.githubusercontent.com/AppertaFoundation/apperta-image-assets/master/supported_by_apperta_lores.png)
