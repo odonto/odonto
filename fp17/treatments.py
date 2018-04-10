@@ -1,3 +1,8 @@
+"""
+Treatment types
+---------------
+"""
+
 import datetime
 
 from .bcds1 import Treatment

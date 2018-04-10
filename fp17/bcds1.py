@@ -1,3 +1,8 @@
+"""
+BCDS1 message
+-------------
+"""
+
 import cerberus
 
 from lxml import etree

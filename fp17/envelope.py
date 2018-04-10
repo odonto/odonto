@@ -1,3 +1,8 @@
+"""
+Message envelope
+----------------
+"""
+
 import pkg_resources
 
 from lxml import etree
