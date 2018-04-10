@@ -22,7 +22,7 @@ This software is currently undergoing the BSA certification process.
 
 1. Run tests with `pytest -vv -r ssX -l`
 
-## Documentatoin
+## Documentation
 
 Documentation uses [Sphinx](http://www.sphinx-doc.org/en/master/)
 
