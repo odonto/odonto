@@ -174,11 +174,6 @@ class Treatment(Message):
 class BCDS1(Message):
     class Validator(cerberus.Validator):
         def _validate_treatments(self, treatments, field, value):
-            from . import treatments
-
-            if not treatments:
-                return
-
             for x in value:
                 instance = Treatment._lookup_by_code[x['code']]
 
