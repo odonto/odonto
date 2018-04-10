@@ -21,3 +21,13 @@ This software is currently undergoing the BSA certification process.
 1. Install pytest with `pip install pytest`
 
 1. Run tests with `pytest -vv -r ssX -l`
+
+## Documentatoin
+
+Documentation uses [Sphinx](http://www.sphinx-doc.org/en/master/)
+
+1. Install Sphinx with `pip install sphinx`
+
+1. Move to the documentation directory `cd docs`
+
+1. Build the documentation to your target format - for instance: `make html`
