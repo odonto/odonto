@@ -9,8 +9,8 @@ setup(
     version='0.0.1',
     description="",
 
-    author="OpenHealthCare, Ltd.",
-    author_email="info@openhealthcare.co.uk",
+    author="Open Health Care, Ltd.",
+    author_email="hello@openhealthcare.co.uk",
     license="BSD",
 
     packages=find_packages(),
