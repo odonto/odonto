@@ -28,6 +28,4 @@ Documentation uses [Sphinx](http://www.sphinx-doc.org/en/master/)
 
 1. Install Sphinx with `pip install sphinx`
 
-1. Move to the documentation directory `cd docs`
-
-1. Build the documentation to your target format - for instance: `make html`
+1. Build the documentation to your target format - for instance: `make -C docs html`
