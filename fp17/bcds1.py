@@ -129,6 +129,8 @@ class Treatment(Message):
         self._lookup_by_code[self.code] = self
 
     def validate(self, document):
+        # Generator method returning 0 items. See
+        # <https://stackoverflow.com/questions/26595895> for background.
         return
         yield
 
