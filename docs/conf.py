@@ -50,8 +50,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python-fp17'
-copyright = u'2017 © OpenHealthCare, Ltd.'
-author = u'OpenHealthCare, Ltd <hello@openhealthcare.org.uk>'
+copyright = u'2017 © Open Health Care, Ltd.'
+author = u'Open Health Care, Ltd <hello@openhealthcare.org.uk>'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
