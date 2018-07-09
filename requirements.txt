@@ -18,7 +18,7 @@ python-dateutil==2.4.2
 # celery==3.1.19
 
 # Open Health Care repositories on GitHub
--e git+https://github.com/openhealthcare/opal.git@v0.10.0#egg=opal
+opal==0.10.0
 
 # Odonto repositories on GitHub
 -e git+https://github.com/odonto/opal-odontotheme.git@master#egg=odontotheme
