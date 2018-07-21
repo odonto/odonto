@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<!--
+      BCDS1 message schema 
+       
+      version 1.0 
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:annotation>
+      <xs:documentation>
+         BCDS1 message schema
+      </xs:documentation>
+   </xs:annotation>
+   <xs:element name="bcds1">
+      <xs:annotation>
+         <xs:documentation>
+            BCDS1 root element.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="pat">
+               <xs:annotation>
+                  <xs:documentation>
+                     Patient details - specifies all patient details
+                     necessary for a claim
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="adrdet">
+                        <xs:annotation>
+                           <xs:documentation>Address</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:sequence>
+                              <xs:element name="adrln" maxOccurs="5">
+                                 <xs:annotation>
+                                    <xs:documentation>Address line</xs:documentation>
+                                 </xs:annotation>
+                                 <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                       <xs:maxLength value="32"/>
+                                       <xs:minLength value="1"/>
+                                    </xs:restriction>
+                                 </xs:simpleType>
+                              </xs:element>
+                           </xs:sequence>
+                           <xs:attribute name="pc">
+                              <xs:annotation>
+                                 <xs:documentation>Postcode</xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:maxLength value="8"/>
+                                    <xs:minLength value="1"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                        </xs:complexType>
+                        <!--end of adrdet-->
+                     </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="nhsno">
+                     <xs:annotation>
+                        <xs:documentation>NHS number</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="17"/>
+                           <xs:minLength value="1"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="nino">
+                     <xs:annotation>
+                        <xs:documentation>NI number</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="9"/>
+                           <xs:minLength value="9"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="ptsur" use="required">
+                     <xs:annotation>
+                        <xs:documentation>Patient surname</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="20"/>
+                           <xs:minLength value="2"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="ptfn" use="required">
+                     <xs:annotation>
+                        <xs:documentation>Patient forename</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="20"/>
+                           <xs:minLength value="2"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="sex" use="required">
+                     <xs:annotation>
+                        <xs:documentation>Patient sex</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:enumeration value="M"/>
+                           <xs:enumeration value="F"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="ptttl">
+                     <xs:annotation>
+                        <xs:documentation>Patient title</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="4"/>
+                           <xs:minLength value="1"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="prvsur">
+                     <xs:annotation>
+                        <xs:documentation>Previous surname</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="20"/>
+                           <xs:minLength value="2"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="dob" use="required">
+                     <xs:annotation>
+                        <xs:documentation>Date of birth</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:pattern value="\d{8}"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+               </xs:complexType>
+               <!--end of pat-->
+            </xs:element>
+            <xs:element name="tda">
+               <xs:annotation>
+                  <xs:documentation>
+                     treatment type, dates and arrangements as necessary
+                     to substantiate a claim
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="trtdatgrp">
+                        <xs:annotation>
+                           <xs:documentation>Treatment dates</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:attribute name="datacc" use="required">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    date of acceptance or registration
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d{6}"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                           <xs:attribute name="datcp">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Date of completion
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d{6}"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                           <xs:attribute name="datexm">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Date of examination
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d{6}"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                        </xs:complexType>
+                     </xs:element>
+                     <xs:element name="clty" minOccurs="0">
+                        <xs:annotation>
+                           <xs:documentation>
+                              Type of claim
+                           </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:attribute name="inireg" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Initial registration
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="rereg" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Re-registration
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="ptothdt" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    patient under care of another dentist
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="octrt" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Occasional treatment only
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="trtrfl" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Treatment on referral
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="nhspri" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Part NHS / private
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                        </xs:complexType>
+                     </xs:element>
+                     <xs:element name="trtarr" minOccurs="0">
+                        <xs:annotation>
+                           <xs:documentation>
+                              Treatment arrangements
+                           </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:attribute name="cc18" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Transfer to continuing care at 18
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="trttra" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Treatment necessitated by trauma
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="radmod" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Orthodontic radiographs / study casts
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                           <xs:attribute name="disfee" type="xs:boolean">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Disability fee
+                                 </xs:documentation>
+                              </xs:annotation>
+                           </xs:attribute>
+                        </xs:complexType>
+                     </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="dtdec">
+                     <xs:annotation>
+                        <xs:documentation>Dentist / provider declaration</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                           <xs:enumeration value="0"/>
+                           <xs:enumeration value="1"/>
+                           <xs:enumeration value="2"/>
+                           <xs:enumeration value="3"/>
+                           <xs:enumeration value="64"/>
+                           <xs:enumeration value="65"/>
+                           <xs:enumeration value="66"/>
+                           <xs:enumeration value="67"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+           <xs:attribute name="sqind">
+              <xs:annotation>
+                <xs:documentation>sqind</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:integer">
+                  <xs:enumeration value="0"/>
+                  <xs:enumeration value="1"/>
+                  <xs:enumeration value="3"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>               </xs:complexType>
+               <!--end of tda-->
+            </xs:element>
+            <xs:element name="chx">
+               <xs:annotation>
+                  <xs:documentation>
+                     Charges and exemptions - specifies patient's
+                     charge and optionally, exemptions claimed
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="exrmdet" minOccurs="0">
+                        <xs:annotation>
+                           <xs:documentation>
+                              Exemption and remission information
+                           </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:attribute name="exrmcd" use="required">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Exemption and remission code
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d{2}"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                           <xs:attribute name="sdet">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Supporting details
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:maxLength value="50"/>
+                                    <xs:minLength value="1"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                        </xs:complexType>
+                        <!-- end of exrmdet-->
+                     </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="ptchg" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Patient charges (amount in pence)
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                           <xs:maxInclusive value="999999"/>
+                           <xs:minInclusive value="0"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="curcd" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Currency code
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:length value="3"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+               </xs:complexType>
+               <!-- end of chx-->
+            </xs:element>
+            <xs:element name="tst" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>
+                     Tooth specific treatment - specifies treatment
+                     relating to specific teeth or non-specific teeth
+                     completed or proposed
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="reptrtty" type="reptrttyType" minOccurs="0" maxOccurs="30"/>
+                  </xs:sequence>
+               </xs:complexType>
+               <!-- end of tst-->
+            </xs:element>
+            <xs:element name="cur" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>
+                     Claims under specific regulation - claim for
+                     work done under specific provision and not
+                     included in TST segment
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="reptrtty" type="reptrttyType" maxOccurs="8"/>
+                  </xs:sequence>
+               </xs:complexType>
+               <!-- end of cur-->
+            </xs:element>
+            <xs:element name="cht" minOccurs="0">
+               <xs:annotation>
+                  <xs:documentation>
+                     Dental chart - a representation of a dental
+                     chart in encoded form
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="todata" maxOccurs="32">
+                        <xs:annotation>
+                           <xs:documentation>
+                              Encoded tooth data
+                           </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:attribute name="toid" use="required">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Tooth identification code
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:pattern value="[1-8][1-9]"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                           <xs:attribute name="ancd" use="required">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Annotation code
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:enumeration value="M"/>
+                                    <xs:enumeration value="Z"/>
+                                    <xs:enumeration value="R"/>
+                                    <xs:enumeration value="E"/>
+                                    <xs:enumeration value="A"/>
+                                    <xs:enumeration value="C"/>
+                                    <xs:enumeration value="BR"/>
+                                    <xs:enumeration value="BP"/>
+                                    <!--tooth missing-->
+                                    <!--tooth missing and space closed-->
+                                    <!--root present-->
+                                    <!--tooth to be extracted-->
+                                    <!--artificial tooth present-->
+                                    <!--crown present-->
+                                    <!--bridge retainer present-->
+                                    <!--bridge pontic present-->
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                           <xs:attribute name="xtvl">
+                              <xs:annotation>
+                                 <xs:documentation>
+                                    Extent of travel
+                                 </xs:documentation>
+                              </xs:annotation>
+                              <xs:simpleType>
+                                 <xs:restriction base="xs:string">
+                                    <xs:pattern value="\d{2}"/>
+                                 </xs:restriction>
+                              </xs:simpleType>
+                           </xs:attribute>
+                        </xs:complexType>
+                        <!--end of todata-->
+                     </xs:element>
+                  </xs:sequence>
+               </xs:complexType>
+               <!--end of cht-->
+            </xs:element>
+            
+         </xs:sequence>
+         <xs:attribute name="clrn" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Unique message reference number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="schvn" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Schema version number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1.0"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="perf" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Performer number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="loc" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Location
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>      
+         <xs:attribute name="pin" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  DPB PIN.  Entered at the time of transmission
+                  to authorise message.
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:length value="6"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="cno" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Contract number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{10,15}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="resct">
+            <xs:annotation>
+               <xs:documentation>
+                  Resubmission count
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:integer">
+                  <xs:maxInclusive value="99"/>
+                  <xs:minInclusive value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="noseg" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Number of segments in message
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:integer">
+                  <xs:maxInclusive value="999999"/>
+                  <xs:minInclusive value="5"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType>
+   </xs:element>
+   <xs:complexType name="reptrttyType">
+      <xs:annotation>
+         <xs:documentation>
+            Repeating treatment type (used in tst and cur segments)
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="toid" minOccurs="0" maxOccurs="36">
+            <xs:annotation>
+               <xs:documentation>
+                  Tooth identification code
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="[1-8][1-9]"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+      </xs:sequence>
+      <xs:attribute name="trtcd" use="required">
+         <xs:annotation>
+            <xs:documentation>
+               Treatment code
+            </xs:documentation>
+         </xs:annotation>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="\d{4}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="noins">
+         <xs:annotation>
+            <xs:documentation>
+               Number of instances - the number of times the
+               treatment code occurs in the course of
+               treatment
+            </xs:documentation>
+         </xs:annotation>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="\d{2}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+   </xs:complexType>
+   <!-- end of reptrttyType-->
+</xs:schema>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-16" ?> <!--
+      receipt message schema 
+       
+      version 1.0 
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:annotation>
+      <xs:documentation>receipt message schema</xs:documentation>
+   </xs:annotation>
+   <xs:element name="receipt">
+      <xs:annotation>
+         <xs:documentation>
+            Response to an interchange received by the DPB
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="msg" minOccurs="0" maxOccurs="unbounded">
+               <xs:annotation>
+                  <xs:documentation>
+                     Information for an invalid message
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:attribute name="no" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Ordinal position of this message in the
+                           interchange
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                           <xs:minInclusive value="1" />
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="ty">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Message type
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string" />
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="clrn">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Unique message reference number
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string" />
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="err" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Error description
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="255" />
+                           <xs:minLength value="1" />
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+               </xs:complexType> <!--end of msg-->
+            </xs:element>
+         </xs:sequence>
+         <xs:attribute name="schvn" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Schema version number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1.0" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="bytes">
+            <xs:annotation>
+               <xs:documentation>
+                  Number of bytes received
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:integer">
+                  <xs:minInclusive value="1" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="dat">
+            <xs:annotation>
+               <xs:documentation>
+                  Date received
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="tim">
+            <xs:annotation>
+               <xs:documentation>
+                  Time received
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{4}" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="seq">
+            <xs:annotation>
+               <xs:documentation>
+                  Sequential serial number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string" />
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="err">
+            <xs:annotation>
+               <xs:documentation>
+                  Error description
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="255" />
+                  <xs:minLength value="1" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType> <!--end of receipt-->
+   </xs:element>
+</xs:schema>
