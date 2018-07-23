@@ -17,5 +17,10 @@ python-dateutil==2.4.2
 # django-celery==3.1.17
 # celery==3.1.19
 
+xmlschema==0.9.20
+lxml==4.1.1
+cerberus==1.1
+click==6.7
+
 # Open Health Care repositories on GitHub
 opal==0.11.2
