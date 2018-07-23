@@ -11,3 +11,4 @@
 .coverage
 htmlcov
 libpeerconnection.log
+odonto/local_settings.py
