@@ -1,0 +1,21 @@
+<div class="form-group"
+     {% if visibility %} {{ visibility|safe }} {% endif %}
+     >
+  <label class="control-label col-sm-5">{{ label }}</label>
+  <div class="col-sm-7"
+    ng-class="{'has-error': {{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required}"
+  >
+    <div class="row">
+      <div class="col-md-4 col-md-push-2">
+        <label style="width: 100%" uib-btn-checkbox ng-model="{{ model }}" class="btn btn-lg btn-default" btn-checkbox-true="1" btn-checkbox-false="undefined">
+          Yes
+        </label>
+      </div>
+      <div class="col-md-4 col-md-push-2">
+        <label style="width: 100%" uib-btn-checkbox ng-model="{{ model }}" class="btn btn-lg btn-default" btn-checkbox-true="undefined" btn-checkbox-false="1">
+          No
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+{% extends 'app_layouts/layout_base.html' %}
+{% load menus %}
+
+{% block navbar %}{% include 'navbar.html' %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-2" id="side-nav">
+  <ul class="app-info">
+    <li>
+      <i class="fa fa-user green"></i>&nbsp;
+      {{ user.username }}
+    </li>
+  </ul>
+  {% menu %}
+  </div>
+
+<div class="col-md-10">
+  <div class="outer-container" ng-view autoscroll="true" ng-hide="ready==false"></div>
+  {% include 'logout_modal.html' %}
+  <div growl></div>
+</div>
+</div>
+{% endblock %}
