@@ -392,3 +392,8 @@ table.patient-list {
   background: none;
   border-color:  rgb(72, 124, 188);
 }
+
+.odonto-menu .navbar-nav li{
+  float: initial;
+  margin-right: 15px;
+}
