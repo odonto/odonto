@@ -1,0 +1,65 @@
+{% extends "opal.html" %}
+{% load static %}
+{% block angularapp %}{% endblock %}
+{% block angulardefinition %}{% endblock %}
+{% block opal_js %}{% endblock %}
+{% block navbar %}{% endblock %}
+{% block content %}
+<div class="row content-centered">
+
+  <div class="col-md-4 col-md-offset-4">
+
+    <center>
+      <img src="{% static 'img/odonto_logo.png' %}" />
+    </center>
+    {% if ODONTO_LOGIN_MESSAGE %}
+    <h2 class="text-center">
+      {{ ODONTO_LOGIN_MESSAGE }}
+    </h2>
+    {% endif %}
+    {% if form.errors %}
+    <p class="lead text-center">Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}?next=/" class="form-horizontal">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="col-sm-12">
+          <input type="text" id="username" name="username"  placeholder="username"
+          autocomplete="off"
+          class="form-control"
+          autofocus="autofocus"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-12">
+          <input type="password" name="password" id="password" placeholder="password" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-12">
+          <center>
+            <button type="submit" class="btn btn-lg btn-default active" id="login">
+              log in
+            </button>
+          </center>
+        </div>
+      </div>
+
+      <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#id_username').focus();
+  $('#login').click(
+    function(){
+      $('.login').addClass('submitted')
+    })
+  });
+  </script>
+  {% endblock %}
