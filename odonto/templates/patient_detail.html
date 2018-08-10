@@ -31,7 +31,7 @@
           {% button_to "Complete FP17" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
         </span>
         <span ng-hide="episode.fp17_incomplete_treatment[0].date_of_acceptance">
-          {% button_to "Start new treatment course" pathways.Fp17Pathway ngpatient="patient.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
+          {% button_to "Start new treatment course" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-primary btn-lg pull-right" icon="fa-money" %}
         </span>
         <!-- End Key Action Buttons -->
 
