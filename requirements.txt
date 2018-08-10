@@ -19,6 +19,3 @@ python-dateutil==2.4.2
 
 # Open Health Care repositories on GitHub
 opal==0.11.2
-
-# Odonto repositories on GitHub
--e git+https://github.com/odonto/opal-odontotheme.git@master#egg=odontotheme
