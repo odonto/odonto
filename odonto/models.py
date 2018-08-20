@@ -189,10 +189,6 @@ class Fp17Declaration(models.EpisodeSubrecord):
     signature_date             = fields.DateField(blank=True, null=True)
 
 
-"""
-WIP: "Data flow" models. (Not to be merged)
-"""
-
 class Provider(models.Model):
     name = models.CharField(max_length=255)
 
