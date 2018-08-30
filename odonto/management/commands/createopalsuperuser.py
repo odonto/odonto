@@ -4,6 +4,7 @@ from django.db import transaction
 
 from opal.models import UserProfile
 
+
 class Command(BaseCommand):
     @transaction.atomic()
     def handle(self, *args, **options):

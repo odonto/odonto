@@ -6,6 +6,7 @@ from opal.models import Episode
 
 from odonto import models
 
+
 class AllPatientsList(core.patient_lists.PatientList):
     display_name = 'All Patients'
 

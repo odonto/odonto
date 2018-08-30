@@ -5,6 +5,7 @@ from opal.core import plugins
 
 from odontotheme.urls import urlpatterns
 
+
 class OdontothemePlugin(plugins.OpalPlugin):
     """
     Main entrypoint to expose this plugin to our Opal application.
