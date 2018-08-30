@@ -242,7 +242,7 @@ class Provider(models.Model):
 
 class Performer(models.Model):
     provider = models.ForeignKey(
-        Profiver,
+        Provider,
         on_delete=models.CASCADE,
         related_name='performers',
     )
