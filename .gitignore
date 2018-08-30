@@ -11,3 +11,4 @@
 .coverage
 htmlcov
 libpeerconnection.log
+/docs/_build/
