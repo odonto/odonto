@@ -1,13 +1,13 @@
-import pytest
 import datetime
+
+from opal.core.test import OpalTestCase
 
 from fp17.envelope import Envelope
 
-from test_bcds1 import bcds1
+from test_bcds1 import gen_bcds1
 
 
-@pytest.fixture
-def envelope():
+def gen_envelope():
     msg = Envelope()
     msg.origin = '01009'
     msg.destination = '01009'
@@ -22,34 +22,38 @@ def envelope():
     return msg
 
 
-def test_valid(envelope):
-    v = envelope.get_validator()
+class EnvelopeTestCase(OpalTestCase):
+    def test_valid(self):
+        msg = gen_envelope()
 
-    assert not v.errors
+        v = msg.get_validator()
 
-    root = envelope.generate_xml()
-    assert len(root.getchildren()) == 0
+        assert not msg.errors
 
-    Envelope.validate_xml(root)
+        root = msg.generate_xml()
+        assert len(root.getchildren()) == 0
 
+        Envelope.validate_xml(root)
 
-def test_validation():
-    msg = Envelope()
+    def test_validation(self):
+        msg = Envelope()
 
-    errors = msg.get_errors()
-    assert 'required field' in errors['origin']
+        errors = msg.get_errors()
+        assert 'required field' in errors['origin']
 
-    msg.origin = '01'
-    errors = msg.get_errors()
-    assert 'origin' not in errors
+        msg.origin = '01'
+        errors = msg.get_errors()
+        assert 'origin' not in errors
 
+    def test_add_message(self):
+        bcds1 = gen_bcds1()
+        envelope = gen_envelope()
 
-def test_add_message(envelope, bcds1):
-    envelope.add_message(bcds1)
-    root = envelope.generate_xml()
-    children = root.getchildren()
+        envelope.add_message(bcds1)
+        root = envelope.generate_xml()
+        children = root.getchildren()
 
-    assert len(children) == 1
-    assert children[0].tag == 'bcds1'
+        assert len(children) == 1
+        assert children[0].tag == 'bcds1'
 
-    envelope.validate_xml(root)
+        envelope.validate_xml(root)

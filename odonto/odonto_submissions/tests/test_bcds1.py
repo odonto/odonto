@@ -1,12 +1,12 @@
-import pytest
 import datetime
+
+from opal.core.test import OpalTestCase
 
 from fp17 import treatments
 from fp17.bcds1 import BCDS1, Patient, Treatment, SCHEDULE_QUERY_TRUE
 
 
-@pytest.fixture
-def bcds1():
+def gen_bcds1():
     msg = BCDS1()
     msg.message_reference_number = 12345
     msg.performer_number = 123456
@@ -70,42 +70,45 @@ def bcds1():
     return msg
 
 
-def test_valid(bcds1):
-    v = bcds1.get_validator()
+class BCDS1TestCase(OpalTestCase):
+    def test_valid(self):
+        msg = gen_bcds1()
 
-    assert not v.errors
+        v = msg.get_validator()
 
-    root = bcds1.generate_xml()
-    assert root.attrib['noseg'] == '8'
+        assert not v.errors
 
-    BCDS1.validate_xml(root)
+        root = msg.generate_xml()
+        assert root.attrib['noseg'] == '8'
 
+        msg.validate_xml(root)
 
-def test_validation():
-    msg = BCDS1()
+    def test_validation(self):
+        msg = gen_bcds1()
 
-    errors = msg.get_errors()
-    assert 'required field' in errors['message_reference_number']
+        errors = msg.get_errors()
+        assert 'required field' in errors['message_reference_number']
 
-    msg.message_reference_number = 0
-    errors = msg.get_errors()
-    assert 'min value is 1' in errors['message_reference_number']
+        msg.message_reference_number = 0
+        errors = msg.get_errors()
+        assert 'min value is 1' in errors['message_reference_number']
 
-    msg.message_reference_number = 1234567
-    errors = msg.get_errors()
-    assert 'max value is 999999' in errors['message_reference_number']
+        msg.message_reference_number = 1234567
+        errors = msg.get_errors()
+        assert 'max value is 999999' in errors['message_reference_number']
 
-    msg.message_reference_number = 123456
-    assert 'clrn' not in msg.get_errors()
+        msg.message_reference_number = 123456
+        assert 'clrn' not in msg.get_errors()
 
+    def test_treatment_validation(self):
+        msg = gen_bcds1()
 
-def test_treatment_validation(bcds1):
-    v = bcds1.get_validator()
+        v = msg.get_validator()
 
-    bcds1.treatments.append(
-        treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY()
-    )
+        msg.treatments.append(
+            treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY()
+        )
 
-    errors = bcds1.get_errors()
-    assert 'Legacy Advanced Mandatory Services used after 01/04/2014' in \
-        errors['treatments']
+        errors = msg.get_errors()
+        assert 'Legacy Advanced Mandatory Services used after 01/04/2014' in \
+            errors['treatments']

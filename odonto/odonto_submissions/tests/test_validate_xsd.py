@@ -1,15 +1,15 @@
+from opal.core.test import OpalTestCase
+
 import glob
-import pytest
 import xmlschema
 
-XSD_FILES = glob.glob('xsd/*.xsd')
 
+class ValidateXSDTestCase(OpalTestCase):
+    def test_validate(self):
+        for filename in glob.glob('xsd/*.xsd'):
+            schema = xmlschema.XMLSchema(filename)
 
-@pytest.mark.parametrize('filename', XSD_FILES)
-def test_validate(filename):
-    schema = xmlschema.XMLSchema(filename)
+            self.failIf(schema.is_valid('<invalid/>'))
 
-    assert not schema.is_valid('<invalid/>')
-
-    with pytest.raises(xmlschema.XMLSchemaValidationError):
-        schema.validate('<invalid/>')
+            with self.assertRaises(xmlschema.XMLSchemaValidationError):
+                schema.validate('<invalid/>')
