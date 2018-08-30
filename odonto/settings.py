@@ -97,19 +97,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '%c856+vs+9q*l-^zz6%z_frd9t+r(7ii&kb5pqgnwk5_6qc+@6'
 
-if DEBUG:
-    TEMPLATE_LOADERS = (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )
-else:
-    TEMPLATE_LOADERS = (
-        ('django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )),
-    )
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -150,14 +137,21 @@ TEMPLATES = [
                 'opal.context_processors.settings',
                 'opal.context_processors.models',
                 'opal.core.pathway.context_processors.pathways',
-
             ],
-
-            # ... some options here ...
+            'loaders': [(
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            )],
         },
     },
 ]
 
+if not DEBUG:
+    # Cache templates in production
+    TEMPLATES[0]['OPTIONS']['loaders'] = [(
+        'django.template.loaders.cached.Loader',
+        TEMPLATES[0]['OPTIONS']['loaders'],
+    )]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
