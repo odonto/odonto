@@ -129,7 +129,7 @@ class Treatment(Message):
     _lookup_by_code = {}
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(Treatment, self).__init__(*args, **kwargs)
 
         self._lookup_by_code[self.code] = self
 
