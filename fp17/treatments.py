@@ -44,7 +44,7 @@ class RECALL_INTERVAL(Treatment):
     """
         "I have given preventative advice and recommended a recall interval,
         taking into account NICE guidance, that I regard as appropriate to the
-        patient’s oral health."
+        patient's oral health."
 
     The number of months recommended recall period [..] between 1 - 24 should
     be provided.

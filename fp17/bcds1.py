@@ -224,7 +224,7 @@ class BCDS1(Message):
 
             # Contract number
             #
-            # The provider’s unique contract number.
+            # The provider's unique contract number.
             'contract_number': {
                 'type': 'number',
                 'min': min_digits(10),
