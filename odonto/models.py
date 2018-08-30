@@ -275,7 +275,6 @@ class BCDS1Message(models.Model):
 
     claim_number = models.IntegerField()
 
-    state =
     location =
     # patient_charge, etc etc
 
@@ -295,6 +294,8 @@ class BCDS1Message(models.Model):
 
 class Submission(models.Model):
     raw_xml = models.TextField()
+
+    state =
 
     created = models.DateTimeField(default=timezone.now)
 
