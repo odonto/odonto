@@ -607,6 +607,6 @@ class BCDS1(Message):
                 todata.attrib['toid'] = entry['tooth']
                 todata.attrib['ancd'] = entry['annotation']
 
-        root.attrib['noseg'] = str(num_segments)
+        root.attrib['noseg'] = str(nonlocals['num_segments'])
 
         return root
