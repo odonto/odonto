@@ -315,7 +315,7 @@ class BCDS1MessageSubmission(models.Model):
     )
 
     submission = models.ForeignKey(
-        BCDS1Message,
+        Submission,
         on_delete=models.CASCADE,
         related_name='bcds1_messages',
     )
