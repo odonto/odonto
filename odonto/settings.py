@@ -229,7 +229,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 if not DEBUG:
     EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME', '')
-    EMAIL_HOST= 'smtp.sendgrid.net'
+    EMAIL_HOST = 'smtp.sendgrid.net'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', '')
@@ -246,7 +246,7 @@ COVERAGE_EXCLUDE_MODULES = ('odonto.migrations', 'odonto.tests',
 # Begins OPAL Settings
 
 OPAL_LOG_OUT_MINUTES = 30
-OPAL_LOG_OUT_DURATION = OPAL_LOG_OUT_MINUTES*60*1000
+OPAL_LOG_OUT_DURATION = OPAL_LOG_OUT_MINUTES *60 *1000
 
 # Begins OPAL optional settings
 # OPAL_EXTRA_HEADER = ''
