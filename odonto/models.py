@@ -317,7 +317,7 @@ class BCDS1MessageSubmission(models.Model):
     submission = models.ForeignKey(
         Submission,
         on_delete=models.CASCADE,
-        related_name='bcds1_messages',
+        related_name='bcds1_message_submissions',
     )
 
     ordering = models.IntegerField()
