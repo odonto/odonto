@@ -293,18 +293,18 @@ class BCDS1Message(models.Model):
         return "pk={0.pk} claim_number={0.claim_number!r}".format(self)
 
 
-class SubmissionBCDS1Message(models.Model):
-    submission = models.ForeignKey(
-        'BCDS1Message',
-        on_delete=models.CASCADE,
-        related_name='bcds1_messages',
-    )
-
+class BCDS1MessageSubmission(models.Model):
     bcds1_message = models.OneToOneField(
         'BCDS1Message',
         unique=True,
         on_delete=models.CASCADE,
         related_name='submission',
+    )
+
+    submission = models.ForeignKey(
+        'BCDS1Message',
+        on_delete=models.CASCADE,
+        related_name='bcds1_messages',
     )
 
     ordering = models.IntegerField()
