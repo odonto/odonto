@@ -294,16 +294,8 @@ class BCDS1Message(models.Model):
 
 class Submission(models.Model):
     raw_xml = models.TextField()
-    raw_response = models.TextField()
-
-    state = fields.ChoiceField(choices=(
-        ('sent', "Sent"),
-        ('success', "Success"),
-        ('failure', "Failure"),
-    ))
 
     created = models.DateTimeField(default=timezone.now)
-    updated = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('-created',)
@@ -326,6 +318,14 @@ class BCDS1MessageSubmission(models.Model):
         on_delete=models.CASCADE,
         related_name='bcds1_message_submissions',
     )
+
+    state = fields.ChoiceField(choices=(
+        ('sent', "Sent"),
+        ('success', "Success"),
+        ('failure', "Failure"),
+    ))
+
+    response = models.TextField()
 
     ordering = models.IntegerField()
 
