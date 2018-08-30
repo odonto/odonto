@@ -295,7 +295,11 @@ class BCDS1Message(models.Model):
 class Submission(models.Model):
     raw_xml = models.TextField()
 
-    state =
+    state = fields.ChoiceField(choices=(
+        ('sent', "Sent"),
+        ('success', "Success"),
+        ('failure', "Failure"),
+    ))
 
     created = models.DateTimeField(default=timezone.now)
 
