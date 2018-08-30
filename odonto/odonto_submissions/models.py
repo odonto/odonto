@@ -25,14 +25,6 @@ class Performer(models.Model):
         related_name='performers',
     )
 
-    # ??
-    user = models.ForeignKey(
-        'auth.User',
-        on_delete=models.CASCADE,
-        related_name='',
-    )
-
-    # ??
     name = models.CharField(max_length=255)
 
     created = models.DateTimeField(default=timezone.now)
