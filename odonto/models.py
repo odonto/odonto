@@ -293,6 +293,19 @@ class BCDS1Message(models.Model):
         return "pk={0.pk} claim_number={0.claim_number!r}".format(self)
 
 
+class Submission(models.Model):
+    raw_xml = models.TextField()
+
+    created = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ('-created',)
+        get_latest_by = 'created'
+
+    def __str__(self):
+        return "pk={0.pk} raw_xml={0.raw_xml!r}".format(self)
+
+
 class BCDS1MessageSubmission(models.Model):
     bcds1_message = models.OneToOneField(
         'BCDS1Message',
@@ -321,16 +334,3 @@ class BCDS1MessageSubmission(models.Model):
     def __str__(self):
         return "submission_id={0.submission_id} " \
             "bcds1_message_id={0.bcds1_message_id!r}".format(self)
-
-
-class Submission(models.Model):
-    raw_xml = models.TextField()
-
-    created = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        ordering = ('-created',)
-        get_latest_by = 'created'
-
-    def __str__(self):
-        return "pk={0.pk} raw_xml={0.raw_xml!r}".format(self)
