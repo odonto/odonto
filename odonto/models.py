@@ -242,7 +242,7 @@ class Provider(models.Model):
 
 class Performer(models.Model):
     provider = models.ForeignKey(
-        'Profiver',
+        Profiver,
         on_delete=models.CASCADE,
         related_name='performers',
     )
@@ -269,7 +269,7 @@ class Performer(models.Model):
 
 class BCDS1Message(models.Model):
     provider = models.ForeignKey(
-        'Provider',
+        Provider,
         related_name='bcds1_messages',
     )
 
@@ -308,14 +308,14 @@ class Submission(models.Model):
 
 class BCDS1MessageSubmission(models.Model):
     bcds1_message = models.OneToOneField(
-        'BCDS1Message',
+        BCDS1Message,
         unique=True,
         on_delete=models.CASCADE,
         related_name='submission',
     )
 
     submission = models.ForeignKey(
-        'BCDS1Message',
+        BCDS1Message,
         on_delete=models.CASCADE,
         related_name='bcds1_messages',
     )
