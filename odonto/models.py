@@ -294,6 +294,7 @@ class BCDS1Message(models.Model):
 
 class Submission(models.Model):
     raw_xml = models.TextField()
+    raw_response = models.TextField()
 
     state = fields.ChoiceField(choices=(
         ('sent', "Sent"),
