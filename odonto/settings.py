@@ -21,12 +21,12 @@ try:
 except ImportError:
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_PATH, 'opal.sqlite'),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': ''
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(PROJECT_PATH, 'opal.sqlite'),
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': '',
         }
     }
 
@@ -90,7 +90,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
 )
 
@@ -107,7 +107,7 @@ else:
         ('django.template.loaders.cached.Loader', (
             'django.template.loaders.filesystem.Loader',
             'django.template.loaders.app_directories.Loader',
-            )),
+        )),
     )
 
 MIDDLEWARE_CLASSES = (
@@ -153,7 +153,6 @@ TEMPLATES = [
 
             ],
 
-
             # ... some options here ...
         },
     },
@@ -191,14 +190,14 @@ LOGGING = {
     'disable_existing_loggers': False,
     'filters': {
         'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
+            '()': 'django.utils.log.RequireDebugFalse',
         }
     },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     'loggers': {
@@ -226,10 +225,11 @@ APPEND_SLASH = False
 AXES_LOCK_OUT_AT_FAILURE = False
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 if not DEBUG:
     EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME', '')
-    EMAIL_HOST= 'smtp.sendgrid.net'
+    EMAIL_HOST = 'smtp.sendgrid.net'
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', '')
@@ -246,7 +246,7 @@ COVERAGE_EXCLUDE_MODULES = ('odonto.migrations', 'odonto.tests',
 # Begins OPAL Settings
 
 OPAL_LOG_OUT_MINUTES = 30
-OPAL_LOG_OUT_DURATION = OPAL_LOG_OUT_MINUTES*60*1000
+OPAL_LOG_OUT_DURATION = OPAL_LOG_OUT_MINUTES *60 *1000
 
 # Begins OPAL optional settings
 # OPAL_EXTRA_HEADER = ''
