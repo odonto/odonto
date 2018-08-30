@@ -19,7 +19,7 @@ except pkg_resources.DistributionNotFound:
 
 class Envelope(Message):
     def __init__(self):
-        super().__init__()
+        super(Envelope, self).__init__()
 
         self._messages = []
 
@@ -156,7 +156,7 @@ class Envelope(Message):
         return root
 
     def generate_xml(self):
-        elem = super().generate_xml()
+        elem = super(Envelope, self).generate_xml()
 
         for x in self._messages:
             elem.append(x.generate_xml())

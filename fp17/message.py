@@ -4,12 +4,14 @@ import cerberus
 import datetime
 import xmlschema
 
+from django.conf import settings
+
 
 class Message(object):
     Validator = cerberus.Validator
 
     def __init__(self, **kwargs):
-        super().__init__()
+        super(Message, self).__init__()
 
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -20,7 +22,11 @@ class Message(object):
 
     @classmethod
     def validate_xml(cls, root):
-        schema = xmlschema.XMLSchema(os.path.join('xsd', cls.Meta.xsd))
+        schema = xmlschema.XMLSchema(os.path.join(
+            os.path.realpath(os.path.dirname(__file__)),
+            'xsd',
+            cls.Meta.xsd,
+        ))
 
         schema.validate(root)
 
