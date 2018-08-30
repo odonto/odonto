@@ -330,6 +330,7 @@ class BCDS1MessageSubmission(models.Model):
     ordering = models.IntegerField()
 
     created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('ordering',)
