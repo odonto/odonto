@@ -92,7 +92,7 @@ class Fp17Pathway(OdontoPagePathway):
         pathway.Step(
             model=models.Demographics,
             display_name='Demographics',
-            ),
+        ),
         pathway.Step(
             model=models.Fp17DentalCareProvider,
             display_name="Care Provider",

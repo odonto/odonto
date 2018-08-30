@@ -21,12 +21,12 @@ try:
 except ImportError:
     DATABASES = {
         'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_PATH, 'opal.sqlite'),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': ''
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(PROJECT_PATH, 'opal.sqlite'),
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': ''
         }
     }
 
@@ -90,7 +90,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
     'compressor.finders.CompressorFinder',
 )
 
@@ -107,7 +107,7 @@ else:
         ('django.template.loaders.cached.Loader', (
             'django.template.loaders.filesystem.Loader',
             'django.template.loaders.app_directories.Loader',
-            )),
+        )),
     )
 
 MIDDLEWARE_CLASSES = (
