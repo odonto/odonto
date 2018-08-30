@@ -59,7 +59,8 @@ class Demographics(models.Demographics):
     # address apart from postcode not held in default Opal model, so it's
     # been appended to the Opal abstract model here.
 
-    house_number_or_name = fields.CharField(max_length=255, null=True, blank=True)
+    house_number_or_name = fields.CharField(
+        max_length=255, null=True, blank=True)
     street = fields.CharField(max_length=255, null=True, blank=True)
     city_or_town = fields.CharField(max_length=255, null=True, blank=True)
     county = fields.CharField(max_length=255, null=True, blank=True)
@@ -75,7 +76,8 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
     # the following provider information is not currently in an Opal model
     # ^^^ consider splitting this into a Provider Model
     provider_name = fields.CharField(max_length=255, blank=True, null=True)
-    provider_location_number = fields.CharField(max_length=255, blank=True, null=True)
+    provider_location_number = fields.CharField(
+        max_length=255, blank=True, null=True)
     provider_address = fields.CharField(max_length=255, blank=True, null=True)
     performer_number = fields.CharField(max_length=255, blank=True, null=True)
 
@@ -107,12 +109,15 @@ class Fp17Exemptions(models.EpisodeSubrecord):
     pension_credit_guarantee_credit = fields.BooleanField(default=False)
     prisoner = fields.BooleanField(default=False)
     universal_credit = fields.BooleanField(default=False)
-    evidence_of_exception_or_remission_seen = fields.BooleanField(default=False)
-    income_related_employment_and_support_allowance = fields.BooleanField(default=False)
+    evidence_of_exception_or_remission_seen = fields.BooleanField(
+        default=False)
+    income_related_employment_and_support_allowance = fields.BooleanField(
+        default=False)
 
     # logically I'd like to split this into its own PatientRemittance model
     # to keep all the Exemptions cleanly together in their own Model.
-    patient_charge_collected = fields.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)
+    patient_charge_collected = fields.DecimalField(
+        decimal_places=2, max_digits=5, blank=True, null=True)
 
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
@@ -141,7 +146,8 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     radiographs_taken = fields.IntegerField(blank=True, null=True)
 
     endodontic_treatment = fields.BooleanField(default=False)
-    permanent_fillings_and_sealant_restorations = fields.IntegerField(blank=True, null=True)
+    permanent_fillings_and_sealant_restorations = fields.IntegerField(
+        blank=True, null=True)
     extractions = fields.IntegerField(blank=True, null=True)
     crowns_provided = fields.IntegerField(blank=True, null=True)
 
@@ -153,7 +159,8 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     veneers_applied = fields.IntegerField(blank=True, null=True)
     inlays = fields.IntegerField(blank=True, null=True)
     bridges_fitted = fields.IntegerField(blank=True, null=True)
-    referral_for_advanced_mandatory_services_band = fields.IntegerField(blank=True, null=True)
+    referral_for_advanced_mandatory_services_band = fields.IntegerField(
+        blank=True, null=True)
 
     examination = fields.BooleanField(default=False)
     antibiotic_items_prescribed = fields.IntegerField(blank=True, null=True)
@@ -189,10 +196,14 @@ class Fp17Recall(models.EpisodeSubrecord):
 class Fp17NHSBSAFields(models.EpisodeSubrecord):
     _is_singleton = True
 
-    Fp17_NHSBSA_field_1 = fields.CharField(max_length=255, blank=True, null=True)
-    Fp17_NHSBSA_field_2 = fields.CharField(max_length=255, blank=True, null=True)
-    Fp17_NHSBSA_field_3 = fields.CharField(max_length=255, blank=True, null=True)
-    Fp17_NHSBSA_field_4 = fields.DecimalField(decimal_places=2, max_digits=5, blank=True, null=True)
+    Fp17_NHSBSA_field_1 = fields.CharField(
+        max_length=255, blank=True, null=True)
+    Fp17_NHSBSA_field_2 = fields.CharField(
+        max_length=255, blank=True, null=True)
+    Fp17_NHSBSA_field_3 = fields.CharField(
+        max_length=255, blank=True, null=True)
+    Fp17_NHSBSA_field_4 = fields.DecimalField(
+        decimal_places=2, max_digits=5, blank=True, null=True)
 
 
 class Fp17Declaration(models.EpisodeSubrecord):
