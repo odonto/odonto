@@ -485,7 +485,9 @@ class BCDS1(Message):
     @staticmethod
     def get_root_xml_element(x):
         # There are 5 mandatory segments, including the </bcds1> closing tag.
-        num_segments = 5
+        nonlocals = {
+            'num_segments': 5,
+        }
 
         root = etree.Element('bcds1')
 
@@ -576,13 +578,11 @@ class BCDS1(Message):
                     x['exemption_remission']['supporting_details']
 
         def create_treatments(name, data):
-            nonlocal num_segments
-
             if not data:
                 return
 
             elem = etree.SubElement(root, name)
-            num_segments += 1
+            nonlocals['num_segments'] += 1
 
             for treatment in data:
                 reptrtty = etree.SubElement(elem, 'reptrtty')
@@ -601,7 +601,7 @@ class BCDS1(Message):
 
         if x['dental_chart']:
             cht = etree.SubElement(root, 'cht')
-            num_segments += 1
+            nonlocals['num_segments'] += 1
             for entry in x['dental_chart']:
                 todata = etree.SubElement(cht, 'todata')
                 todata.attrib['toid'] = entry['tooth']
