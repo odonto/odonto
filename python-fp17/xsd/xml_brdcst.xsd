@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-16" ?> <!--
+		BRDCST message schema 
+		 
+		version 1.0 
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation>
+			BRDCST message schema
+			Used to pass general information to
+			practices
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="brdcst">
+		<xs:annotation>
+			<xs:documentation>
+				BRDCST root element.
+				Used to pass general information to
+				practices
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="bul" type="xs:string" minOccurs="0" maxOccurs="99">
+					<xs:annotation>
+						<xs:documentation>
+							Used to pass general information to practices
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element> <!--end of bul-->
+			</xs:sequence>
+			<xs:attribute name="schvn" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Schema version number
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="1.0" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType> <!--end of brdcst-->
+	</xs:element>
+</xs:schema>

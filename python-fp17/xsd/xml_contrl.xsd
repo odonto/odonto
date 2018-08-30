@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-16" ?> <!--
+      CONTRL message schema 
+       
+      version 1.0 
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:annotation>
+      <xs:documentation>Tranmission response (CONTRL) schema</xs:documentation>
+   </xs:annotation>
+   <xs:element name="contrl">
+      <xs:annotation>
+         <xs:documentation>
+         message sent in response to an interchange received by the DPB
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:attribute name="schvn" use="required">
+            <xs:annotation>
+               <xs:documentation>Schema version number</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1.0" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="ori" use="required">
+            <xs:annotation>
+               <xs:documentation>Origin.  The origin of the interchange that this message is acknowledging</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35" />
+                  <xs:minLength value="1" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="dest" use="required">
+            <xs:annotation>
+               <xs:documentation>Destination.  The destination of the interchange that this message is acknowledging</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35" />
+                  <xs:minLength value="1" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="seq" use="required">
+            <xs:annotation>
+               <xs:documentation>Sequential serial number.  Reference to the interchange that this message is acknowledging</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="accd">
+            <xs:annotation>
+               <xs:documentation>
+                  Action code:
+                  1 = interchange accepted
+                  4 = interchange rejected
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:integer">
+                  <xs:enumeration value="1" />
+                  <xs:enumeration value="4" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="errcd">
+            <xs:annotation>
+               <xs:documentation>Error code</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{1,2}" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="errtxt">
+            <xs:annotation>
+               <xs:documentation>
+                  Text describing the nature of the error
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="325" />
+                  <xs:minLength value="1" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>
