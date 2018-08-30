@@ -303,6 +303,7 @@ class Submission(models.Model):
     ))
 
     created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('-created',)
