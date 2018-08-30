@@ -23,7 +23,8 @@ class Message(object):
     @classmethod
     def validate_xml(cls, root):
         schema = xmlschema.XMLSchema(os.path.join(
-            os.path.realpath(os.path.dirname(__file__)),
+            settings.PROJECT_PATH,
+            'odonto_submissions',
             'xsd',
             cls.Meta.xsd,
         ))
