@@ -11,28 +11,36 @@ opal.models but can be customised here with extra / altered fields.
 """
 
 
-class Location(models.Location): pass
+class Location(models.Location):
+    pass
 
 
-class Allergies(models.Allergies): pass
+class Allergies(models.Allergies):
+    pass
 
 
-class Diagnosis(models.Diagnosis): pass
+class Diagnosis(models.Diagnosis):
+    pass
 
 
-class PastMedicalHistory(models.PastMedicalHistory): pass
+class PastMedicalHistory(models.PastMedicalHistory):
+    pass
 
 
-class Treatment(models.Treatment): pass
+class Treatment(models.Treatment):
+    pass
 
 
-class Investigation(models.Investigation): pass
+class Investigation(models.Investigation):
+    pass
 
 
-class SymptomComplex(models.SymptomComplex): pass
+class SymptomComplex(models.SymptomComplex):
+    pass
 
 
-class PatientConsultation(models.PatientConsultation): pass
+class PatientConsultation(models.PatientConsultation):
+    pass
 
 # we commonly need a referral route, ie how the patient
 # came to the service, but not always.
