@@ -610,3 +610,4 @@ class BCDS1(Message):
         root.attrib['noseg'] = str(nonlocals['num_segments'])
 
         return root
+

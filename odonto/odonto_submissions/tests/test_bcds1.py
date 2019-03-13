@@ -85,6 +85,7 @@ class BCDS1TestCase(OpalTestCase):
 
     def test_validation(self):
         msg = gen_bcds1()
+        delattr(msg, "message_reference_number")
 
         errors = msg.get_errors()
         assert 'required field' in errors['message_reference_number']

@@ -4,7 +4,7 @@ from opal.core.test import OpalTestCase
 
 from fp17.envelope import Envelope
 
-from test_bcds1 import gen_bcds1
+from .test_bcds1 import gen_bcds1
 
 
 def gen_envelope():
@@ -27,8 +27,8 @@ class EnvelopeTestCase(OpalTestCase):
         msg = gen_envelope()
 
         v = msg.get_validator()
-
-        assert not msg.errors
+        errors = msg.get_errors()
+        assert not errors
 
         root = msg.generate_xml()
         assert len(root.getchildren()) == 0
