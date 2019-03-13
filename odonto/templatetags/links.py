@@ -1,7 +1,7 @@
 """
 Odonto Link templatetags
 """
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django import template
 import six
 
