@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-16"?>
+<!--
+      interchange envelope schema 
+       
+      version 1.0 
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:annotation>
+      <xs:documentation>Schema name: ic</xs:documentation>
+   </xs:annotation>
+   <xs:element name="ic">
+      <xs:annotation>
+         <xs:documentation>Interchange envelope root element</xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:attribute name="schvn" use="required">
+            <xs:annotation>
+               <xs:documentation>Schema version</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1.0"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="synv" use="required">
+            <xs:annotation>
+               <xs:documentation>Syntax version</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="ori" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Origin.  For messages orginated by the user, the unique five
+                  digit site number issued by the system.  Messages originated
+                  by the system use the code appropriate to the service.
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35"/>
+                  <xs:minLength value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="dest" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Destination.  For messages orginated by the system, the unique
+                  five digit site number issued by the service.  Messages
+                  originated by a user use the code appropriate to the service.
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35"/>
+                  <xs:minLength value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="datrel" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Date of release of interchange for transmission
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="tim" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Time of release of interchange for transmission
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{4}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="seq" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Sequential serial number.  Unique number from site for each
+                  interchange
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:pattern value="\d{6}"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="swname" use="required">
+            <xs:annotation>
+               <xs:documentation>Practice system software package name</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="50"/>
+                  <xs:minLength value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="swver" use="required">
+            <xs:annotation>
+               <xs:documentation>Practice system software package version</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="50"/>
+                  <xs:minLength value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="pmsno">
+            <xs:annotation>
+               <xs:documentation>Practice system approval number</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="8"/>
+                  <xs:minLength value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="rev">
+            <xs:annotation>
+               <xs:documentation>Revision level</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="xmcat">
+            <xs:annotation>
+               <xs:documentation>Transmission category</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1"/>
+                  <xs:enumeration value="2"/>
+                  <xs:enumeration value="3"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+         <xs:attribute name="teind" type="xs:boolean">
+            <xs:annotation>
+               <xs:documentation>Test indicator</xs:documentation>
+            </xs:annotation>
+         </xs:attribute>
+         <xs:attribute name="icct">
+            <xs:annotation>
+               <xs:documentation>
+                  Interchange control count.  Number of messages in the interchange.
+                  Required for interchanges in the END service.
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:integer">
+                  <xs:maxInclusive value="999999"/>
+                  <xs:minInclusive value="0"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType>
+   </xs:element>
+</xs:schema>

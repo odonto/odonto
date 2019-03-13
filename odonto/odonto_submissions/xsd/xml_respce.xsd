@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-16" ?> <!--
+
+      RESPCE message schema 
+      version 1.0 
+
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:annotation>
+      <xs:documentation>
+          RESPCE message schema
+          Contains validation reject codes and other
+            responses to specific claims that cannot be immediately
+            paid
+        </xs:documentation>
+   </xs:annotation>
+   <xs:element name="respce">
+      <xs:annotation>
+         <xs:documentation>
+            RESPCE root element.  Each RESPCE message contains 
+            validation reject codes and other responses to specific 
+            claims that cannot be immediately paid
+         </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="rsp" maxOccurs="99">
+               <xs:annotation>
+                  <xs:documentation>
+                     Response - notifies the site of the rejection of
+                     a claim, acceptance of a modified version and provides
+                        additional information
+                  </xs:documentation>
+               </xs:annotation>
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="mstxt" maxOccurs="10">
+                        <xs:annotation>
+                           <xs:documentation>
+                                    Full response text
+                        </xs:documentation>
+                        </xs:annotation>
+                        <xs:complexType>
+                           <xs:simpleContent>
+                              <xs:extension base="xs:string">
+                                 <xs:attribute name="rspty" use="required">
+                                    <xs:simpleType>
+                                       <xs:restriction base="xs:string">
+                                          <xs:maxLength value="4" />
+                                          <xs:minLength value="1" />
+                                       </xs:restriction>
+                                    </xs:simpleType>
+                                 </xs:attribute>
+                              </xs:extension>
+                           </xs:simpleContent>
+                        </xs:complexType> <!--end of mstxt-->
+                     </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="cno" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Contract number
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:pattern value="\d{14,15}" />
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="perf" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Performer number
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:pattern value="\d{6}" />
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="loc" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                              Location
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:pattern value="\d{6}" />
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="clrn" use="required">
+                     <xs:annotation>
+                        <xs:documentation>
+                           Message reference number
+                        </xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:pattern value="\d{6}" />
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+               </xs:complexType> <!--end of rsp-->
+            </xs:element>
+         </xs:sequence>
+         <xs:attribute name="schvn" use="required">
+            <xs:annotation>
+               <xs:documentation>
+                  Schema version number
+               </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:enumeration value="1.0" />
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:attribute>
+      </xs:complexType> <!--end of respce-->
+   </xs:element>
+</xs:schema>

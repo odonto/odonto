@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import glob
+import click
+import datetime
+
+from lxml import etree
+
+from fp17.bcds1 import BCDS1, Patient
+from fp17.envelope import Envelope
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+@click.command()
+@click.option('--site-number', required=True,
+              help="Site Number/Origin")
+@click.option('--contract-number', required=True,
+              help="Contract Number")
+@click.option('--performer-number', required=True,
+              help="Performer Number")
+@click.option('--location-id', required=True,
+              help="Location Id")
+@click.option('--pin', required=True,
+              help="PIN Number")
+@click.option('--serial-number', required=True,
+              help="Serial/Sequence No")
+@click.option('--start-claim-number', required=True,
+              help="Start Claim Ref No. Incremented by 1 for each "
+              "subsequent claim in the test file.")
+@click.option('--surname-prefix', required=True,
+              help="Prefix all patient surnames to help with identification.")
+def main(site_number, contract_number, performer_number, location_id, pin,
+         serial_number, start_claim_number, surname_prefix):
+
+    result = ""
+    start_claim_number = int(start_claim_number)
+
+    envelope = Envelope()
+    envelope.origin = site_number
+    envelope.destination = "1234"
+    envelope.approval_number = 1
+    envelope.release_timestamp = datetime.datetime.utcnow()
+    envelope.test = True
+    envelope.serial_number = int(serial_number)
+
+    for filename in sorted(glob.glob(os.path.join(BASE_DIR, 'case_*.py'))):
+        name = os.path.splitext(os.path.basename(filename))[0]
+
+        print("I: Processing {} ...".format(name), file=sys.stderr)
+
+        bcds1 = BCDS1()
+        bcds1.message_reference_number = start_claim_number
+        bcds1.performer_number = int(performer_number)
+        bcds1.dpb_pin = int(pin)
+        bcds1.contract_number = int(contract_number)
+        bcds1.location = int(location_id)
+        bcds1.patient = Patient()
+
+        fn = from_dotted_path('supplier_testing.{}.annotate'.format(name))
+        bcds1 = fn(bcds1)
+
+        # Prepend the surname prefix.
+        bcds1.patient.surname = '{}{}'.format(surname_prefix,
+                                              bcds1.patient.surname)
+
+        start_claim_number += 1
+        envelope.add_message(bcds1)
+        assert not bcds1.get_errors(), bcds1.get_errors()
+
+    assert not envelope.get_errors(), envelope.get_errors()
+
+    root = envelope.generate_xml()
+    Envelope.validate_xml(root)
+
+    print(etree.tostring(root, encoding='unicode', pretty_print=True).strip())
+
+    return 0
+
+
+def from_dotted_path(fullpath):
+    """
+    Returns the specified attribute of a module, specified by a string.
+
+    ``from_dotted_path('a.b.c.d')`` is roughly equivalent to::
+
+        from a.b.c import d
+
+    except that ``d`` is returned and not entered into the current namespace.
+    """
+
+    module, attr = fullpath.rsplit('.', 1)
+
+    return getattr(__import__(module, {}, {}, (attr,)), attr)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
