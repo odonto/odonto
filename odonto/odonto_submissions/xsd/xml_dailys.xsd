@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-16" ?> <!--
+		DAILYS message schema 
+		 
+		version 1.0 
+-->
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:annotation>
+		<xs:documentation>
+			DAILYS message schema
+			"Next Day" schedule
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="dailys">
+		<xs:annotation>
+			<xs:documentation>
+        DAILYS root element.  Each DAILYS message contains a list of item
+        of service payments for claims submitted electronically and included
+        in the dentist's payment schedule
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="isp" minOccurs="1" maxOccurs="999">
+					<xs:annotation>
+						<xs:documentation>
+							Item of service payment - details of item of
+							service payment in a schedule
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="comdet" minOccurs="0" maxOccurs="4">
+								<xs:annotation>
+									<xs:documentation>
+										Comment
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="comios" use="required">
+										<xs:annotation>
+											<xs:documentation>
+												Comment line
+											</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="23" />
+												<xs:minLength value="1" />
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="lnkdt" type="xs:boolean">
+										<xs:annotation>
+											<xs:documentation>
+												Linked dentist indicator
+												If true, treatment disallowed because of previous
+												treatment by another dentist under the 'same dentist'
+												rule
+											</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType> <!--end of comdet-->
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="clrn" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									Message reference number
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="\d{6}" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="curcd" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									Currency code
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:length value="3" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="fee" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									Scale fee (amount in pence)
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:maxInclusive value="999999999" />
+									<xs:minInclusive value="-99999999" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="ptchgsch" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									Patient's charge scheduled
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:maxInclusive value="9999999" />
+									<xs:minInclusive value="-999999" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="rmamt">
+							<xs:annotation>
+								<xs:documentation>
+									Remission amount (in pence)
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:maxInclusive value="9999999" />
+									<xs:minInclusive value="-999999" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="adpct">
+							<xs:annotation>
+								<xs:documentation>
+									Additional percentage
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:maxInclusive value="99999" />
+									<xs:minInclusive value="1" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType> <!--end of isp-->
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="schvn" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Schema version number
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="1.0" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="cno" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Contract number
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d{10,15}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="perf" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Performer number
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d{6}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="loc" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						Location
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d{6}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="sch" use="required">
+				<xs:annotation>
+					<xs:documentation>
+						schedule number (This should have a value of "0000" in the DAYLYS message)
+					</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="\d{4}" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType> <!--end of dailys-->
+	</xs:element>
+</xs:schema>
