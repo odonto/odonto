@@ -40,6 +40,10 @@ h2 {
 #side-nav {
     background-color: #487DBC;
 }
+#logout {
+    position: fixed;
+    bottom: 0px;
+}
 
 
 .grey{
@@ -238,6 +242,9 @@ label{
 #side-nav ul.nav li i {
   padding-right: 4px;
 }
+#side-nav ul.nav li a{
+  padding-left: 26px;
+}
 #side-nav li a{
     color: white;
 }
@@ -254,6 +261,9 @@ label{
 #side-nav ul li.active a{
     background-color: #124c91;
 
+}
+#side-nav hr {
+  margin-left: 5%
 }
 
 #side-nav.can-assign ul li.active,

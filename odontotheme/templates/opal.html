@@ -4,21 +4,45 @@
 {% block navbar %}{% include 'navbar.html' %}{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-2" id="side-nav">
-  <ul class="app-info">
-    <li>
-      <i class="fa fa-user green"></i>&nbsp;
-      {{ user.username }}
-    </li>
-  </ul>
-  {% menu %}
-  </div>
+  <div class="row">
+    <div class="col-md-2" id="side-nav">
+      <ul class="app-info">
+        <li>
+          <i class="fa fa-user green"></i>&nbsp;
+          {{ user.username }}
+        </li>
+      </ul>
 
-<div class="col-md-10">
-  <div class="outer-container" ng-view autoscroll="true" ng-hide="ready==false"></div>
-  {% include 'logout_modal.html' %}
-  <div growl></div>
-</div>
-</div>
+      {% menu %}
+
+      <div id="logout">
+
+        <ul class="app-info">
+          {% if view.request.user.is_superuser %}
+      	  <li>
+            <a href="/admin/" title="Admin">
+              <i class="fa fa-cogs"></i>
+              Admin
+            </a>
+          </li>
+          {% endif %}
+
+          <li>
+            <a href="{% url 'logout' %}" title="Log out">
+              <i class="fa fa-sign-out"></i>
+              Log out
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="col-md-10">
+      <div class="outer-container" ng-view autoscroll="true" ng-hide="ready==false"></div>
+      {% include 'logout_modal.html' %}
+      <div growl></div>
+    </div>
+  </div>
 {% endblock %}

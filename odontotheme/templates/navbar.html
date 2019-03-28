@@ -16,23 +16,7 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="main-navbar">
-      <ul class="nav navbar-nav navbar-right nav-bar-links">
-      	<li>
-          <a href="{% url 'logout' %}" title="Log out">
-            <i class="fa fa-sign-out"></i>
-            {{ request.usr }}
-          </a>
-        </li>
-        {% if request.user.is_superuser %}
-      	<li>
-          <a href="/admin/" title="Admin">
-            <i class="fa fa-cogs"></i>
-          </a>
-        </li>
-        {% endif %}
-      </ul>
-        {% include 'partials/_nav_search.html' %}
-
+      {% include 'partials/_nav_search.html' %}
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
