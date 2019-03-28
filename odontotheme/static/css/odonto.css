@@ -61,8 +61,14 @@ h2 {
     height: 90px;
     background-color: #487DBC;
 }
+.nav-bar-search .form-control {
+    font-size: 16px;
+    line-height: 16px;
+    height: 32px;
+}
+
 .nav-bar-search:before {
-    top: 10px;
+    font-size: 16px;
 }
 .navbar-default .navbar-nav > li > a {
     color: white;
