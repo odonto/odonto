@@ -5,17 +5,20 @@
 {% block opal_js %}{% endblock %}
 {% block navbar %}{% endblock %}
 {% block content %}
-<div class="row content-centered">
+<div class="row content-offset">
 
   <div class="col-md-4 col-md-offset-4">
 
     <center>
       <img src="{% static 'img/odonto_logo.png' %}" />
     </center>
-    {% if ODONTO_LOGIN_MESSAGE %}
     <h2 class="text-center">
-      {{ ODONTO_LOGIN_MESSAGE }}
+      {{ OPAL_BRAND_NAME }}<small>{{ VERSION_NUMBER }}</small>
     </h2>
+    {% if ODONTO_LOGIN_MESSAGE %}
+    <h3 class="text-center">
+      {{ ODONTO_LOGIN_MESSAGE }}
+    </h3>
     {% endif %}
     {% if form.errors %}
     <p class="lead text-center">Your username and password didn't match. Please try again.</p>
