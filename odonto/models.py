@@ -73,7 +73,7 @@ class Demographics(models.Demographics):
     city_or_town = fields.CharField(max_length=255, null=True, blank=True)
     county = fields.CharField(max_length=255, null=True, blank=True)
 
-    # postcode = fields.CharField(max_length=255)  # => opal.Demographics.postcode
+    # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
 
 
 class Fp17DentalCareProvider(models.PatientSubrecord):
