@@ -279,6 +279,7 @@ ODONTO_LOGIN_MESSAGE = 'Log in to get started'
 # )
 
 try:
-    from local_settings import *
+    from odonto.local_settings import *
 except ImportError:
     pass
+print(DATABASES)
