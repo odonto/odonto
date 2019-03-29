@@ -21,3 +21,9 @@ def btn_checkbox(*args, **kwargs):
     - required: label to show when we're required!
     """
     return extract_common_args(kwargs)
+
+
+
+@register.inclusion_tag('_helpers/btn_radio.html')
+def btn_radio(*args, **kwargs):
+    return extract_common_args(kwargs)

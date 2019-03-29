@@ -1,0 +1,15 @@
+<div class="btn-group">
+  <div class="row">
+    <label class="control-label">
+      {{ label }}
+    </label>
+  </div>
+  <div class="row">
+    <label class="btn btn-default btn-radio-group"
+           ng-model="{{ model }}"
+           uib-btn-radio="'[[ i ]]'"
+           ng-repeat="i in {{ lookuplist }} track by $index">
+      [[ i ]]
+    </label>
+  </div>
+</div>

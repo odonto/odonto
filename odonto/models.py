@@ -5,6 +5,7 @@ from django.db.models import fields
 from django.db import models as djangomodels
 
 from opal import models
+from opal.core.fields import enum
 
 """
 Core Opal models - these inherit from the abstract data models in
@@ -135,11 +136,20 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
 
-    incomplete_treatment_band_1 = fields.BooleanField(default=False)
-    incomplete_treatment_band_2 = fields.BooleanField(default=False)
-    incomplete_treatment_band_3 = fields.BooleanField(default=False)
-    date_of_acceptance = fields.DateField(blank=True, null=True)
-    completion_or_last_visit = fields.DateField(blank=True, null=True)
+    BAND_CHOICES = enum('Band 1', 'Band 2', 'Band 3')
+
+    treatment_band = fields.CharField(
+        max_length=255, blank=True, null=True,
+        choices=BAND_CHOICES
+    )
+    date_of_acceptance = fields.DateField(
+        blank=True, null=True,
+        verbose_name="Date of acceptance"
+    )
+    completion_or_last_visit = fields.DateField(
+        blank=True, null=True,
+        verbose_name="Completion or last visit"
+    )
 
     class Meta:
         verbose_name = "Incomplete treatment and treatment dates"

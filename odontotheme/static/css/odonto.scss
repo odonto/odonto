@@ -7,6 +7,10 @@ $black_coral: #595F72;
 $bone: #DDD8C4;
 
 // Color and typography
+.cambridge_blue {
+    color: $cambridge_blue;
+}
+
 body {
     background-color: white;
     font-size: 16px;
@@ -31,6 +35,7 @@ a:hover {
 
 .form-control {
     color: $black_coral;
+    border-radius: 0px;
 }
 
 .form-horizontal .control-label,
@@ -41,6 +46,33 @@ label{
   font-weight: normal;
 }
 
+.btn {
+    border-radius: 0px;
+}
+
+.btn.btn-radio-group{
+    font-size: 18px;
+    line-height: 24px;
+    padding: 18px;
+}
+
+.btn-default {
+    color: $black_coral;
+}
+
+.btn-default.active {
+    background-color: $cambridge_blue;
+    border-color: darken($cambridge_blue, 8%);
+    color: $black_coral;
+}
+
+.btn-secondary, .btn-secondary:hover, .btn-secondary:focus{
+    background-color: $cambridge_blue;
+    border-color: darken($cambridge_blue, 8%);
+    color: $black_coral;
+    font-size: 18px;
+    line-height: 24px;
+}
 
 
 // Layout and positioning
@@ -57,6 +89,10 @@ label{
   padding-bottom: 8px;
 }
 
+#logout {
+    position: fixed;
+    bottom: 0px;
+}
 
 // Unconverted
 .form-control {
@@ -91,23 +127,11 @@ label{
 #side-nav {
     background-color: $odonto_blue;
 }
-#logout {
-    position: fixed;
-    bottom: 0px;
-}
-
-
-.grey{
-  color: #999;
-}
 
 .btn-primary {
     background-color: rgb(102, 174, 40);
 }
-.btn-secondary, .btn-secondary:hover, .btn-secondary:focus{
-    background-color: rgb(216, 143, 33);
-    color: white;
-}
+
 .navbar-default, .top-navbar {
     border-bottom: none;
 }
@@ -255,15 +279,6 @@ label{
     border-bottom: 3px solid rgb(72, 124, 188);
 }
 
-tr.urgent {
-    color: firebrick;
-    font-weight: bold;
-}
-.bg-urgent {
-    color: white;
-    background-color: firebrick;
-}
-
 .navbar-brand {
     padding-left: 50px;
 }
@@ -308,16 +323,11 @@ tr.urgent {
   margin-left: 5%
 }
 
-#side-nav.can-assign ul li.active,
-#side-nav.can-assign ul li.active a{
-    background-color: #124c91;
-    background-color: #06916B;
-}
-
 .outer-container {
   overflow-y: scroll;
   height: 100vh;
 }
+
 .no-touchevents .panel-heading i.edit, .list-group-item i.edit, .list-group-item i.delete {
   display: block;
   color: #ccc;
@@ -332,33 +342,6 @@ tr.urgent {
   cursor: pointer;
 }
 
-.odonto-referral-detail {
-    overflow-y: scroll;
-    height: 80vh;
-}
-.green {
-    color: #9cc96b;
-}
-.c3-xgrid-focus line { display: none; }
-
-.supernumber {
-  font-size: 98px;
-  text-align: center;
-  padding: 12px;
-}
-.superlabel{
-  text-align: center;
-  padding-bottom: 12px;
-}
-.superstat {
-  background-color: #3ebc99;
-
-}
-.superstat.failing {
-  background-color: red;
-  color: white;
-}
-
 .btn.btn-default small{
   color: #CCC;
 }
@@ -369,70 +352,6 @@ tr.urgent {
 
 .panel-margin{
   padding-left: 15px;
-}
-
-
-
-/*
-* switch user css
-*/
-
-.switch-user-bar{
-  position: fixed;
-  height: 60px;
-  width: 30%;
-  bottom: 0;
-  right: 0;
-}
-
-.switch-user-bg{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: #9CBEE6;
-  opacity: 0.4;
-}
-
-.switch-user-container{
-  padding-top: 10px;
-}
-
-
-.btn.can-refer{
-  background-color: #5E52C4;
-  background-color: #487DBC;
-  color: white;
-}
-
-.btn.can-refer.btn-active{
-  background-color: white;
-  color: #5E52C4;
-  color: #487DBC;
-}
-
-
-.btn.can-assign{
-  background-color: #281A9A;
-  background-color: #3EBC99;
-  color: white;
-}
-
-.btn.can-assign.btn-active{
-  background-color: white;
-  color: #281A9A;
-  color: #3EBC99;
-}
-
-.btn.can-confirm{
-  background-color: #124c91;
-  background-color: #5E52C4;
-  color: white;
-}
-
-.btn.can-confirm.btn-active{
-  background-color: white;
-  color: #124c91;
-  color: #5E52C4;
 }
 
 
