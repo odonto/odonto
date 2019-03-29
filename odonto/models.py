@@ -2,6 +2,7 @@
 odonto models.
 """
 from django.db.models import fields
+from django.db import models as djangomodels
 
 from opal import models
 
@@ -51,6 +52,12 @@ class PatientConsultation(models.PatientConsultation):
 End Opal core models
 """
 
+class PerformerNumber(djangomodels.Model):
+    user   = djangomodels.ForeignKey(
+        models.User, on_delete=djangomodels.CASCADE
+    )
+    number = fields.TextField()
+
 
 class Demographics(models.Demographics):
     _icon = None
@@ -87,18 +94,42 @@ class Demographics(models.Demographics):
 class Fp17DentalCareProvider(models.PatientSubrecord):
     _is_singleton = True
 
+    LOCATION_NUMBERS = (
+        ('010108', 'Albion Road'),
+        ('010112', 'Amble'),
+        ('010113', 'Blyth'),
+        ('016027', 'Hexham'),
+        ('010109', 'Longbenton'),
+        ('24946', 'Morpeth NHS Centre'),
+        ('010117', 'Northgate'),
+        ('010116', 'Seaton Hirst'),
+        ('010111', 'Wallsend'),
+        ('010054', 'Ward 15, WGH'),
+    )
+
     # I'm pretty sure this should not be handled as a PatientSubrecord
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
     # ^^^ consider splitting this into a Provider Model
-    provider_name = fields.CharField(max_length=255, blank=True, null=True)
+    provider_name = fields.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name="Provider name"
+    )
     provider_location_number = fields.CharField(
-        max_length=255, blank=True, null=True)
-    provider_address = fields.CharField(max_length=255, blank=True, null=True)
-    performer_number = fields.CharField(max_length=255, blank=True, null=True)
+        max_length=255, blank=True, null=True,
+        verbose_name="Provider location",
+        choices=LOCATION_NUMBERS
+    )
+    provider_address = fields.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name="Provider address"
+    )
+    performer = fields.CharField(
+        max_length=255, blank=True, null=True
+    )
 
     class Meta:
-        verbose_name = "Provider name, address and location number"
+        verbose_name = "Provider name, address and location"
 
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):

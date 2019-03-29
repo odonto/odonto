@@ -1,11 +1,17 @@
 {% load forms %}
 <div class="row">
-  <div class="col-md-6">
-    {% input field="Fp17DentalCareProvider.provider_name" style="vertical" %}
+  <div class="col-md-5">
+    {% input field="Fp17DentalCareProvider.provider_name" style="vertical" disabled="true" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% input field="Fp17DentalCareProvider.performer_number" style="vertical" %}
+    {% select field="Fp17DentalCareProvider.performer" style="vertical" lookuplist="metadata.performer.performer_list" %}
   </div>
 </div>
-{% input field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
-{% textarea field="Fp17DentalCareProvider.provider_address" style="vertical" %}
+<div class="row">
+  <div class="col-md-5">
+    {% textarea field="Fp17DentalCareProvider.provider_address" style="vertical" disabled="true" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% select field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
+  </div>
+</div>

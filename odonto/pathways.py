@@ -86,15 +86,21 @@ class AddPatientPathway(OdontoPagePathway):
 
 
 class Fp17Pathway(OdontoPagePathway):
-    display_name = 'FP17 Claim Form'
+    display_name = 'FP17 claim form'
     slug = 'fp17'
     steps = (
         pathway.Step(
-            model=models.Demographics,
+            model=models.Fp17DentalCareProvider,
+            step_controller="CareProviderStepCtrl",
+            display_name="Part 1: {}".format(
+                models.Fp17DentalCareProvider.get_display_name()
+            )
         ),
         pathway.Step(
-            model=models.Fp17DentalCareProvider,
-            step_controller="CareProviderStepCtrl"
+            model=models.Demographics,
+            display_name="Part 2: {}".format(
+                models.Demographics.get_display_name()
+            )
         ),
         pathway.Step(
             model=models.Fp17IncompleteTreatment,
