@@ -53,6 +53,8 @@ End Opal core models
 
 
 class Demographics(models.Demographics):
+    _icon = None
+
     # patient_nhs_number = fields.IntegerField()
     # ^^^ covered by Opal Demographics.nhs_number
     # title = fields.CharField(max_length=255)  # => opal.Demographics.title
@@ -68,17 +70,23 @@ class Demographics(models.Demographics):
     # been appended to the Opal abstract model here.
 
     house_number_or_name = fields.CharField(
-        max_length=255, null=True, blank=True)
+        max_length=255, null=True, blank=True,
+        verbose_name="House number or name"
+    )
     street = fields.CharField(max_length=255, null=True, blank=True)
-    city_or_town = fields.CharField(max_length=255, null=True, blank=True)
+    city_or_town = fields.CharField(
+        max_length=255, null=True, blank=True,
+        verbose_name="City or town"
+    )
     county = fields.CharField(max_length=255, null=True, blank=True)
 
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
-
+    class Meta:
+        verbose_name = "Patient information"
 
 class Fp17DentalCareProvider(models.PatientSubrecord):
     _is_singleton = True
-    _title = "Provider details"
+
     # I'm pretty sure this should not be handled as a PatientSubrecord
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
@@ -88,6 +96,9 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
         max_length=255, blank=True, null=True)
     provider_address = fields.CharField(max_length=255, blank=True, null=True)
     performer_number = fields.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Provider name, address and location number"
 
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):

@@ -1,0 +1,9 @@
+{% load forms %}
+<div pathway-step="{{ step.get_api_name }}">
+  <div class="row">
+    <h2>
+      {{ step.get_display_name }}
+    </h2>
+  </div>
+  {% include step.get_template %}
+</div>

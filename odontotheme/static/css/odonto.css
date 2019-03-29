@@ -1,123 +1,137 @@
-/* Odonto wireframe stylings */
 body {
-    background-color: white;
-    font-size: 16px;
-}
+  background-color: white;
+  font-size: 16px;
+  color: #595F72; }
+
+h1 {
+  color: #3b68a0; }
 
 h2 {
-    color: rgb(72, 124, 188);
-}
+  color: #3C4939; }
+
+a {
+  color: #595F72; }
+
+a:hover {
+  color: #474c5b; }
 
 .form-control {
-    font-size: 18px;
-    height: 48px;
-}
-.btn-lg {
-    padding: 6px 40px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 2px;
-}
+  color: #595F72; }
 
-.btn-default small{
-  color: #DDD;
-}
+.form-horizontal .control-label,
+label {
+  text-align: left;
+  font-size: 18px;
+  color: #595F72;
+  font-weight: normal; }
+
+h1 {
+  margin-bottom: 36px; }
+
+h2 {
+  margin-bottom: 24px; }
+
+.form-horizontal .control-label,
+label {
+  padding-bottom: 8px; }
+
+.form-control {
+  font-size: 18px;
+  height: 48px; }
+
+.btn-lg {
+  padding: 6px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 2px; }
+
+.btn-default small {
+  color: #DDD; }
+
 .navbar .container-fluid .navbar-brand {
-    margin-left: -32px;
-}
+  margin-left: -32px; }
 
 .navbar-default a.navbar-brand {
-    color: white;
-}
-.navbar-default a.navbar-brand:hover {
-    color: #eee;
-}
+  color: white; }
 
-#side-nav .navbar-nav{
-    width: 100%;
-}
+.navbar-default a.navbar-brand:hover {
+  color: #eee; }
+
+#side-nav .navbar-nav {
+  width: 100%; }
 
 #side-nav {
-    background-color: #487DBC;
-}
+  background-color: #487CBC; }
+
 #logout {
-    position: fixed;
-    bottom: 0px;
-}
+  position: fixed;
+  bottom: 0px; }
 
-
-.grey{
-  color: #999;
-}
+.grey {
+  color: #999; }
 
 .btn-primary {
-    background-color: rgb(102, 174, 40);
-}
-.btn-secondary, .btn-secondary:hover, .btn-secondary:focus{
-    background-color: rgb(216, 143, 33);
-    color: white;
-}
+  background-color: #66ae28; }
+
+.btn-secondary, .btn-secondary:hover, .btn-secondary:focus {
+  background-color: #d88f21;
+  color: white; }
+
 .navbar-default, .top-navbar {
-    border-bottom: none;
-}
+  border-bottom: none; }
 
 .top-navbar {
-    height: 90px;
-    background-color: #487DBC;
-}
+  height: 90px;
+  background-color: #487DBC; }
+
 .nav-bar-search .form-control {
-    font-size: 16px;
-    line-height: 16px;
-    height: 32px;
-}
+  font-size: 16px;
+  line-height: 16px;
+  height: 32px; }
 
 .nav-bar-search:before {
-    font-size: 16px;
-}
+  font-size: 16px; }
+
 .navbar-default .navbar-nav > li > a {
-    color: white;
-}
+  color: white; }
+
 .navbar-brand img {
-    height: 80px;
-    margin-top: -15px;
-}
+  height: 80px;
+  margin-top: -15px; }
+
 #main-navbar {
-    margin-top: 20px;
-}
+  margin-top: 20px; }
+
 .ngProgressLiteBar {
-    top: 90px;
-    background-color: white;
-}
+  top: 90px;
+  background-color: white; }
+
 .content-offset {
-    margin-top: 100px
-}
+  margin-top: 100px; }
+
 .pathway-offset {
-    margin-top: 80px;
-}
+  margin-top: 80px; }
 
-.nav-bar-links{
-    margin-top: -5px;
-}
+.nav-bar-links {
+  margin-top: -5px; }
 
-.nav-bar-odonto-container{
+.nav-bar-odonto-container {
   position: fixed;
   margin-top: -106px;
   z-index: 1040;
-  left: 50%;
-}
-.nav-bar-odonto-title{
+  left: 50%; }
+
+.nav-bar-odonto-title {
   margin-left: -50%;
   font-size: 24px;
   font-weight: 300;
-  color: white;
-}
+  color: white; }
 
-.odonto-small-title{
+.odonto-small-title {
   font-size: 18px;
   font-weight: 400;
   margin-top: 30px;
-  margin-bottom: 30px;
-}
+  margin-bottom: 30px; }
 
 .loading {
   background-color: white;
@@ -126,289 +140,240 @@ h2 {
   width: 1100%;
   z-index: 100;
   padding-left: 0px;
-  margin-left: -20px;
-}
+  margin-left: -20px; }
+
 .pathway-process-steps-padding {
-    margin-top: 60px;
-}
+  margin-top: 60px; }
+
 .btn-choices button {
   width: 240px;
   height: 200px;
   border-radius: 4px;
   margin-bottom: 30px;
-  background-color: rgb(212,212,212);
-  color: white;
-}
+  background-color: #d4d4d4;
+  color: white; }
 
 .btn-choices button.active {
-  background-color:  rgb(72, 124, 188)
-}
-
+  background-color: #487cbc; }
 
 .odonto-list {
-    margin-top: 90px;
-    padding: 20px;
-}
+  margin-top: 90px;
+  padding: 20px; }
 
 .patient-detail-heading h1,
 .patient-detail-heading h1 small {
-    color: rgb(72, 124, 188);
+  color: #487cbc; }
 
-}
-.panel.panel-primary .panel-heading{
-    color: black;
-}
+.panel.panel-primary .panel-heading {
+  color: black; }
 
 .odonto-detail {
-    margin-top: 100px;
-/*     background-color: firebrick */
-}
+  margin-top: 100px;
+  /*     background-color: firebrick */ }
+
 .odonto-detail h2 {
-    padding-bottom: 20px;
-}
+  padding-bottom: 20px; }
 
 .odonto-detail .panel-default {
-    border: none;
-}
+  border: none; }
 
 .panel-primary .panel-default .panel-heading,
 .panel-default .panel-heading {
-    border-bottom: 3px solid rgb(72, 124, 188);
-}
+  border-bottom: 3px solid #487cbc; }
 
 .search-panel.panel.panel-primary .panel-heading {
   background-color: transparent;
-  border-bottom: 3px solid rgb(72, 124, 188);
-}
-.modal-header{
-    background-color: rgb(72, 124, 188);
-}
+  border-bottom: 3px solid #487cbc; }
 
-.panel.panel-primary .panel-heading a{
-    color: #f76c51;
-}
-.panel.panel-primary .panel-heading a:hover{
-    color: #f76c51;
-    text-decoration: underline;
-}
-.panel.panel-primary .panel-heading a.btn{
-    color: white;
-}
-.panel.panel-primary .panel-heading a.btn:hover{
-    color: white;
-    text-decoration: none;
-}
+.modal-header {
+  background-color: #487cbc; }
+
+.panel.panel-primary .panel-heading a {
+  color: #f76c51; }
+
+.panel.panel-primary .panel-heading a:hover {
+  color: #f76c51;
+  text-decoration: underline; }
+
+.panel.panel-primary .panel-heading a.btn {
+  color: white; }
+
+.panel.panel-primary .panel-heading a.btn:hover {
+  color: white;
+  text-decoration: none; }
 
 .panel.panel-primary .panel-heading {
-    background-color: transparent;
-    border-bottom: 3px solid rgb(72, 124, 188);
-}
+  background-color: transparent;
+  border-bottom: 3px solid #487cbc; }
 
 tr.urgent {
-    color: firebrick;
-    font-weight: bold;
-}
-.bg-urgent {
-    color: white;
-    background-color: firebrick;
-}
-.form-horizontal .control-label,
-label{
-  text-align: left;
-  font-size: 18px;
-  color: #999;
-  font-weight: normal;
-  padding-bottom: 8px;
-}
+  color: firebrick;
+  font-weight: bold; }
 
+.bg-urgent {
+  color: white;
+  background-color: firebrick; }
 
 .navbar-brand {
-    padding-left: 50px;
-}
+  padding-left: 50px; }
 
 #side-nav {
   background-color: #124c91;
   background-color: #487DBC;
-  height: 100vh
-}
+  height: 100vh; }
+
 #side-nav ul.app-info {
   padding-top: 120px;
-  padding-bottom: 30px;
-}
+  padding-bottom: 30px; }
+
 .app-info li {
   padding-left: 32px;
-  color: white;
-}
+  color: white; }
+
 #side-nav ul.nav li i {
-  padding-right: 4px;
-}
-#side-nav ul.nav li a{
-  padding-left: 26px;
-}
-#side-nav li a{
-    color: white;
-}
+  padding-right: 4px; }
+
+#side-nav ul.nav li a {
+  padding-left: 26px; }
+
+#side-nav li a {
+  color: white; }
+
 #side-nav ul.nav li:hover,
-#side-nav ul.nav  li a:hover{
+#side-nav ul.nav li a:hover {
   background-color: #2c64a8;
-  color: white;
-}
+  color: white; }
 
-#side-nav ul.nav  li a:hover{
-  cursor: pointer
-}
+#side-nav ul.nav li a:hover {
+  cursor: pointer; }
+
 #side-nav ul li.active,
-#side-nav ul li.active a{
-    background-color: #124c91;
+#side-nav ul li.active a {
+  background-color: #124c91; }
 
-}
 #side-nav hr {
-  margin-left: 5%
-}
+  margin-left: 5%; }
 
 #side-nav.can-assign ul li.active,
-#side-nav.can-assign ul li.active a{
-    background-color: #124c91;
-    background-color: #06916B;
-}
+#side-nav.can-assign ul li.active a {
+  background-color: #124c91;
+  background-color: #06916B; }
 
 .outer-container {
   overflow-y: scroll;
-  height: 100vh;
-}
+  height: 100vh; }
+
 .no-touchevents .panel-heading i.edit, .list-group-item i.edit, .list-group-item i.delete {
   display: block;
-  color: #ccc;
-}
+  color: #ccc; }
 
 .touchevents .panel-heading i.edit,
 .touchevents .panel-heading i.delete,
 .panel-heading:hover i.edit,
 .list-group-item:hover i.edit,
-.list-group-item:hover i.delete{
+.list-group-item:hover i.delete {
   color: black;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 .odonto-referral-detail {
-    overflow-y: scroll;
-    height: 80vh;
-}
+  overflow-y: scroll;
+  height: 80vh; }
+
 .green {
-    color: #9cc96b;
-}
-.c3-xgrid-focus line { display: none; }
+  color: #9cc96b; }
+
+.c3-xgrid-focus line {
+  display: none; }
 
 .supernumber {
   font-size: 98px;
   text-align: center;
-  padding: 12px;
-}
-.superlabel{
-  text-align: center;
-  padding-bottom: 12px;
-}
-.superstat {
-  background-color: #3ebc99;
+  padding: 12px; }
 
-}
+.superlabel {
+  text-align: center;
+  padding-bottom: 12px; }
+
+.superstat {
+  background-color: #3ebc99; }
+
 .superstat.failing {
   background-color: red;
-  color: white;
-}
+  color: white; }
 
-.btn.btn-default small{
-  color: #CCC;
-}
+.btn.btn-default small {
+  color: #CCC; }
 
-.btn.btn-default small{
-  color: #CCC;
-}
+.btn.btn-default small {
+  color: #CCC; }
 
-.panel-margin{
-  padding-left: 15px;
-}
-
-
+.panel-margin {
+  padding-left: 15px; }
 
 /*
 * switch user css
 */
-
-.switch-user-bar{
+.switch-user-bar {
   position: fixed;
   height: 60px;
-  width: 30%%;
+  width: 30%;
   bottom: 0;
-  right: 0;
-}
+  right: 0; }
 
-.switch-user-bg{
+.switch-user-bg {
   position: absolute;
   height: 100%;
   width: 100%;
   background-color: #9CBEE6;
-  opacity: 0.4;
-}
+  opacity: 0.4; }
 
-.switch-user-container{
-  padding-top: 10px;
-}
+.switch-user-container {
+  padding-top: 10px; }
 
-
-.btn.can-refer{
+.btn.can-refer {
   background-color: #5E52C4;
   background-color: #487DBC;
-  color: white;
-}
+  color: white; }
 
-.btn.can-refer.btn-active{
+.btn.can-refer.btn-active {
   background-color: white;
   color: #5E52C4;
-  color: #487DBC;
-}
+  color: #487DBC; }
 
-
-.btn.can-assign{
+.btn.can-assign {
   background-color: #281A9A;
   background-color: #3EBC99;
-  color: white;
-}
+  color: white; }
 
-.btn.can-assign.btn-active{
+.btn.can-assign.btn-active {
   background-color: white;
   color: #281A9A;
-  color: #3EBC99;
-}
+  color: #3EBC99; }
 
-.btn.can-confirm{
+.btn.can-confirm {
   background-color: #124c91;
   background-color: #5E52C4;
-  color: white;
-}
+  color: white; }
 
-.btn.can-confirm.btn-active{
+.btn.can-confirm.btn-active {
   background-color: white;
   color: #124c91;
-  color: #5E52C4;
-}
-
+  color: #5E52C4; }
 
 table.patient-list {
-  font-size: 16px;
-}
+  font-size: 16px; }
 
 .panel {
   border: none;
   background: none;
   box-shadow: none;
-  border-radius: 0px;
-}
-.panel-footer {
-    background: none;
-}
+  border-radius: 0px; }
 
-.panel.panel-primary .panel-heading.pathway-header{
+.panel-footer {
+  background: none; }
+
+.panel.panel-primary .panel-heading.pathway-header {
   background: none;
-  border-color:  rgb(72, 124, 188);
-}
+  border-color: #487cbc; }
+
+/*# sourceMappingURL=odonto.css.map */

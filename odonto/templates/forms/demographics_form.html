@@ -1,11 +1,47 @@
 {% load forms %}
-{% input field="Demographics.nhs_number" label="NHS Number" %}
-{% input field="Demographics.first_name" %}
-{% input field="Demographics.surname" %}
-{% date_of_birth_field %}
-{% select field="Demographics.sex" %}
-{% input field="Demographics.house_number_or_name" %}
-{% input field="Demographics.street" %}
-{% input field="Demographics.city_or_town" %}
-{% input field="Demographics.county" %}
-{% input field="Demographics.post_code" %}
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.nhs_number" label="NHS number" style="vertical"%}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.first_name" label="First forename" style="vertical" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% input field="Demographics.surname" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% date_of_birth_field style="vertical" label="Date of birth" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% select field="Demographics.sex" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+{% input field="Demographics.house_number_or_name" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.street" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.city_or_town" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.county" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.post_code" style="vertical" label="Post code" %}
+  </div>
+</div>

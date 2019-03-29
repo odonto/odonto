@@ -91,11 +91,9 @@ class Fp17Pathway(OdontoPagePathway):
     steps = (
         pathway.Step(
             model=models.Demographics,
-            display_name='Demographics',
         ),
         pathway.Step(
             model=models.Fp17DentalCareProvider,
-            display_name="Care Provider",
             step_controller="CareProviderStepCtrl"
         ),
         pathway.Step(

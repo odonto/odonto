@@ -11,3 +11,6 @@
 .coverage
 htmlcov
 libpeerconnection.log
+.sass-cache
+odonto/local_settings.py
+*sqlite*
