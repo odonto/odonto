@@ -134,13 +134,15 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
-    _title = 'FP17 Treatment Course'
 
     incomplete_treatment_band_1 = fields.BooleanField(default=False)
     incomplete_treatment_band_2 = fields.BooleanField(default=False)
     incomplete_treatment_band_3 = fields.BooleanField(default=False)
     date_of_acceptance = fields.DateField(blank=True, null=True)
     completion_or_last_visit = fields.DateField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Incomplete treatment and treatment dates"
 
 
 class Fp17Exemptions(models.EpisodeSubrecord):

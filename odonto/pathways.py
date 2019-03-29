@@ -104,7 +104,10 @@ class Fp17Pathway(OdontoPagePathway):
         ),
         pathway.Step(
             model=models.Fp17IncompleteTreatment,
-            step_controller="FP17TreatmentStepCtrl"
+            step_controller="FP17TreatmentStepCtrl",
+            display_name="Part 3: {}".format(
+                models.Fp17IncompleteTreatment.get_display_name()
+            )
         ),
         pathway.Step(
             model=models.Fp17Exemptions,
