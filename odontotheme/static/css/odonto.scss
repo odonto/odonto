@@ -10,6 +10,9 @@ $bone: #DDD8C4;
 .cambridge_blue {
     color: $cambridge_blue;
 }
+.bg-bone {
+    background-color: $bone;
+}
 
 body {
     background-color: white;
@@ -56,6 +59,15 @@ label{
     padding: 18px;
 }
 
+.btn.btn-checkbox {
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  text-align: center;
+  padding: 8px 0px 0px 0px;
+}
+
 .btn-default {
     color: $black_coral;
 }
@@ -77,16 +89,22 @@ label{
 
 // Layout and positioning
 h1 {
+    margin-top: 24px;
     margin-bottom: 36px;
 }
 
 h2 {
+    margin-top: 24px;
     margin-bottom: 24px;
 }
 
 .form-horizontal .control-label,
 label{
   padding-bottom: 8px;
+}
+
+.odonto-checkbox label.col-md-9 {
+    padding-left: 0px;
 }
 
 #logout {

@@ -157,29 +157,69 @@ class Fp17IncompleteTreatment(models.EpisodeSubrecord):
 
 class Fp17Exemptions(models.EpisodeSubrecord):
     _is_singleton = True
-    _title = "Exemptions and Remissions"
 
-    patient_under_18 = fields.BooleanField(default=False)
-    full_remission_hc2_cert = fields.BooleanField(default=False)
-    partial_remission_hc3_cert = fields.BooleanField(default=False)
-    expectant_mother = fields.BooleanField(default=False)
-    nursing_mother = fields.BooleanField(default=False)
-    aged_18_in_full_time_education = fields.BooleanField(default=False)
-    income_support = fields.BooleanField(default=False)
-    nhs_tax_credit_exemption = fields.BooleanField(default=False)
-    income_based_jobseekers_allowance = fields.BooleanField(default=False)
-    pension_credit_guarantee_credit = fields.BooleanField(default=False)
+    patient_under_18 = fields.BooleanField(
+        default=False,
+        verbose_name="Patient under 18"
+    )
+    full_remission_hc2_cert = fields.BooleanField(
+        default=False,
+        verbose_name = "Full remission - HC2 cert."
+    )
+    partial_remission_hc3_cert = fields.BooleanField(
+        default=False,
+        verbose_name="Partial remission - HC3 cert."
+    )
+    expectant_mother = fields.BooleanField(
+        default=False,
+        verbose_name="Expectant mother"
+    )
+    nursing_mother = fields.BooleanField(
+        default=False,
+        verbose_name="Nursing mother"
+    )
+    aged_18_in_full_time_education = fields.BooleanField(
+        default=False,
+        verbose_name="Aged 18 in full time education"
+    )
+    income_support = fields.BooleanField(
+        default=False,
+        verbose_name="Income support"
+    )
+    nhs_tax_credit_exemption = fields.BooleanField(
+        default=False,
+        verbose_name="NHS tax credit exemption"
+    )
+    income_based_jobseekers_allowance = fields.BooleanField(
+        default=False,
+        verbose_name="Income based jobseekers allowance"
+    )
+    pension_credit_guarantee_credit = fields.BooleanField(
+        default=False,
+        verbose_name="Pension credit guarantee credit"
+    )
     prisoner = fields.BooleanField(default=False)
-    universal_credit = fields.BooleanField(default=False)
-    evidence_of_exception_or_remission_seen = fields.BooleanField(
-        default=False)
+    universal_credit = fields.BooleanField(
+        default=False,
+        verbose_name="Universal credit"
+    )
     income_related_employment_and_support_allowance = fields.BooleanField(
-        default=False)
+        default=False,
+        verbose_name="Income related employment and support allowance"
+    )
 
-    # logically I'd like to split this into its own PatientRemittance model
-    # to keep all the Exemptions cleanly together in their own Model.
+    evidence_of_exception_or_remission_seen = fields.BooleanField(
+        default=False,
+        verbose_name="Evidence of exception or remission seen"
+    )
+
     patient_charge_collected = fields.DecimalField(
-        decimal_places=2, max_digits=5, blank=True, null=True)
+        decimal_places=2, max_digits=5, blank=True, null=True,
+        verbose_name="Patient charge collected"
+    )
+
+    class Meta:
+        verbose_name = "Exemptions and remissions"
 
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
