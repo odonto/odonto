@@ -1,12 +1,24 @@
-<span ng-show="item.provider_name">
-  Provider: [[ item.provider_name ]]
-   <br />
-</span>
-<span ng-show="item.provider_location_number">
-  Provider number: [[ item.provider_location_number ]]
-   <br />
-</span>
-<span ng-show="item.performer">
-  Performer: [[ item.performer ]]
-   <br />
-</span>
+<div class="row">
+  <div class="col-md-3">
+    Provider:
+  </div>
+  <div class="col-md-9">
+    <b>[[ item.provider_name ]]</b>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    Location:
+  </div>
+  <div class="col-md-9">
+    <b>[[ item.provider_location_number ]]</b>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    Performer:
+  </div>
+  <div class="col-md-9">
+    <b>[[ item.performer ]]</b>
+  </div>
+</div>

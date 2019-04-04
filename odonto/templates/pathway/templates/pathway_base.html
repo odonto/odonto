@@ -18,7 +18,9 @@
         <strong class="help-block">Please fix the above errors</strong>
       </div>
       {% block pathway_footer %}
-        {% include "pathway/partial/save_button.html" %}
+        <div class="pathway-save-button">
+          {% include "pathway/partial/save_button.html" %}
+        </div>
       {% endblock %}
   </form>
 

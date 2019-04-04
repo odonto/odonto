@@ -35,7 +35,7 @@ except ImportError:
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '.herokuapp.com'
+    '.herokuapp.com',
 ]
 
 # Local time zone for this installation. Choices can be found here:

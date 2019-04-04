@@ -21,17 +21,18 @@
   <div class="row">
     <div class="col-md-6">
       {% record_panel models.Fp17Exemptions %}
-    </div>
-    <div class="col-md-6">
       {% record_panel models.Fp17TreatmentCategory %}
     </div>
+    <div class="col-md-6">
+      {% record_panel models.Fp17ClinicalDataSet %}
+    </div>
   </div>
-
-  {% record_panel models.Fp17ClinicalDataSet %}
-  {% record_panel models.Fp17OtherDentalServices %}
-
-  <div ng-show="episode.fp17_incomplete_treatment[0].completion_or_last_visit">
-    {% record_panel models.Fp17Recall %}
+  <div class="row">
+    <div class="col-md-6">
+      {% record_panel models.Fp17OtherDentalServices %}
+    </div>
+    <div class="col-md-6">
+      {% record_panel models.Fp17Recall %}
+    </div>
   </div>
-
 </div>

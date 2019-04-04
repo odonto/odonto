@@ -1,14 +1,22 @@
-{% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-4">
-    {% checkbox field="Fp17OtherDentalServices.treatment_on_referral" style="vertical" %}
-    {% checkbox field="Fp17OtherDentalServices.free_repair_or_replacement" style="vertical" %}
+    {% btn_checkbox field="Fp17OtherDentalServices.treatment_on_referral" style="vertical" %}
   </div>
   <div class="col-md-4">
-    {% checkbox field="Fp17OtherDentalServices.further_treatment_within_2_months" style="vertical" %}
-    {% checkbox field="Fp17OtherDentalServices.domicillary_services" style="vertical" %}
+    {% btn_checkbox field="Fp17OtherDentalServices.further_treatment_within_2_months" style="vertical" %}
   </div>
   <div class="col-md-4">
-    {% checkbox field="Fp17OtherDentalServices.sedation_services" style="vertical" %}
+    {% btn_checkbox field="Fp17OtherDentalServices.sedation_services" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.free_repair_or_replacement" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.domicillary_services" style="vertical" %}
+  </div>
+  <div class="col-md-4">
   </div>
 </div>

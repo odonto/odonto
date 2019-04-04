@@ -1,56 +1,102 @@
 {% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-3">
-    {% checkbox field="Fp17ClinicalDataSet.examination" style="vertical" %}
-    {% checkbox field="Fp17ClinicalDataSet.scale_and_polish" style="vertical" %}
+    {% btn_checkbox field="Fp17ClinicalDataSet.examination" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% checkbox field="Fp17ClinicalDataSet.fluoride_varnish" style="vertical" %}
-    {% checkbox field="Fp17ClinicalDataSet.endodontic_treatment" style="vertical" %}
+    {% btn_checkbox field="Fp17ClinicalDataSet.fluoride_varnish" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% checkbox field="Fp17ClinicalDataSet.other_treatment" style="vertical" %}
-    {% checkbox label="Best practice prevention according to 'Delivering Better Oral Health' offered" field="Fp17ClinicalDataSet.best_practice_prevention" style="vertical" %}
+    {% btn_checkbox field="Fp17ClinicalDataSet.other_treatment" %}
   </div>
 </div>
-<div class="row">
+<div class="row content-offset-20">
   <div class="col-md-3">
-    {% input field="Fp17ClinicalDataSet.fissure_sealants" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.crowns_provided" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.veneers_applied" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.inlays" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.bridges_fitted" unit="number of teeth" maxlength="2" style="vertical" %}
+    {% btn_checkbox field="Fp17ClinicalDataSet.scale_and_polish" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input field="Fp17ClinicalDataSet.radiographs_taken" maxlength="2" unit="number of radiographs"  style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.lower_denture_metal" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.upper_denture_acrylic" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.lower_denture_acrylic" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.upper_denture_metal" unit="number of teeth" maxlength="2" style="vertical" %}
+    {% btn_checkbox field="Fp17ClinicalDataSet.best_practice_prevention" unit="number" style="vertical" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input field="Fp17ClinicalDataSet.permanent_fillings_and_sealant_restorations" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.extractions" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.antibiotic_items_prescribed" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" style="vertical" %}
-  </div>
-</div>
-<hr>
-<div class="row">
-  <div class="col-md-3">
-    <h4>Decayed Teeth</h4>
-    {% input field="Fp17ClinicalDataSet.decayed_teeth_permanent" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.decayed_teeth_deciduous" unit="number of teeth" maxlength="2" style="vertical" %}
 
   </div>
-  <div class="col-md-3 col-md-offset-1">
-    <h4>Filled Teeth</h4>
-    {% input field="Fp17ClinicalDataSet.filled_teeth_permanent" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.filled_teeth_deciduous" unit="number of teeth" maxlength="2" style="vertical" %}
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-1">
+    {% input field="Fp17ClinicalDataSet.fissure_sealants" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.radiographs_taken" maxlength="2" unit="number"  style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.endodontic_treatment" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.veneers_applied" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.bridges_fitted" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.crowns_provided" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-1">
+    {% input field="Fp17ClinicalDataSet.upper_denture_acrylic" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.lower_denture_acrylic" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.lower_denture_metal" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.upper_denture_metal" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.antibiotic_items_prescribed" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+
+  </div>
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-1">
+    {% input field="Fp17ClinicalDataSet.extractions" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.inlays" unit="teeth" maxlength="2" style="vertical" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    <h4>Missing Teeth</h4>
-    {% input field="Fp17ClinicalDataSet.missing_teeth_permanent" unit="number of teeth" maxlength="2" style="vertical" %}
-    {% input field="Fp17ClinicalDataSet.missing_teeth_deciduous" unit="number of teeth" maxlength="2" style="vertical" %}
+    {% input label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.permanent_fillings_and_sealant_restorations" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-1">
+    {% input field="Fp17ClinicalDataSet.decayed_teeth_permanent" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.decayed_teeth_deciduous" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.filled_teeth_permanent" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.filled_teeth_deciduous" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.missing_teeth_permanent" unit="teeth" maxlength="2" style="vertical" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% input field="Fp17ClinicalDataSet.missing_teeth_deciduous" unit="teeth" maxlength="2" style="vertical" %}
   </div>
 </div>

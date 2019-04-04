@@ -130,7 +130,7 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
     )
 
     class Meta:
-        verbose_name = "Provider name, address and location"
+        verbose_name = "Part 1 Provider name, address and location"
 
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
@@ -152,7 +152,7 @@ class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name = "Incomplete treatment and treatment dates"
+        verbose_name = "Part 3 Incomplete treatment and treatment dates"
 
 
 class Fp17Exemptions(models.EpisodeSubrecord):
@@ -219,80 +219,198 @@ class Fp17Exemptions(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name = "Exemptions and remissions"
+        verbose_name = "Part 4 Exemptions and remissions"
 
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
-    _title = "Treatment Category"
 
-    treatment_category_band_1 = fields.BooleanField(default=False)
-    treatment_category_band_2 = fields.BooleanField(default=False)
-    treatment_category_band_3 = fields.BooleanField(default=False)
-    urgent_treatment = fields.BooleanField(default=False)
-    regulation_11_replacement_appliance = fields.BooleanField(default=False)
-    prescription_only = fields.BooleanField(default=False)
-    denture_repairs = fields.BooleanField(default=False)
-    bridge_repairs = fields.BooleanField(default=False)
-    arrest_of_bleeding = fields.BooleanField(default=False)
-    removal_of_sutures = fields.BooleanField(default=False)
+    TREATMENT_CATEGORIES = enum(
+        "Band 1", "Band 2", "Band 3"
+    )
+
+    treatment_category = fields.CharField(
+        max_length=255, blank=True, null=True,
+        choices=TREATMENT_CATEGORIES,
+        verbose_name="Treatment category"
+    )
+    urgent_treatment = fields.BooleanField(
+        default=False,
+        verbose_name="Urgent treatment"
+    )
+    regulation_11_replacement_appliance = fields.BooleanField(
+        default=False,
+        verbose_name="Regulation 11 replacement appliance"
+    )
+    prescription_only = fields.BooleanField(
+        default=False,
+        verbose_name="Prescription only"
+    )
+    denture_repairs = fields.BooleanField(
+        default=False,
+        verbose_name="Denture repairs"
+    )
+    bridge_repairs = fields.BooleanField(
+        default=False,
+        verbose_name="Bridge repairs"
+    )
+    arrest_of_bleeding = fields.BooleanField(
+        default=False,
+        verbose_name="Arrest of bleeding"
+    )
+    removal_of_sutures = fields.BooleanField(
+        default=False,
+        verbose_name="Removal of sutures"
+    )
+
+    class Meta:
+        verbose_name = "Part 5 Treatment category"
 
 
 class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     _is_singleton = True
-    _title = "FP17 Clinical Data Set"
 
-    scale_and_polish = fields.BooleanField(default=False)
-    fluoride_varnish = fields.BooleanField(default=False)
-    fissure_sealants = fields.IntegerField(blank=True, null=True)
-    radiographs_taken = fields.IntegerField(blank=True, null=True)
+    scale_and_polish = fields.BooleanField(
+        default=False,
+        verbose_name="Scale and polish"
+    )
+    fluoride_varnish = fields.BooleanField(
+        default=False,
+        verbose_name="Fluoride varnish"
+    )
+    fissure_sealants = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Fissure sealants"
+    )
+    radiographs_taken = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Radiographs taken"
+    )
 
-    endodontic_treatment = fields.BooleanField(default=False)
+    endodontic_treatment = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Endontic treatment"
+    )
     permanent_fillings_and_sealant_restorations = fields.IntegerField(
-        blank=True, null=True)
+        blank=True, null=True,
+        verbose_name="Permanent fillings and sealant restorations"
+    )
     extractions = fields.IntegerField(blank=True, null=True)
-    crowns_provided = fields.IntegerField(blank=True, null=True)
+    crowns_provided = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Crowns provided"
+    )
 
-    upper_denture_acrylic = fields.IntegerField(blank=True, null=True)
-    lower_denture_acrylic = fields.IntegerField(blank=True, null=True)
-    upper_denture_metal = fields.IntegerField(blank=True, null=True)
-    lower_denture_metal = fields.IntegerField(blank=True, null=True)
+    upper_denture_acrylic = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Upper denture acrylic"
+    )
+    lower_denture_acrylic = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Lower denture acrylic"
+    )
+    upper_denture_metal = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Upper denture metal"
+    )
+    lower_denture_metal = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Lower denture metal"
+    )
 
-    veneers_applied = fields.IntegerField(blank=True, null=True)
+    veneers_applied = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Veneers applied"
+    )
     inlays = fields.IntegerField(blank=True, null=True)
-    bridges_fitted = fields.IntegerField(blank=True, null=True)
+    bridges_fitted = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Bridges fitted"
+    )
     referral_for_advanced_mandatory_services_band = fields.IntegerField(
-        blank=True, null=True)
+        blank=True, null=True,
+        verbose_name="Referral for advanced mandatory services band"
+    )
 
     examination = fields.BooleanField(default=False)
-    antibiotic_items_prescribed = fields.IntegerField(blank=True, null=True)
-    other_treatment = fields.BooleanField(default=False)
-    best_practice_prevention = fields.BooleanField(default=False)
+    antibiotic_items_prescribed = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Antibiotic items prescribed"
+    )
+    other_treatment = fields.BooleanField(
+        default=False,
+        verbose_name="Other treatment"
+    )
+    best_practice_prevention = fields.BooleanField(
+        default=False,
+        verbose_name="Best practice prevention according to Delivering Better Oral Health offered"
+    )
 
-    decayed_teeth_permanent = fields.IntegerField(blank=True, null=True)
-    decayed_teeth_deciduous = fields.IntegerField(blank=True, null=True)
-    missing_teeth_permanent = fields.IntegerField(blank=True, null=True)
-    missing_teeth_deciduous = fields.IntegerField(blank=True, null=True)
-    filled_teeth_permanent = fields.IntegerField(blank=True, null=True)
-    filled_teeth_deciduous = fields.IntegerField(blank=True, null=True)
+    decayed_teeth_permanent = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Decayed teeth permanent"
+    )
+    decayed_teeth_deciduous = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Decayed teeth deciduous"
+    )
+    missing_teeth_permanent = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Missing teeth permanent"
+    )
+    missing_teeth_deciduous = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Missing teeth deciduous"
+    )
+    filled_teeth_permanent = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Filled teeth permanent"
+    )
+    filled_teeth_deciduous = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Filled teeth deciduous"
+    )
+
+    class Meta:
+        verbose_name="Part 5a Clinical data set"
 
 
 class Fp17OtherDentalServices(models.EpisodeSubrecord):
     _is_singleton = True
     _title = "FP17 Other Dental Services"
 
-    treatment_on_referral = fields.BooleanField(default=False)
-    free_repair_or_replacement = fields.BooleanField(default=False)
-    further_treatment_within_2_months = fields.BooleanField(default=False)
-    domicillary_services = fields.BooleanField(default=False)
-    sedation_services = fields.BooleanField(default=False)
+    treatment_on_referral = fields.BooleanField(
+        default=False,
+        verbose_name="Treatment on referral"
+    )
+    free_repair_or_replacement = fields.BooleanField(
+        default=False,
+        verbose_name="Free repair or replacement"
+    )
+    further_treatment_within_2_months = fields.BooleanField(
+        default=False,
+        verbose_name="Further treatment within 2 months"
+    )
+    domicillary_services = fields.BooleanField(
+        default=False,
+        verbose_name="Domicillary services"
+    )
+    sedation_services = fields.BooleanField(
+        default=False,
+        verbose_name="Sedation services"
+    )
+
+    class Meta:
+        verbose_name = "Part 6 Other services"
 
 
 class Fp17Recall(models.EpisodeSubrecord):
     _is_singleton = True
-    _title = "Recall"
 
     number_of_months = fields.IntegerField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Part 7 NICE guidance"
 
 
 class Fp17NHSBSAFields(models.EpisodeSubrecord):

@@ -1,7 +1,15 @@
 {% load forms %}
-<p>
-  I have given preventative advice and recommended a recall interval, taking
-  into account NICE guidance, that I regard as appropriate to the patient’s
-  current oral health.
-</p>
-{% input label="Recall interval" field="Fp17Recall.number_of_months" maxlength="2" unit="months" %}
+<div class="row">
+  <div class="col-md-6">
+    <p class="row"><!-- This is silly but applies margin -15px -->
+      I have given preventative advice and recommended a recall interval, taking
+      into account NICE guidance, that I regard as appropriate to the patient’s
+      current oral health.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
+    {% input label="Recall interval" field="Fp17Recall.number_of_months" maxlength="2" unit="months" style="vertical" %}
+  </div>
+</div>

@@ -6,14 +6,21 @@
 
 body {
   background-color: white;
-  font-size: 16px;
-  color: #595F72; }
+  font-size: 18px;
+  color: #21232A;
+  overflow-y: hidden; }
 
 h1 {
   color: #3b68a0; }
 
 h2 {
   color: #3C4939; }
+
+h3 {
+  font-size: 20px; }
+
+table {
+  font-size: 16px; }
 
 a {
   color: #595F72; }
@@ -56,12 +63,42 @@ label {
   border-color: #89ba90;
   color: #595F72; }
 
+.panel.panel-primary .panel-heading .btn-primary,
+.btn-primary,
+.btn-primary:focus {
+  background-color: #A3C9A8;
+  border-color: #89ba90;
+  color: #595F72; }
+
+.panel.panel-primary .panel-heading .btn-primary:hover,
+.btn-primary:hover {
+  color: #595F72;
+  font-weight: normal;
+  background-color: #89ba90; }
+
 .btn-secondary, .btn-secondary:hover, .btn-secondary:focus {
   background-color: #A3C9A8;
   border-color: #89ba90;
   color: #595F72;
+  font-weight: normal;
   font-size: 18px;
   line-height: 24px; }
+
+#episode-history h4 {
+  color: #21232A;
+  font-size: 16px; }
+
+#episode-history a {
+  font-size: 16px;
+  display: block; }
+
+#episode-history a:hover,
+#episode-history a:visited {
+  color: white;
+  font-size: 16px; }
+
+#episode-history a.bg-active {
+  background-color: #3b68a0; }
 
 h1 {
   margin-top: 24px;
@@ -75,8 +112,22 @@ h2 {
 label {
   padding-bottom: 8px; }
 
+.pathway-save-button .btn {
+  margin-top: 32px;
+  margin-left: -15px;
+  margin-bottom: 64px; }
+
 .odonto-checkbox label.col-md-9 {
   padding-left: 0px; }
+
+#episode-history {
+  position: fixed;
+  left: 0px;
+  top: 300px;
+  margin-left: 25px; }
+
+#episode-history a {
+  padding: 5px; }
 
 #logout {
   position: fixed;
@@ -109,9 +160,6 @@ label {
 
 #side-nav {
   background-color: #487CBC; }
-
-.btn-primary {
-  background-color: #66ae28; }
 
 .navbar-default, .top-navbar {
   border-bottom: none; }
@@ -223,20 +271,6 @@ label {
 
 .modal-header {
   background-color: #487cbc; }
-
-.panel.panel-primary .panel-heading a {
-  color: #f76c51; }
-
-.panel.panel-primary .panel-heading a:hover {
-  color: #f76c51;
-  text-decoration: underline; }
-
-.panel.panel-primary .panel-heading a.btn {
-  color: white; }
-
-.panel.panel-primary .panel-heading a.btn:hover {
-  color: white;
-  text-decoration: none; }
 
 .panel.panel-primary .panel-heading {
   background-color: transparent;

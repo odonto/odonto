@@ -81,6 +81,14 @@ class AddPatientPathway(OdontoPagePathway):
         models.Demographics,
     )
 
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        episode.stage = 'New'
+        episode.save()
+        return patient, episode
+
     def redirect_url(self, user=None, patient=None, episode=None):
         return "/#/patient/{0}/".format(patient.id)
 
@@ -89,13 +97,9 @@ class Fp17Pathway(OdontoPagePathway):
     display_name = 'FP17 claim form'
     slug = 'fp17'
     steps = (
-
         pathway.Step(
             model=models.Fp17DentalCareProvider,
             step_controller="CareProviderStepCtrl",
-            display_name="Part 1: {}".format(
-                models.Fp17DentalCareProvider.get_display_name()
-            )
         ),
         pathway.Step(
             model=models.Demographics,
@@ -106,32 +110,36 @@ class Fp17Pathway(OdontoPagePathway):
         pathway.Step(
             model=models.Fp17IncompleteTreatment,
             step_controller="FP17TreatmentStepCtrl",
-            display_name="Part 3: {}".format(
-                models.Fp17IncompleteTreatment.get_display_name()
-            )
         ),
-        pathway.Step(
-            model=models.Fp17Exemptions,
-            display_name="Part 4: {}".format(
-                models.Fp17Exemptions.get_display_name()
-            )
-        ),
-
-
-
-        pathway.Step(
-            model=models.Fp17TreatmentCategory,
-            display_name="Treatment Category"),
-        pathway.Step(
-            model=models.Fp17ClinicalDataSet,
-            display_name="Clinical Data Set"),
-        pathway.Step(
-            model=models.Fp17OtherDentalServices,
-            display_name="Other Services"),
-        pathway.Step(
-            model=models.Fp17Recall,
-            display_name="NICE Guidance"),
+        pathway.Step(model=models.Fp17Exemptions),
+        pathway.Step(model=models.Fp17TreatmentCategory),
+        pathway.Step(model=models.Fp17ClinicalDataSet),
+        pathway.Step(model=models.Fp17OtherDentalServices),
+        pathway.Step(model=models.Fp17Recall),
         pathway.Step(
             model=models.Fp17Declaration,
-            display_name="Declaration"),
+            display_name="Part 9 Declaration"),
     )
+
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        episode.stage = 'Open'
+        episode.save()
+        return patient, episode
+
+
+class CompleteFP17Pathway(Fp17Pathway):
+    display_name = "Submit FP17"
+    slug         = "complete-fp17"
+    finish_button_text = "Submit to BSA"
+
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        episode.stage = 'Submitted'
+        episode.save()
+        new_episode = patient.create_episode(stage="New")
+        return patient, episode

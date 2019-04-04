@@ -1,12 +1,24 @@
-{% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-6">
-    {% checkbox label="All the necessary care and treatment that the patient is willing to undergo will be provided." field="Fp17Declaration.necessary_care_provided" style="vertical" %}
+    <p class="row"> <!-- This is silly but applies margin -15px -->
+      I declare that I am properly entitled to practise under the current dental
+      regulations and that the information I have given on this form is correct
+      and complete. I understand that if it is not, appropriate action may be
+      taken. For the purpose of verification of this and the prevention and
+      detection of fraud and incorrectness, I consent to the disclosure of relevant
+      information from this form to and by the NHS Business Services Authority.
+    </p>
   </div>
+</div>
+
+<div class="row">
   <div class="col-md-6">
-    {% checkbox label="All the currently necessary care and treatment that the patient is willing to undergo has been carried out." field="Fp17Declaration.necessary_care_carried_out" style="vertical" %}
+    {% btn_checkbox label="All the necessary care and treatment that the patient is willing to undergo will be provided." field="Fp17Declaration.necessary_care_provided" %}
   </div>
 </div>
 <div class="row">
-  <p>I declare that I am properly entitled to practise under the current dental regulations and that the information I have given on this form is correct and complete. I understand that if it is not, appropriate action may be taken. For the purpose of verification of this and the prevention and detection of fraud and incorrectness, I consent to the disclosure of relevant information from this form to and by the NHS Business Services Authority.</p>
+  <div class="col-md-6">
+    {% btn_checkbox label="All the currently necessary care and treatment that the patient is willing to undergo has been carried out." field="Fp17Declaration.necessary_care_carried_out" style="vertical" %}
+  </div>
 </div>

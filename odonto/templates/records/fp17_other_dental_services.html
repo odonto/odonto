@@ -1,20 +1,42 @@
-<span ng-show="item.treatment_on_referral">
-     Treatment On Referral
-   <br />
-</span>
-<span ng-show="item.free_repair_or_replacement">
-     Free Repair Or Replacement
-   <br />
-</span>
-<span ng-show="item.further_treatment_within_2_months">
-     Further Treatment Within 2 Months
-   <br />
-</span>
-<span ng-show="item.domicillary_services">
-     Domicillary Services
-   <br />
-</span>
-<span ng-show="item.sedation_services">
-     Sedation Services
-   <br />
-</span>
+<table class="table table-striped">
+  <tr>
+    <td>
+      Treatment on referral
+    </td>
+    <td>
+      <span ng-show="item.treatment_on_referral">X</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Free repair or replacement
+    </td>
+    <td>
+      <span ng-show="item.free_repair_or_replacement">X</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Further treatment within 2 months
+    </td>
+    <td>
+      <span ng-show="item.further_treatment_within_2_months">X</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Domicillary services
+    </td>
+    <td>
+      <span ng-show="item.domicillary_services">X</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Sedation services
+    </td>
+    <td>
+      <span ng-show="item.sedation_services">X</span>
+    </td>
+  </tr>
+</table>

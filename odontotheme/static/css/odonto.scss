@@ -4,6 +4,7 @@ $artichoke: #84A07C;
 $rifle_green: #3C4939;
 $cambridge_blue: #A3C9A8;
 $black_coral: #595F72;
+$gunmetal: #21232A;
 $bone: #DDD8C4;
 
 // Color and typography
@@ -16,8 +17,9 @@ $bone: #DDD8C4;
 
 body {
     background-color: white;
-    font-size: 16px;
-    color: $black_coral;
+    font-size: 18px;
+    color: $gunmetal;
+    overflow-y: hidden;
 }
 
 h1 {
@@ -26,6 +28,14 @@ h1 {
 
 h2 {
     color: $rifle_green;
+}
+
+h3 {
+    font-size: 20px;
+}
+
+table {
+    font-size: 16px;
 }
 
 a {
@@ -78,14 +88,49 @@ label{
     color: $black_coral;
 }
 
+.panel.panel-primary .panel-heading  .btn-primary,
+.btn-primary,
+.btn-primary:focus{
+    background-color: $cambridge_blue;
+    border-color: darken($cambridge_blue, 8%);
+    color: $black_coral;
+}
+
+.panel.panel-primary .panel-heading  .btn-primary:hover,
+.btn-primary:hover {
+    color: $black_coral;
+    font-weight: normal;
+    background-color: darken($cambridge_blue, 8%);
+}
+
 .btn-secondary, .btn-secondary:hover, .btn-secondary:focus{
     background-color: $cambridge_blue;
     border-color: darken($cambridge_blue, 8%);
     color: $black_coral;
+    font-weight: normal;
     font-size: 18px;
     line-height: 24px;
 }
 
+#episode-history h4 {
+    color: $gunmetal;
+    font-size: 16px;
+}
+
+#episode-history a {
+    font-size: 16px;
+    display: block;
+}
+
+#episode-history a:hover,
+#episode-history a:visited,{
+    color: white;
+    font-size: 16px;
+}
+
+#episode-history a.bg-active {
+    background-color: darken($odonto_blue, 8%);
+}
 
 // Layout and positioning
 h1 {
@@ -103,8 +148,25 @@ label{
   padding-bottom: 8px;
 }
 
+.pathway-save-button .btn {
+    margin-top: 32px;
+    margin-left: -15px;
+    margin-bottom: 64px;
+}
+
 .odonto-checkbox label.col-md-9 {
     padding-left: 0px;
+}
+
+#episode-history {
+  position: fixed;
+  left: 0px;
+  top: 300px;
+  margin-left: 25px;
+}
+
+#episode-history a{
+    padding: 5px;
 }
 
 #logout {
@@ -127,6 +189,7 @@ label{
 .btn-default small{
   color: #DDD;
 }
+
 .navbar .container-fluid .navbar-brand {
     margin-left: -32px;
 }
@@ -144,10 +207,6 @@ label{
 
 #side-nav {
     background-color: $odonto_blue;
-}
-
-.btn-primary {
-    background-color: rgb(102, 174, 40);
 }
 
 .navbar-default, .top-navbar {
@@ -277,20 +336,6 @@ label{
     background-color: rgb(72, 124, 188);
 }
 
-.panel.panel-primary .panel-heading a{
-    color: #f76c51;
-}
-.panel.panel-primary .panel-heading a:hover{
-    color: #f76c51;
-    text-decoration: underline;
-}
-.panel.panel-primary .panel-heading a.btn{
-    color: white;
-}
-.panel.panel-primary .panel-heading a.btn:hover{
-    color: white;
-    text-decoration: none;
-}
 
 .panel.panel-primary .panel-heading {
     background-color: transparent;

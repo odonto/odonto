@@ -1,20 +1,24 @@
-<span ng-show="item.incomplete_treatment_band_1">
-     Incomplete Treatment Band 1
-   <br />
-</span>
-<span ng-show="item.incomplete_treatment_band_2">
-     Incomplete Treatment Band 2
-   <br />
-</span>
-<span ng-show="item.incomplete_treatment_band_3">
-     Incomplete Treatment Band 3
-   <br />
-</span>
-<span ng-show="item.date_of_acceptance">
-  Date of Acceptance: [[ item.date_of_acceptance | shortDate ]]
-   <br />
-</span>
-<span ng-show="item.completion_or_last_visit">
-  Date of Completion: [[ item.completion_or_last_visit | shortDate ]]
-   <br />
-</span>
+<div class="row">
+  <div class="col-md-8">
+    Treatment band:
+  </div>
+  <div class="col-md-4">
+    <b>[[ item.treatment_band ]]</b>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    Date of acceptance:
+  </div>
+  <div class="col-md-4">
+    <b>[[ item.date_of_acceptance | displayDate ]]</b>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8">
+    Date of completion or last visit:
+  </div>
+  <div class="col-md-4">
+    <b>[[ item.completion_or_last_visit | displayDate ]]</b>
+  </div>
+</div>

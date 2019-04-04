@@ -1,19 +1,32 @@
 {% load forms %}
+{% load odonto_forms %}
 <div class="row">
-  <div class="col-md-4">
-    {% checkbox field="Fp17TreatmentCategory.treatment_category_band_1" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.treatment_category_band_2" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.treatment_category_band_3" style="vertical" %}
+  <div class="col-md-3">
+    {% select field="Fp17TreatmentCategory.treatment_category" style="vertical"%}
   </div>
-  <div class="col-md-4">
-    {% checkbox field="Fp17TreatmentCategory.urgent_treatment" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.regulation_11_replacement_appliance" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.prescription_only" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.denture_repairs" style="vertical" %}
+</div>
+<div class="row">
+  <div class="col-md-2">
+    {% btn_checkbox field="Fp17TreatmentCategory.urgent_treatment" %}
   </div>
-  <div class="col-md-4">
-    {% checkbox field="Fp17TreatmentCategory.bridge_repairs" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.arrest_of_bleeding" style="vertical" %}
-    {% checkbox field="Fp17TreatmentCategory.removal_of_sutures" style="vertical" %}
+  <div class="col-md-2 col-md-offset-1">
+    {% btn_checkbox field="Fp17TreatmentCategory.regulation_11_replacement_appliance" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% btn_checkbox field="Fp17TreatmentCategory.prescription_only" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-2">
+    {% btn_checkbox field="Fp17TreatmentCategory.denture_repairs" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% btn_checkbox field="Fp17TreatmentCategory.bridge_repairs" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% btn_checkbox field="Fp17TreatmentCategory.arrest_of_bleeding" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% btn_checkbox field="Fp17TreatmentCategory.removal_of_sutures"%}
   </div>
 </div>
