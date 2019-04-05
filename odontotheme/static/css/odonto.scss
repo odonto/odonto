@@ -221,11 +221,22 @@ label{
 .nav-bar-search .form-control {
     font-size: 16px;
     line-height: 16px;
-    height: 32px;
+    height: 39px;
+}
+
+.input-group-btn.search{
+    display: inline-block;
+    margin-left: 4px;
+
+    button{
+        font-size: 16px;
+        line-height: 20px;
+    }
 }
 
 .nav-bar-search:before {
     font-size: 16px;
+    top: 8px;
 }
 .navbar-default .navbar-nav > li > a {
     color: white;
