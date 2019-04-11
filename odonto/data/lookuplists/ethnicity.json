@@ -1,0 +1,72 @@
+{
+  "ethnicity": [
+    {
+      "synonyms": [], 
+      "name": "White british"
+    },
+    {
+      "synonyms": [],
+      "name": "White irish"
+    },
+    {
+      "synonyms": [],
+      "name": "White "other
+    },
+    {
+      "synonyms": [],
+      "name": "White and black caribbean"
+    },
+    {
+      "synonyms": [],
+      "name": "White and black african"
+    },
+    {
+      "synonyms": [],
+      "name": "White and asian"
+    },
+    {
+      "synonyms": [],
+      "name": "Other mixed background"
+    },
+    {
+      "synonyms": [],
+      "name": "Asian or asian british indian"
+    },
+    {
+      "synonyms": [],
+      "name": "Asian or asian british pakistani"
+    },
+    {
+      "synonyms": [],
+      "name": "Asian or asian british bangladeshi"
+    },
+    {
+      "synonyms": [],
+      "name": "Other asian background"
+    },
+    {
+      "synonyms": [],
+      "name": "Black or black british caribbean"
+    },
+    {
+      "synonyms": [],
+      "name": "Black or black british african"
+    },
+    {
+      "synonyms": [],
+      "name": "Other black background"
+    },
+    {
+      "synonyms": [],
+      "name": "Chinese"
+    },
+    {
+      "synonyms": [],
+      "name": "Other ethnic group"
+    },
+    {
+      "synonyms": [],
+      "name": "Patient declined"
+    }
+  ]
+}
