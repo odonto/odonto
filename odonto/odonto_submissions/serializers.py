@@ -148,7 +148,6 @@ class ExceptionSerializer(object):
         "universal_credit": e.UNIVERSAL_CREDIT,
         "income_related_employment_and_support_allowance":
             e.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE,
-        # "evidence_of_exception_or_remission_seen" TODO this does not exist
         # "patient_charge_collected" TODO this is not exist
     }
 
@@ -159,12 +158,15 @@ class ExceptionSerializer(object):
         result = {}
         for i, v in self.EXEMPTION_MAPPINGS.items():
             if getattr(self.model_instance, i):
-                # TODO make sure we always want evidence seen
-                # for prisoners there is no evidence seen requirement
-                if hasattr(v, "EVIDENCE_SEEN"):
+                # Prisoner does not have a concept of no exemption seen
+                if i == "prisoner":
+                    result["code"] = v
+                    continue
+
+                if self.model_instance.evidence_of_exception_or_remission_seen:
                     result["code"] = v.EVIDENCE_SEEN
                 else:
-                    result["code"] = v
+                    result["code"] = v.NO_EVIDENCE_SEEN
 
         return result
 
