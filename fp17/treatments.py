@@ -10,7 +10,7 @@ from .bcds1 import Treatment
 
 class TREATMENT_CATEGORY(Treatment):
     def __init__(self, band):
-        super(TREATMENT_CATEGORY, self).__init__(code=9150, instance_count=band)
+        super().__init__(code=9150, instance_count=band)
 
 
 TREATMENT_CATEGORY_URGENT = Treatment(code=9150, instance_count=4)
@@ -40,7 +40,7 @@ class BRIDGES_FITTED(Treatment):
     """
 
     def __init__(self, num_units):
-        super(BRIDGES_FITTED, self).__init__(code=9315, instance_count=num_units)
+        super().__init__(code=9315, instance_count=num_units)
 
 
 class VENEERS_APPLIED(Treatment):
@@ -51,7 +51,7 @@ class VENEERS_APPLIED(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(VENEERS_APPLIED, self).__init__(code=9313, instance_count=num_teeth)
+        super().__init__(code=9313, instance_count=num_teeth)
 
 
 class INLAYS(Treatment):
@@ -61,7 +61,7 @@ class INLAYS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(INLAYS, self).__init__(code=9313, instance_count=num_teeth)
+        super().__init__(code=9313, instance_count=num_teeth)
 
 
 class RECALL_INTERVAL(Treatment):
@@ -75,7 +75,7 @@ class RECALL_INTERVAL(Treatment):
     """
 
     def __init__(self, num_months):
-        super(RECALL_INTERVAL, self).__init__(code=9172, instance_count=num_months)
+        super().__init__(code=9172, instance_count=num_months)
 
 
 BEST_PRACTICE_PREVENTION = Treatment(code=9173)
@@ -88,17 +88,17 @@ class FISSURE_SEALANTS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(FISSURE_SEALANTS, self).__init__(code=9303, instance_count=num_teeth)
+        super().__init__(code=9303, instance_count=num_teeth)
 
 
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
-        super(RADIOGRAPHS, self).__init__(code=9304, instance_count=num_radiographs)
+        super().__init__(code=9304, instance_count=num_radiographs)
 
 
 class ENDODONTIC_TREATMENT(Treatment):
     def __init__(self, num_teeth):
-        super(ENDODONTIC_TREATMENT, self).__init__(code=9305, instance_count=num_teeth)
+        super().__init__(code=9305, instance_count=num_teeth)
 
 
 class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
@@ -116,9 +116,7 @@ class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
     """
 
     def __init__(self, num_fillings):
-        super(PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS, self).__init__(
-            code=9306, instance_count=num_fillings
-        )
+        super().__init__(code=9306, instance_count=num_fillings)
 
 
 class EXTRACTION(Treatment):
@@ -129,12 +127,12 @@ class EXTRACTION(Treatment):
     """
 
     def __init__(self, num_extractions):
-        super(EXTRACTION, self).__init__(code=9307, instance_count=num_extractions)
+        super().__init__(code=9307, instance_count=num_extractions)
 
 
 class CROWN(Treatment):
     def __init__(self, num_crowns):
-        super(CROWN, self).__init__(code=9308, instance_count=num_crowns)
+        super().__init__(code=9308, instance_count=num_crowns)
 
 
 class FILLED_TEETH_DECIDUOUS(Treatment):
@@ -146,9 +144,7 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(FILLED_TEETH_DECIDUOUS, self).__init__(
-            code=9325, instance_count=num_teeth
-        )
+        super().__init__(code=9325, instance_count=num_teeth)
 
 
 SCALE_AND_POLISH = Treatment(code=9301)
@@ -157,11 +153,12 @@ FLUORIDE_VARNISH = Treatment(code=9302)
 
 OTHER_TREATMENT = Treatment(code=9399)
 
+
 # For date of acceptance prior to 1 April 2014 for England and 1 May 2014 for
 # Wales. Isle of Man will continue to use this code.
 class REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY(Treatment):
     def __init__(self):
-        super(REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES_LEGACY, self).__init__(code=9316)
+        super().__init__(code=9316)
 
     def validate(self, document):
         if document["date_of_acceptance"] >= datetime.date(2014, 4, 1):
@@ -182,14 +179,12 @@ class REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES(Treatment):
     """
 
     def __init__(self, treatment_band):
-        super(REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES, self).__init__(
-            code=9319, instance_count=treatment_band
-        )
+        super().__init__(code=9319, instance_count=treatment_band)
 
 
 class ANTIBIOTIC_ITEMS(Treatment):
     def __init__(self, num_prescribed):
-        super(ANTIBIOTIC_ITEMS, self).__init__(code=9318, instance_count=num_prescribed)
+        super().__init__(code=9318, instance_count=num_prescribed)
 
 
 class DECAYED_PERMANENT(Treatment):
@@ -199,7 +194,7 @@ class DECAYED_PERMANENT(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(DECAYED_PERMANENT, self).__init__(code=9320, instance_count=num_teeth)
+        super().__init__(code=9320, instance_count=num_teeth)
 
 
 class MISSING_PERMANENT(Treatment):
@@ -210,7 +205,7 @@ class MISSING_PERMANENT(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(MISSING_PERMANENT, self).__init__(code=9321, instance_count=num_teeth)
+        super().__init__(code=9321, instance_count=num_teeth)
 
 
 class FILLED_PERMANENT(Treatment):
@@ -221,7 +216,7 @@ class FILLED_PERMANENT(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(FILLED_PERMANENT, self).__init__(code=9322, instance_count=num_teeth)
+        super().__init__(code=9322, instance_count=num_teeth)
 
 
 class DECAYED_DECIDUOUS(Treatment):
@@ -231,7 +226,7 @@ class DECAYED_DECIDUOUS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(DECAYED_DECIDUOUS, self).__init__(code=9323, instance_count=num_teeth)
+        super().__init__(code=9323, instance_count=num_teeth)
 
 
 class MISSING_DECIDUOUS(Treatment):
@@ -242,7 +237,7 @@ class MISSING_DECIDUOUS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(MISSING_DECIDUOUS, self).__init__(code=9324, instance_count=num_teeth)
+        super().__init__(code=9324, instance_count=num_teeth)
 
 
 class FILLED_DECIDUOUS(Treatment):
@@ -252,7 +247,7 @@ class FILLED_DECIDUOUS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(FILLED_DECIDUOUS, self).__init__(code=9324, instance_count=num_teeth)
+        super().__init__(code=9324, instance_count=num_teeth)
 
 
 class UPPER_DENTURE_ACRYLIC(Treatment):
@@ -262,7 +257,7 @@ class UPPER_DENTURE_ACRYLIC(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(UPPER_DENTURE_ACRYLIC, self).__init__(code=9309, instance_count=num_teeth)
+        super().__init__(code=9309, instance_count=num_teeth)
 
 
 class LOWER_DENTURE_ACRYLIC(Treatment):
@@ -272,7 +267,7 @@ class LOWER_DENTURE_ACRYLIC(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(LOWER_DENTURE_ACRYLIC, self).__init__(code=9310, instance_count=num_teeth)
+        super().__init__(code=9310, instance_count=num_teeth)
 
 
 class UPPER_DENTURE_METAL(Treatment):
@@ -282,7 +277,7 @@ class UPPER_DENTURE_METAL(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(UPPER_DENTURE_METAL, self).__init__(code=9311, instance_count=num_teeth)
+        super().__init__(code=9311, instance_count=num_teeth)
 
 
 class LOWER_DENTURE_METAL(Treatment):
@@ -292,31 +287,41 @@ class LOWER_DENTURE_METAL(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super(LOWER_DENTURE_METAL, self).__init__(code=9312, instance_count=num_teeth)
+        super().__init__(code=9312, instance_count=num_teeth)
 
 
 ETHNIC_ORIGIN_1_WHITE_BRITISH = Treatment(code=9025, instance_count=1)
 ETHNIC_ORIGIN_2_WHITE_IRISH = Treatment(code=9025, instance_count=2)
 ETHNIC_ORIGIN_3_WHITE_OTHER = Treatment(code=9025, instance_count=3)
-ETHNIC_ORIGIN_4_WHITE_AND_BLACK_CARIBBEAN = Treatment(code=9025, instance_count=4)
-ETHNIC_ORIGIN_5_WHITE_AND_BLACK_AFRICAN = Treatment(code=9025, instance_count=5)
+ETHNIC_ORIGIN_4_WHITE_AND_BLACK_CARIBBEAN = Treatment(
+    code=9025, instance_count=4
+)
+ETHNIC_ORIGIN_5_WHITE_AND_BLACK_AFRICAN = Treatment(
+    code=9025, instance_count=5
+)
 ETHNIC_ORIGIN_6_WHITE_AND_ASIAN = Treatment(code=9025, instance_count=6)
 ETHNIC_ORIGIN_7_OTHER_MIXED_BACKGROUND = Treatment(code=9025, instance_count=7)
-ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN = Treatment(code=9025, instance_count=8)
+ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN = Treatment(
+    code=9025, instance_count=8
+)
 ETHNIC_ORIGIN_9_ASIAN_OR_ASIAN_BRITISH_PAKISTANI = Treatment(
     code=9025, instance_count=9
 )
 ETHNIC_ORIGIN_10_ASIAN_OR_ASIAN_BRITISH_BANGLADESHI = Treatment(
     code=9025, instance_count=10
 )
-ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND = Treatment(code=9025, instance_count=11)
+ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND = Treatment(
+    code=9025, instance_count=11
+)
 ETHNIC_ORIGIN_12_BLACK_OR_BLACK_BRITISH_CARIBBEAN = Treatment(
     code=9025, instance_count=12
 )
 ETHNIC_ORIGIN_13_BLACK_OR_BLACK_BRITISH_AFRICAN = Treatment(
     code=9025, instance_count=13
 )
-ETHNIC_ORIGIN_14_OTHER_BLACK_BACKGROUND = Treatment(code=9025, instance_count=14)
+ETHNIC_ORIGIN_14_OTHER_BLACK_BACKGROUND = Treatment(
+    code=9025, instance_count=14
+)
 ETHNIC_ORIGIN_15_CHINESE = Treatment(code=9025, instance_count=15)
 ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP = Treatment(code=9025, instance_count=16)
 ETHNIC_ORIGIN_PATIENT_DECLINED = Treatment(code=9025, instance_count=99)
