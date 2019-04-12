@@ -77,10 +77,10 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
     TREATMENT_MAPPINGS = OrderedDict([
         ("examination", t.EXAMINATION),
         ("scale_and_polish", t.SCALE_AND_POLISH),
-        # "fluoride_varnish", t.REGULATION_11_APPLIANCE,  # TODO This is wrong
+        ("fluoride_varnish", t.FLUORIDE_VARNISH),
         ("fissure_sealants", t.FISSURE_SEALANTS),
         ("radiographs_taken", t.RADIOGRAPHS),
-        # "endodontic_treatment": t.BRIDGE_REPAIRS,  # TODO this is wrong
+        ("endodontic_treatment", t.ENDODONTIC_TREATMENT),
         (
             "permanent_fillings_and_sealant_restorations",
             t.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS
@@ -91,9 +91,8 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
         ("lower_denture_acrylic", t.LOWER_DENTURE_ACRYLIC),
         ("upper_denture_metal", t.UPPER_DENTURE_METAL),
         ("lower_denture_metal", t.LOWER_DENTURE_METAL),
-        # "veneers_applied": t.REMOVAL_OF_SUTURES,  # TODO this is wrong
-        # "inlays": t.REMOVAL_OF_SUTURES,  # TODO this is wrong
-        # "referral_for_advanced_mandatory_services_band
+        ("veneers_applied", t.VENEERS_APPLIED),
+        ("inlays", t.INLAYS),
         ("bridges_fitted", t.BRIDGES_FITTED),
         (
             "referral_for_advanced_mandatory_services_band",

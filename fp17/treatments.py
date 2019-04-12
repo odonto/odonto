@@ -40,6 +40,25 @@ class BRIDGES_FITTED(Treatment):
         super(BRIDGES_FITTED, self).__init__(code=9315, instance_count=num_units)
 
 
+class VENEERS_APPLIED(Treatment):
+    """
+    This is the number of teeth that have been provided with laboratory
+    fabricated veneers in any permanent material. They may be on either the
+    labial or palatal surface.
+    """
+    def __init__(self, num_teeth):
+        super(VENEERS_APPLIED, self).__init__(code=9313, instance_count=num_teeth)
+
+
+class INLAYS(Treatment):
+    """
+    The number of teeth provided with inlays, pinlays or onlays, using
+    an indirect technique and permanent material.
+    """
+    def __init__(self, num_teeth):
+        super(INLAYS, self).__init__(code=9313, instance_count=num_teeth)
+
+
 class RECALL_INTERVAL(Treatment):
     """
         "I have given preventative advice and recommended a recall interval,
@@ -67,6 +86,12 @@ class FISSURE_SEALANTS(Treatment):
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
         super(RADIOGRAPHS, self).__init__(code=9304, instance_count=num_radiographs)
+
+
+class ENDODONTIC_TREATMENT(Treatment):
+    def __init__(self, num_teeth):
+        super(ENDODONTIC_TREATMENT, self).__init__(code=9305, instance_count=num_teeth)
+
 
 class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
     """
@@ -111,6 +136,9 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
         super(FILLED_TEETH_DECIDUOUS, self).__init__(code=9325, instance_count=num_teeth)
 
 SCALE_AND_POLISH = Treatment(code=9301)
+FLUORIDE_VARNISH = Treatment(code=9302)
+
+
 OTHER_TREATMENT = Treatment(code=9399)
 
 # For date of acceptance prior to 1 April 2014 for England and 1 May 2014 for
