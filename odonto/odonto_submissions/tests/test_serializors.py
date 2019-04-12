@@ -1,5 +1,5 @@
+from opal.core.test import OpalTestCase
 import datetime
-from django.core.management.base import BaseCommand
 from django.utils.module_loading import import_string
 from fp17 import bcds1 as message
 from fp17.envelope import Envelope
@@ -89,10 +89,10 @@ def equalise_treatments(old_xml, new_xml):
     new_treatments = get_treatments(new_xml)
     old_treatments = get_treatments(old_xml)
     if not new_treatments == old_treatments:
-        new_difference = new_treatments.difference(old_treatments)
-        print("Only in new {}".format(new_difference))
-        old_difference = old_treatments.difference(new_treatments)
-        print("Only in old {}".format(old_difference))
+        # new_difference = new_treatments.difference(old_treatments)
+        # print("Only in new {}".format(new_difference))
+        # old_difference = old_treatments.difference(new_treatments)
+        # print("Only in old {}".format(old_difference))
         return False
     return True
 
@@ -105,42 +105,21 @@ def equal(old, new):
         return False
     old_xml.find(".//bcds1").remove(old_xml.find(".//tst"))
     new_xml.find(".//bcds1").remove(new_xml.find(".//tst"))
-    return etree.tostring(old_xml) == etree.tostring(new_xml)
+    result = etree.tostring(old_xml) == etree.tostring(new_xml)
+    # if not result:
+    #     print("Old method")
+    #     print(old)
+    #     print("=" * 20)
+    #     print("New method")
+    #     print(new)
+    #     print("=" * 20)
+    #     print("Equivalent {}".format(is_equal))
+    return result
 
 
-class Command(BaseCommand):
-
-    def add_arguments(self, parser):
-        parser.add_argument(
-            'case_number',
-            type=int,
-            default=None,
-            nargs='?',
-            help="Which case number to look compare",
-        )
-
-    def compare(self, case_number):
-        print("Case {}".format(case_number))
-        try:
+class SerializerTestCase(OpalTestCase):
+    def test_cases(self):
+        for case_number in range(1, 46):
             new = from_model(case_number)
-        except ValueError:
-            print("Failed")
-            return
-        old = from_message(case_number)
-        is_equal = equal(old, new)
-        if not is_equal:
-            print("Old method")
-            print(old)
-            print("=" * 20)
-            print("New method")
-            print(new)
-            print("=" * 20)
-            print("Equivalent {}".format(is_equal))
-
-    def handle(self, *args, **kwargs):
-        if kwargs["case_number"] is not None:
-            case_number = kwargs.get("case_number")
-            self.compare(case_number)
-        else:
-            for case_number in range(1, 46):
-                self.compare(case_number)
+            old = from_message(case_number)
+            self.assertTrue(equal(old, new))
