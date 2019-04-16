@@ -5,6 +5,8 @@ from odonto import models
 from django.db import models as django_models
 from fp17 import treatments as t
 from fp17 import exemptions as e
+from fp17.envelope import Envelope
+from fp17.bcds1 import BCDS1, Patient as FP17_Patient
 
 
 class TreatmentSerializer(object):
@@ -230,6 +232,75 @@ class DemographicsTranslater(object):
         if self.model_instance.county:
             result.append(self.model_instance.county)
         return result
+
+
+def get_envelope(episode, user):
+    """
+    Gets the envelope information
+    TODO currently needs:
+
+    - site number/origin
+    Mandatory.
+    Corresponds to Interchange to which this segment refers.
+
+    - destination
+    For messages orginated by the system, the unique
+    five digit site number issued by the service.  Messages
+    originated by a user use the code appropriate to the service.
+
+    - approval_number
+    The practice system approval number is the supplier number provided
+    by the NHSDS.
+
+    - serial_number
+    sequential serial number of the interchange that was sent (optional)
+    """
+    envelope = Envelope()
+    envelope.release_timestamp = datetime.datetime.utcnow()
+    return envelope
+
+
+def get_bcds1(episode, user):
+    """
+    Gets the envelope information
+    TODO current needs
+    - message_reference_number
+    Sequential number assigned by the practice application that within
+    contract number (9105) uniquely identifies a message.
+
+    - contract number
+    For message types BCDS1
+    Provider’s unique 10 digit contract number:
+
+    - pin
+    The practice system must ensure that once a dentist has entered the DPB
+    PIN to authorise a batch of claims prior to transmission that no further
+    claims may be added in his/her name.
+    """
+
+    bcds1 = BCDS1()
+    provider = episode.patient.fp17dentalcareprovider.get()
+    bcds1.location = provider.provider_location_number
+    performer_number = user.performernumber.first()
+
+    if not performer_number:
+        raise ValueError(
+            "No performer number for user {}".format(user.id)
+        )
+
+    bcds1.performer_number = performer_number.number
+    bcds1.patient = FP17_Patient()
+
+
+def translate_episode_to_xml(episode, user):
+    bcds1 = get_bcds1(episode, user)
+    envelope = get_envelope(episode, user)
+    envelope.add_message(bcds1)
+    assert not bcds1.get_errors(), bcds1.get_errors()
+    assert not envelope.get_errors(), envelope.get_errors()
+    root = envelope.generate_xml()
+    Envelope.validate_xml(root)
+    return root
 
 
 def translate_to_bdcs1(bcds1, episode):

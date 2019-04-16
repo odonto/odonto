@@ -5,6 +5,8 @@ from django.utils import timezone
 class Provider(models.Model):
     name = models.CharField(max_length=255)
 
+    # For message types BCDS1 Provider’s unique 10 digit
+    # contract number:
     contract_number = models.IntegerField(unique=True)
     provider_number = models.IntegerField(unique=True)
 
