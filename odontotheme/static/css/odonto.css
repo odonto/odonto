@@ -188,8 +188,7 @@ label {
   margin-top: 20px; }
 
 .ngProgressLiteBar {
-  top: 90px;
-  background-color: white; }
+  display: none; }
 
 .content-offset {
   margin-top: 100px; }

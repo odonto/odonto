@@ -16,11 +16,3 @@ class Application(application.OpalApplication):
         # Uncomment this if you want to implement custom dynamic flows.
         # 'js/openodonto/flow.js',
     ]
-
-    @classmethod
-    def get_menu_items(cls, user=None):
-        from odonto import pathways
-        menu_items = [
-            pathways.AddPatientPathway.as_menuitem()
-        ]
-        return menu_items

@@ -1,5 +1,5 @@
 """
-odonto models.
+Odonto models.
 """
 from django.db.models import fields
 from django.db import models as djangomodels
