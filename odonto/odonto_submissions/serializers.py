@@ -7,6 +7,7 @@ from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
+from odonto.odonto_submissions.models import BCDS1Message
 
 
 class TreatmentSerializer(object):
@@ -234,54 +235,40 @@ class DemographicsTranslater(object):
         return result
 
 
-def get_envelope(episode, user):
+def get_envelope(episode, user, serial_number):
     """
     Gets the envelope information
-    TODO currently needs:
-
-    - site number/origin
-    Mandatory.
-    Corresponds to Interchange to which this segment refers.
-
-    - destination
-    For messages orginated by the system, the unique
-    five digit site number issued by the service.  Messages
-    originated by a user use the code appropriate to the service.
-
-    - approval_number
-    The practice system approval number is the supplier number provided
-    by the NHSDS.
-
-    - serial_number
-    sequential serial number of the interchange that was sent (optional)
     """
     envelope = Envelope()
+    care_provider = episode.patient.fp17dentalcareprovider_set.get()
+    envelope.origin = care_provider.provider_location_number
+    envelope.release_timestamp = datetime.datetime.utcnow()
+    envelope.serial_number = serial_number
+
+    print("Assumed destination is A0DPB")
+    envelope.destination = "A0DPB"
+
+    print("We are expecting to receive a approval number")
+    envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     return envelope
 
 
-def get_bcds1(episode, user):
+def get_bcds1(episode, user, message_reference_number):
     """
-    Gets the envelope information
-    TODO current needs
-    - message_reference_number
-    Sequential number assigned by the practice application that within
-    contract number (9105) uniquely identifies a message.
+    creates a a BDCS1 message segmant.
 
-    - contract number
-    For message types BCDS1
-    Provider’s unique 10 digit contract number:
-
-    - pin
-    The practice system must ensure that once a dentist has entered the DPB
-    PIN to authorise a batch of claims prior to transmission that no further
-    claims may be added in his/her name.
+    message_id is the unique message referant
+    Gets the bcs1 information
     """
 
     bcds1 = BCDS1()
-    provider = episode.patient.fp17dentalcareprovider.get()
+    bcds1.contact_number = "194689/0001"
+    bcds1.message_reference_number = message_reference_number
+    bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
+    provider = episode.patient.fp17dentalcareprovider_set.get()
     bcds1.location = provider.provider_location_number
-    performer_number = user.performernumber.first()
+    performer_number = user.performernumber_set.first()
 
     if not performer_number:
         raise ValueError(
@@ -290,17 +277,20 @@ def get_bcds1(episode, user):
 
     bcds1.performer_number = performer_number.number
     bcds1.patient = FP17_Patient()
+    translate_to_bdcs1(bcds1, episode)
+    return bcds1
 
 
-def translate_episode_to_xml(episode, user):
-    bcds1 = get_bcds1(episode, user)
-    envelope = get_envelope(episode, user)
+def translate_episode_to_xml(
+    episode, user, serial_number, message_reference_number
+):
+    bcds1 = get_bcds1(episode, user, message_reference_number)
+    envelope = get_envelope(episode, user, serial_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
-    return root
 
 
 def translate_to_bdcs1(bcds1, episode):
@@ -346,3 +336,57 @@ def translate_to_bdcs1(bcds1, episode):
     if charge:
         bcds1.patient_charge_pence = charge
     return bcds1
+
+
+class FP17Serializer():
+    def __init__(self, episode, user):
+        self.episode = episode
+        self.user = user
+        self._errors = None
+
+    def is_valid(self):
+        performer_number = self.user.performernumber.first()
+        if not performer_number:
+            self._errors = "no performer information for user"
+            return False
+
+        envelope = get_envelope(self.episode, self.user, 1)
+        errors = envelope.get_errors()
+        if errors:
+            self._errors = errors
+            return False
+
+        bdcs1 = get_bcds1(self.episode, self.user, "1")
+        errors = bdcs1.get_errors()
+        if errors:
+            self._errors = errors
+            return False
+        root = envelope.generate_xml()
+        errors = Envelope.validate_xml(root)
+        if errors:
+            self._errors = errors
+            return False
+        return True
+
+    @property
+    def errors(self):
+        if not self._errors:
+            self.is_valid()
+
+        return self._errors
+
+    def save(self):
+        message = BCDS1Message(
+            user=self.user,
+            episode=self.episode
+        )
+        message.save()
+        return message
+
+
+
+
+
+
+
+

@@ -3,6 +3,7 @@ Pathways for Odonto
 """
 from opal.core import menus, pathway
 from odonto import models
+from odonto.odonto_submissions import serializers
 
 
 class PathwayUrlMixin(object):
@@ -141,5 +142,7 @@ class CompleteFP17Pathway(Fp17Pathway):
         )
         episode.stage = 'Submitted'
         episode.save()
-        new_episode = patient.create_episode(stage="New")
+        patient.create_episode(stage="New")
+        serializer = serializers.FP17Serializer(episode, user)
+        serializer.save()
         return patient, episode

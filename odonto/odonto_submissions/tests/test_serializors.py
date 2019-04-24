@@ -55,7 +55,7 @@ def from_message(number):
     bcds1 = generate_bcds1()
     envelope = generate_envelope()
     from_message_method = get_from_message_method(number)
-    from_message_method(bcds1)
+    from_message_method(bcds1)s
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
@@ -65,10 +65,13 @@ def from_message(number):
 
 
 def from_model(number):
+    patient = opal_ßmodels.Patient.objects.create()
+    episode = patient.create_episode()
+    patient.fp17dentalcareprovider.update(
+        provider_location_number="site_number"
+    )
     bcds1 = generate_bcds1()
     envelope = generate_envelope()
-    patient = opal_models.Patient.objects.create()
-    episode = patient.create_episode()
     from_model_method = get_from_model_method(number)
     from_model_method(bcds1, patient, episode)
     envelope.add_message(bcds1)

@@ -52,12 +52,16 @@ class PatientConsultation(models.PatientConsultation):
 """
 End Opal core models
 """
-
 class PerformerNumber(djangomodels.Model):
-    user   = djangomodels.ForeignKey(
+    user = djangomodels.ForeignKey(
         models.User, on_delete=djangomodels.CASCADE
     )
     number = fields.TextField()
+
+    @property
+    def dpb_pin(self):
+        print("This needs to not be hardcoded")
+        return 100000
 
 
 class Demographics(models.Demographics):
@@ -91,6 +95,7 @@ class Demographics(models.Demographics):
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:
         verbose_name = "Patient information"
+
 
 class Fp17DentalCareProvider(models.PatientSubrecord):
     _is_singleton = True
