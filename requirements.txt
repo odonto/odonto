@@ -22,4 +22,4 @@ click==6.7
 # celery==3.1.25
 
 # Open Health Care repositories on GitHub
--e git+https://github.com/openhealthcare/opal@v0.14.0#egg=opal
+opal==0.14.0
