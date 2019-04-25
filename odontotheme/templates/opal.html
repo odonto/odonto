@@ -18,11 +18,6 @@
         <li ng-class="{active: $location.absUrl().indexOf('add_patient') != -1}">
           {% link_to "Register patient" pathways.AddPatientPathway %}
         </li>
-        {% if roles.is_dentist %}
-          <li ng-class="{active: $location.absUrl().indexOf('add_patient') != -1}">
-            {% link_to "Register patient" pathways.AddPatientPathway %}
-          </li>
-        {% endif %}
       </ul>
 
       <div id="logout">
