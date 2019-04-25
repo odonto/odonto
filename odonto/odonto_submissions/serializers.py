@@ -159,7 +159,7 @@ class ExceptionSerializer(object):
     def exemptions(self):
         result = {}
         for i, v in self.EXEMPTION_MAPPINGS.items():
-            if getattr(self.model_instance, i):
+            if getattr(self.model_pinstance, i):
                 # Prisoner does not have a concept of no exemption seen
                 if i == "prisoner":
                     result["code"] = v
@@ -245,8 +245,10 @@ def get_envelope(episode, user, serial_number):
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
 
-    print("Assumed destination is A0DPB")
-    envelope.destination = "A0DPB"
+    print("Assumed destination is 1234")
+    # This is probably the correct one, but the above is what we used in test messages
+    # envelope.destination = "A0DPB"
+
 
     print("We are expecting to receive a approval number")
     envelope.approval_number = 1
