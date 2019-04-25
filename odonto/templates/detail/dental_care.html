@@ -8,31 +8,34 @@
     {% link_to "Open an FP17" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" %}
   <p>
 </div>
+
+<h2>FP17 Summary</h2>
+
 <!-- mid Treatment View -->
 <div ng-show="episode.fp17_incomplete_treatment[0].date_of_acceptance">
   <div class="row">
     <div class="col-md-6">
-      {% record_panel models.Fp17DentalCareProvider %}
+      {% record_panel models.Fp17DentalCareProvider editable=False %}
     </div>
     <div class="col-md-6">
-      {% record_panel models.Fp17IncompleteTreatment %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17Exemptions %}
-      {% record_panel models.Fp17TreatmentCategory %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17ClinicalDataSet %}
+      {% record_panel models.Fp17IncompleteTreatment editable=False %}
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      {% record_panel models.Fp17OtherDentalServices %}
+      {% record_panel models.Fp17Exemptions editable=False %}
+      {% record_panel models.Fp17TreatmentCategory editable=False %}
     </div>
     <div class="col-md-6">
-      {% record_panel models.Fp17Recall %}
+      {% record_panel models.Fp17ClinicalDataSet editable=False %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      {% record_panel models.Fp17OtherDentalServices editable=False %}
+    </div>
+    <div class="col-md-6">
+      {% record_panel models.Fp17Recall editable=False %}
     </div>
   </div>
 </div>

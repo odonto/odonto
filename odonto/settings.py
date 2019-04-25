@@ -36,6 +36,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.herokuapp.com',
+    'ntghcomdent1',
+    'ntghcomdent2',
 ]
 
 # Local time zone for this installation. Choices can be found here:
@@ -135,6 +137,7 @@ TEMPLATES = [
                 'opal.context_processors.settings',
                 'opal.context_processors.models',
                 'opal.core.pathway.context_processors.pathways',
+                'odonto.context_processors.odonto_roles',
             ],
         },
     },

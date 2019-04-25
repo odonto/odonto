@@ -1,5 +1,5 @@
 """
-odonto models.
+Odonto models.
 """
 from django.db.models import fields
 from django.db import models as djangomodels
@@ -130,7 +130,7 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
     )
 
     class Meta:
-        verbose_name = "Part 1 Provider name, address and location"
+        verbose_name = "Performer name and clinic"
 
 
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
@@ -152,7 +152,7 @@ class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name = "Part 3 Incomplete treatment and treatment dates"
+        verbose_name = "Incomplete treatment and treatment dates"
 
 
 class Fp17Exemptions(models.EpisodeSubrecord):
@@ -219,7 +219,7 @@ class Fp17Exemptions(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name = "Part 4 Exemptions and remissions"
+        verbose_name = "Exemptions and remissions"
 
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
@@ -264,7 +264,7 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name = "Part 5 Treatment category"
+        verbose_name = "Treatment category"
 
 
 class Fp17ClinicalDataSet(models.EpisodeSubrecord):
@@ -372,7 +372,7 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name="Part 5a Clinical data set"
+        verbose_name="Clinical data set"
 
 
 class Fp17OtherDentalServices(models.EpisodeSubrecord):
@@ -401,7 +401,7 @@ class Fp17OtherDentalServices(models.EpisodeSubrecord):
     )
 
     class Meta:
-        verbose_name = "Part 6 Other services"
+        verbose_name = "Other services"
 
 
 class Fp17Recall(models.EpisodeSubrecord):
@@ -410,7 +410,7 @@ class Fp17Recall(models.EpisodeSubrecord):
     number_of_months = fields.IntegerField(blank=True, null=True)
 
     class Meta:
-        verbose_name = "Part 7 NICE guidance"
+        verbose_name = "NICE guidance"
 
 
 class Fp17NHSBSAFields(models.EpisodeSubrecord):
