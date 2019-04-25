@@ -1,5 +1,5 @@
 import datetime
-
+from odonto.odonto_submissions.serializers import translate_to_bdcs1
 from fp17 import treatments
 
 
@@ -21,3 +21,29 @@ def annotate(bcds1):
     ]
 
     return bcds1
+
+
+def from_model(bcds1, patient, episode):
+    demographics = patient.demographics()
+    demographics.surname = "CANLEY"
+    demographics.first_name = "VIOLET"
+    demographics.house_number_or_name = "22"
+    demographics.street = "HIGH STREET"
+    demographics.sex = "Female"
+    demographics.date_of_birth = datetime.date(1929, 5, 25)
+    demographics.ethnicity = "White and black african"
+    demographics.save()
+
+    episode.fp17treatmentcategory_set.update(
+        removal_of_sutures=True
+    )
+
+    episode.fp17clinicaldataset_set.update(
+        filled_teeth_permanent=3
+    )
+
+    episode.fp17incompletetreatment_set.update(
+        date_of_acceptance=datetime.date(2017, 4, 1),
+        completion_or_last_visit=datetime.date(2017, 4, 1)
+    )
+    translate_to_bdcs1(bcds1, episode)

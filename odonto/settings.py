@@ -167,7 +167,6 @@ INSTALLED_APPS = (
     'opal',
     'opal.core.search',
     'opal.core.pathway',
-    'opal.core.referencedata',
     'odonto',
     'odonto.odonto_submissions',
     'django.contrib.admin',
