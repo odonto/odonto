@@ -1,6 +1,8 @@
 """
 Context processors for Odonto
 """
+
+
 def odonto_roles(request):
     default = {
         'roles': {
@@ -14,9 +16,9 @@ def odonto_roles(request):
     if not request.user.is_authenticated:
         return default
 
-    default['roles']['is_admin']: True
+    default['roles']['is_admin'] = True
 
     if request.user.performernumber_set.count() > 0:
-        default['roles']['is_dentist']: True
+        default['roles']['is_dentist'] = True
 
     return default
