@@ -1,4 +1,5 @@
 {% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
     {% input field="Demographics.nhs_number" label="NHS number" style="vertical"%}
@@ -20,12 +21,12 @@
     {% date_of_birth_field style="vertical" label="Date of birth" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% radio field="Demographics.sex" style="vertical" required=True %}
+    {% btn_radio field="Demographics.sex" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-{% input field="Demographics.house_number_or_name" style="vertical" %}
+    {% input field="Demographics.house_number_or_name" style="vertical" %}
   </div>
 </div>
 <div class="row">
