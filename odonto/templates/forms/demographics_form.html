@@ -2,7 +2,7 @@
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.nhs_number" label="NHS number" style="vertical"%}
+    {% input field="Demographics.nhs_number" label="NHS number" maxlength="10" style="vertical"%}
   </div>
 </div>
 <div class="row">
@@ -17,7 +17,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5">b
     {% date_of_birth_field style="vertical" label="Date of birth" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
