@@ -1,0 +1,52 @@
+{% load forms %}
+{% load odonto_forms %}
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticTreatment.patient_failed_to_return" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticTreatment.patient_requested_stop" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticTreatment.treatment_discontinued" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticTreatment.treatment_completed" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticTreatment.par_scores_calculated" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% input field="OrthodonticTreatment.iotn" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% input field="OrthodonticTreatment.aesthetic_component" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticTreatment.iotn_not_applicable" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticTreatment.repair" %}
+  </div>
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticTreatment.replacement" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+      {% datepicker field="OrthodonticTreatment.date_of_completion" style="vertical" %}
+  </div>
+</div>
+
+
+
+
+
+
+
