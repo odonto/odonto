@@ -86,6 +86,12 @@ class Demographics(models.Demographics):
         verbose_name="House number or name"
     )
     street = fields.CharField(max_length=255, null=True, blank=True)
+    phone_number = fields.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name="Contact phone number"
+    )
     city_or_town = fields.CharField(
         max_length=255, null=True, blank=True,
         verbose_name="City or town"
