@@ -159,7 +159,7 @@ class ExceptionSerializer(object):
     def exemptions(self):
         result = {}
         for i, v in self.EXEMPTION_MAPPINGS.items():
-            if getattr(self.model_pinstance, i):
+            if getattr(self.model_instance, i):
                 # Prisoner does not have a concept of no exemption seen
                 if i == "prisoner":
                     result["code"] = v
