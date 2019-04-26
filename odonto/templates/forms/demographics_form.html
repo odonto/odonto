@@ -1,7 +1,8 @@
 {% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.nhs_number" label="NHS number" style="vertical"%}
+    {% input field="Demographics.nhs_number" label="NHS number" maxlength="10" style="vertical" %}
   </div>
 </div>
 <div class="row">
@@ -9,23 +10,28 @@
     {% input field="Demographics.title" style="vertical" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input field="Demographics.first_name" label="First forename" style="vertical" %}
+    {% input field="Demographics.first_name" label="First forename" style="vertical" required=True maxlength="20" minlength="2" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% input field="Demographics.surname" style="vertical" %}
+    {% input field="Demographics.surname" style="vertical" required=True maxlength="20" minlength="2" %}
   </div>
 </div>
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5">b
     {% date_of_birth_field style="vertical" label="Date of birth" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% select field="Demographics.sex" style="vertical" %}
+    {% btn_radio field="Demographics.sex" required=True %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-{% input field="Demographics.house_number_or_name" style="vertical" %}
+    {% input field="Demographics.phone_number" style="vertical" element_name="tel" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input field="Demographics.house_number_or_name" style="vertical" %}
   </div>
 </div>
 <div class="row">

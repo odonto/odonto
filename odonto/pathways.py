@@ -110,13 +110,15 @@ class Fp17Pathway(OdontoPagePathway):
             step_controller="FP17TreatmentStepCtrl",
         ),
         pathway.Step(model=models.Fp17Exemptions),
-        pathway.Step(model=models.Fp17TreatmentCategory),
         pathway.Step(model=models.Fp17ClinicalDataSet),
         pathway.Step(model=models.Fp17OtherDentalServices),
+        pathway.Step(model=models.Fp17TreatmentCategory),
         pathway.Step(model=models.Fp17Recall),
         pathway.Step(
             model=models.Fp17Declaration,
-            display_name="Part 9 Declaration"),
+            display_name="Declaration",
+            base_template="pathway/steps/declaration_base_template.html"
+        ),
     )
 
     def save(self, data, user=None, patient=None, episode=None):

@@ -86,6 +86,12 @@ class Demographics(models.Demographics):
         verbose_name="House number or name"
     )
     street = fields.CharField(max_length=255, null=True, blank=True)
+    phone_number = fields.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name="Contact phone number"
+    )
     city_or_town = fields.CharField(
         max_length=255, null=True, blank=True,
         verbose_name="City or town"
@@ -141,12 +147,6 @@ class Fp17DentalCareProvider(models.PatientSubrecord):
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
 
-    BAND_CHOICES = enum('Band 1', 'Band 2', 'Band 3')
-
-    treatment_band = fields.CharField(
-        max_length=255, blank=True, null=True,
-        choices=BAND_CHOICES
-    )
     date_of_acceptance = fields.DateField(
         blank=True, null=True,
         verbose_name="Date of acceptance"

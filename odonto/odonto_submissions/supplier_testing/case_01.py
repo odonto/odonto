@@ -32,8 +32,8 @@ def annotate(bcds1):
 
 def from_model(bcds1, patient, episode):
     demographics = patient.demographics()
-    demographics.surname = "BARLASTON"
-    demographics.first_name = "SALLY"
+    demographics.surname = "Barlaston"
+    demographics.first_name = "Sally"
     demographics.house_number_or_name = "1"
     demographics.street = "HIGH STREET"
     demographics.sex = "Female"

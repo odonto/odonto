@@ -1,15 +1,28 @@
-<div class="btn-group">
-  <div class="row">
-    <label class="control-label">
-      {{ label }}
-    </label>
-  </div>
-  <div class="row">
-    <label class="btn btn-default btn-radio-group"
-           ng-model="{{ model }}"
-           uib-btn-radio="'[[ i ]]'"
-           ng-repeat="i in {{ lookuplist }} track by $index">
-      [[ i ]]
-    </label>
+<div class="form-group">
+  <div class="btn-group">
+    <div class="row">
+      <label class="control-label">
+        {{ label }}
+      </label>
+    </div>
+    <div class="row">
+      <label class="btn btn-default btn-radio-group"
+            ng-model="{{ model }}"
+            uib-btn-radio="'[[ i ]]'"
+            name="[[ {{ element_name }} ]]"
+            {% if required %}required {% endif %}
+            ng-repeat="i in {{ lookuplist }} track by $index">
+        [[ i ]]
+      </label>
+    </div>
   </div>
 </div>
+{% if required %}
+<div class="row" ng-show="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required">
+  <div class="col-md-12">
+    <span class="help-block" >
+      {{ label }} is required
+    </span>
+  </div>
+</div>
+{% endif %}

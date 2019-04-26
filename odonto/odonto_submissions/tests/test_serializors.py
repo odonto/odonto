@@ -3,6 +3,7 @@ import datetime
 from django.utils.module_loading import import_string
 from fp17 import bcds1 as message
 from fp17.envelope import Envelope
+from odonto.odonto_submissions import serializers
 from opal import models as opal_models
 from lxml import etree
 
@@ -55,7 +56,7 @@ def from_message(number):
     bcds1 = generate_bcds1()
     envelope = generate_envelope()
     from_message_method = get_from_message_method(number)
-    from_message_method(bcds1)s
+    from_message_method(bcds1)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
@@ -65,9 +66,9 @@ def from_message(number):
 
 
 def from_model(number):
-    patient = opal_ßmodels.Patient.objects.create()
+    patient = opal_models.Patient.objects.create()
     episode = patient.create_episode()
-    patient.fp17dentalcareprovider.update(
+    patient.fp17dentalcareprovider_set.update(
         provider_location_number="site_number"
     )
     bcds1 = generate_bcds1()
@@ -126,3 +127,10 @@ class SerializerTestCase(OpalTestCase):
             new = from_model(case_number)
             old = from_message(case_number)
             self.assertTrue(equal(old, new))
+
+    def test_translate_name(self):
+        name = "Mc'Wilson-Smith-jones"
+        self.assertEqual(
+            serializers.translate_name(name),
+            "MCWILSONSMITHJONES"
+        )
