@@ -116,7 +116,9 @@ class Fp17Pathway(OdontoPagePathway):
         pathway.Step(model=models.Fp17Recall),
         pathway.Step(
             model=models.Fp17Declaration,
-            display_name="Part 9 Declaration"),
+            display_name="Declaration",
+            base_template="pathway/steps/declaration_base_template.html"
+        ),
     )
 
     def save(self, data, user=None, patient=None, episode=None):
