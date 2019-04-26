@@ -295,11 +295,23 @@ def translate_episode_to_xml(
     Envelope.validate_xml(root)
 
 
+def translate_name(name):
+    """
+    The fp17 form only accepts...
+
+    Upper case only
+    No hyphens, apostrophes or embedded spaces
+    """
+    name = name.upper()
+    return ''.join(c for c in name if c.isalnum())
+
+
 def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
-    bcds1.patient.surname = demographics.surname
-    bcds1.patient.forename = demographics.first_name
+    # surname must be upper case according to the form submitting guidelines
+    bcds1.patient.surname = translate_name(demographics.surname)
+    bcds1.patient.forename = translate_name(demographics.first_name)
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()

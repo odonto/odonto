@@ -3,6 +3,7 @@ import datetime
 from django.utils.module_loading import import_string
 from fp17 import bcds1 as message
 from fp17.envelope import Envelope
+from odonto.odonto_submissions import serializers
 from opal import models as opal_models
 from lxml import etree
 
@@ -126,3 +127,10 @@ class SerializerTestCase(OpalTestCase):
             new = from_model(case_number)
             old = from_message(case_number)
             self.assertTrue(equal(old, new))
+
+    def test_translate_name(self):
+        name = "Mc'Wilson-Smith-jones"
+        self.assertEqual(
+            serializers.translate_name(name),
+            "MCWILSONSMITHJONES"
+        )
