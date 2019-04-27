@@ -145,3 +145,36 @@ class CompleteFP17Pathway(Fp17Pathway):
         serializer = serializers.FP17Serializer(episode, user)
         serializer.save()
         return patient, episode
+
+
+class Fp17OPathway(OdontoPagePathway):
+    display_name = 'FP17O claim form'
+    slug = 'fp17o'
+    steps = (
+        pathway.Step(
+            model=models.Fp17DentalCareProvider,
+            step_controller="CareProviderStepCtrl",
+        ),
+        pathway.Step(
+            model=models.Demographics
+        ),
+        pathway.Step(model=models.Fp17Exemptions),
+        pathway.Step(
+            model=models.OrthodonticDataSet
+        ),
+        pathway.Step(model=models.OrthodonticAssessment),
+        pathway.Step(model=models.OrthodonticTreatment),
+        pathway.Step(
+            model=models.Fp17Declaration,
+            display_name="Declaration",
+            base_template="pathway/steps/declaration_base_template.html"
+        ),
+    )
+
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        episode.stage = 'Open'
+        episode.save()
+        return patient, episode

@@ -1,0 +1,53 @@
+{% load forms %}
+{% load odonto_forms %}
+<div class="row content-offset-20">
+  <div class="col-md-4">
+    {% input field="OrthodonticDataSet.radiograph" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticDataSet.removable_upper_appliance" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticDataSet.fixed_upper_appliance" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticDataSet.retainer_upper" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticDataSet.removable_lower_appliance" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticDataSet.fixed_lower_appliance" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticDataSet.retainer_lower" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticDataSet.function_appliance" %}
+  </div>
+</div>
+
+
+<div class="row content-offset-20">
+  <div class="col-md-2">
+    {% input field="OrthodonticDataSet.extractions_upper_right" style="vertical" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% input field="OrthodonticDataSet.extractions_upper_left" style="vertical" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% input field="OrthodonticDataSet.extractions_lower_right" style="vertical" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% input field="OrthodonticDataSet.extractions_lower_left" style="vertical" %}
+  </div>
+</div>
+
+
+

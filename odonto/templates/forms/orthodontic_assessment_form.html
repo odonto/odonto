@@ -1,0 +1,37 @@
+{% load forms %}
+{% load odonto_forms %}
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_checkbox field="OrthodonticAssessment.assessment_and_review" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticAssessment.assess_and_refuse_treatment" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticAssessment.assess_and_appliance_fitted" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% input field="OrthodonticAssessment.iotn" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% input field="OrthodonticAssessment.aesthetic_component" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="OrthodonticAssessment.iotn_not_applicable" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% datepicker field="OrthodonticAssessment.date_of_referral" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% datepicker field="OrthodonticAssessment.date_of_assessment" style="vertical" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% datepicker field="OrthodonticAssessment.date_of_appliance_fitted" style="vertical" %}
+  </div>
+</div>
+
+

@@ -439,3 +439,102 @@ class Fp17Declaration(models.EpisodeSubrecord):
 
     signature = fields.CharField(max_length=255, blank=True, null=True)
     signature_date = fields.DateField(blank=True, null=True)
+
+
+# FP17O models
+class OrthodonticDataSet(models.EpisodeSubrecord):
+    _is_singleton = True
+
+    radiograph = fields.IntegerField(blank=True, null=True)
+    removable_upper_appliance = fields.BooleanField(default=False)
+    removable_lower_appliance = fields.BooleanField(default=False)
+    fixed_upper_appliance = fields.BooleanField(default=False)
+    fixed_lower_appliance = fields.BooleanField(default=False)
+    function_appliance = fields.BooleanField(default=False)
+    retainer_upper = fields.BooleanField(default=False)
+    retainer_lower = fields.BooleanField(default=False)
+    extractions_upper_right = fields.IntegerField(blank=True, null=True)
+    extractions_upper_left = fields.IntegerField(blank=True, null=True)
+    extractions_lower_right = fields.IntegerField(blank=True, null=True)
+    extractions_lower_left = fields.IntegerField(blank=True, null=True)
+
+
+class OrthodonticAssessment(models.EpisodeSubrecord):
+    _is_singleton = True
+
+    assessment_and_review = fields.BooleanField(default=False)
+    assess_and_refuse_treatment = fields.BooleanField(
+        default=False,
+        verbose_name="Assess & refuse treatment"
+    )
+    assess_and_appliance_fitted = fields.BooleanField(
+        default=False,
+        verbose_name="Assess & appliance fitted"
+    )
+
+    # Index of Orthodontic Treatment Need
+    # Only accepts 1-5
+    iotn = fields.IntegerField(
+        blank=True, null=True, verbose_name="IOTN"
+    )
+    # Only accepts 1-10
+    aesthetic_component = fields.IntegerField(
+        blank=True, null=True
+    )
+    iotn_not_applicable = fields.BooleanField(
+        default=False, verbose_name="IOTN not applicable"
+    )
+    date_of_referral = fields.DateField(blank=True, null=True)
+    date_of_assessment = fields.DateField(blank=True, null=True)
+    date_of_appliance_fitted = fields.DateField(blank=True, null=True)
+
+
+class OrthodonticTreatment(models.EpisodeSubrecord):
+    _is_singleton = True
+
+    patient_failed_to_return = fields.BooleanField(
+        default=False,
+        verbose_name="Treatment abandoned - patient failed to return"
+    )
+    patient_requested_stop = fields.BooleanField(
+        default=False,
+        verbose_name="Treatment abandoned - patient requested"
+    )
+    treatment_discontinued = fields.BooleanField(
+        default=False,
+    )
+    treatment_completed = fields.BooleanField(
+        default=False
+    )
+    par_scores_calculated = fields.BooleanField(
+        default=False,
+        verbose_name="PAR "
+    )
+    iotn = fields.IntegerField(
+        blank=True, null=True, verbose_name="IOTN"
+    )
+    # Index of Orthodontic Treatment Need
+    # Only accepts 1-5
+    iotn = fields.IntegerField(
+        blank=True, null=True, verbose_name="IOTN"
+    )
+    # Only accepts 1-10
+    aesthetic_component = fields.IntegerField(
+        blank=True, null=True
+    )
+    iotn_not_applicable = fields.BooleanField(
+        default=False, verbose_name="IOTN not applicable"
+    )
+    repair = fields.BooleanField(
+        default=False,
+        verbose_name="Repair to appliance fitted by another dentist"
+    )
+    replacement = fields.BooleanField(
+        default=False,
+        verbose_name="Regulation 11 replacement appliance"
+    )
+    date_of_completion = fields.DateField(
+        blank=True,
+        null=True,
+        verbose_name="Date of completion or last visit"
+    )
