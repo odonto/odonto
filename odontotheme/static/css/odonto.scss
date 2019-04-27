@@ -164,6 +164,9 @@ label{
   left: 0px;
   top: 300px;
   margin-left: 25px;
+  @media(max-width: 991px){
+    display: none;
+  }
 }
 
 #episode-history a{
@@ -352,9 +355,12 @@ label{
 }
 
 #side-nav {
-  background-color: #124c91;
   background-color: #487DBC;
-  height: 100vh
+  height: 100vh;
+
+  @media(max-width: 991px){
+    display: none;
+  }
 }
 #side-nav ul.app-info {
   padding-top: 120px;
