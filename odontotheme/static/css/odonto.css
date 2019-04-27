@@ -199,6 +199,11 @@ label {
 
 #side-nav {
   background-color: #487CBC;
+  position: fixed;
+}
+
+.main-view {
+  overflow-x: auto;
 }
 
 .navbar-default, .top-navbar {

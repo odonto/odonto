@@ -208,6 +208,11 @@ label{
 
 #side-nav {
     background-color: $odonto_blue;
+    position: fixed;
+}
+
+.main-view{
+    overflow-x: auto;
 }
 
 .navbar-default, .top-navbar {
