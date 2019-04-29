@@ -1,4 +1,5 @@
 {% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-6">
     <p class="row"><!-- This is silly but applies margin -15px -->
@@ -10,6 +11,6 @@
 </div>
 <div class="row">
   <div class="col-md-3">
-    {% input label="Recall interval" field="Fp17Recall.number_of_months" maxlength="2" unit="months" style="vertical" %}
+    {% number label="Recall interval" field="Fp17Recall.number_of_months" maxlength="2" unit="months" min="0" %}
   </div>
 </div>
