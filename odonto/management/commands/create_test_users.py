@@ -6,7 +6,7 @@ from opal.models import UserProfile
 
 
 class Command(BaseCommand):
-    @transaction.atomic()
+    @transaction.atomic
     def handle(self, *args, **options):
         user = User(username='super')
         user.set_password('super1')
