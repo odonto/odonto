@@ -72,11 +72,15 @@ label {
 .btn-default {
   color: #595F72;
 }
-
 .btn-default.active {
   background-color: #A3C9A8;
   border-color: #89ba90;
   color: #595F72;
+}
+
+.btn-error .btn-default, .btn-error .active.btn-default {
+  background-color: #fcc;
+  border-color: #ffc2c2;
 }
 
 .panel.panel-primary .panel-heading .btn-primary,

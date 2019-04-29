@@ -149,11 +149,21 @@ class CompleteFP17Pathway(Fp17Pathway):
         pathway.Step(
             model=models.Fp17IncompleteTreatment,
             step_controller="FP17TreatmentStepCtrl",
-            template="pathway/steps/incomplete_treatment_dates.html"
+            template="".join([
+                "pathway/steps/complete_fp17_pathway/"
+                "fp17_incomplete_treatment_form.html"
+            ])
         ),
         pathway.Step(model=models.Fp17Exemptions),
         pathway.Step(model=models.Fp17ClinicalDataSet),
-        pathway.Step(model=models.Fp17OtherDentalServices),
+        pathway.Step(
+            step_controller="FP17IncompleteTreatmentCtrl",
+            model=models.Fp17OtherDentalServices,
+            template="".join([
+                "pathway/steps/complete_fp17_pathway/"
+                "fp17_other_dental_services_form.html"
+            ])
+        ),
         pathway.Step(model=models.Fp17TreatmentCategory),
         pathway.Step(model=models.Fp17Recall),
         pathway.Step(

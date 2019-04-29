@@ -1,0 +1,31 @@
+{% load odonto_forms %}
+<div class="row">
+  <div ng-class="{'btn-error': treatmentOnReferralError}" class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.treatment_on_referral" style="vertical" %}
+    <span class="help-block" ng-show="treatmentOnReferralError">
+       Band 1/2/3 is required
+    </span>
+  </div>
+  <div ng-class="{'btn-error': furtherTreatmentWithin2Months}" class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.further_treatment_within_2_months" style="vertical" %}
+    <span class="help-block" ng-show="furtherTreatmentWithin2Months">
+        Band 1/2/3 is required
+     </span>
+  </div>
+  <div class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.sedation_services" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div ng-class="{'btn-error': freeRepairOrReplacement}" class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.free_repair_or_replacement" style="vertical" %}
+    <span class="help-block" ng-show="freeRepairOrReplacement">
+        Band 2/3 or "Urgent Treatment" required
+    </span>
+  </div>
+  <div class="col-md-4">
+    {% btn_checkbox field="Fp17OtherDentalServices.domicillary_services" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+  </div>
+</div>
