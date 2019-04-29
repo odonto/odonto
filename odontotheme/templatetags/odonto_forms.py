@@ -2,7 +2,7 @@
 Templatetags for form/modal helpers
 """
 from django import template
-from opal.templatetags.forms import extract_common_args
+from opal.templatetags.forms import extract_common_args, _input
 
 register = template.Library()
 
@@ -55,4 +55,22 @@ def teeth(*args, **kwargs):
     ctx["style"] = "vertical"
     return ctx
 
+
+@register.inclusion_tag('_helpers/char_field.html')
+def charfield(*args, **kwargs):
+    """
+    Similar to the input field in opal but accepts
+    pattern and min length
+    and is always vertical
+    """
+    ctx = _input(*args, **kwargs)
+    ctx["style"] = "vertical"
+
+    if "pattern" not in kwargs and "pattern_error" in kwargs:
+        raise ValueError("Pattern error passed in but no pattern")
+
+    for field in ["pattern", "minlength", "pattern_error"]:
+        if field in kwargs:
+            ctx[field] = kwargs[field]
+    return ctx
 
