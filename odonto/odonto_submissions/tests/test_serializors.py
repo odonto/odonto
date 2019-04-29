@@ -128,9 +128,9 @@ class SerializerTestCase(OpalTestCase):
             old = from_message(case_number)
             self.assertTrue(equal(old, new))
 
-    def test_translate_name(self):
+    def test_clean_non_alphanumeric(self):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(
-            serializers.translate_name(name),
-            "MCWILSONSMITHJONES"
+            serializers.clean_non_alphanumeric(name),
+            "McWilsonSmithjones"
         )
