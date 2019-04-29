@@ -56,12 +56,22 @@ label {
   padding: 8px 0px 0px 0px; }
 
 .btn-default {
+<<<<<<< HEAD
   color: #595F72; }
 
+=======
+  color: #595F72;
+}
+>>>>>>> 0f67a2e5d6201e11eac27c4390404a92ec075cee
 .btn-default.active {
   background-color: #A3C9A8;
   border-color: #89ba90;
   color: #595F72; }
+
+.btn-error .btn-default, .btn-error .active.btn-default {
+  background-color: #fcc;
+  border-color: #ffc2c2;
+}
 
 .panel.panel-primary .panel-heading .btn-primary,
 .btn-primary,

@@ -13,6 +13,7 @@ class Application(application.OpalApplication):
         'js/opal/controllers/discharge.js',
         'js/openodonto/controllers/careprovider.step.controller.js',
         'js/openodonto/controllers/fp17treatment.step.controller.js',
+        'js/openodonto/controllers/complete_fp17_other_dental_services.controller.step.js'
         # Uncomment this if you want to implement custom dynamic flows.
         # 'js/openodonto/flow.js',
     ]

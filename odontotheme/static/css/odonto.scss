@@ -6,6 +6,7 @@ $cambridge_blue: #A3C9A8;
 $black_coral: #595F72;
 $gunmetal: #21232A;
 $bone: #DDD8C4;
+$error_red: #fcc;
 
 // Color and typography
 .cambridge_blue {
@@ -80,13 +81,21 @@ label{
 
 .btn-default {
     color: $black_coral;
+
+    &.active {
+        background-color: $cambridge_blue;
+        border-color: darken($cambridge_blue, 8%);
+        color: $black_coral;
+    }
 }
 
-.btn-default.active {
-    background-color: $cambridge_blue;
-    border-color: darken($cambridge_blue, 8%);
-    color: $black_coral;
+.btn-error{
+    .btn-default, .active.btn-default{
+        background-color: $error_red;
+        border-color: darken($error_red, 2%);
+    }
 }
+
 
 .panel.panel-primary .panel-heading  .btn-primary,
 .btn-primary,

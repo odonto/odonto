@@ -221,17 +221,28 @@ class DemographicsTranslater(object):
         return self.ETHNICITY_MAPPINGS.get(self.model_instance.ethnicity)
 
     def address(self):
-        result = [
+        address_list = [
             "{} {}".format(
                 self.model_instance.house_number_or_name,
                 self.model_instance.street
             )
         ]
         if self.model_instance.city_or_town:
-            result.append(self.model_instance.city_or_town)
+            address_list.append(self.model_instance.city_or_town)
 
         if self.model_instance.county:
-            result.append(self.model_instance.county)
+            address_list.append(self.model_instance.county)
+
+        address_list = [
+            i for i in address_list
+        ]
+
+        result = []
+        for address_line in address_list:
+            cleaned_line = ''.join(
+                i for i in address_line if i.isalnum() or i == ' '
+            )
+            result.append(cleaned_line[:32])
         return result
 
 
@@ -248,7 +259,6 @@ def get_envelope(episode, user, serial_number):
     print("Assumed destination is 1234")
     # This is probably the correct one, but the above is what we used in test messages
     # envelope.destination = "A0DPB"
-
 
     print("We are expecting to receive a approval number")
     envelope.approval_number = 1
@@ -295,14 +305,13 @@ def translate_episode_to_xml(
     Envelope.validate_xml(root)
 
 
-def translate_name(name):
+def clean_non_alphanumeric(name):
     """
     The fp17 form only accepts...
 
     Upper case only
     No hyphens, apostrophes or embedded spaces
     """
-    name = name.upper()
     return ''.join(c for c in name if c.isalnum())
 
 
@@ -310,8 +319,12 @@ def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
     # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = translate_name(demographics.surname)
-    bcds1.patient.forename = translate_name(demographics.first_name)
+    bcds1.patient.surname = clean_non_alphanumeric(
+        demographics.surname
+    ).upper()
+    bcds1.patient.forename = clean_non_alphanumeric(
+        demographics.first_name
+    ).upper()
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
