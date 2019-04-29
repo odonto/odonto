@@ -133,6 +133,21 @@ class Fp17Pathway(OdontoPagePathway):
         return patient, episode
 
 
+class AdminFP17Pathway(Fp17Pathway):
+    display_name = 'Edit FP17'
+    slug = 'fp17-edit'
+
+    @transaction.atomic
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        print(data)
+        # episode.stage = 'Open'
+        # episode.save()
+        return patient, episode
+
+
 class CompleteFP17Pathway(Fp17Pathway):
     display_name = "Submit FP17"
     slug         = "complete-fp17"
@@ -145,8 +160,8 @@ class CompleteFP17Pathway(Fp17Pathway):
         episode.stage = 'Submitted'
         episode.save()
         patient.create_episode(stage="New")
-        serializer = serializers.FP17Serializer(episode, user)
-        serializer.save()
+        # serializer = serializers.FP17Serializer(episode, user)
+        # serializer.save()
         return patient, episode
 
 

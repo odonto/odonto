@@ -103,7 +103,7 @@ class Demographics(models.Demographics):
         verbose_name = "Patient information"
 
 
-class Fp17DentalCareProvider(models.PatientSubrecord):
+class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
     LOCATION_NUMBERS = (

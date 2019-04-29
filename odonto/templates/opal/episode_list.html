@@ -1,0 +1,22 @@
+{% extends "opal.html" %}
+
+{% block odonto_viewport %}
+  <div class="content-offset">
+    <h2>Unsubmitted FP17s ({{ view.request.user.get_full_name }})</h2>
+    {% for episode in object_list %}
+      <div class="row content-offset-20">
+        <a href="/#/patient/{{ episode.patient.id }}/{{ episode.id}}">
+        <div class="col-md-3">
+          {{ episode.patient.demographics.name }}
+        </div>
+        <div class="col-md-3">
+          {{ episode.fp17treatmentcategory_set.get.treatment_category }}
+        </div>
+        <div class="col-md-3">
+          {{ episode.fp17incompletetreatment_set.get.completion_or_last_visit }}
+        </div>
+        </a>
+      </div>
+  {% endfor %}
+  </div>
+{% endblock %}

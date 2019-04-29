@@ -113,7 +113,8 @@ label{
 }
 
 #episode-history h4 {
-    color: $gunmetal;
+    color: white;
+    text-decoration: underline;
     font-size: 16px;
 }
 
@@ -161,7 +162,7 @@ label{
 
 #episode-history {
   position: fixed;
-  left: 0px;
+  left: 20px;
   top: 300px;
   margin-left: 25px;
   @media(max-width: 991px){

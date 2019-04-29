@@ -5,53 +5,63 @@
 {% block navbar %}{% include 'navbar.html' %}{% endblock %}
 
 {% block content %}
-<div class="outer-container">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2" id="side-nav">
-        <ul class="app-info">
-          <li>
-            <i class="fa fa-user cambridge_blue"></i>&nbsp;
-            {{ user.first_name }} {{ user.last_name }}
-          </li>
-        </ul>
-
-        <ul class="nav navbar-nav navbar-right">
-          <li ng-class="{active: $location.absUrl().indexOf('add_patient') != -1}">
-            {% link_to "Register patient" pathways.AddPatientPathway %}
-          </li>
-        </ul>
-
-        <div id="logout">
-
+  <div class="outer-container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2" id="side-nav">
           <ul class="app-info">
-            {% if view.request.user.is_superuser %}
             <li>
-              <a href="/admin/" title="Admin">
-                <i class="fa fa-cogs"></i>
-                Admin
-              </a>
+              <i class="fa fa-user cambridge_blue"></i>&nbsp;
+              {{ user.first_name }} {{ user.last_name }}
             </li>
-            {% endif %}
-
-            <li>
-              <a href="{% url 'logout' %}" title="Log out">
-                <i class="fa fa-sign-out"></i>
-                Log out
-              </a>
-            </li>
-
           </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li ng-class="{active: $location.absUrl().indexOf('add_patient') != -1}">
+              {% link_to "Register patient" pathways.AddPatientPathway %}
+            </li>
+            {% if roles.is_dentist %}
+              <li>
+                <a href="{% url 'unsubmitted-fp17s' %}">
+                  Unsubmitted ({{ stats.my_unsubmitted_fp17s }})
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+
+
+          <div id="logout">
+
+            <ul class="app-info">
+              {% if view.request.user.is_superuser %}
+                <li>
+                  <a href="/admin/" title="Admin">
+                    <i class="fa fa-cogs"></i>
+                    Admin
+                  </a>
+                </li>
+              {% endif %}
+
+              <li>
+                <a href="{% url 'logout' %}" title="Log out">
+                  <i class="fa fa-sign-out"></i>
+                  Log out
+                </a>
+              </li>
+
+            </ul>
+          </div>
         </div>
-      </div>
 
 
-      <div class="col-md-10 main-view col-md-offset-2">
-        <div ng-view autoscroll="true" ng-hide="ready==false"></div>
-        {% include 'logout_modal.html' %}
-        <div growl></div>
+        <div class="col-md-10 main-view col-md-offset-2">
+          {% block odonto_viewport %}
+            <div ng-view autoscroll="true" ng-hide="ready==false"></div>
+          {% endblock %}
+          {% include 'logout_modal.html' %}
+          <div growl></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
