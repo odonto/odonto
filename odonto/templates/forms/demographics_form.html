@@ -10,10 +10,10 @@
     {% input field="Demographics.title" style="vertical" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input field="Demographics.first_name" label="First forename" style="vertical" required=True maxlength="20" minlength="2" %}
+    {% charfield field="Demographics.first_name" label="First forename" required=True maxlength="20" minlength="2" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% input field="Demographics.surname" style="vertical" required=True maxlength="20" minlength="2" %}
+    {% charfield field="Demographics.surname" required=True maxlength="20" minlength="2" %}
   </div>
 </div>
 <div class="row">
@@ -36,21 +36,21 @@
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.street" style="vertical" %}
+    {% input field="Demographics.street" maxlength="32" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.city_or_town" style="vertical" %}
+    {% input field="Demographics.city_or_town" maxlength="32" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.county" style="vertical" %}
+    {% input field="Demographics.county" maxlength="32" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.post_code" style="vertical" label="Post code" %}
+    {% charfield field="Demographics.post_code" maxlength="32" pattern='/^[a-zA-Z\d ]+$/' label="Post code" pattern_error="Letters and numbers only" %}
   </div>
 </div>

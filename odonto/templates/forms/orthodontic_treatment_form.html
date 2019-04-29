@@ -21,10 +21,10 @@
 </div>
 <div class="row content-offset-20">
   <div class="col-md-3">
-    {% input field="OrthodonticTreatment.iotn" style="vertical" %}
+    {% number field="OrthodonticTreatment.iotn" min=0 max=0 %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input field="OrthodonticTreatment.aesthetic_component" style="vertical" %}
+    {% number field="OrthodonticTreatment.aesthetic_component" min=1 max=10 %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="OrthodonticTreatment.iotn_not_applicable" %}

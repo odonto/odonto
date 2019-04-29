@@ -138,6 +138,41 @@ class CompleteFP17Pathway(Fp17Pathway):
     slug         = "complete-fp17"
     finish_button_text = "Submit to BSA"
 
+    steps = (
+        pathway.Step(
+            model=models.Fp17DentalCareProvider,
+            step_controller="CareProviderStepCtrl",
+        ),
+        pathway.Step(
+            model=models.Demographics
+        ),
+        pathway.Step(
+            model=models.Fp17IncompleteTreatment,
+            step_controller="FP17TreatmentStepCtrl",
+            template="".join([
+                "pathway/steps/complete_fp17_pathway/"
+                "fp17_incomplete_treatment_form.html"
+            ])
+        ),
+        pathway.Step(model=models.Fp17Exemptions),
+        pathway.Step(model=models.Fp17ClinicalDataSet),
+        pathway.Step(
+            step_controller="FP17IncompleteTreatmentCtrl",
+            model=models.Fp17OtherDentalServices,
+            template="".join([
+                "pathway/steps/complete_fp17_pathway/"
+                "fp17_other_dental_services_form.html"
+            ])
+        ),
+        pathway.Step(model=models.Fp17TreatmentCategory),
+        pathway.Step(model=models.Fp17Recall),
+        pathway.Step(
+            model=models.Fp17Declaration,
+            display_name="Declaration",
+            base_template="pathway/steps/declaration_base_template.html"
+        ),
+    )
+
     def save(self, data, user=None, patient=None, episode=None):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode

@@ -1,3 +1,4 @@
+{% extends 'pathway/templates/pathway_base.html' %}
 {% load forms %}
 {% block pathway_container %}
 <div class="col-md-12 content-offset pathway">
@@ -14,20 +15,20 @@
 
       {% block pathway_body %}
       {% endblock pathway_body %}
-      <div class="text-center" ng-show="form.$submitted && (!form.$valid || pathway.errors)">
+      <div class="text-center" ng-show="form.$submitted && (form.$invalid || pathway.errors)">
         <strong class="help-block">Please fix the above errors</strong>
       </div>
       {% block pathway_footer %}
-      <div class="pathway-save-button">
-          <button
-          class="btn btn-lg btn-primary btn-save"
-          ng-click="(!pathway.errors && form.$valid) && pathway.finish(editing)"
-          ng-disabled="form.$submitted && (!form.$valid || pathway.errors)"
-        >
-          <i class="[[ pathway.finish_button_icon ]]"></i>
-          [[ pathway.finish_button_text ]]
-        </button>
-      </div>
+        <div ng-hide="pathway.errors" class="pathway-save-button">
+            <button
+            class="btn btn-lg btn-primary btn-save"
+            ng-click="pathway.errors || form.$valid && pathway.finish(editing)"
+            check-form="form"
+          >
+            <i class="[[ pathway.finish_button_icon ]]"></i>
+            [[ pathway.finish_button_text ]]
+          </button>
+        </div>
       {% endblock %}
     </form>
   </div>
