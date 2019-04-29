@@ -1,6 +1,7 @@
 """
 Pathways for Odonto
 """
+from django.db import transaction
 from opal.core import menus, pathway
 from odonto import models
 from odonto.odonto_submissions import serializers
@@ -82,6 +83,7 @@ class AddPatientPathway(OdontoPagePathway):
         models.Demographics,
     )
 
+    @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
@@ -121,6 +123,7 @@ class Fp17Pathway(OdontoPagePathway):
         ),
     )
 
+    @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
@@ -171,6 +174,7 @@ class Fp17OPathway(OdontoPagePathway):
         ),
     )
 
+    @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
