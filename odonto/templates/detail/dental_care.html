@@ -16,8 +16,7 @@
 <!-- mid Treatment View -->
 <div ng-show="episode.fp17_incomplete_treatment[0].date_of_acceptance">
   <h2>
-    FP17 Summary {% include
-    "partials/edit_open_or_complete_fp17_button.html" %}
+    FP17 Summary {% include "partials/edit_open_or_complete_fp17_button.html" %}
   </h2>
   <div class="row">
     <div class="col-md-6">
@@ -29,8 +28,8 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      {% record_panel models.Fp17Exemptions editable=False %} {%
-      record_panel models.Fp17TreatmentCategory editable=False %}
+      {% record_panel models.Fp17Exemptions editable=False %}
+      {% record_panel models.Fp17TreatmentCategory editable=False %}
     </div>
     <div class="col-md-6">
       {% record_panel models.Fp17ClinicalDataSet editable=False %}
