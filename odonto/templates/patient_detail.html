@@ -1,7 +1,7 @@
 {% load panels %}
 {% load forms %}
 {% load links %}
-<div ng-show="patient == null" class="container-fluid content-offset">
+<div ng-show="patient == null" class="content-offset">
   <h1 class="text-center content-offset">
     Patient not found
   </h1>
@@ -28,7 +28,7 @@
 </div>
 
 
-<div class="container-fluid content-offset {% block container_classes %}{% endblock %}"
+<div class="content-offset {% block container_classes %}{% endblock %}"
      ng-hide="patient == null">
   <div class="panel panel-primary panel-container patient-detail {% block panel_classes %}{% endblock %}">
     <!-- Default panel contents -->

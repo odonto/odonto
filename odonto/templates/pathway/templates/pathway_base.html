@@ -1,7 +1,7 @@
 {% load forms %}
 {% block pathway_container %}
-  <div class="container content-offset pathway">
-
+<div class="col-md-12 content-offset pathway">
+  <div class="col-md-12">
     <form name="form" class="form-horizontal" novalidate>
       <div class="row">
         <h1>
@@ -22,7 +22,7 @@
           {% include "pathway/partial/save_button.html" %}
         </div>
       {% endblock %}
-  </form>
-
+    </form>
+  </div>
 </div>
 {% endblock %}
