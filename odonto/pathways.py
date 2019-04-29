@@ -194,6 +194,6 @@ class Fp17OPathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open'
+        episode.stage = 'Open Orthodontic'
         episode.save()
         return patient, episode
