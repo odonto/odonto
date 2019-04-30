@@ -7,7 +7,7 @@
 </div>
 <div class="row">
   <div class="col-md-1">
-    {% select field="Demographics.title" style="vertical" %}
+    {% input field="Demographics.title" style="vertical" maxlength=4 %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% charfield field="Demographics.first_name" label="First forename" required=True maxlength="20" minlength="2" %}
