@@ -21,14 +21,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with open(options.get("file_name")) as csvfile:
             reader = csv.reader(csvfile)
-            for frist, last, performer_number, email in reader:
+            for first, last, performer_number, email in reader:
+                first = first.strip()
+                last = last.strip()
                 username = '{}.{}'.format(
-                    frist.lower().strip(),
-                    last.lower().strip().replace('’', '')
+                    first.lower()[0],
+                    last.lower().replace('’', '')
                 )
                 user = User(
                     username=username,
-                    first_name=frist,
+                    first_name=first,
                     last_name=last,
                     email=email
                 )
