@@ -44,14 +44,7 @@ class SymptomComplex(models.SymptomComplex):
 class PatientConsultation(models.PatientConsultation):
     pass
 
-# we commonly need a referral route, ie how the patient
-# came to the service, but not always.
-# class ReferralRoute(models.ReferralRoute): pass
 
-
-"""
-End Opal core models
-"""
 class PerformerNumber(djangomodels.Model):
     user = djangomodels.ForeignKey(
         models.User, on_delete=djangomodels.CASCADE
@@ -61,7 +54,14 @@ class PerformerNumber(djangomodels.Model):
     @property
     def dpb_pin(self):
         print("This needs to not be hardcoded")
-        return 100000
+
+    def __str__(self):
+        return "{}: {}".format(self.user.username, self.number)
+
+
+"""
+End Opal core models
+"""
 
 
 class Demographics(models.Demographics):
