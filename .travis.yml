@@ -12,7 +12,7 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 script:
-  - opal test --coverage
+  - opal test py --coverage
 after_success:
   - find coverage
   - coveralls-lcov -v -n coverage/Firefox\ 56.0.0\ \(Linux\ 0.0.0\)/lcov.info > coverage/coverage.json
