@@ -68,7 +68,7 @@ def from_message(number):
 def from_model(number):
     patient = opal_models.Patient.objects.create()
     episode = patient.create_episode()
-    patient.fp17dentalcareprovider_set.update(
+    episode.fp17dentalcareprovider_set.update(
         provider_location_number="site_number"
     )
     bcds1 = generate_bcds1()

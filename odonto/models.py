@@ -54,6 +54,7 @@ class PerformerNumber(djangomodels.Model):
     @property
     def dpb_pin(self):
         print("This needs to not be hardcoded")
+        return 100000
 
     def __str__(self):
         return "{}: {}".format(self.user.username, self.number)
