@@ -6,7 +6,7 @@ $cambridge_blue: #A3C9A8;
 $black_coral: #595F72;
 $gunmetal: #21232A;
 $bone: #DDD8C4;
-$error_red: #fcc;
+$error_red: #DE3C4B;
 
 // Color and typography
 .cambridge_blue {
@@ -58,6 +58,10 @@ label{
   font-size: 18px;
   color: $black_coral;
   font-weight: normal;
+}
+
+.help-block {
+    color: $error_red;
 }
 
 .btn {
