@@ -1,0 +1,57 @@
+{% extends "opal.html" %}
+{% load links %}
+{% block odonto_viewport %}
+  <div class="content-offset">
+    {% with object.demographics as demographics %}
+      <h1>{{ demographics.name }} {{ demographics.date_of_birth}} </h1>
+      <div class="row"> <!-- Start demographics banner -->
+        <div class="col-md-4">
+          <p>
+            NHS Number: <b>{{ demographics.nhs_number }}</b>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <p>
+            Sex: <b>{{ demographics.sex }}</b>
+          </p>
+        </div>
+        <div class="col-md-1 col-md-offset-4">
+          <a href="/pathway/#/demographics/{{ object.pk }}/{{ object.episode_set.first.pk }}">
+          <i class="fa fa-pencil edit pull-right"></i>
+        </div>
+      </div> <!-- end demographics banner -->
+
+      <div class="row content-offset">
+        <a class="btn btn-primary pull-right {% if open_fp17 %}disabled{% endif %}"
+           href="/pathway/#/fp17/{{ object.pk }}">
+          Open FP17
+        </a>
+        <a class="btn btn-primary pull-right {% if open_fp17o %}disabled{% endif %}"
+           style="margin-right: 10px;"
+           href="/pathway/#/fp17o/{{ object.pk }}">
+          Open FP17O
+        </a>
+      </div>
+
+      <div class="row content-offset-20">
+        <table class="table">
+          {% for episode in patient.episode_set.all %}
+            <tr>
+              <td>Episode type</td>
+              <td>{{ episode.stage }}</td>
+              <td>Start date ? </td>
+              <td></td>
+              <td>
+                <a href="/pathway/#/fp17-edit/{{ object.pk }}/{{ episode.pk }}"
+                   class="btn btn-small btn-primary">
+                  Edit &nbsp;
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+{% endwith %}
+  </div>
+{% endblock %}
