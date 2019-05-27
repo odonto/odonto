@@ -283,6 +283,12 @@ OPAL_LOG_OUT_DURATION = OPAL_LOG_OUT_MINUTES *60 *1000
 # Enable/Disable autocomplete from navbar search
 OPAL_AUTOCOMPLETE_SEARCH = False
 
+OPAL_DEFAULT_SEARCH_FIELDS = [
+    "demographics__nhs_number",
+    "demographics__first_name",
+    "demographics__surname"
+]
+
 INTEGRATING = False
 
 # OPAL required Django settings you should edit

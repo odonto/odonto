@@ -3,7 +3,9 @@
 {% block odonto_viewport %}
   <div class="content-offset">
     {% with object.demographics as demographics %}
-      <h1>{{ demographics.name }} {{ demographics.date_of_birth}} </h1>
+      <h1 class="patient-detail-heading">
+        {{ demographics.name }} {{ demographics.date_of_birth}}
+      </h1>
       <div class="row"> <!-- Start demographics banner -->
         <div class="col-md-4">
           <p>
@@ -22,32 +24,72 @@
       </div> <!-- end demographics banner -->
 
       <div class="row content-offset">
-        <a class="btn btn-primary pull-right {% if open_fp17 %}disabled{% endif %}"
-           href="/pathway/#/fp17/{{ object.pk }}">
+        <a class="btn btn-primary btn-lg pull-right {% if open_fp17 %}disabled{% endif %} open-claim-button"
+           href="/pathway/#/fp17/{{ object.pk }}/{{ new_fp17_pk }}">
           Open FP17
         </a>
-        <a class="btn btn-primary pull-right {% if open_fp17o %}disabled{% endif %}"
-           style="margin-right: 10px;"
-           href="/pathway/#/fp17o/{{ object.pk }}">
+        <a class="btn btn-primary btn-lg pull-right {% if open_fp17o %}disabled{% endif %} open-claim-button"
+           href="/pathway/#/fp17o/{{ object.pk }}/{{ new_fp17o_pk }}">
           Open FP17O
         </a>
       </div>
 
       <div class="row content-offset-20">
-        <table class="table">
-          {% for episode in patient.episode_set.all %}
+        <table class="table table-striped">
+          {% for episode in episodes %}
+            {% if episode.stage != "New" %}
             <tr>
-              <td>Episode type</td>
-              <td>{{ episode.stage }}</td>
-              <td>Start date ? </td>
-              <td></td>
+              <td>{{ episode.category_name }}</td>
               <td>
-                <a href="/pathway/#/fp17-edit/{{ object.pk }}/{{ episode.pk }}"
+                {% if episode.fp17treatmentcategory_set.get.treatment_category %}
+                  {{ episode.fp17treatmentcategory_set.get.treatment_category }}
+                {% endif %}
+              </td>
+              <td>{{ episode.stage }}</td>
+              <td>{{ episode.fp17dentalcareprovider_set.get.provider_location_number }}</td>
+              <td>{{ episode.fp17dentalcareprovider_set.get.performer }}</td>
+              <td>
+                {% if episode.category_name == "FP17" %}
+                  {{ episode.fp17incompletetreatment_set.get.date_of_acceptance }}
+                {% endif %}
+                {% if episode.category_name == "FP17O" %}
+                  {{ episode.orthodontictreatment_set.get.date_of_completion }}
+                {% endif %}
+              </td>
+              <td>
+                {% if episode.stage != "Submitted" %}
+                  <a
+                    {% if episode.category_name == "FP17" %}
+                      href="/pathway/#/fp17-edit/{{ object.pk }}/{{ episode.pk }}"
+                    {% endif %}
+                    {% if episode.category_name == "FP17O" %}
+                      href="/pathway/#/fp17-o-edit/{{ object.pk }}/{{ episode.pk }}"
+                    {% endif %}
                    class="btn btn-small btn-primary">
                   Edit &nbsp;
                 </a>
+              {% else %}
+                <a href="{% url 'odonto-view-fp17' episode.pk %}" class="btn btn-small btn-default">
+                  View
+                </a>
+              {% endif %}
+              </td>
+              <td>
+                {% if episode.stage != "Submitted" %}
+                  <a
+                    {% if episode.category_name == "FP17" %}
+                      href="{% url 'odonto-submit-fp17' episode.pk %}"
+                    {% endif %}
+                    {% if episode.category_name == "FP17O" %}
+                      href="{% url 'odonto-submit-fp17-o' episode.pk %}"
+                    {% endif %}
+                   class="btn btn-small btn-primary">
+                  Submit
+                </a>
+                {% endif %}
               </td>
             </tr>
+            {% endif %}
           {% endfor %}
         </table>
       </div>

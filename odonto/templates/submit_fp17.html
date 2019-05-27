@@ -1,0 +1,41 @@
+{% extends "opal.html" %}
+{% load links %}
+{% load odonto_subrecords %}
+
+{% block odonto_viewport %}
+  <div class="content-offset">
+    {% with object.patient.demographics as demographics %}
+      <h1>{{ demographics.name }} - Submit FP17</h1>
+      <div class="row"> <!-- Start demographics banner -->
+        <div class="col-md-8">
+          <p>
+            Please review the details of this submission before sending to the BSA
+          </p>
+        </div>
+      </div> <!-- end demographics banner -->
+
+      {% subrecord_row models.Fp17DentalCareProvider %}
+      {% subrecord_row models.Fp17IncompleteTreatment %}
+      {% subrecord_row models.Fp17Exemptions %}
+      {% subrecord_row models.Fp17ClinicalDataSet %}
+      {% subrecord_row models.Fp17OtherDentalServices %}
+      {% subrecord_row models.Fp17TreatmentCategory %}
+      {% subrecord_row models.Fp17Recall %}
+      {% subrecord_row models.Fp17Declaration %}
+
+      <div class="row offset-below">
+        <div class="col-md-6">
+          <form action="." method="POST" >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg">
+              Submit to the BSA
+            </button>
+          </form>
+        </div>
+      </div>
+
+
+
+{% endwith %}
+  </div>
+{% endblock %}

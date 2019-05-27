@@ -1,210 +1,215 @@
-<table class="table table-striped">
-  <tr>
-    <td>
-      Scale and polish
-    </td>
-    <td>
-      <span ng-show="item.scale_and_polish">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Fluoride varnish
-    </td>
-    <td>
-      <span ng-show="item.fluoride_varnish">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Fissure sealants
-    </td>
-    <td>
-      [[ item.fissure_sealants ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Radiographs taken
-    </td>
-    <td>
-      [[ item.radiographs_taken ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Endodontic treatment
-    </td>
-    <td>
-      [[ item.endodontic_treatment ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Permanent fillings and sealant restorations
-    </td>
-    <td>
-      [[ item.permanent_fillings_and_sealant_restorations ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Extractions
-    </td>
-    <td>
-      [[ item.extractions ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Crowns provided
-    </td>
-    <td>
-      [[ item.crowns_provided ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Upper denture acrylic
-    </td>
-    <td>
-      [[ item.upper_denture_acrylic ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Lower denture acrylic
-    </td>
-    <td>
-      [[ item.lower_denture_acrylic ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Upper denture metal
-    </td>
-    <td>
-      [[ item.upper_denture_metal ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Lower denture metal
-    </td>
-    <td>
-      [[ item.lower_denture_metal ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Veneers applied
-    </td>
-    <td>
-      [[ item.veneers_applied ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Inlays
-    </td>
-    <td>
-      [[ item.inlays ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Bridges fitted
-    </td>
-    <td>
-      [[ item.bridges_fitted ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Referral for advanced mandatory services band
-    </td>
-    <td>
-      [[ item.referral_for_advanced_mandatory_services_band ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Examination
-    </td>
-    <td>
-      <span ng-show="item.examination">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Antibiotic items prescribed
-    </td>
-    <td>
-      [[ item.antibiotic_items_prescribed ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Other treatment
-    </td>
-    <td>
-      <span ng-show="item.other_treatment">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Best practice prevention according to Delivering Better Oral Health offered
-    </td>
-    <td>
-      <span ng-show="item.best_practice_prevention">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Decayed teeth permanent
-    </td>
-    <td>
-      [[ item.decayed_teeth_permanent ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Decayed teeth deciduous
-    </td>
-    <td>
-      [[ item.decayed_teeth_deciduous ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Missing teeth permanent
-    </td>
-    <td>
-      [[ item.missing_teeth_permanent ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Missing teeth deciduous
-    </td>
-    <td>
-      [[ item.missing_teeth_deciduous ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Filled teeth permanent
-    </td>
-    <td>
-      [[ item.filled_teeth_permanent ]]
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Filled teeth deciduous
-    </td>
-    <td>
-      [[ item.filled_teeth_deciduous ]]
-    </td>
-  </tr>
-</table>
+<div class="row">
+
+  <div class="col-md-6">
+    <table class="table table-striped">
+      <tr>
+        <td>
+          Scale and polish
+        </td>
+        <td>
+          {% if item.scale_and_polish %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Fluoride varnish
+        </td>
+        <td>
+          {% if item.fluoride_varnish %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Fissure sealants
+        </td>
+        <td>
+          {{ item.fissure_sealants }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Radiographs taken
+        </td>
+        <td>
+          {{ item.radiographs_taken }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Endodontic treatment
+        </td>
+        <td>
+          {{ item.endodontic_treatment }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Permanent fillings and sealant restorations
+        </td>
+        <td>
+          {{ item.permanent_fillings_and_sealant_restorations }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Extractions
+        </td>
+        <td>
+          {{ item.extractions }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Crowns provided
+        </td>
+        <td>
+          {{ item.crowns_provided }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Upper denture acrylic
+        </td>
+        <td>
+          {{ item.upper_denture_acrylic }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Lower denture acrylic
+        </td>
+        <td>
+          {{ item.lower_denture_acrylic }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Upper denture metal
+        </td>
+        <td>
+          {{ item.upper_denture_metal }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Lower denture metal
+        </td>
+        <td>
+          {{ item.lower_denture_metal }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Veneers applied
+        </td>
+        <td>
+          {{ item.veneers_applied }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Inlays
+        </td>
+        <td>
+          {{ item.inlays }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Bridges fitted
+        </td>
+        <td>
+          {{ item.bridges_fitted }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Referral for advanced mandatory services band
+        </td>
+        <td>
+          {{ item.referral_for_advanced_mandatory_services_band }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Examination
+        </td>
+        <td>
+          {% if item.examination %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Antibiotic items prescribed
+        </td>
+        <td>
+          {{ item.antibiotic_items_prescribed }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Other treatment
+        </td>
+        <td>
+          {% if item.other_treatment %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Best practice prevention according to Delivering Better Oral Health offered
+        </td>
+        <td>
+          {% if item.best_practice_prevention %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Decayed teeth permanent
+        </td>
+        <td>
+          {{ item.decayed_teeth_permanent }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Decayed teeth deciduous
+        </td>
+        <td>
+          {{ item.decayed_teeth_deciduous }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Missing teeth permanent
+        </td>
+        <td>
+          {{ item.missing_teeth_permanent }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Missing teeth deciduous
+        </td>
+        <td>
+          {{ item.missing_teeth_deciduous }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Filled teeth permanent
+        </td>
+        <td>
+          {{ item.filled_teeth_permanent }}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Filled teeth deciduous
+        </td>
+        <td>
+          {{ item.filled_teeth_deciduous }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

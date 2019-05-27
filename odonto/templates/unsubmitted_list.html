@@ -1,0 +1,59 @@
+{% extends "opal.html" %}
+
+{% block odonto_viewport %}
+  <div class="content-offset">
+    <h2>Unsubmitted FP17s ({{ view.request.user.get_full_name }})</h2>
+    <table class="table table-striped">
+      {% for episode in view.get_fp17s %}
+        <tr>
+          <td>
+            <a href="{% url 'odonto-patient-detail' episode.patient.pk %}">
+              {{ episode.patient.demographics.name }}
+            </a>
+          </td>
+          <td>{{ episode.category_name }}</td>
+          <td>
+            {% if episode.fp17treatmentcategory_set.get.treatment_category %}
+              {{ episode.fp17treatmentcategory_set.get.treatment_category }}
+            {% endif %}
+          </td>
+          <td>{{ episode.fp17dentalcareprovider_set.get.provider_location_number }}</td>
+          <td>
+            {% if episode.category_name == "FP17" %}
+              {{ episode.fp17incompletetreatment_set.get.date_of_acceptance }}
+            {% endif %}
+            {% if episode.category_name == "FP17O" %}
+              {{ episode.orthodontictreatment_set.get.date_of_completion }}
+            {% endif %}
+          </td>
+
+          <td>
+            <a
+              {% if episode.category_name == "FP17" %}
+                href="/pathway/#/fp17-edit/{{ episode.patient.pk }}/{{ episode.pk }}"
+              {% endif %}
+              {% if episode.category_name == "FP17O" %}
+                href="/pathway/#/fp17-o-edit/{{ episode.patient.pk }}/{{ episode.pk }}"
+              {% endif %}
+              class="btn btn-small btn-primary">
+              Edit &nbsp;
+            </a>
+          </td>
+          <td>
+            <a
+              {% if episode.category_name == "FP17" %}
+                href="{% url 'odonto-submit-fp17' episode.pk %}"
+              {% endif %}
+              {% if episode.category_name == "FP17O" %}
+                href="{% url 'odonto-submit-fp17-o' episode.pk %}"
+              {% endif %}
+              class="btn btn-small btn-primary">
+              Submit
+            </a>
+          </td>
+        </tr>
+
+{% endfor %}
+    </table>
+  </div>
+{% endblock %}

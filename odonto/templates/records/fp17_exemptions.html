@@ -1,122 +1,127 @@
-<table class="table table-striped">
-  <tr>
-    <td>
-      Patient under 18
-    </td>
-    <td>
-      <span ng-show="item.patient_under_18">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Full remission HC2 cert
-    </td>
-    <td>
-      <span ng-show="item.full_remission_hc2_cert">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Partial remission HC3 cert
-    </td>
-    <td>
-      <span ng-show="item.partial_remission_hc3_cert">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Expectant mother
-    </td>
-    <td>
-        <span ng-show="item.expectant_mother">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Nursing mother
-    </td>
-    <td>
-        <span ng-show="item.nursing_mother">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Aged 18 in full time education
-    </td>
-    <td>
-        <span ng-show="item.aged_18_in_full_time_education">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Income support
-    </td>
-    <td>
-        <span ng-show="item.income_support">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        NHS tax credit exemption
-    </td>
-    <td>
-        <span ng-show="item.nhs_tax_credit_exemption">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Income based jobseekers allowance
-    </td>
-    <td>
-        <span ng-show="item.income_based_jobseekers_allowance">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Pension credit guarantee credit
-    </td>
-    <td>
-        <span ng-show="item.pension_credit_guarantee_credit">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Prisoner
-    </td>
-    <td>
-        <span ng-show="item.prisoner">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Income related employment and support allowance
-    </td>
-    <td>
-        <span ng-show="item.income_related_employment_and_support_allowance">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-        Universal credit
-    </td>
-    <td>
-        <span ng-show="item.universal_credit">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      Evidence of exception or remission seen
-    </td>
-    <td>
-        <span ng-show="item.evidence_of_exception_or_remission_seen">X</span>
-    </td>
-  </tr>
-  <tr>
-    <td>
-    Patient charge collected
-    </td>
-    <td>
-    [[ item.patient_charge_collected ]]
-    </td>
-  </tr>
-</table>
+<div class="row">
+
+  <div class="col-md-6">
+    <table class="table table-striped">
+      <tr>
+        <td>
+          Patient under 18
+        </td>
+        <td>
+          {% if item.patient_under_18 %}X{% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Full remission HC2 cert
+        </td>
+        <td>
+          {% if item.full_remission_hc2_cert %}X{% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Partial remission HC3 cert
+        </td>
+        <td>
+          {% if item.partial_remission_hc3_cert %}X{% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Expectant mother
+        </td>
+        <td>
+          {% if item.expectant_mother %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Nursing mother
+        </td>
+        <td>
+          {% if item.nursing_mother %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Aged 18 in full time education
+        </td>
+        <td>
+          {% if item.aged_18_in_full_time_education %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Income support
+        </td>
+        <td>
+          {% if item.income_support %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          NHS tax credit exemption
+        </td>
+        <td>
+          {% if item.nhs_tax_credit_exemption %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Income based jobseekers allowance
+        </td>
+        <td>
+          {% if item.income_based_jobseekers_allowance %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Pension credit guarantee credit
+        </td>
+        <td>
+          {% if item.pension_credit_guarantee_credit %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Prisoner
+        </td>
+        <td>
+          {% if item.prisoner %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Income related employment and support allowance
+        </td>
+        <td>
+          {% if item.income_related_employment_and_support_allowance %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Universal credit
+        </td>
+        <td>
+          {% if item.universal_credit %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Evidence of exception or remission seen
+        </td>
+        <td>
+          {% if item.evidence_of_exception_or_remission_seen %} X {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Patient charge collected
+        </td>
+        <td>
+          {{ item.patient_charge_collected }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

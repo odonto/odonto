@@ -33,7 +33,7 @@ class OdontoPagePathway(pathway.PagePathway):
 
 
 class AddPatientPathway(OdontoPagePathway):
-    display_name = "Add Patient"
+    display_name = "Register Patient"
     slug = "add_patient"
     icon = "fa fa-user"
 
@@ -46,8 +46,8 @@ class AddPatientPathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'New'
-        episode.save()
+        patient.create_episode(category_name='FP17', stage='New')
+        patient.create_episode(category_name='FP17O', stage='New')
         return patient, episode
 
 
@@ -57,32 +57,36 @@ class EditDemographicsPathway(OdontoPagePathway):
     steps = [ models.Demographics ]
 
 
+FP17_STEPS = (
+    pathway.Step(
+        model=models.Fp17DentalCareProvider,
+        step_controller="CareProviderStepCtrl",
+    ),
+    pathway.Step(
+        model=models.Demographics
+    ),
+    pathway.Step(
+        model=models.Fp17IncompleteTreatment,
+        step_controller="FP17TreatmentStepCtrl",
+    ),
+    pathway.Step(model=models.Fp17Exemptions),
+    pathway.Step(model=models.Fp17ClinicalDataSet),
+    pathway.Step(model=models.Fp17OtherDentalServices),
+    pathway.Step(model=models.Fp17TreatmentCategory),
+    pathway.Step(model=models.Fp17Recall),
+    pathway.Step(
+        model=models.Fp17Declaration,
+        display_name="Declaration",
+        base_template="pathway/steps/declaration_base_template.html"
+    ),
+)
+
+
 class Fp17Pathway(OdontoPagePathway):
-    display_name = 'FP17 claim form'
+    display_name = 'Open FP17'
     slug = 'fp17'
-    steps = (
-        pathway.Step(
-            model=models.Fp17DentalCareProvider,
-            step_controller="CareProviderStepCtrl",
-        ),
-        pathway.Step(
-            model=models.Demographics
-        ),
-        pathway.Step(
-            model=models.Fp17IncompleteTreatment,
-            step_controller="FP17TreatmentStepCtrl",
-        ),
-        pathway.Step(model=models.Fp17Exemptions),
-        pathway.Step(model=models.Fp17ClinicalDataSet),
-        pathway.Step(model=models.Fp17OtherDentalServices),
-        pathway.Step(model=models.Fp17TreatmentCategory),
-        pathway.Step(model=models.Fp17Recall),
-        pathway.Step(
-            model=models.Fp17Declaration,
-            display_name="Declaration",
-            base_template="pathway/steps/declaration_base_template.html"
-        ),
-    )
+    finish_button_text = 'Open FP17'
+    steps = FP17_STEPS
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
@@ -91,104 +95,55 @@ class Fp17Pathway(OdontoPagePathway):
         )
         episode.stage = 'Open'
         episode.save()
+        patient.create_episode(category_name='FP17', stage='New')
         return patient, episode
 
 
-class AdminFP17Pathway(Fp17Pathway):
+class EditFP17Pathway(OdontoPagePathway):
     display_name = 'Edit FP17'
     slug = 'fp17-edit'
-
-    @transaction.atomic
-    def save(self, data, user=None, patient=None, episode=None):
-        patient, episode = super().save(
-            data, user=user, patient=patient, episode=episode
-        )
-        # episode.stage = 'Open'
-        # episode.save()
-        return patient, episode
+    steps = FP17_STEPS
 
 
-class CompleteFP17Pathway(Fp17Pathway):
-    display_name = "Submit FP17"
-    slug         = "complete-fp17"
-    finish_button_text = "Submit to BSA"
-
-    steps = (
-        pathway.Step(
-            model=models.Fp17DentalCareProvider,
-            step_controller="CareProviderStepCtrl",
-        ),
-        pathway.Step(
-            model=models.Demographics
-        ),
-        pathway.Step(
-            model=models.Fp17IncompleteTreatment,
-            step_controller="FP17TreatmentStepCtrl",
-            template="".join([
-                "pathway/steps/complete_fp17_pathway/"
-                "fp17_incomplete_treatment_form.html"
-            ])
-        ),
-        pathway.Step(model=models.Fp17Exemptions),
-        pathway.Step(model=models.Fp17ClinicalDataSet),
-        pathway.Step(
-            step_controller="FP17IncompleteTreatmentCtrl",
-            model=models.Fp17OtherDentalServices,
-            template="".join([
-                "pathway/steps/complete_fp17_pathway/"
-                "fp17_other_dental_services_form.html"
-            ])
-        ),
-        pathway.Step(model=models.Fp17TreatmentCategory),
-        pathway.Step(model=models.Fp17Recall),
-        pathway.Step(
-            model=models.Fp17Declaration,
-            display_name="Declaration",
-            base_template="pathway/steps/declaration_base_template.html"
-        ),
-    )
-
-    def save(self, data, user=None, patient=None, episode=None):
-        patient, episode = super().save(
-            data, user=user, patient=patient, episode=episode
-        )
-        episode.stage = 'Submitted'
-        episode.save()
-        patient.create_episode(stage="New")
-        # serializer = serializers.FP17Serializer(episode, user)
-        # serializer.save()
-        return patient, episode
+FP17_O_STEPS = (
+    pathway.Step(
+        model=models.Fp17DentalCareProvider,
+        step_controller="CareProviderStepCtrl",
+    ),
+    pathway.Step(
+        model=models.Demographics
+    ),
+    pathway.Step(model=models.Fp17Exemptions),
+    pathway.Step(
+        model=models.OrthodonticDataSet
+    ),
+    pathway.Step(model=models.OrthodonticAssessment),
+    pathway.Step(model=models.OrthodonticTreatment),
+    pathway.Step(
+        model=models.Fp17Declaration,
+        display_name="Declaration",
+        base_template="pathway/steps/declaration_base_template.html"
+    ),
+)
 
 
 class Fp17OPathway(OdontoPagePathway):
     display_name = 'FP17O claim form'
     slug = 'fp17o'
-    steps = (
-        pathway.Step(
-            model=models.Fp17DentalCareProvider,
-            step_controller="CareProviderStepCtrl",
-        ),
-        pathway.Step(
-            model=models.Demographics
-        ),
-        pathway.Step(model=models.Fp17Exemptions),
-        pathway.Step(
-            model=models.OrthodonticDataSet
-        ),
-        pathway.Step(model=models.OrthodonticAssessment),
-        pathway.Step(model=models.OrthodonticTreatment),
-        pathway.Step(
-            model=models.Fp17Declaration,
-            display_name="Declaration",
-            base_template="pathway/steps/declaration_base_template.html"
-        ),
-    )
+    steps = FP17_O_STEPS
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open Orthodontic'
+        episode.stage = 'Open'
         episode.save()
+        patient.create_episode(category_name='FP17O', stage='New')
         return patient, episode
+
+
+class EditFP17OPathway(OdontoPagePathway):
+    display_name = 'Edit FP17O'
+    slug = 'fp17-o-edit'
+    steps = FP17_O_STEPS

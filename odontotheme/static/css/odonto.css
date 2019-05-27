@@ -69,6 +69,11 @@ label {
   background-color: #DE3C4B;
   border-color: #dd3343; }
 
+.btn-primary.disabled {
+  background-color: #595F72;
+  border-color: #555a6c;
+  color: #DDD8C4; }
+
 .panel.panel-primary .panel-heading .btn-primary,
 .btn-primary,
 .btn-primary:focus {
@@ -116,6 +121,9 @@ h2 {
   margin-top: 24px;
   margin-bottom: 24px; }
 
+.offset-below {
+  margin-bottom: 48px; }
+
 .form-horizontal .control-label,
 label {
   padding-bottom: 8px; }
@@ -143,6 +151,12 @@ label {
 #logout {
   position: fixed;
   bottom: 0px; }
+
+.patient-detail-heading {
+  margin-top: 110px; }
+
+.open-claim-button {
+  margin-right: 12px; }
 
 .form-control {
   font-size: 18px;

@@ -435,6 +435,9 @@ class Fp17NHSBSAFields(models.EpisodeSubrecord):
 class Fp17Declaration(models.EpisodeSubrecord):
     _is_singleton = True
 
+    class Meta:
+        verbose_name = "Declaration"
+
     necessary_care_provided = fields.BooleanField(default=False)
     necessary_care_carried_out = fields.BooleanField(default=False)
 

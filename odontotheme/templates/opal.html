@@ -22,8 +22,13 @@
             </li>
             {% if roles.is_dentist %}
               <li>
-                <a href="{% url 'unsubmitted-fp17s' %}">
-                  Unsubmitted ({{ stats.my_unsubmitted_fp17s }})
+                <a href="{% url 'odonto-unsubmitted-fp17s' %}">
+                  Unsubmitted {% comment %}({{ stats.my_unsubmitted_fp17s }}){% endcomment %}
+                </a>
+              </li>
+              <li>
+                <a href="{% url 'odonto-open-fp17s' %}">
+                  Open
                 </a>
               </li>
             {% endif %}

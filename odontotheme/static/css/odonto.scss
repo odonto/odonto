@@ -100,6 +100,11 @@ label{
     }
 }
 
+.btn-primary.disabled {
+    background-color: $black_coral;
+    border-color: darken($black_coral, 2%);
+    color: $bone;
+}
 
 .panel.panel-primary .panel-heading  .btn-primary,
 .btn-primary,
@@ -158,6 +163,10 @@ h2 {
     margin-bottom: 24px;
 }
 
+.offset-below {
+    margin-bottom: 48px;
+}
+
 .form-horizontal .control-label,
 label{
   padding-bottom: 8px;
@@ -190,6 +199,13 @@ label{
 #logout {
     position: fixed;
     bottom: 0px;
+}
+
+.patient-detail-heading {
+    margin-top: 110px;
+}
+.open-claim-button {
+    margin-right: 12px;
 }
 
 // Unconverted

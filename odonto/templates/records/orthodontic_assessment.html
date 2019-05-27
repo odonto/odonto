@@ -1,36 +1,36 @@
-<span ng-show="item.assessment_and_review">
+{% if item.assessment_and_review %}
      Assessment And Review
    <br />
-</span>
-<span ng-show="item.assess_and_refuse_treatment">
+{% endif %}
+{% if item.assess_and_refuse_treatment %}
      Assess & refuse treatment
    <br />
-</span>
-<span ng-show="item.assess_and_appliance_fitted">
+{% endif %}
+{% if item.assess_and_appliance_fitted %}
      Assess & appliance fitted
    <br />
-</span>
-<span ng-show="item.iotn">
-    [[ item.iotn ]]
+{% endif %}
+{% if item.iotn %}
+    {{ item.iotn }}
    <br />
-</span>
-<span ng-show="item.aesthetic_component">
-    [[ item.aesthetic_component ]]
+{% endif %}
+{% if item.aesthetic_component %}
+    {{ item.aesthetic_component }}
    <br />
-</span>
-<span ng-show="item.iotn_not_applicable">
+{% endif %}
+{% if item.iotn_not_applicable %}
      IOTN not applicable
    <br />
-</span>
-<span ng-show="item.date_of_referral">
-    [[ item.date_of_referral | displayDate ]]
+{% endif %}
+{% if item.date_of_referral %}
+    {{ item.date_of_referral }}
    <br />
-</span>
-<span ng-show="item.date_of_assessment">
-    [[ item.date_of_assessment | displayDate ]]
+{% endif %}
+{% if item.date_of_assessment %}
+    {{ item.date_of_assessment }}
    <br />
-</span>
-<span ng-show="item.date_of_appliance_fitted">
-    [[ item.date_of_appliance_fitted | displayDate ]]
+{% endif %}
+{% if item.date_of_appliance_fitted %}
+    {{ item.date_of_appliance_fitted }}
    <br />
-</span>
+{% endif %}
