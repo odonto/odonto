@@ -1,0 +1,14 @@
+[run]
+source =
+       odonto
+       odontotheme
+
+omit =
+    */migrations/*
+    odonto/test/*
+    odonto/wsgi*
+    odonto/settings.py
+    odonto/local_settings.py
+    odonto/odonto_submissions/tests/*
+    odonto/odonto_submissions/supplier_testing/*
+    odontotheme/tests

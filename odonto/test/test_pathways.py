@@ -3,6 +3,7 @@ Unittests for odonto.pathways
 """
 from opal.models import Episode
 from opal.core.test import OpalTestCase
+
 from odonto import pathways
 
 
