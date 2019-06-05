@@ -449,18 +449,86 @@ class Fp17Declaration(models.EpisodeSubrecord):
 class OrthodonticDataSet(models.EpisodeSubrecord):
     _is_singleton = True
 
-    radiograph = fields.IntegerField(blank=True, null=True)
+    radiograph                = fields.IntegerField(blank=True, null=True)
     removable_upper_appliance = fields.BooleanField(default=False)
     removable_lower_appliance = fields.BooleanField(default=False)
-    fixed_upper_appliance = fields.BooleanField(default=False)
-    fixed_lower_appliance = fields.BooleanField(default=False)
-    function_appliance = fields.BooleanField(default=False)
-    retainer_upper = fields.BooleanField(default=False)
-    retainer_lower = fields.BooleanField(default=False)
+    fixed_upper_appliance     = fields.BooleanField(default=False)
+    fixed_lower_appliance     = fields.BooleanField(default=False)
+    function_appliance        = fields.BooleanField(default=False)
+    retainer_upper            = fields.BooleanField(default=False)
+    retainer_lower            = fields.BooleanField(default=False)
     extractions_upper_right = fields.IntegerField(blank=True, null=True)
     extractions_upper_left = fields.IntegerField(blank=True, null=True)
     extractions_lower_right = fields.IntegerField(blank=True, null=True)
     extractions_lower_left = fields.IntegerField(blank=True, null=True)
+
+
+class ExtractionChart(models.EpisodeSubrecord):
+    """
+    Dental charting uses Zsigmondy-Palmer notation.
+    (https://en.wikipedia.org/wiki/Palmer_notation)
+
+    Tl;dr: UR = Upper Right, etc; Numbers work up from the midline; Letters are deciduous.
+    """
+    _is_singleton = True
+
+    ur_1 = fields.BooleanField(default=False)
+    ur_2 = fields.BooleanField(default=False)
+    ur_3 = fields.BooleanField(default=False)
+    ur_4 = fields.BooleanField(default=False)
+    ur_5 = fields.BooleanField(default=False)
+    ur_6 = fields.BooleanField(default=False)
+    ur_7 = fields.BooleanField(default=False)
+    ur_8 = fields.BooleanField(default=False)
+    ur_9 = fields.BooleanField(default=False)
+    ur_a = fields.BooleanField(default=False)
+    ur_b = fields.BooleanField(default=False)
+    ur_c = fields.BooleanField(default=False)
+    ur_d = fields.BooleanField(default=False)
+    ur_e = fields.BooleanField(default=False)
+    ul_1 = fields.BooleanField(default=False)
+    ul_2 = fields.BooleanField(default=False)
+    ul_3 = fields.BooleanField(default=False)
+    ul_4 = fields.BooleanField(default=False)
+    ul_5 = fields.BooleanField(default=False)
+    ul_6 = fields.BooleanField(default=False)
+    ul_7 = fields.BooleanField(default=False)
+    ul_8 = fields.BooleanField(default=False)
+    ul_9 = fields.BooleanField(default=False)
+    ul_a = fields.BooleanField(default=False)
+    ul_b = fields.BooleanField(default=False)
+    ul_c = fields.BooleanField(default=False)
+    ul_d = fields.BooleanField(default=False)
+    ul_e = fields.BooleanField(default=False)
+    lr_1 = fields.BooleanField(default=False)
+    lr_2 = fields.BooleanField(default=False)
+    lr_3 = fields.BooleanField(default=False)
+    lr_4 = fields.BooleanField(default=False)
+    lr_5 = fields.BooleanField(default=False)
+    lr_6 = fields.BooleanField(default=False)
+    lr_7 = fields.BooleanField(default=False)
+    lr_8 = fields.BooleanField(default=False)
+    lr_9 = fields.BooleanField(default=False)
+    lr_a = fields.BooleanField(default=False)
+    lr_b = fields.BooleanField(default=False)
+    lr_c = fields.BooleanField(default=False)
+    lr_d = fields.BooleanField(default=False)
+    lr_e = fields.BooleanField(default=False)
+    ll_1 = fields.BooleanField(default=False)
+    ll_2 = fields.BooleanField(default=False)
+    ll_3 = fields.BooleanField(default=False)
+    ll_4 = fields.BooleanField(default=False)
+    ll_5 = fields.BooleanField(default=False)
+    ll_6 = fields.BooleanField(default=False)
+    ll_7 = fields.BooleanField(default=False)
+    ll_8 = fields.BooleanField(default=False)
+    ll_9 = fields.BooleanField(default=False)
+    ll_a = fields.BooleanField(default=False)
+    ll_b = fields.BooleanField(default=False)
+    ll_c = fields.BooleanField(default=False)
+    ll_d = fields.BooleanField(default=False)
+    ll_e = fields.BooleanField(default=False)
+
 
 
 class OrthodonticAssessment(models.EpisodeSubrecord):

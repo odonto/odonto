@@ -477,3 +477,25 @@ table.patient-list {
   background: none;
   border-color:  rgb(72, 124, 188);
 }
+
+.dental-chart .right {
+    float: right;
+}
+.chart-tooth {
+    float: left;
+}
+.chart-tooth label.notation {
+    display: block;
+    border: 1px solid #ccc;
+    padding: 0px;
+    margin-top: 1px;
+    text-align: center;
+}
+.btn.btn-tooth {
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  text-align: center;
+  padding: 8px 0px 0px 0px;
+}

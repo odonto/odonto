@@ -117,6 +117,7 @@ FP17_O_STEPS = (
     pathway.Step(
         model=models.OrthodonticDataSet
     ),
+    pathway.Step(model=models.ExtractionChart),
     pathway.Step(model=models.OrthodonticAssessment),
     pathway.Step(model=models.OrthodonticTreatment),
     pathway.Step(
