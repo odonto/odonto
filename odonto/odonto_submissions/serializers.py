@@ -275,7 +275,7 @@ def get_bcds1(episode, user, message_reference_number):
     """
 
     bcds1 = BCDS1()
-    bcds1.contact_number = "194689/0001"
+    bcds1.contract_number = "194689/0001"
     bcds1.message_reference_number = message_reference_number
     bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
     provider = episode.patient.fp17dentalcareprovider_set.get()
