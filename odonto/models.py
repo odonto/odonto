@@ -3,6 +3,7 @@ Odonto models.
 """
 from django.db.models import fields
 from django.db import models as djangomodels
+from django.conf import settings
 
 from opal import models
 from opal.core.fields import enum
@@ -45,16 +46,12 @@ class PatientConsultation(models.PatientConsultation):
     pass
 
 
-class PerformerNumber(djangomodels.Model):
-    user = djangomodels.ForeignKey(
+class Performer(djangomodels.Model):
+    user = djangomodels.OneToOneField(
         models.User, on_delete=djangomodels.CASCADE
     )
-    number = fields.TextField()
-
-    @property
-    def dpb_pin(self):
-        print("This needs to not be hardcoded")
-        return 100000
+    number = fields.TextField(blank=True, default="")
+    dpb_pin = fields.TextField(blank=True, default="")
 
     def __str__(self):
         return "{}: {}".format(self.user.username, self.number)
@@ -120,6 +117,10 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
         ('010054', 'Ward 15, WGH'),
     )
 
+    @property
+    def location_id(self):
+        return settings.LOCATION
+
     # I'm pretty sure this should not be handled as a PatientSubrecord
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
@@ -140,6 +141,11 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     performer = fields.CharField(
         max_length=255, blank=True, null=True
     )
+
+    def get_performer(self):
+        return Performer.objects.filter(
+            user__username=self.performer
+        ).first()
 
     class Meta:
         verbose_name = "Performer name and clinic"

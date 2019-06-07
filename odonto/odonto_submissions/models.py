@@ -1,13 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import transaction
 from opal.models import Episode
-from odonto.odonto_submissions import send_message
-
-
-class MessageSentException(Exception):
-    pass
+from . import dpb_api
+from .exceptions import MessageSentException
 
 
 class SystemClaim(models.Model):
@@ -58,23 +54,15 @@ class Submission(models.Model):
     class Meta:
         ordering = ('-serial_number',)
         get_latest_by = 'serial_number'
-        unique_together = (
-            ('message', 'serial_number'),
-        )
 
     def __str__(self):
         return "pk={0.pk} raw_xml={0.raw_xml!r}".format(self)
 
 
 class BCDS1Message(models.Model):
-    episode = models.ForeignKey(
+    episode = models.OneToOneField(
         Episode,
-        on_delete=models.CASCADE
-    )
-    user = models.ForeignKey(
-        User,
-        null=True,
-        on_delete=models.SET_NULL
+        on_delete=models.CASCADE,
     )
 
     created = models.DateTimeField(default=timezone.now)
@@ -83,9 +71,6 @@ class BCDS1Message(models.Model):
     class Meta:
         ordering = ('created',)
         get_latest_by = 'created'
-        unique_together = (
-            ('episode', 'user'),
-        )
 
     def new_submission(self):
         from odonto.odonto_submissions import serializers
@@ -121,8 +106,9 @@ class BCDS1Message(models.Model):
                 "Please create a new submission with create_submission"
             )
         current_submission.state = Submission.SENT
+        content = dpb_api.send_message(current_submission.raw_xml)
+        current_submission.response = content
         current_submission.save()
-        send_message.send_message(current_submission.xml)
 
     def __str__(self):
         current_submission = self.submission_set.last()

@@ -1,13 +1,14 @@
 import datetime
 from collections import OrderedDict
-from fp17.bcds1 import Patient, Treatment
+from django.conf import settings
+from fp17.bcds1 import Treatment
 from odonto import models
 from django.db import models as django_models
+from lxml import etree
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
-from odonto.odonto_submissions.models import BCDS1Message
 
 
 class TreatmentSerializer(object):
@@ -150,7 +151,7 @@ class ExceptionSerializer(object):
         "universal_credit": e.UNIVERSAL_CREDIT,
         "income_related_employment_and_support_allowance":
             e.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE,
-        # "patient_charge_collected" TODO this is not exist
+        # "patient_charge_collected" TODO this dos not exist
     }
 
     def __init__(self, model_instance):
@@ -245,28 +246,28 @@ class DemographicsTranslater(object):
             result.append(cleaned_line[:32])
         return result
 
+    def surname(self):
+        return clean_non_alphanumeric(self.model_instance.surname).upper()
 
-def get_envelope(episode, user, serial_number):
+    def first_name(self):
+        return clean_non_alphanumeric(self.model_instance.first_name).upper()
+
+
+def get_envelope(episode, serial_number):
     """
     Gets the envelope information
     """
     envelope = Envelope()
-    care_provider = episode.patient.fp17dentalcareprovider_set.get()
-    envelope.origin = care_provider.provider_location_number
+    envelope.origin = str(settings.SITE_ID)
+    envelope.destination = settings.DESTINATION
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
-
-    print("Assumed destination is 1234")
-    # This is probably the correct one, but the above is what we used in test messages
-    # envelope.destination = "A0DPB"
-
-    print("We are expecting to receive a approval number")
     envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     return envelope
 
 
-def get_bcds1(episode, user, message_reference_number):
+def get_bcds1(episode, message_reference_number):
     """
     creates a a BDCS1 message segmant.
 
@@ -275,19 +276,25 @@ def get_bcds1(episode, user, message_reference_number):
     """
 
     bcds1 = BCDS1()
-    bcds1.contract_number = "194689/0001"
-    bcds1.message_reference_number = message_reference_number
-    bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
-    provider = episode.patient.fp17dentalcareprovider_set.get()
-    bcds1.location = provider.provider_location_number
-    performer_number = user.performernumber_set.first()
 
-    if not performer_number:
+    # According to the spec this is a required random number
+    bcds1.contract_number = "1234567890"
+    bcds1.message_reference_number = message_reference_number
+
+    performer = episode.fp17dentalcareprovider_set.get().get_performer()
+
+    if not performer or not performer.number or not performer.pin:
         raise ValueError(
-            "No performer number for user {}".format(user.id)
+            "No performer credentials for user {}".format(
+                 episode.fp17dentalcareprovider_set.get().performer
+            )
         )
 
-    bcds1.performer_number = performer_number.number
+    bcds1.dpb_pin = performer.dpb_pin
+    bcds1.performer_number = performer.number
+
+    provider = episode.fp17dentalcareprovider_set.get()
+    bcds1.location = provider.provider_location_number
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
     return bcds1
@@ -296,13 +303,14 @@ def get_bcds1(episode, user, message_reference_number):
 def translate_episode_to_xml(
     episode, user, serial_number, message_reference_number
 ):
-    bcds1 = get_bcds1(episode, user, message_reference_number)
-    envelope = get_envelope(episode, user, serial_number)
+    bcds1 = get_bcds1(episode, message_reference_number)
+    envelope = get_envelope(episode, serial_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
+    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
 
 
 def clean_non_alphanumeric(name):
@@ -319,12 +327,8 @@ def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
     # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = clean_non_alphanumeric(
-        demographics.surname
-    ).upper()
-    bcds1.patient.forename = clean_non_alphanumeric(
-        demographics.first_name
-    ).upper()
+    bcds1.patient.surname = demographics_translater.surname()
+    bcds1.patient.forename = demographics_translater.first_name()
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
@@ -363,52 +367,6 @@ def translate_to_bdcs1(bcds1, episode):
     if charge:
         bcds1.patient_charge_pence = charge
     return bcds1
-
-
-class FP17Serializer():
-    def __init__(self, episode, user):
-        self.episode = episode
-        self.user = user
-        self._errors = None
-
-    def is_valid(self):
-        performer_number = self.user.performernumber.first()
-        if not performer_number:
-            self._errors = "no performer information for user"
-            return False
-
-        envelope = get_envelope(self.episode, self.user, 1)
-        errors = envelope.get_errors()
-        if errors:
-            self._errors = errors
-            return False
-
-        bdcs1 = get_bcds1(self.episode, self.user, "1")
-        errors = bdcs1.get_errors()
-        if errors:
-            self._errors = errors
-            return False
-        root = envelope.generate_xml()
-        errors = Envelope.validate_xml(root)
-        if errors:
-            self._errors = errors
-            return False
-        return True
-
-    @property
-    def errors(self):
-        if not self._errors:
-            self.is_valid()
-
-        return self._errors
-
-    def save(self):
-        message = BCDS1Message(
-            user=self.user,
-            episode=self.episode
-        )
-        message.save()
-        return message
 
 
 
