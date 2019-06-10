@@ -81,9 +81,9 @@ class PatientDetailView(DetailView):
         return context
 
 
-class SubmitFP17DetailView(DetailView):
+class FP17SummaryDetailView(DetailView):
     model = Episode
-    template_name = 'submit_fp17.html'
+    template_name = 'fp17_summary.html'
 
 
 class ViewFP17DetailView(DetailView):
@@ -92,9 +92,9 @@ class ViewFP17DetailView(DetailView):
     template_name = 'view_fp17.html'
 
 
-class SubmitFP17ODetailView(DetailView):
+class FP17OSummaryDetailView(DetailView):
     model = Episode
-    template_name = 'submit_fp17_o.html'
+    template_name = 'fp17_o_summary.html'
 
 
 class ViewFP17ODetailView(DetailView):

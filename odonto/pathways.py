@@ -103,7 +103,7 @@ CHECK_STEP_FP17 = pathway.Step(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
     step_controller="RedirectIfValid",
-    base_summary_url="/submit-fp17/",
+    base_summary_url="/summary-fp17/",
     display_name="unused"
 )
 
@@ -176,7 +176,7 @@ CHECK_STEP_FP17O = pathway.Step(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
     step_controller="RedirectIfValid",
-    base_summary_url="/submit-fp17-o/",
+    base_summary_url="/summary-fp17-o/",
     display_name="unused"
 )
 

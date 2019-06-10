@@ -14,7 +14,7 @@
 
 <div class="row offset-below">
   <div class="col-md-6">
-    <button ng-show="!isFormValid"
+    <button ng-show="isFormValid === false"
       class="btn btn-lg btn-primary btn-save"
       ng-click="isFormValid = true"
       ng-disabled="isFormValid"
@@ -22,7 +22,7 @@
       <i class="[[ pathway.finish_button_icon ]]"></i>
       Review
     </button>
-    <button ng-show="isFormValid"
+    <button ng-show="isFormValid === true"
       class="btn btn-lg btn-primary btn-save"
       ng-click="pathway.finish(editing)"
     >
