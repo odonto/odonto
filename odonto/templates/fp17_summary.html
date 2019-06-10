@@ -1,6 +1,7 @@
 {% load links %}
 {% load odonto_subrecords %}
 
+<div class="row">
 {% with object.patient.demographics as demographics %}
   <div class="row"> <!-- Start demographics banner -->
     <div class="col-md-8">
@@ -19,3 +20,4 @@
   {% subrecord_row models.Fp17Recall %}
   {% subrecord_row models.Fp17Declaration %}
 {% endwith %}
+</div>
