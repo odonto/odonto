@@ -19,7 +19,6 @@ def has_open_fp17o(patient):
             stage__in=['New', 'Submitted']).exists()
 
 
-
 class OpenFP17s(TemplateView):
     template_name = "open_list.html"
 
@@ -86,13 +85,6 @@ class SubmitFP17DetailView(DetailView):
     model = Episode
     template_name = 'submit_fp17.html'
 
-    def post(self, request, *args, **kwargs):
-        # Validation ?
-        episode = self.get_object()
-        episode.stage = 'Submitted'
-        episode.save()
-        return redirect(reverse('odonto-patient-detail', args=[episode.patient.pk]))
-
 
 class ViewFP17DetailView(DetailView):
 
@@ -100,21 +92,11 @@ class ViewFP17DetailView(DetailView):
     template_name = 'view_fp17.html'
 
 
-
-
 class SubmitFP17ODetailView(DetailView):
     model = Episode
     template_name = 'submit_fp17_o.html'
 
-    def post(self, request, *args, **kwargs):
-        # Validation ?
-        episode = self.get_object()
-        episode.stage = 'Submitted'
-        episode.save()
-        return redirect(reverse('odonto-patient-detail', args=[episode.patient.pk]))
-
 
 class ViewFP17ODetailView(DetailView):
-
     model = Episode
     template_name = 'view_fp17_o.html'

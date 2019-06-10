@@ -1,0 +1,34 @@
+{% extends 'pathway/templates/page_pathway.html' %}
+
+{% block pathway_body %}
+<span ng-show="isFormValid === true">
+  <div ng-include="baseSummaryUrl + episode.id + '/'"></div>
+</span>
+<span ng-show="isFormValid === false">
+  {{ block.super }}
+</span>
+{% endblock %}
+
+
+{% block pathway_footer %}
+
+<div class="row offset-below">
+  <div class="col-md-6">
+    <button ng-show="!isFormValid"
+      class="btn btn-lg btn-primary btn-save"
+      ng-click="isFormValid = true"
+      ng-disabled="isFormValid"
+    >
+      <i class="[[ pathway.finish_button_icon ]]"></i>
+      Review
+    </button>
+    <button ng-show="isFormValid"
+      class="btn btn-lg btn-primary btn-save"
+      ng-click="pathway.finish(editing)"
+    >
+      <i class="[[ pathway.finish_button_icon ]]"></i>
+      Submit to the BSA
+    </button>
+  </div>
+</div>
+{% endblock pathway_footer %}

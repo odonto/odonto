@@ -80,10 +80,10 @@
                 {% if episode.stage != "Submitted" %}
                   <a
                     {% if episode.category_name == "FP17" %}
-                      href="{% url 'odonto-submit-fp17' episode.pk %}"
+                      href="/pathway/#/fp17-submit/{{ object.pk }}/{{ episode.pk }}"
                     {% endif %}
                     {% if episode.category_name == "FP17O" %}
-                      href="{% url 'odonto-submit-fp17-o' episode.pk %}"
+                      href="/pathway/#/fp17-o-submit/{{ object.pk }}/{{ episode.pk }}"
                     {% endif %}
                    class="btn btn-small btn-primary">
                   Submit
