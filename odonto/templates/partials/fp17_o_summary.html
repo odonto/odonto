@@ -1,23 +1,11 @@
 {% load links %}
 {% load odonto_subrecords %}
 
-<div class="row">
-{% with object.patient.demographics as demographics %}
-  <div class="row"> <!-- Start demographics banner -->
-    <div class="col-md-8">
-      <p>
-        Please review the details of this submission before sending to the BSA
-      </p>
-    </div>
-  </div> <!-- end demographics banner -->
+{% subrecord_row models.Fp17DentalCareProvider pathway=pathway %}
+{% subrecord_row models.Fp17Exemptions pathway=pathway %}
 
-  {% subrecord_row models.Fp17DentalCareProvider pathway=1 %}
-  {% subrecord_row models.Fp17Exemptions pathway=1 %}
+{% subrecord_row models.OrthodonticDataSet pathway=pathway %}
+{% subrecord_row models.OrthodonticAssessment pathway=pathway %}
+{% subrecord_row models.OrthodonticTreatment pathway=pathway %}
 
-  {% subrecord_row models.OrthodonticDataSet pathway=1 %}
-  {% subrecord_row models.OrthodonticAssessment pathway=1 %}
-  {% subrecord_row models.OrthodonticTreatment pathway=1 %}
-
-  {% subrecord_row models.Fp17Declaration pathway=1 %}
-{% endwith %}
-</div>
+{% subrecord_row models.Fp17Declaration pathway=pathway %}

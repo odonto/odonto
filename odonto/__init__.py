@@ -14,5 +14,6 @@ class Application(application.OpalApplication):
         'js/openodonto/controllers/careprovider.step.controller.js',
         'js/openodonto/controllers/fp17treatment.step.controller.js',
         'js/openodonto/controllers/complete_fp17_other_dental_services.controller.step.js',
-        'js/openodonto/controllers/display_summary.step.controller.js'
+        'js/openodonto/controllers/display_summary.step.controller.js',
+        'js/openodonto/controllers/summary.controller.js'
     ]
