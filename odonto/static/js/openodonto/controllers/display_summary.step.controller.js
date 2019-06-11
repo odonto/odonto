@@ -1,4 +1,4 @@
-angular.module('opal.controllers').controller('RedirectIfValid', function(scope, step, episode, $timeout, $rootScope){
+angular.module('opal.controllers').controller('DisplaySummaryStep', function(scope, step, episode, $timeout, $rootScope){
   "use strict";
   $rootScope.isFormValid = null;
 

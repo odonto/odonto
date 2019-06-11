@@ -102,7 +102,7 @@ class Fp17Pathway(OdontoPagePathway):
 CHECK_STEP = pathway.Step(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
-    step_controller="RedirectIfValid",
+    step_controller="DisplaySummaryStep",
     display_name="unused"
 )
 
