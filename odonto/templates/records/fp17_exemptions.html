@@ -7,7 +7,7 @@
           Patient under 18
         </td>
         <td>
-          {% if item.patient_under_18 %}X{% endif %}
+          <span ng-show="item.patient_under_18">X</span>
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           Full remission HC2 cert
         </td>
         <td>
-          {% if item.full_remission_hc2_cert %}X{% endif %}
+          <span ng-show="item.full_remission_hc2_cert">X</span>
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           Partial remission HC3 cert
         </td>
         <td>
-          {% if item.partial_remission_hc3_cert %}X{% endif %}
+          <span ng-show="item.partial_remission_hc3_cert">X</span>
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           Expectant mother
         </td>
         <td>
-          {% if item.expectant_mother %} X {% endif %}
+          <span ng-show="item.expectant_mother">X</span>
         </td>
       </tr>
       <tr>
@@ -39,7 +39,7 @@
           Nursing mother
         </td>
         <td>
-          {% if item.nursing_mother %} X {% endif %}
+          <span ng-show="item.nursing_mother">X</span>
         </td>
       </tr>
       <tr>
@@ -47,7 +47,7 @@
           Aged 18 in full time education
         </td>
         <td>
-          {% if item.aged_18_in_full_time_education %} X {% endif %}
+          <span ng-show="item.aged_18_in_full_time_education">X</span>
         </td>
       </tr>
       <tr>
@@ -55,7 +55,7 @@
           Income support
         </td>
         <td>
-          {% if item.income_support %} X {% endif %}
+          <span ng-show="item.income_support">X</span>
         </td>
       </tr>
       <tr>
@@ -63,7 +63,7 @@
           NHS tax credit exemption
         </td>
         <td>
-          {% if item.nhs_tax_credit_exemption %} X {% endif %}
+          <span ng-show="item.nhs_tax_credit_exemption">X</span>
         </td>
       </tr>
       <tr>
@@ -71,7 +71,7 @@
           Income based jobseekers allowance
         </td>
         <td>
-          {% if item.income_based_jobseekers_allowance %} X {% endif %}
+          <span ng-show="item.income_based_jobseekers_allowance">X</span>
         </td>
       </tr>
       <tr>
@@ -79,7 +79,7 @@
           Pension credit guarantee credit
         </td>
         <td>
-          {% if item.pension_credit_guarantee_credit %} X {% endif %}
+          <span ng-show="item.pension_credit_guarantee_credit">X</span>
         </td>
       </tr>
       <tr>
@@ -87,7 +87,7 @@
           Prisoner
         </td>
         <td>
-          {% if item.prisoner %} X {% endif %}
+          <span ng-show="item.prisoner">X</span>
         </td>
       </tr>
       <tr>
@@ -95,7 +95,7 @@
           Income related employment and support allowance
         </td>
         <td>
-          {% if item.income_related_employment_and_support_allowance %} X {% endif %}
+          <span ng-show="item.income_related_employment_and_support_allowance">X</span>
         </td>
       </tr>
       <tr>
@@ -103,7 +103,7 @@
           Universal credit
         </td>
         <td>
-          {% if item.universal_credit %} X {% endif %}
+          <span ng-show="item.universal_credit">X</span>
         </td>
       </tr>
       <tr>
@@ -111,7 +111,7 @@
           Evidence of exception or remission seen
         </td>
         <td>
-          {% if item.evidence_of_exception_or_remission_seen %} X {% endif %}
+          <span ng-show="item.evidence_of_exception_or_remission_seen">X</span>
         </td>
       </tr>
       <tr>
@@ -119,7 +119,7 @@
           Patient charge collected
         </td>
         <td>
-          {{ item.patient_charge_collected }}
+          [[ item.patient_charge_collected ]]
         </td>
       </tr>
     </table>

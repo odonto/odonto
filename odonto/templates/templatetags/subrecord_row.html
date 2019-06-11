@@ -2,6 +2,8 @@
 <div class="row content-offset-20">
   <div class="col-md-12">
     <h2>{{ model.get_display_name }}</h2>
-    {% subrecord model %}
+    <span ng-repeat="item in {{ object_list }}">
+      {% include model.get_display_template %}
+    </span>
   </div>
 </div>

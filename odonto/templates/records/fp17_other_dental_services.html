@@ -7,7 +7,7 @@
           Treatment on referral
         </td>
         <td>
-          {% if item.treatment_on_referral %} X {% endif %}
+          <span ng-show="item.treatment_on_referral">X</span>
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           Free repair or replacement
         </td>
         <td>
-          {% if item.free_repair_or_replacement %} X {% endif %}
+          <span ng-show="item.free_repair_or_replacement">X</span>
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           Further treatment within 2 months
         </td>
         <td>
-          {% if item.further_treatment_within_2_months %} X {% endif %}
+          <span ng-show="item.further_treatment_within_2_months">X</span>
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           Domicillary services
         </td>
         <td>
-          {% if item.domicillary_services %} X {% endif %}
+          <span ng-show="item.domicillary_services">X</span>
         </td>
       </tr>
       <tr>
@@ -39,7 +39,7 @@
           Sedation services
         </td>
         <td>
-          {% if item.sedation_services %} X {% endif %}
+          <span ng-show="item.sedation_services">X</span>
         </td>
       </tr>
     </table>

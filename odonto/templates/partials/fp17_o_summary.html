@@ -11,13 +11,13 @@
     </div>
   </div> <!-- end demographics banner -->
 
-  {% subrecord_row models.Fp17DentalCareProvider %}
-  {% subrecord_row models.Fp17Exemptions %}
+  {% subrecord_row models.Fp17DentalCareProvider pathway=1 %}
+  {% subrecord_row models.Fp17Exemptions pathway=1 %}
 
-  {% subrecord_row models.OrthodonticDataSet %}
-  {% subrecord_row models.OrthodonticAssessment %}
-  {% subrecord_row models.OrthodonticTreatment %}
+  {% subrecord_row models.OrthodonticDataSet pathway=1 %}
+  {% subrecord_row models.OrthodonticAssessment pathway=1 %}
+  {% subrecord_row models.OrthodonticTreatment pathway=1 %}
 
-  {% subrecord_row models.Fp17Declaration %}
+  {% subrecord_row models.Fp17Declaration pathway=1 %}
 {% endwith %}
 </div>

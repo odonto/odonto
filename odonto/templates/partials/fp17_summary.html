@@ -1,0 +1,23 @@
+{% load links %}
+{% load odonto_subrecords %}
+
+<div class="row">
+{% with object.patient.demographics as demographics %}
+  <div class="row"> <!-- Start demographics banner -->
+    <div class="col-md-8">
+      <p>
+        Please review the details of this submission before sending to the BSA
+      </p>
+    </div>
+  </div> <!-- end demographics banner -->
+
+  {% subrecord_row models.Fp17DentalCareProvider pathway=1 %}
+  {% subrecord_row models.Fp17IncompleteTreatment pathway=1 %}
+  {% subrecord_row models.Fp17Exemptions pathway=1 %}
+  {% subrecord_row models.Fp17ClinicalDataSet pathway=1 %}
+  {% subrecord_row models.Fp17OtherDentalServices pathway=1 %}
+  {% subrecord_row models.Fp17TreatmentCategory pathway=1 %}
+  {% subrecord_row models.Fp17Recall pathway=1 %}
+  {% subrecord_row models.Fp17Declaration pathway=1 %}
+{% endwith %}
+</div>

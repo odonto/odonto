@@ -3,7 +3,7 @@
     Date of acceptance:
   </div>
   <div class="col-md-9">
-    <b>{{ item.date_of_acceptance }}</b>
+    <b>[[ item.date_of_acceptance | displayDate ]]</b>
   </div>
 </div>
 <div class="row">
@@ -11,6 +11,6 @@
     Date of completion or last visit:
   </div>
   <div class="col-md-9">
-    <b>{{ item.completion_or_last_visit }}</b>
+    <b>[[ item.completion_or_last_visit | displayDate ]]</b>
   </div>
 </div>

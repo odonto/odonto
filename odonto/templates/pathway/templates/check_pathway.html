@@ -2,7 +2,7 @@
 
 {% block pathway_body %}
 <span ng-show="isFormValid === true">
-  <div ng-include="baseSummaryUrl + episode.id + '/'"></div>
+  {% include pathway.summary_template %}
 </span>
 <span ng-show="isFormValid === false">
   {{ block.super }}
