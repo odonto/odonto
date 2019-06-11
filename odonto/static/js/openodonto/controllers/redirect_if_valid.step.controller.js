@@ -1,9 +1,8 @@
-angular.module('opal.controllers').controller('RedirectIfValid', function(scope, step, episode, $rootScope){
+angular.module('opal.controllers').controller('RedirectIfValid', function(scope, step, episode, $timeout, $rootScope){
   "use strict";
+  $rootScope.isFormValid = null;
 
-  $rootScope.baseSummaryUrl = step.base_summary_url;
-
-  setTimeout(function(){
+  $timeout(function(){
     scope.form.$setSubmitted();
     if(scope.form.$valid){
       $rootScope.isFormValid = true;
@@ -11,5 +10,5 @@ angular.module('opal.controllers').controller('RedirectIfValid', function(scope,
     else{
       $rootScope.isFormValid = false;
     }
-  }, 1);
+  });
 });
