@@ -138,7 +138,6 @@ TEMPLATES = [
                 'opal.context_processors.models',
                 'opal.core.pathway.context_processors.pathways',
                 'odonto.context_processors.odonto_roles',
-                'odonto.context_processors.stats',
             ],
         },
     },

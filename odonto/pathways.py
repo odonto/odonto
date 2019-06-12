@@ -85,7 +85,6 @@ FP17_STEPS = (
 class Fp17Pathway(OdontoPagePathway):
     display_name = 'Open FP17'
     slug = 'fp17'
-    finish_button_text = 'Open FP17'
     steps = FP17_STEPS
 
     @transaction.atomic
@@ -117,6 +116,7 @@ FP17_O_STEPS = (
     pathway.Step(
         model=models.OrthodonticDataSet
     ),
+    pathway.Step(model=models.ExtractionChart),
     pathway.Step(model=models.OrthodonticAssessment),
     pathway.Step(model=models.OrthodonticTreatment),
     pathway.Step(

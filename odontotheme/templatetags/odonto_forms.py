@@ -3,6 +3,7 @@ Templatetags for form/modal helpers
 """
 from django import template
 from opal.templatetags.forms import extract_common_args, _input
+from opal.core.subrecords import get_subrecord_from_model_name
 
 register = template.Library()
 
@@ -74,3 +75,40 @@ def charfield(*args, **kwargs):
             ctx[field] = kwargs[field]
     return ctx
 
+
+@register.inclusion_tag('_helpers/extraction_chart.html')
+def extraction_chart(*args, **kwargs):
+    ctx = {}
+    return ctx
+
+
+@register.inclusion_tag('_helpers/chart_tooth.html')
+def chart_tooth(notation, **kwargs):
+    """
+    Displays a box which can be used as part of a dental chart
+    """
+    label_value    = notation[2:]
+    label          = True
+    label_position = 'below'
+
+    if notation[1].lower == 'l':
+        try:
+            int(notation[1:])
+            label = False # We don't label lower permanent
+        except:
+            # Lower deciduous are labelled below
+            label_position = 'above'
+
+    model = "editing.{0}.{1}".format(
+        get_subrecord_from_model_name('ExtractionChart').get_api_name(),
+        "{0}_{1}".format(notation[:2], label_value).lower()
+    )
+
+    ctx = {
+        'notation'      : notation,
+        'label'         : label,
+        'label_value'   : label_value,
+        'label_position': label_position,
+        'model'         : model
+    }
+    return ctx
