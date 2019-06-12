@@ -38,7 +38,7 @@ def generate_envelope():
     envelope.origin = site_number
     envelope.destination = "1234"
     envelope.approval_number = 1
-    envelope.release_timestamp = datetime.datetime.utcnow()
+    envelope.release_timestamp = datetime.datetime(2019, 1, 2, 10, 30)
     envelope.test = True
     envelope.serial_number = serial_number
     return envelope
