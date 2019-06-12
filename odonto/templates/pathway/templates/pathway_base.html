@@ -14,10 +14,12 @@
 
       {% block pathway_body %}
       {% endblock pathway_body %}
+
+      {% block pathway_footer %}
       <div class="text-center" ng-show="form.$submitted && (!form.$valid || pathway.errors)">
         <strong class="help-block">Please fix the above errors</strong>
       </div>
-      {% block pathway_footer %}
+
       <div class="pathway-save-button">
           <button
           class="btn btn-lg btn-primary btn-save"

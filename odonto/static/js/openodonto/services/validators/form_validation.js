@@ -1,13 +1,7 @@
-angular.module('opal.controllers').controller(
-  'DisplaySummaryStep', function(scope, step, episode, $timeout, $rootScope, ExemptionsAndRemissionsValidator
-){
-  "use strict";
-  $rootScope.isFormValid = null;
-  $rootScope.showSummary = null;
-  var validators = [
-    ExemptionsAndRemissionsValidator
-  ];
-  var getValidationErrors = function(editing){
+angular.module('opal.services').factory('FormValidation', function(){
+  "use strict"
+
+  var getValidationErrors = function(editing, validators){
     // errors are aggregated from the
     // validators and are of the form
     // {step_api_name: field_name: ["some errors"]}
@@ -35,23 +29,5 @@ angular.module('opal.controllers').controller(
     return errors;
   }
 
-
-  var validate = function(){
-    if(scope.form.$valid){
-      var errors = getValidationErrors(scope.editing);
-      $rootScope.isFormValid = !_.size(errors);
-      $rootScope.errors = errors;
-    }
-    else{
-      $rootScope.isFormValid = false;
-    }
-  }
-
-  scope.$watch("editing", validate, true);
-
-  $timeout(function(){
-    scope.form.$setSubmitted();
-    validate();
-    $rootScope.showSummary = $rootScope.isFormValid;
-  });
+  return getValidationErrors;
 });
