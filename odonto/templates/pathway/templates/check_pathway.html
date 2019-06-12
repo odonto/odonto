@@ -1,7 +1,7 @@
 {% extends 'pathway/templates/page_pathway.html' %}
 
 {% block pathway_body %}
-<span ng-show="isFormValid === true">
+<span ng-show="showSummary === true">
   <div class="row">
     <div class="row"> <!-- Start demographics banner -->
       <div class="col-md-8">
@@ -13,25 +13,33 @@
     {% include pathway.summary_template with pathway=1 %}
   </div>
 </span>
-<span ng-show="isFormValid === false">
-  {{ block.super }}
+<span ng-show="showSummary === false">
+  {% for step in pathway.get_steps %}
+    {% include step.get_base_template %}
+    <div class="help-block text-center" ng-repeat="err in errors['{{ step.get_api_name }}'].step_error">
+      [[ err ]]
+    </div>
+  {% endfor %}
 </span>
 {% endblock %}
 
 
 {% block pathway_footer %}
+<div class="text-center" ng-show="isFormValid === false">
+  <strong class="help-block">Please fix the above errors</strong>
+</div>
 
 <div class="row offset-below">
   <div class="col-md-6">
-    <button ng-show="isFormValid === false"
+    <button ng-show="showSummary === false"
       class="btn btn-lg btn-primary btn-save"
-      ng-click="isFormValid = true"
-      ng-disabled="isFormValid"
+      ng-click="showSummary = true"
+      ng-disabled="!isFormValid"
     >
       <i class="[[ pathway.finish_button_icon ]]"></i>
       Review
     </button>
-    <button ng-show="isFormValid === true"
+    <button ng-show="showSummary === true"
       class="btn btn-lg btn-primary btn-save"
       ng-click="pathway.finish(editing)"
     >
