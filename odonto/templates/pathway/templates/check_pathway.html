@@ -16,8 +16,8 @@
 <span ng-show="showSummary === false">
   {% for step in pathway.get_steps %}
     {% include step.get_base_template %}
-    <div class="help-block text-center" ng-repeat="err in errors['{{ step.get_api_name }}'].step_error">
-      [[ err ]]
+    <div class="help-block text-center" ng-show="errors['{{ step.get_api_name }}'].step_error">
+      [[ errors['{{ step.get_api_name }}'].step_error ]]
     </div>
   {% endfor %}
 </span>
