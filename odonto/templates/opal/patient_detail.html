@@ -58,7 +58,6 @@
               </td>
               <td>
                 {% if episode.stage != "Submitted" %}
-                {% if roles.is_dentist %}
                   <a
                     {% if episode.category_name == "FP17" %}
                       href="/pathway/#/fp17-edit/{{ object.pk }}/{{ episode.pk }}"
@@ -69,7 +68,6 @@
                    class="btn btn-small btn-primary">
                   Edit &nbsp;
                 </a>
-                  {% endif %}
               {% else %}
                 <a
                   {% if episode.category_name == "FP17" %}
@@ -85,6 +83,7 @@
               </td>
               <td>
                 {% if episode.stage != "Submitted" %}
+                  {% if roles.is_dentist %}
                   <a
                     {% if episode.category_name == "FP17" %}
                       href="/pathway/#/fp17-submit/{{ object.pk }}/{{ episode.pk }}"
@@ -95,6 +94,7 @@
                    class="btn btn-small btn-primary">
                   Submit
                 </a>
+                  {% endif %}
                 {% endif %}
               </td>
             </tr>

@@ -1,7 +1,7 @@
 angular.module('opal.services').factory('ExemptionsAndRemissionsValidator', function(){
   // validators return a function that takes a patient
   // returns an object of
-  // {stepApiName: field/step_error: [errorMessages]}
+  // {stepApiName: field/step_error: errorMessages}
 
 
   // if a patient has neither exemption fields

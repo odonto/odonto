@@ -1,0 +1,15 @@
+<div class="chart-tooth">
+  {% if label %}
+    {% if label_position == 'above' %}
+      <label class="notation">{{ label_value }}</label>
+    {% endif %}
+  {% endif %}
+
+  <label uib-btn-checkbox ng-model="{{ model }}" class="btn btn-lg btn-default btn-tooth" />
+
+  {% if label %}
+    {% if label_position == 'below' %}
+      <label class="notation">{{ label_value }}</label>
+    {% endif %}
+  {% endif %}
+</div>

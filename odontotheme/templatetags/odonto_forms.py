@@ -5,6 +5,7 @@ from django import template
 from opal.templatetags.forms import (
     extract_common_args, _input, _model_and_field_from_path
 )
+from opal.core.subrecords import get_subrecord_from_model_name
 
 register = template.Library()
 
@@ -42,7 +43,6 @@ def btn_checkbox(*args, **kwargs):
     return get_odonto_common_args(kwargs)
 
 
-
 @register.inclusion_tag('_helpers/btn_radio.html')
 def btn_radio(*args, **kwargs):
     return get_odonto_common_args(kwargs)
@@ -65,6 +65,7 @@ def number(*args, **kwargs):
     ctx = extract_numeric_args(kwargs)
     ctx["style"] = "vertical"
     return ctx
+
 
 @register.inclusion_tag('_helpers/number.html')
 def teeth(*args, **kwargs):
@@ -109,3 +110,40 @@ def odonto_datepicker(*args, **kwargs):
     context["user_options"] = kwargs.pop("user_options", False)
     return context
 
+
+@register.inclusion_tag('_helpers/extraction_chart.html')
+def extraction_chart(*args, **kwargs):
+    ctx = {}
+    return ctx
+
+
+@register.inclusion_tag('_helpers/chart_tooth.html')
+def chart_tooth(notation, **kwargs):
+    """
+    Displays a box which can be used as part of a dental chart
+    """
+    label_value    = notation[2:]
+    label          = True
+    label_position = 'below'
+
+    if notation[1].lower == 'l':
+        try:
+            int(notation[1:])
+            label = False # We don't label lower permanent
+        except:
+            # Lower deciduous are labelled below
+            label_position = 'above'
+
+    model = "editing.{0}.{1}".format(
+        get_subrecord_from_model_name('ExtractionChart').get_api_name(),
+        "{0}_{1}".format(notation[:2], label_value).lower()
+    )
+
+    ctx = {
+        'notation'      : notation,
+        'label'         : label,
+        'label_value'   : label_value,
+        'label_position': label_position,
+        'model'         : model
+    }
+    return ctx
