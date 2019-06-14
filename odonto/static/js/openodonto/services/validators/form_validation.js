@@ -12,16 +12,11 @@ angular.module('opal.services').factory('FormValidation', function(){
       var result = validator(editing);
       if(_.size(result)){
         _.each(result, function(step_error_obj, step_name){
-          _.each(step_error_obj, function(errors_array, field_name){
+          _.each(step_error_obj, function(error, field_name){
             if(!errors[step_name]){
               errors[step_name] = {};
             }
-            if(!errors[step_name][field_name]){
-              errors[step_name][field_name] = [];
-            }
-            _.each(errors_array, function(err){
-              errors[step_name][field_name].push(err);
-            })
+            errors[step_name][field_name] = error;
           });
         });
       }

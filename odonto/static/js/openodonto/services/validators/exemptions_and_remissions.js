@@ -40,9 +40,7 @@ angular.module('opal.services').factory('ExemptionsAndRemissionsValidator', func
     if(exceptionOrCharge(editing)){
       return {
         fp17_exemptions: {
-          step_error: [
-            "Please select an exemption or add the charge"
-          ]
+          step_error: "Please select an exemption or add the charge"
         }
       }
     }
