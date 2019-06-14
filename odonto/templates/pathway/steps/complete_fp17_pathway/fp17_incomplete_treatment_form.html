@@ -2,10 +2,10 @@
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% datepicker field="Fp17IncompleteTreatment.date_of_acceptance" style="vertical" required=True %}
+    {% odonto_datepicker field="Fp17IncompleteTreatment.date_of_acceptance" style="vertical" required=True %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% datepicker field="Fp17IncompleteTreatment.completion_or_last_visit" required=True style="vertical" %}
+    {% odonto_datepicker field="Fp17IncompleteTreatment.completion_or_last_visit" required=True style="vertical" %}
     <div class="row">
       <button class="btn btn-secondary" ng-click="completion_same_as_acceptance()">
         Same as acceptance
