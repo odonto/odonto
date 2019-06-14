@@ -6,7 +6,8 @@ from requests.auth import HTTPBasicAuth
 from .exceptions import MessageSentException
 
 
-URL = "https://ebusiness.dpb.nhs.uk/claims.asp"
+CLAIMS_URL = "https://ebusiness.dpb.nhs.uk/claims.asp"
+RESPONSES_URL = "https://ebusiness.dpb.nhs.uk/responses.asp"
 
 
 def send_message(xml):
@@ -17,7 +18,7 @@ def send_message(xml):
     )
     if getattr(settings, "SEND_MESSAGES") or not settings.DEBUG:
         result = requests.post(
-            URL,
+            CLAIMS_URL,
             auth=HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
             data=xml
         )
@@ -35,3 +36,10 @@ def send_message(xml):
     else:
         logging.info("NOT SENDING MESSAGE BECAUSE DEBUG=TRUE")
         return "DEBUG mode: not sent"
+
+
+def get_responses():
+    return requests.get(
+        RESPONSES_URL,
+        auth=HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
+    )
