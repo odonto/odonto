@@ -6,6 +6,7 @@
     <table class="table table-striped">
       {% for episode in view.get_fp17s %}
         <tr>
+          {% comment %}
           <td>
             <a href="{% url 'odonto-patient-detail' episode.patient.pk %}">
               {{ episode.patient.demographics.name }}
@@ -24,7 +25,7 @@
             {% endif %}
             {% if episode.category_name == "FP17O" %}
               {{ episode.orthodontictreatment_set.get.date_of_completion }}
-            {% endif %}
+            {% endif %
           </td>
 
           <td>
@@ -39,9 +40,10 @@
               Edit &nbsp;
             </a>
           </td>
+          {% endcomment %}
         </tr>
 
-{% endfor %}
+        {% endfor %}
     </table>
   </div>
 {% endblock %}
