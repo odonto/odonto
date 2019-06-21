@@ -235,15 +235,6 @@ label{
     color: #eee;
 }
 
-#side-nav .navbar-nav{
-    width: 100%;
-}
-
-#side-nav {
-    background-color: $odonto_blue;
-    position: fixed;
-}
-
 .main-view{
     overflow-x: auto;
 }
@@ -400,32 +391,61 @@ label{
   padding-left: 32px;
   color: white;
 }
-#side-nav ul.nav li i {
-  padding-right: 4px;
-}
-#side-nav ul.nav li a{
-  padding-left: 26px;
-}
-#side-nav li a{
-    color: white;
-}
-#side-nav ul.nav li:hover,
-#side-nav ul.nav  li a:hover{
-  background-color: #2c64a8;
-  color: white;
+
+
+#side-nav {
+    background-color: $odonto_blue;
+    position: fixed;
+
+
+
+    .navbar-nav{
+        width: 100%;
+    }
+
+    ul.nav li{
+        float: none;
+
+        i {
+            padding-right: 4px;
+        }
+
+        a{
+            padding-left: 26px;
+        }
+
+        .badge{
+            float: right;
+            background-color: white;
+            color: #124c91;
+        }
+
+        &:hover, a:hover{
+            background-color: #2c64a8;
+            color: white;
+            cursor: pointer;
+        }
+
+        &.active, &.active a{
+            background-color: #124c91;
+        }
+    }
+
+    hr {
+        margin-left: 5%
+    }
+
+    a{
+        color: white;
+    }
 }
 
-#side-nav ul.nav  li a:hover{
-  cursor: pointer
-}
-#side-nav ul li.active,
-#side-nav ul li.active a{
-    background-color: #124c91;
+// #side-nav ul li.active,
+// #side-nav ul li.active a{
+//     background-color: #124c91;
 
-}
-#side-nav hr {
-  margin-left: 5%
-}
+// }
+
 
 .outer-container {
   overflow-y: scroll;
