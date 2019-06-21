@@ -6,7 +6,6 @@
     <table class="table table-striped">
       {% for episode in view.get_fp17s %}
         <tr>
-          {% comment %}
           <td>
             <a href="{% url 'odonto-patient-detail' episode.patient.pk %}">
               {{ episode.patient.demographics.name }}
@@ -40,7 +39,6 @@
               Edit &nbsp;
             </a>
           </td>
-          {% endcomment %}
         </tr>
 
         {% endfor %}
