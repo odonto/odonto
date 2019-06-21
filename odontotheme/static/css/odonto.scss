@@ -483,14 +483,19 @@ table.patient-list {
 }
 .chart-tooth {
     float: left;
-}
-.chart-tooth label.notation {
-    display: block;
-    border: 1px solid #ccc;
-    padding: 0px;
     margin-top: 1px;
-    text-align: center;
+    margin-bottom: 1px;
+
+    label.notation {
+        display: block;
+        border: 1px solid #ccc;
+        padding: 0px;
+        text-align: center;
+        margin-top: 2px;
+        margin-bottom: 0;
+    }
 }
+
 .btn.btn-tooth {
   min-width: 40px;
   min-height: 40px;

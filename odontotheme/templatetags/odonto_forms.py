@@ -87,15 +87,15 @@ def chart_tooth(notation, **kwargs):
     """
     Displays a box which can be used as part of a dental chart
     """
-    label_value    = notation[2:]
-    label          = True
+    label_value = notation[2:]
+    label = kwargs.pop("label", True)
     label_position = 'below'
 
     if notation[1].lower == 'l':
         try:
             int(notation[1:])
-            label = False # We don't label lower permanent
-        except:
+            label = False  # We don't label lower permanent
+        except Exception:
             # Lower deciduous are labelled below
             label_position = 'above'
 
