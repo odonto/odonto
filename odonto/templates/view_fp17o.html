@@ -1,0 +1,18 @@
+{% extends "opal.html" %}
+{% load links %}
+{% load odonto_subrecords %}
+
+{% block odonto_viewport %}
+  <div class="content-offset">
+    {% with object.patient.demographics as demographics %}
+      <h1>{{ demographics.name }} - FP17O</h1>
+
+      {% subrecord_row models.Fp17DentalCareProvider %}
+      {% subrecord_row models.Fp17Exemptions %}
+
+      {% subrecord_row models.OrthodonticDataSet %}
+      {% subrecord_row models.OrthodonticAssessment %}
+      {% subrecord_row models.OrthodonticTreatment %}
+{% endwith %}
+  </div>
+{% endblock %}

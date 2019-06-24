@@ -68,7 +68,7 @@ same name and DOB"
 class EditDemographicsPathway(OdontoPagePathway):
     display_name = 'Edit Demographics'
     slug         = 'demographics'
-    steps = [ models.Demographics ]
+    steps = [models.Demographics]
 
 
 FP17_STEPS = (
@@ -88,11 +88,6 @@ FP17_STEPS = (
     pathway.Step(model=models.Fp17OtherDentalServices),
     pathway.Step(model=models.Fp17TreatmentCategory),
     pathway.Step(model=models.Fp17Recall),
-    pathway.Step(
-        model=models.Fp17Declaration,
-        display_name="Declaration",
-        base_template="pathway/steps/declaration_base_template.html"
-    ),
 )
 
 
@@ -164,11 +159,6 @@ FP17_O_STEPS = (
     pathway.Step(model=models.ExtractionChart),
     pathway.Step(model=models.OrthodonticAssessment),
     pathway.Step(model=models.OrthodonticTreatment),
-    pathway.Step(
-        model=models.Fp17Declaration,
-        display_name="Declaration",
-        base_template="pathway/steps/declaration_base_template.html"
-    ),
 )
 
 

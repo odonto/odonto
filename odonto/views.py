@@ -25,7 +25,7 @@ class OpenFP17s(TemplateView):
     template_name = "open_list.html"
 
     def get_fp17s(self):
-        qs = Episode.objects.all()
+        qs = Episode.objects.filter(stage="Open")
         qs = episode_categories.get_episodes_for_user(
             qs, self.request.user
         )
@@ -76,7 +76,6 @@ class FP17SummaryDetailView(DetailView):
 
 
 class ViewFP17DetailView(DetailView):
-
     model = Episode
     template_name = 'view_fp17.html'
 
