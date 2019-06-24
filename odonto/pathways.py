@@ -1,10 +1,12 @@
 """
 Pathways for Odonto
 """
+import logging
 from django.db import transaction
 from opal.core import menus, pathway
 from odonto import models
 from odonto.odonto_submissions import serializers
+from plugins.add_patient_step import FindPatientStep
 
 
 class OdontoPagePathway(pathway.PagePathway):
@@ -36,9 +38,12 @@ class AddPatientPathway(OdontoPagePathway):
     display_name = "Register Patient"
     slug = "add_patient"
     icon = "fa fa-user"
+    template = "pathway/templates/add_patient_base.html"
 
     steps = (
-        models.Demographics,
+        FindPatientStep(
+            base_template="pathway/steps/step_base_without_display_name.html"
+        ),
     )
 
     @transaction.atomic
@@ -48,6 +53,15 @@ class AddPatientPathway(OdontoPagePathway):
         )
         patient.create_episode(category_name='FP17', stage='New')
         patient.create_episode(category_name='FP17O', stage='New')
+        demographics = patient.demographics()
+        if models.Demographics.objects.filter(
+            first_name=demographics.first_name,
+            surname=demographics.surname,
+            date_of_birth=demographics.date_of_birth
+        ).count() > 2:
+            err = "A patient has been saved but another already exists with the \
+same name and DOB"
+            logging.error(err)
         return patient, episode
 
 

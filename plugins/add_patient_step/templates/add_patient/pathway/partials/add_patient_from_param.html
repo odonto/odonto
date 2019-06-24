@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-md-12 text-center">
+        <p class="lead">
+            Add Patient
+        </p>
+    </div>
+</div>
+<div class="col-sm-8">
+    {% include models.Demographics.get_form_template %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="horizontal-form">
+            {% datepicker field="Referral.date_of_referral" style="vertical" %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="horizontal-form">
+            {% datepicker field="Referral.date_referral_received" style="vertical" %}
+            </div>
+        </div>
+    </div>
+</div>
