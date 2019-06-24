@@ -416,7 +416,7 @@ label {
   background-color: white;
   color: #124c91;
 }
-#side-nav ul.nav li:hover, #side-nav ul.nav li a:hover {
+#side-nav ul.nav li:hover a, #side-nav ul.nav li a:hover, #side-nav ul.nav li:hover {
   background-color: #2c64a8;
   color: white;
   cursor: pointer;
