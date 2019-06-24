@@ -42,10 +42,10 @@
           <td>
             <a
               {% if episode.category_name == "FP17" %}
-                href="{% url 'odonto-submit-fp17' episode.pk %}"
+                href="{% url 'odonto-summary-fp17' episode.pk %}"
               {% endif %}
               {% if episode.category_name == "FP17O" %}
-                href="{% url 'odonto-submit-fp17-o' episode.pk %}"
+                href="{% url 'odonto-summary-fp17-o' episode.pk %}"
               {% endif %}
               class="btn btn-small btn-primary">
               Submit

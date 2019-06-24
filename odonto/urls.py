@@ -11,13 +11,13 @@ urlpatterns = [
     path('patient/<int:pk>/', views.PatientDetailView.as_view(),
          name='odonto-patient-detail'),
 
-    path('submit-fp17/<int:pk>/', views.SubmitFP17DetailView.as_view(),
-         name='odonto-submit-fp17'),
+    path('summary-fp17/<int:pk>/', views.FP17SummaryDetailView.as_view(),
+         name='odonto-summary-fp17'),
     path('view-fp17/<int:pk>/', views.ViewFP17DetailView.as_view(),
          name='odonto-view-fp17'),
 
-    path('submit-fp17-o/<int:pk>/', views.SubmitFP17ODetailView.as_view(),
-         name='odonto-submit-fp17-o'),
+    path('summary-fp17-o/<int:pk>/', views.FP17OSummaryDetailView.as_view(),
+         name='odonto-summary-fp17-o'),
     path('view-fp17-o/<int:pk>/', views.ViewFP17ODetailView.as_view(),
          name='odonto-view-fp17-o'),
 

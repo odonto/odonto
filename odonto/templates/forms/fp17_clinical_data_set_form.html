@@ -1,4 +1,3 @@
-{% load forms %}
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-3">
@@ -28,7 +27,7 @@
     {% number field="Fp17ClinicalDataSet.radiographs_taken" min="0" maxlength="2" unit="number" %}
   </div>
   <div class="col-md-1 col-md-offset-1">
-    {% input field="Fp17ClinicalDataSet.endodontic_treatment" style="vertical" %}
+    {% charfield field="Fp17ClinicalDataSet.endodontic_treatment" %}
   </div>
   <div class="col-md-1 col-md-offset-1">
     {% teeth field="Fp17ClinicalDataSet.veneers_applied" %}
@@ -70,7 +69,7 @@
     {% teeth field="Fp17ClinicalDataSet.inlays" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" style="vertical" %}
+    {% charfield label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% teeth field="Fp17ClinicalDataSet.permanent_fillings_and_sealant_restorations" %}

@@ -7,7 +7,7 @@
           Treatment category
         </td>
         <td>
-          {{ item.treatment_category }}
+          [[ item.treatment_category ]]
         </td>
       </tr>
       <tr>
@@ -15,7 +15,7 @@
           Urgent treatment
         </td>
         <td>
-          {% if item.urgent_treatment %} X {% endif %}
+          <span ng-show="item.urgent_treatment">X</span>
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           Regulation 11 replacement appliance
         </td>
         <td>
-          {% if item.regulation_11_replacement_appliance %} X {% endif %}
+          <span ng-show="item.regulation_11_replacement_appliance">X</span>
         </td>
       </tr>
       <tr>
@@ -31,7 +31,7 @@
           Prescription only
         </td>
         <td>
-          {% if item.prescription_only %} X {% endif %}
+          <span ng-show="item.prescription_only">X</span>
         </td>
       </tr>
       <tr>
@@ -39,7 +39,7 @@
           Denture repairs
         </td>
         <td>
-          {% if item.denture_repairs %} X {% endif %}
+          <span ng-show="item.denture_repairs">X</span>
         </td>
       </tr>
       <tr>
@@ -47,7 +47,7 @@
           Bridge repairs
         </td>
         <td>
-          {% if item.bridge_repairs %} X {% endif %}
+          <span ng-show="item.bridge_repairs">X</span>
         </td>
       </tr>
       <tr>
@@ -55,7 +55,7 @@
           Arrest of bleeding
         </td>
         <td>
-          {% if item.arrest_of_bleeding %} X {% endif %}
+          <span ng-show="item.arrest_of_bleeding">X</span>
         </td>
       </tr>
       <tr>
@@ -63,7 +63,7 @@
           Removal of sutures
         </td>
         <td>
-          {% if item.removal_of_sutures %} X {% endif %}
+          <span ng-show="item.removal_of_sutures">X</span>
         </td>
       </tr>
     </table>

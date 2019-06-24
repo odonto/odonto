@@ -2,12 +2,12 @@
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.nhs_number" label="NHS number" maxlength="10" style="vertical" %}
+    {% charfield field="Demographics.nhs_number" label="NHS number" maxlength="10" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-1">
-    {% input field="Demographics.title" style="vertical" maxlength=4 %}
+    {% charfield field="Demographics.title" style="vertical" maxlength=4 %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% charfield field="Demographics.first_name" label="First forename" required=True maxlength="20" minlength="2" %}
@@ -26,27 +26,27 @@
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.phone_number" style="vertical" element_name="tel" %}
+    {% charfield field="Demographics.phone_number" style="vertical" element_name="tel" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.house_number_or_name" style="vertical" %}
+    {% charfield field="Demographics.house_number_or_name" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.street" maxlength="32" style="vertical" %}
+    {% charfield field="Demographics.street" maxlength="32" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.city_or_town" maxlength="32" style="vertical" %}
+    {% charfield field="Demographics.city_or_town" maxlength="32" style="vertical" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% input field="Demographics.county" maxlength="32" style="vertical" %}
+    {% charfield field="Demographics.county" maxlength="32" style="vertical" %}
   </div>
 </div>
 <div class="row">

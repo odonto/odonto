@@ -1,5 +1,6 @@
 <div class="form-group"
      {% if visibility %} {{ visibility|safe }} {% endif %}
+     ng-class="{'errored-state': errors['{{ model_api_name }}']['{{ field_name }}']}"
      >
   <label
     class="control-label {% ifequal style "horizontal" %}col-sm-3{% endifequal %}">
@@ -17,8 +18,6 @@
                uib-datepicker-popup="dd/MM/yyyy"
                ng-model="{{ model }}"
                is-open="{{ formname }}[{{ element_name }} + '_open']"
-               min-date="{{ mindate}}"
-               max-date="maxDate"
                show-button-bar="false"
                show-weeks="false"
                name="[[ {{ element_name}} ]]"
@@ -43,6 +42,9 @@
      <span class="help-block" ng-show="({{ formname }}[{{ element_name }}].$dirty || {{ formname }}.$submitted) && {{ formname }}[{{ element_name }}].$error.required">
        {{ label }} is required
      </span>
-   {% endif %}
+    {% endif %}
+    <span class="help-block" ng-show="errors['{{ model_api_name }}']['{{ field_name }}']">
+      [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
+    </span>
   </div>
 </div>

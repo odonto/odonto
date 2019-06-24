@@ -69,7 +69,14 @@
                   Edit &nbsp;
                 </a>
               {% else %}
-                <a href="{% url 'odonto-view-fp17' episode.pk %}" class="btn btn-small btn-default">
+                <a
+                  {% if episode.category_name == "FP17" %}
+                    href="/#/summary/fp17/{{ object.pk }}/{{ episode.pk }}"
+                  {% endif %}
+                  {% if episode.category_name == "FP17O" %}
+                    href="/#/summary/fp17o/{{ object.pk }}/{{ episode.pk }}"
+                  {% endif %}
+                  class="btn btn-small btn-default">
                   View
                 </a>
               {% endif %}
@@ -79,10 +86,10 @@
                   {% if roles.is_dentist %}
                   <a
                     {% if episode.category_name == "FP17" %}
-                      href="{% url 'odonto-submit-fp17' episode.pk %}"
+                      href="/pathway/#/fp17-submit/{{ object.pk }}/{{ episode.pk }}"
                     {% endif %}
                     {% if episode.category_name == "FP17O" %}
-                      href="{% url 'odonto-submit-fp17-o' episode.pk %}"
+                      href="/pathway/#/fp17-o-submit/{{ object.pk }}/{{ episode.pk }}"
                     {% endif %}
                    class="btn btn-small btn-primary">
                   Submit

@@ -13,10 +13,10 @@
 </div>
 <div class="row content-offset-20">
   <div class="col-md-3">
-    {% input field="OrthodonticAssessment.iotn" style="vertical" %}
+    {% charfield field="OrthodonticAssessment.iotn" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% input field="OrthodonticAssessment.aesthetic_component" style="vertical" %}
+    {% charfield field="OrthodonticAssessment.aesthetic_component" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="OrthodonticAssessment.iotn_not_applicable" %}
@@ -24,13 +24,13 @@
 </div>
 <div class="row content-offset-20">
   <div class="col-md-3">
-    {% datepicker field="OrthodonticAssessment.date_of_referral" style="vertical" %}
+    {% odonto_datepicker field="OrthodonticAssessment.date_of_referral" style="vertical" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% datepicker field="OrthodonticAssessment.date_of_assessment" style="vertical" %}
+    {% odonto_datepicker field="OrthodonticAssessment.date_of_assessment" style="vertical" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% datepicker field="OrthodonticAssessment.date_of_appliance_fitted" style="vertical" %}
+    {% odonto_datepicker field="OrthodonticAssessment.date_of_appliance_fitted" style="vertical" %}
   </div>
 </div>
 

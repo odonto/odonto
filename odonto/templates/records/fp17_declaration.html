@@ -1,15 +1,15 @@
-{% if item.necessary_care_provided %}
+<span ng-show="item.necessary_care_provided">
      Necessary Care Provided
    <br />
-{% endif %}
-{% if item.necessary_care_carried_out %}
+</span>
+<span ng-show="item.necessary_care_carried_out">
      Necessary Care Carried Out
    <br />
-{% endif %}
-{% if item.signature %}
+  </span>
+<span ng-show="item.signature">
     [[ item.signature ]]
    <br />
-{% endif %}
-{% if item.signature_date %}
-    [[ item.signature_date | shortDate ]]
-{% endif %}
+  </span>
+<span ng-show="item.signature_date">
+  [[ item.signature_date | shortDate ]]
+</span>
