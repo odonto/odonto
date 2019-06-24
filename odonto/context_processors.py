@@ -25,6 +25,8 @@ def odonto_roles(request):
 
 
 def episode_counts(request):
+    if not request.user.is_authenticated:
+        return {}
     episodes = Episode.objects.all()
     for_user = episode_categories.get_episodes_for_user(
         episodes, request.user
