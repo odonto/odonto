@@ -76,7 +76,6 @@ label {
 .btn-default {
   color: #595F72;
 }
-
 .btn-default.active {
   background-color: #A3C9A8;
   border-color: #89ba90;
@@ -175,7 +174,6 @@ label {
   top: 300px;
   margin-left: 25px;
 }
-
 @media (max-width: 991px) {
   #episode-history {
     display: none;
@@ -225,15 +223,6 @@ label {
 
 .navbar-default a.navbar-brand:hover {
   color: #eee;
-}
-
-#side-nav .navbar-nav {
-  width: 100%;
-}
-
-#side-nav {
-  background-color: #487CBC;
-  position: fixed;
 }
 
 .main-view {
@@ -390,7 +379,6 @@ label {
   background-color: #487DBC;
   height: 100vh;
 }
-
 @media (max-width: 991px) {
   #side-nav {
     display: none;
@@ -407,35 +395,40 @@ label {
   color: white;
 }
 
+#side-nav {
+  background-color: #487CBC;
+  position: fixed;
+}
+#side-nav .navbar-nav {
+  width: 100%;
+}
+#side-nav ul.nav li {
+  float: none;
+}
 #side-nav ul.nav li i {
   padding-right: 4px;
 }
-
 #side-nav ul.nav li a {
   padding-left: 26px;
 }
-
-#side-nav li a {
-  color: white;
+#side-nav ul.nav li .badge {
+  float: right;
+  background-color: white;
+  color: #124c91;
 }
-
-#side-nav ul.nav li:hover,
-#side-nav ul.nav li a:hover {
+#side-nav ul.nav li:hover, #side-nav ul.nav li a:hover {
   background-color: #2c64a8;
   color: white;
-}
-
-#side-nav ul.nav li a:hover {
   cursor: pointer;
 }
-
-#side-nav ul li.active,
-#side-nav ul li.active a {
+#side-nav ul.nav li.active, #side-nav ul.nav li.active a {
   background-color: #124c91;
 }
-
 #side-nav hr {
   margin-left: 5%;
+}
+#side-nav a {
+  color: white;
 }
 
 .outer-container {
@@ -476,8 +469,7 @@ table.patient-list {
 .panel {
   border: none;
   background: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
   border-radius: 0px;
 }
 
@@ -496,17 +488,14 @@ table.patient-list {
 
 .chart-tooth {
   float: left;
-  margin-top: 1px;
-  margin-bottom: 1px;
 }
 
 .chart-tooth label.notation {
   display: block;
   border: 1px solid #ccc;
   padding: 0px;
+  margin-top: 1px;
   text-align: center;
-  margin-top: 2px;
-  margin-bottom: 0;
 }
 
 .btn.btn-tooth {
@@ -517,4 +506,5 @@ table.patient-list {
   text-align: center;
   padding: 8px 0px 0px 0px;
 }
+
 /*# sourceMappingURL=odonto.css.map */
