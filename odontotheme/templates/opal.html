@@ -21,14 +21,14 @@
               {% link_to "Register patient" pathways.AddPatientPathway %}
             </li>
             {% if roles.is_dentist %}
-              <li>
+              <li {% if request.resolver_match.url_name == "odonto-unsubmitted-fp17s" %}class="active"{% endif %}>
                 <a href="{% url 'odonto-unsubmitted-fp17s' %}">
-                  Unsubmitted
+                  Unsubmitted <span class="badge">{{ episode_counts.unsubmitted }}</span>
                 </a>
               </li>
-              <li>
+              <li {% if request.resolver_match.url_name == "odonto-open-fp17s" %}class="active"{% endif %}>
                 <a href="{% url 'odonto-open-fp17s' %}">
-                  Open
+                  Open <span class="badge">{{ episode_counts.open }}</span>
                 </a>
               </li>
             {% endif %}

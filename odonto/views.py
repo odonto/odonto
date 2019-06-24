@@ -4,6 +4,7 @@ Odonto views
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
+from odonto import episode_categories
 
 from opal.models import Episode, Patient
 
@@ -12,6 +13,7 @@ def has_open_fp17(patient):
     return patient.episode_set.filter(
         category_name='FP17').exclude(
             stage__in=['New', 'Submitted']).exists()
+
 
 def has_open_fp17o(patient):
     return patient.episode_set.filter(
@@ -23,40 +25,27 @@ class OpenFP17s(TemplateView):
     template_name = "open_list.html"
 
     def get_fp17s(self):
-        name = self.request.user.get_full_name()
-        qs = Episode.objects.filter(
-            stage="Open",
-            fp17dentalcareprovider__performer=name
+        qs = Episode.objects.all()
+        qs = episode_categories.get_episodes_for_user(
+            qs, self.request.user
         )
-        episodes = []
-        for e in qs:
-            if e.category_name == 'FP17':
-                if e.fp17incompletetreatment_set.get().completion_or_last_visit == None:
-                    episodes.append(e)
-            if e.category_name == 'FP17O':
-                episodes.append(e)
 
-        return episodes
+        unsubmitted = episode_categories.get_unsubmitted_fp17_and_fp17os(qs)
+        unsubmitted_ids = unsubmitted.values_list("id", flat=True)
+        return qs.exclude(id__in=unsubmitted_ids)
 
 
 class UnsubmittedFP17s(TemplateView):
     template_name = "unsubmitted_list.html"
 
     def get_fp17s(self):
-        name = self.request.user.get_full_name()
-        qs = Episode.objects.filter(
-            stage="Open",
-            fp17dentalcareprovider__performer=name
+        qs = Episode.objects.all()
+        qs = episode_categories.get_episodes_for_user(
+            qs, self.request.user
         )
-        episodes = []
-        for e in qs:
-            if e.category_name == 'FP17':
-                if e.fp17incompletetreatment_set.get().completion_or_last_visit:
-                    episodes.append(e)
-            if e.category_name == 'FP17O':
-                episodes.append(e)
-
-        return episodes
+        return episode_categories.get_unsubmitted_fp17_and_fp17os_for_user(
+            self.request.user
+        )
 
 
 class PatientDetailView(DetailView):
