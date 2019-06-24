@@ -1,0 +1,8 @@
+{% load forms %}
+
+<div class="row" ng-if="state == 'initial'">
+  {% include "add_patient/pathway/partials/search_patient.html" %}
+</div>
+<div class="row" ng-if="state == 'editing_demographics'">
+  {% include "add_patient/pathway/partials/unable_to_find_patient.html" %}
+</div>

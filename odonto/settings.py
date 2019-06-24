@@ -172,6 +172,7 @@ INSTALLED_APPS = (
     'odonto',
     'odonto.odonto_submissions',
     'django.contrib.admin',
+    'plugins.add_patient_step',
 )
 
 # A sample logging configuration. The only tangible logging
