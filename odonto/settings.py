@@ -50,8 +50,6 @@ TIME_ZONE = 'UTC'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-gb'
 
-SITE_ID = 1
-
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -230,6 +228,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'odonto_submissions': {
+            'handlers': ['console_detailed', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     }
 }
 
@@ -318,9 +321,17 @@ ODONTO_LOGIN_MESSAGE = 'Log in to get started'
 #     ('text/x-scss', 'sass --scss {infile} {outfile}'),
 # )
 
-# DPB Credentials
+# <---- DPB Credentials
 DPB_USERNAME = None
 DPB_PASSWORD = None
+
+# Not django sites site id, but the DPB SITe
+DPB_SITE_ID = None
+LOCATION = None
+FP17_CONTACT_NUMBER = None
+FP17O_CONTACT_NUMBER = None
+SEND_MESSAGES = True
+# DPB Credentials ------>
 
 try:
     from odonto.local_settings import *

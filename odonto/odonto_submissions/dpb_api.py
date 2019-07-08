@@ -1,9 +1,9 @@
 import datetime
 import requests
-import logging
 from django.conf import settings
 from requests.auth import HTTPBasicAuth
 from .exceptions import MessageSentException
+from . import logger
 
 
 CLAIMS_URL = "https://ebusiness.dpb.nhs.uk/claims.asp"
@@ -11,7 +11,7 @@ RESPONSES_URL = "https://ebusiness.dpb.nhs.uk/responses.asp"
 
 
 def send_message(xml):
-    logging.info(
+    logger.info(
         "message sent {} {}".format(
             xml, datetime.datetime.now()
         )
@@ -22,7 +22,7 @@ def send_message(xml):
             auth=HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
             data=xml
         )
-        logging.info(
+        logger.info(
             "result {} {}".format(
                 result.status_code, result.content
             )
@@ -34,7 +34,7 @@ def send_message(xml):
         else:
             return result.content
     else:
-        logging.info("NOT SENDING MESSAGE BECAUSE DEBUG=TRUE")
+        logger.info("NOT SENDING MESSAGE BECAUSE DEBUG=TRUE")
         return "DEBUG mode: not sent"
 
 
