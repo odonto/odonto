@@ -102,6 +102,7 @@ class Demographics(models.Demographics):
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:
         verbose_name = "Patient information"
+        verbose_name_plural = "Patient information"
 
 
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
