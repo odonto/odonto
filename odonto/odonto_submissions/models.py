@@ -71,11 +71,6 @@ class BCDS1Message(models.Model):
         Episode,
         on_delete=models.CASCADE
     )
-    user = models.ForeignKey(
-        User,
-        null=True,
-        on_delete=models.SET_NULL
-    )
 
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
@@ -83,9 +78,6 @@ class BCDS1Message(models.Model):
     class Meta:
         ordering = ('created',)
         get_latest_by = 'created'
-        unique_together = (
-            ('episode', 'user'),
-        )
 
     def new_submission(self):
         from odonto.odonto_submissions import serializers
@@ -100,7 +92,6 @@ class BCDS1Message(models.Model):
 
         xml = serializers.translate_episode_to_xml(
             self.episode,
-            self.user,
             serial_number,
             claim.reference_number
         )
