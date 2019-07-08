@@ -208,17 +208,20 @@ class BCDS1(Message):
                 'type': 'number',
                 'min': min_digits(6),
                 'max': max_digits(6),
-                'required': True,
             },
 
             # DPB PIN
             #
             # Personal identification number assigned to a dentist by the NHSDS
             # used to authorise message transmission.
+            # it is a number which is 6 digits long
+            # however the first number(s) can be 0
+            # e.g. 011111 so we use a string field
             'dpb_pin': {
-                'type': 'number',
-                'min': min_digits(6),
-                'max': max_digits(6),
+                'type': 'string',
+                'minlength': 6,
+                'maxlength': 6,
+                'regex': r'^\d*$',
                 'required': True,
             },
 
