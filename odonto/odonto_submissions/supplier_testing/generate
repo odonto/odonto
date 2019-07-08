@@ -54,7 +54,7 @@ def main(site_number, contract_number, performer_number, location_id, pin,
         bcds1 = BCDS1()
         bcds1.message_reference_number = start_claim_number
         bcds1.performer_number = int(performer_number)
-        bcds1.dpb_pin = int(pin)
+        bcds1.dpb_pin = pin
         bcds1.contract_number = int(contract_number)
         bcds1.location = int(location_id)
         bcds1.patient = Patient()

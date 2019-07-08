@@ -244,7 +244,7 @@ class DemographicsTranslater(object):
                 i for i in address_line if i.isalnum() or i == ' '
             )
             result.append(cleaned_line[:32])
-        return result
+        return [i.upper() for i in result]
 
     def surname(self):
         return clean_non_alphanumeric(self.model_instance.surname).upper()
@@ -258,7 +258,7 @@ def get_envelope(episode, serial_number):
     Gets the envelope information
     """
     envelope = Envelope()
-    envelope.origin = str(settings.SITE_ID)
+    envelope.origin = str(settings.DPB_SITE_ID)
     envelope.destination = settings.DESTINATION
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
@@ -278,12 +278,12 @@ def get_bcds1(episode, message_reference_number):
     bcds1 = BCDS1()
 
     # According to the spec this is a required random number
-    bcds1.contract_number = "1234567890"
+    bcds1.contract_number = 1234567890
     bcds1.message_reference_number = message_reference_number
 
     performer = episode.fp17dentalcareprovider_set.get().get_performer()
 
-    if not performer or not performer.number or not performer.pin:
+    if not performer or not performer.number or not performer.dpb_pin:
         raise ValueError(
             "No performer credentials for user {}".format(
                  episode.fp17dentalcareprovider_set.get().performer
@@ -291,10 +291,8 @@ def get_bcds1(episode, message_reference_number):
         )
 
     bcds1.dpb_pin = performer.dpb_pin
-    bcds1.performer_number = performer.number
-
-    provider = episode.fp17dentalcareprovider_set.get()
-    bcds1.location = provider.provider_location_number
+    bcds1.performer_number = int(performer.number)
+    bcds1.location = 10108 # int(provider.provider_location_number)
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
     return bcds1
