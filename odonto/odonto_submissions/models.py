@@ -1,9 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import transaction
 from opal.models import Episode
-from odonto.odonto_submissions import send_message
+from . import dpb_api
 
 
 class MessageSentException(Exception):
@@ -25,6 +24,9 @@ class SystemClaim(models.Model):
             instance.reference_number = max_number
         instance.save()
         return instance
+
+    def __str__(self):
+        return "ref num: {}".format(self.reference_number)
 
 
 class Submission(models.Model):
@@ -63,7 +65,10 @@ class Submission(models.Model):
         )
 
     def __str__(self):
-        return "pk={0.pk} raw_xml={0.raw_xml!r}".format(self)
+        episode = self.message.episode
+        return "Episode: {} {}, state: {}".format(
+            episode.category_name, episode.id, self.state
+        )
 
 
 class BCDS1Message(models.Model):
@@ -78,6 +83,7 @@ class BCDS1Message(models.Model):
     class Meta:
         ordering = ('created',)
         get_latest_by = 'created'
+        verbose_name = "BCDS1 Message"
 
     def new_submission(self):
         from odonto.odonto_submissions import serializers
@@ -113,13 +119,21 @@ class BCDS1Message(models.Model):
             )
         current_submission.state = Submission.SENT
         current_submission.save()
-        send_message.send_message(current_submission.xml)
+        # this just tells us that the message has been received
+        # messages are processed as part of a batch process
+        current_submission.response = dpb_api.send_message(current_submission.raw_xml)
+        current_submission.save()
 
     def __str__(self):
         current_submission = self.submission_set.last()
+        if current_submission:
+            state = current_submission.state
+        else:
+            state = "No submissions"
+
         return "pk={} episode_id={} {}".format(
             self.id,
             self.episode.id,
-            current_submission.state or "No submissions"
+            state
         )
 
