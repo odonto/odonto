@@ -281,7 +281,7 @@ def get_bcds1(episode, message_reference_number):
     bcds1.contract_number = 1234567890
     bcds1.message_reference_number = message_reference_number
 
-    performer = episode.fp17dentalcareprovider_set.get().get_performer()
+    performer = episode.fp17dentalcareprovider_set.get().get_performer_obj()
 
     if not performer or not performer.number or not performer.dpb_pin:
         raise ValueError(
@@ -292,7 +292,7 @@ def get_bcds1(episode, message_reference_number):
 
     bcds1.dpb_pin = performer.dpb_pin
     bcds1.performer_number = int(performer.number)
-    bcds1.location = 10108 # int(provider.provider_location_number)
+    bcds1.location = settings.LOCATION
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
     return bcds1
