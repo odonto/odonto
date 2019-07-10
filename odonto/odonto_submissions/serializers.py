@@ -351,11 +351,7 @@ def translate_to_bdcs1(bcds1, episode):
                 translator(instance).to_messages()
             )
 
-    ethnicity_treatment = demographics_translater.ethnicity()
-
-    if ethnicity_treatment:
-        bcds1.treatments.append(ethnicity_treatment)
-
+    bcds1.treatments.append(demographics_translater.ethnicity())
     fp17_exemption = episode.fp17exemptions_set.get()
     exemption_translator = ExceptionSerializer(fp17_exemption)
     exemptions = exemption_translator.exemptions()
