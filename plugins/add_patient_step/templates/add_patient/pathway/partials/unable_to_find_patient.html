@@ -30,7 +30,10 @@
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% input field="Demographics.phone_number" style="vertical" element_name="tel" %}
+              {% charfield field="Demographics.phone_number" style="vertical" element_name="tel" %}
+            </div>
+            <div class="col-md-5 col-md-offset-1">
+              {% select field="Demographics.ethnicity" style="vertical" %}
             </div>
           </div>
           <div class="row">
