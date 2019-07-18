@@ -230,6 +230,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'odonto_submissions': {
+            'handlers': ['console_detailed', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     }
 }
 
