@@ -323,6 +323,13 @@ ODONTO_LOGIN_MESSAGE = 'Log in to get started'
 #     ('text/x-scss', 'sass --scss {infile} {outfile}'),
 # )
 
+# <---- DPB Credentials
+DPB_USERNAME = None
+DPB_PASSWORD = None
+SEND_MESSAGES = True
+# DPB Credentials ------>
+
+
 try:
     from odonto.local_settings import *
 except ImportError:
