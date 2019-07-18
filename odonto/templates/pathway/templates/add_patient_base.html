@@ -11,7 +11,7 @@
     <button
     class="btn btn-lg btn-primary btn-save"
     ng-show="pathway.steps[0].scope.state !== 'initial'"
-    ng-click="(!pathway.errors && form.$valid) && pathway.finish(editing)"
+    ng-click="!form.$setSubmitted() && (!pathway.errors && form.$valid) && pathway.finish(editing)"
     ng-disabled="form.$submitted && (!form.$valid || pathway.errors)"
   >
     <i class="[[ pathway.finish_button_icon ]]"></i>
