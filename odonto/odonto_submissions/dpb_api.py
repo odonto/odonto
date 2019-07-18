@@ -16,7 +16,7 @@ def send_message(xml):
             xml, datetime.datetime.now()
         )
     )
-    if getattr(settings, "SEND_MESSAGES") or not settings.DEBUG:
+    if settings.SEND_MESSAGES or not settings.DEBUG:
         result = requests.post(
             CLAIMS_URL,
             auth=HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
