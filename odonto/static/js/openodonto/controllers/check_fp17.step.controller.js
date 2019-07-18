@@ -1,13 +1,14 @@
 angular.module('opal.controllers').controller(
   'CheckFP17Step', function(
-    scope, step, episode, $timeout, $rootScope, FormValidation, ExemptionsAndRemissionsValidator, CompletionOrLastVisit
+    scope, step, episode, $timeout, $rootScope, FormValidation, ExemptionsAndRemissionsValidator, CompletionOrLastVisit, DateOfBirthRequired
 ){
   "use strict";
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
     ExemptionsAndRemissionsValidator,
-    CompletionOrLastVisit
+    CompletionOrLastVisit,
+    DateOfBirthRequired
   ];
 
   var validate = function(){

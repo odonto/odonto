@@ -4,12 +4,15 @@
     [[ {{ model_name }} | displayDate ]]
   </p>
 </div>
-<div ng-class="{'has-error': form.date_of_birth.$invalid}" ng-hide="editing.demographics.external_system" class="form-group">
+<div ng-class="{'errored-state': errors.demographics.date_of_birth}" ng-hide="editing.demographics.external_system" class="form-group">
   <label class="control-label {% ifequal style "horizontal" %}col-sm-3{% endifequal %}">Date of birth</label>
   <div class="{% ifequal style "horizontal" %}col-sm-8{% endifequal %}">
     <div date-of-birth ng-model="{{ model_name }}"></div>
     <span class="help-block" ng-show="form.date_of_birth.$invalid">
       Please enter a valid date of birth in the format DD/MM/YYYY
+    </span>
+    <span class="help-block" ng-show="errors.demographics.date_of_birth">
+      [[ errors.demographics.date_of_birth ]]
     </span>
   </div>
 </div>

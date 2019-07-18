@@ -20,4 +20,5 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/exemptions_and_remissions.js',
         'js/openodonto/services/validators/completion_or_last_visit.js',
         'js/openodonto/services/validators/form_validation.js',
+        'js/openodonto/services/validators/date_of_birth_required.js',
     ]
