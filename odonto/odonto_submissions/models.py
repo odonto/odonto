@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import transaction
 from opal.models import Episode
-from odonto.odonto_submissions import send_message
+from . import dpb_api
 
 
 class MessageSentException(Exception):
@@ -122,7 +122,7 @@ class BCDS1Message(models.Model):
             )
         current_submission.state = Submission.SENT
         current_submission.save()
-        send_message.send_message(current_submission.xml)
+        dpb_api.send_message(current_submission.xml)
 
     def __str__(self):
         current_submission = self.submission_set.last()
