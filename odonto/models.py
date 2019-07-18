@@ -138,6 +138,11 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
         max_length=255, blank=True, null=True
     )
 
+    def get_performer_obj(self):
+        return PerformerNumber.objects.filter(
+            user__username=self.performer
+        ).first()
+
     class Meta:
         verbose_name = "Performer name and clinic"
 
