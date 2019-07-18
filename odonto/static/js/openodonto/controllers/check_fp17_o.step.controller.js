@@ -8,13 +8,14 @@ angular.module('opal.controllers').controller(
     $rootScope,
     FormValidation,
     ExemptionsAndRemissionsValidator,
-    CompletionOrLastVisit
+    DateOfBirthRequired
 ){
   "use strict";
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
-    ExemptionsAndRemissionsValidator
+    ExemptionsAndRemissionsValidator,
+    DateOfBirthRequired
   ];
 
   var validate = function(){
