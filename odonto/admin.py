@@ -2,8 +2,6 @@ from django.contrib import admin
 from reversion.admin import VersionAdmin
 from odonto import models
 
-admin.site.register(models.PerformerNumber, VersionAdmin)
-
 
 class HasEthnicity(admin.SimpleListFilter):
     title = 'Ethnicity'
@@ -45,6 +43,10 @@ class DemographicsAdmin(admin.ModelAdmin):
     list_editable = ("ethnicity_fk",)
 
 
+class PerformerNumberAdmin(VersionAdmin):
+    list_display = ('user', 'number', 'dpb_pin')
+
+
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
-
+admin.site.register(models.PerformerNumber, PerformerNumberAdmin)
