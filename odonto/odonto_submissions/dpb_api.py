@@ -12,7 +12,7 @@ RESPONSES_URL = "https://ebusiness.dpb.nhs.uk/responses.asp"
 
 def send_message(xml):
     logger.info(
-        "message sent {} {}".format(
+        "sending message {} {}".format(
             xml, datetime.datetime.now()
         )
     )
@@ -32,6 +32,7 @@ def send_message(xml):
 {result.content}"
             raise MessageSentException(err)
         else:
+            logger.info("message sent")
             return result.content
     else:
         logger.info("NOT SENDING MESSAGE BECAUSE DEBUG=TRUE")
