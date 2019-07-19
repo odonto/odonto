@@ -49,12 +49,8 @@ class PerformerNumber(djangomodels.Model):
     user = djangomodels.ForeignKey(
         models.User, on_delete=djangomodels.CASCADE
     )
-    number = fields.TextField()
-
-    @property
-    def dpb_pin(self):
-        print("This needs to not be hardcoded")
-        return 100000
+    number = fields.TextField(blank=True, default="")
+    dpb_pin = fields.TextField(blank=True, default="")
 
     def __str__(self):
         return "{}: {}".format(self.user.username, self.number)
@@ -141,6 +137,11 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     performer = fields.CharField(
         max_length=255, blank=True, null=True
     )
+
+    def get_performer_obj(self):
+        return PerformerNumber.objects.filter(
+            user__username=self.performer
+        ).first()
 
     class Meta:
         verbose_name = "Performer name and clinic"
