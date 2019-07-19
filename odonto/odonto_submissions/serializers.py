@@ -365,51 +365,6 @@ def translate_to_bdcs1(bcds1, episode):
     return bcds1
 
 
-class FP17Serializer():
-    def __init__(self, episode, user):
-        self.episode = episode
-        self.user = user
-        self._errors = None
-
-    def is_valid(self):
-        performer_number = self.user.performernumber.first()
-        if not performer_number:
-            self._errors = "no performer information for user"
-            return False
-
-        envelope = get_envelope(self.episode, self.user, 1)
-        errors = envelope.get_errors()
-        if errors:
-            self._errors = errors
-            return False
-
-        bdcs1 = get_bcds1(self.episode, self.user, "1")
-        errors = bdcs1.get_errors()
-        if errors:
-            self._errors = errors
-            return False
-        root = envelope.generate_xml()
-        errors = Envelope.validate_xml(root)
-        if errors:
-            self._errors = errors
-            return False
-        return True
-
-    @property
-    def errors(self):
-        if not self._errors:
-            self.is_valid()
-
-        return self._errors
-
-    def save(self):
-        message = BCDS1Message(
-            user=self.user,
-            episode=self.episode
-        )
-        message.save()
-        return message
-
 
 
 
