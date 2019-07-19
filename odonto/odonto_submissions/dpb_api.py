@@ -12,8 +12,8 @@ RESPONSES_URL = "https://ebusiness.dpb.nhs.uk/responses.asp"
 
 def send_message(xml):
     logger.info(
-        "sending message {} {}".format(
-            xml, datetime.datetime.now()
+        "send_message() called with {}".format(
+            xml
         )
     )
     if settings.SEND_MESSAGES:
