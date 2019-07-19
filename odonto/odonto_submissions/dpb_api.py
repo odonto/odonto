@@ -1,4 +1,3 @@
-import datetime
 import requests
 from django.conf import settings
 from requests.auth import HTTPBasicAuth
