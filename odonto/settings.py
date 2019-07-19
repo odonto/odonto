@@ -326,7 +326,7 @@ ODONTO_LOGIN_MESSAGE = 'Log in to get started'
 # <---- DPB Credentials
 DPB_USERNAME = None
 DPB_PASSWORD = None
-SEND_MESSAGES = True
+SEND_MESSAGES = False
 # DPB Credentials ------>
 
 

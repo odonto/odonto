@@ -35,8 +35,8 @@ def send_message(xml):
             logger.info("message sent")
             return result.content
     else:
-        logger.info("NOT SENDING MESSAGE BECAUSE DEBUG=TRUE")
-        return "DEBUG mode: not sent"
+        logger.info("NOT SENDING MESSAGE BECAUSE SEND_MESSAGES=False")
+        return "SEND_MESSAGES=False: not sent"
 
 
 def get_responses():
