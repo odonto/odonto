@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 from requests.auth import HTTPBasicAuth
-from .exceptions import MessageSentException
+from .exceptions import MessageSendingException
 from . import logger
 
 
@@ -29,7 +29,7 @@ def send_message(xml):
         if result.status_code != 200:
             err = "Message sending resulted in {result.status_code} and \
 {result.content}"
-            raise MessageSentException(err)
+            raise MessageSendingException(err)
         else:
             response = result.content
             logger.info(

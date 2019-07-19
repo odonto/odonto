@@ -1,2 +1,2 @@
-class MessageSentException(Exception):
+class MessageSendingException(Exception):
     pass
