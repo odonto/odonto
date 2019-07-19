@@ -32,8 +32,11 @@ def send_message(xml):
 {result.content}"
             raise MessageSentException(err)
         else:
-            logger.info("message sent")
-            return result.content
+            response = result.content
+            logger.info(
+                "message sent, received a response of {}".format(response)
+            )
+            return response
     else:
         logger.info("NOT SENDING MESSAGE BECAUSE SEND_MESSAGES=False")
         return "SEND_MESSAGES=False: not sent"
