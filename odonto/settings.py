@@ -334,4 +334,3 @@ try:
     from odonto.local_settings import *
 except ImportError:
     pass
-print(DATABASES)
