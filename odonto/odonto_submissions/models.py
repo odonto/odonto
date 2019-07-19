@@ -4,10 +4,7 @@ from django.utils import timezone
 from django.db import transaction
 from opal.models import Episode
 from . import dpb_api
-
-
-class MessageSentException(Exception):
-    pass
+from .exceptions import MessageSentException
 
 
 class SystemClaim(models.Model):
