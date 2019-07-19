@@ -3,11 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db import transaction
 from opal.models import Episode
-from odonto.odonto_submissions import send_message
-
-
-class MessageSentException(Exception):
-    pass
+from . import dpb_api
+from .exceptions import MessageSendingException
 
 
 class SystemClaim(models.Model):
@@ -113,16 +110,16 @@ class BCDS1Message(models.Model):
     def send(self):
         current_submission = self.submission_set.last()
         if not current_submission:
-            raise MessageSentException(
+            raise MessageSendingException(
                 "No submission to send, please call create_submission"
             )
         if not current_submission.state == Submission.UNSENT:
-            raise MessageSentException(
+            raise MessageSendingException(
                 "Please create a new submission with create_submission"
             )
         current_submission.state = Submission.SENT
         current_submission.save()
-        send_message.send_message(current_submission.xml)
+        dpb_api.send_message(current_submission.xml)
 
     def __str__(self):
         current_submission = self.submission_set.last()

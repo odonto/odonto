@@ -230,6 +230,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'odonto_submissions': {
+            'handlers': ['console_detailed', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': True,
+        },
     }
 }
 
@@ -318,8 +323,14 @@ ODONTO_LOGIN_MESSAGE = 'Log in to get started'
 #     ('text/x-scss', 'sass --scss {infile} {outfile}'),
 # )
 
+# <---- DPB Credentials
+DPB_USERNAME = None
+DPB_PASSWORD = None
+SEND_MESSAGES = False
+# DPB Credentials ------>
+
+
 try:
     from odonto.local_settings import *
 except ImportError:
     pass
-print(DATABASES)
