@@ -2,6 +2,7 @@
 Odonto models.
 """
 from django.db.models import fields
+from django.contrib.auth.models import User
 from django.db import models as djangomodels
 
 from opal import models
@@ -139,9 +140,9 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     )
 
     def get_performer_obj(self):
-        return PerformerNumber.objects.filter(
-            user__username=self.performer
-        ).first()
+        for user in User.objects.all():
+            if user.get_full_name() == self.performer:
+                return user
 
     class Meta:
         verbose_name = "Performer name and clinic"
@@ -530,7 +531,6 @@ class ExtractionChart(models.EpisodeSubrecord):
     ll_c = fields.BooleanField(default=False)
     ll_d = fields.BooleanField(default=False)
     ll_e = fields.BooleanField(default=False)
-
 
 
 class OrthodonticAssessment(models.EpisodeSubrecord):
