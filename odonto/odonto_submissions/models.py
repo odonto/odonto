@@ -68,21 +68,13 @@ class BCDS1Message(models.Model):
         Episode,
         on_delete=models.CASCADE
     )
-    user = models.ForeignKey(
-        User,
-        null=True,
-        on_delete=models.SET_NULL
-    )
-
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ('created',)
         get_latest_by = 'created'
-        unique_together = (
-            ('episode', 'user'),
-        )
+        verbose_name = "BCDS1 Message"
 
     def new_submission(self):
         from odonto.odonto_submissions import serializers
