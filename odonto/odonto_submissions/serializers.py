@@ -246,7 +246,7 @@ class DemographicsTranslater(object):
         return result
 
 
-def get_envelope(episode, user, serial_number):
+def get_envelope(episode, serial_number):
     """
     Gets the envelope information
     """
@@ -266,7 +266,7 @@ def get_envelope(episode, user, serial_number):
     return envelope
 
 
-def get_bcds1(episode, user, message_reference_number):
+def get_bcds1(episode, message_reference_number):
     """
     creates a a BDCS1 message segmant.
 
@@ -277,7 +277,6 @@ def get_bcds1(episode, user, message_reference_number):
     bcds1 = BCDS1()
     bcds1.contract_number = "194689/0001"
     bcds1.message_reference_number = message_reference_number
-    bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
     provider = episode.patient.fp17dentalcareprovider_set.get()
     bcds1.location = provider.provider_location_number
     performer = provider.get_performer_obj()
