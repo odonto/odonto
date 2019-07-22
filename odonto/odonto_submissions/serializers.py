@@ -1,6 +1,7 @@
 import datetime
 from collections import OrderedDict
 from fp17.bcds1 import Patient, Treatment
+from django.conf import settings
 from odonto import models
 from django.db import models as django_models
 from fp17 import treatments as t
@@ -279,7 +280,7 @@ def get_bcds1(episode, message_reference_number):
     bcds1.contract_number = 1234567890
     bcds1.message_reference_number = message_reference_number
     provider = episode.patient.fp17dentalcareprovider_set.get()
-    bcds1.location = provider.provider_location_number
+    bcds1.location = settings.LOCATION
     performer = provider.get_performer_obj()
 
     if not performer:
