@@ -247,6 +247,16 @@ class DemographicsTranslater(object):
             result.append(cleaned_line[:32])
         return result
 
+    def forename(self):
+        return clean_non_alphanumeric(
+            self.model_instance.first_name
+        ).upper()
+
+    def surname(self):
+        return clean_non_alphanumeric(
+            self.model_instance.surname
+        ).upper()
+
 
 def get_envelope(episode, serial_number):
     """
@@ -326,12 +336,9 @@ def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
     # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = clean_non_alphanumeric(
-        demographics.surname
-    ).upper()
-    bcds1.patient.forename = clean_non_alphanumeric(
-        demographics.first_name
-    ).upper()
+    bcds1.patient.surname = demographics_translater.surname()
+    bcds1.patient.forename = demographics_translater.forename()
+
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
