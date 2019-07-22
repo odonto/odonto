@@ -1,7 +1,7 @@
 import datetime
 from collections import OrderedDict
 from lxml import etree
-from fp17.bcds1 import Patient, Treatment
+from fp17.bcds1 import Treatment
 from django.conf import settings
 from odonto import models
 from django.db import models as django_models
@@ -9,7 +9,6 @@ from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
-from odonto.odonto_submissions.models import BCDS1Message
 
 
 class TreatmentSerializer(object):
