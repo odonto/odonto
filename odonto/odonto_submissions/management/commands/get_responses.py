@@ -7,7 +7,6 @@ run.
 """
 from django.core.management.base import BaseCommand
 from odonto.odonto_submissions.models import CompassBatchResponse
-from odonto.odonto_submissions import dpb_apik
 
 
 class Command(BaseCommand):
