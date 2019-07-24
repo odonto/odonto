@@ -326,7 +326,12 @@ ODONTO_LOGIN_MESSAGE = 'Log in to get started'
 # <---- DPB Credentials
 DPB_USERNAME = None
 DPB_PASSWORD = None
+DPB_SITE_ID = 89651
+
 SEND_MESSAGES = False
+LOCATION = 10108
+DESTINATION = "A0DPB"
+
 # DPB Credentials ------>
 
 
