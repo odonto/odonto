@@ -47,7 +47,12 @@ def send_message(xml):
 
 
 def get_responses():
+    request_kwargs = {
+        "auth": HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
+    }
+    if hasattr(settings, "PROXY"):
+        request_kwargs["proxies"] = settings.PROXY
     return requests.get(
         RESPONSES_URL,
-        auth=HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
+        **request_kwargs
     )
