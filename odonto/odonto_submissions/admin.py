@@ -1,5 +1,6 @@
 from django.contrib import admin
 from opal import models as opal_models
+from . import models
 from reversion.admin import VersionAdmin
 from odonto import episode_categories
 import dateutil.relativedelta
@@ -42,3 +43,7 @@ class EpisodeAdmin(VersionAdmin):
 
 admin.site.unregister(opal_models.Episode)
 admin.site.register(opal_models.Episode, EpisodeAdmin)
+
+admin.site.register(models.CompassBatchResponse)
+admin.site.register(models.Submission)
+admin.site.register(models.SystemClaim)

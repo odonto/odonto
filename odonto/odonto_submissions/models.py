@@ -10,6 +10,14 @@ from . import logger
 class SystemClaim(models.Model):
     reference_number = models.IntegerField(unique=True)
 
+    class Meta:
+        ordering = ('-reference_number',)
+
+    def __str__(self):
+        return "id={0.id} reference number={0.reference_number}".format(
+            self
+        )
+
     @classmethod
     def create(cls):
         instance = cls()
@@ -41,6 +49,12 @@ class CompassBatchResponse(models.Model):
     state = models.CharField(
         default="", choices=STATUS, max_length=256
     )
+
+    def __str__(self):
+        return "id={0.id} created={0.created} state={0.state}".format(
+            self
+        )
+
 
     @classmethod
     def get(cls):
