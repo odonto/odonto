@@ -1,13 +1,14 @@
 import datetime
 from collections import OrderedDict
-from fp17.bcds1 import Patient, Treatment
+from lxml import etree
+from fp17.bcds1 import Treatment
+from django.conf import settings
 from odonto import models
 from django.db import models as django_models
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
-from odonto.odonto_submissions.models import BCDS1Message
 
 
 class TreatmentSerializer(object):
@@ -242,31 +243,39 @@ class DemographicsTranslater(object):
             cleaned_line = ''.join(
                 i for i in address_line if i.isalnum() or i == ' '
             )
-            result.append(cleaned_line[:32])
+            result.append(cleaned_line[:32].upper())
         return result
 
+    def forename(self):
+        return clean_non_alphanumeric(
+            self.model_instance.first_name
+        ).upper()
 
-def get_envelope(episode, user, serial_number):
+    def surname(self):
+        return clean_non_alphanumeric(
+            self.model_instance.surname
+        ).upper()
+
+
+def get_envelope(episode, serial_number):
     """
     Gets the envelope information
     """
     envelope = Envelope()
-    care_provider = episode.patient.fp17dentalcareprovider_set.get()
+    care_provider = episode.fp17dentalcareprovider_set.get()
     envelope.origin = care_provider.provider_location_number
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
 
-    print("Assumed destination is 1234")
-    # This is probably the correct one, but the above is what we used in test messages
-    # envelope.destination = "A0DPB"
+    envelope.origin = str(settings.DPB_SITE_ID)
+    envelope.destination = settings.DESTINATION
 
-    print("We are expecting to receive a approval number")
     envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     return envelope
 
 
-def get_bcds1(episode, user, message_reference_number):
+def get_bcds1(episode, message_reference_number):
     """
     creates a a BDCS1 message segmant.
 
@@ -275,34 +284,39 @@ def get_bcds1(episode, user, message_reference_number):
     """
 
     bcds1 = BCDS1()
-    bcds1.contract_number = "194689/0001"
+    # According to the spec this is a required random number
+    bcds1.contract_number = 1234567890
     bcds1.message_reference_number = message_reference_number
-    bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
-    provider = episode.patient.fp17dentalcareprovider_set.get()
-    bcds1.location = provider.provider_location_number
-    performer_number = user.performernumber_set.first()
+    provider = episode.fp17dentalcareprovider_set.get()
+    bcds1.location = settings.LOCATION
+    performer = provider.get_performer_obj()
 
-    if not performer_number:
+    if not performer:
         raise ValueError(
-            "No performer number for user {}".format(user.id)
+            "Unable to get the performer name {} from care provider {}".format(
+                provider.performer,
+                provider.id
+            )
         )
 
-    bcds1.performer_number = performer_number.number
+    bcds1.performer_number = int(performer.number)
+    bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
     return bcds1
 
 
 def translate_episode_to_xml(
-    episode, user, serial_number, message_reference_number
+    episode, serial_number, message_reference_number
 ):
-    bcds1 = get_bcds1(episode, user, message_reference_number)
-    envelope = get_envelope(episode, user, serial_number)
+    bcds1 = get_bcds1(episode, message_reference_number)
+    envelope = get_envelope(episode, serial_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
+    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
 
 
 def clean_non_alphanumeric(name):
@@ -319,12 +333,9 @@ def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
     # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = clean_non_alphanumeric(
-        demographics.surname
-    ).upper()
-    bcds1.patient.forename = clean_non_alphanumeric(
-        demographics.first_name
-    ).upper()
+    bcds1.patient.surname = demographics_translater.surname()
+    bcds1.patient.forename = demographics_translater.forename()
+
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
