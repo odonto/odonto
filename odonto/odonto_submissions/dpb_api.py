@@ -21,10 +21,8 @@ def send_message(xml):
             "data":  xml
         }
         if hasattr(settings, "PROXY"):
-            proxy = {
-                settings.PROXY["IP"]: settings.PROXY["PORT"]
-            }
-            request_kwargs["proxies"] = proxy
+            request_kwargs["proxies"] = settings.PROXY
+
         result = requests.post(
             CLAIMS_URL, **request_kwargs
         )
