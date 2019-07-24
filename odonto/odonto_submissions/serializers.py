@@ -1,6 +1,8 @@
 import datetime
 from collections import OrderedDict
-from fp17.bcds1 import Patient, Treatment
+from lxml import etree
+from fp17.bcds1 import Treatment
+from django.conf import settings
 from odonto import models
 from django.db import models as django_models
 from fp17 import treatments as t
@@ -244,8 +246,18 @@ class DemographicsTranslater(object):
             result.append(cleaned_line[:32])
         return result
 
+    def forename(self):
+        return clean_non_alphanumeric(
+            self.model_instance.first_name
+        ).upper()
 
-def get_envelope(episode, user, serial_number):
+    def surname(self):
+        return clean_non_alphanumeric(
+            self.model_instance.surname
+        ).upper()
+
+
+def get_envelope(episode, serial_number):
     """
     Gets the envelope information
     """
@@ -265,7 +277,7 @@ def get_envelope(episode, user, serial_number):
     return envelope
 
 
-def get_bcds1(episode, user, message_reference_number):
+def get_bcds1(episode, message_reference_number):
     """
     creates a a BDCS1 message segmant.
 
@@ -274,19 +286,23 @@ def get_bcds1(episode, user, message_reference_number):
     """
 
     bcds1 = BCDS1()
-    bcds1.contract_number = "194689/0001"
+    # According to the spec this is a required random number
+    bcds1.contract_number = 1234567890
     bcds1.message_reference_number = message_reference_number
-    bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
     provider = episode.patient.fp17dentalcareprovider_set.get()
-    bcds1.location = provider.provider_location_number
-    performer_number = user.performernumber_set.first()
+    bcds1.location = settings.LOCATION
+    performer = provider.get_performer_obj()
 
-    if not performer_number:
+    if not performer:
         raise ValueError(
-            "No performer number for user {}".format(user.id)
+            "Unable to get the performer name {} from care provider {}".format(
+                provider.performer,
+                provider.id
+            )
         )
 
-    bcds1.performer_number = performer_number.number
+    bcds1.performer_number = performer.number
+    bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
     return bcds1
@@ -302,6 +318,7 @@ def translate_episode_to_xml(
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
+    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
 
 
 def clean_non_alphanumeric(name):
@@ -318,12 +335,9 @@ def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
     # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = clean_non_alphanumeric(
-        demographics.surname
-    ).upper()
-    bcds1.patient.forename = clean_non_alphanumeric(
-        demographics.first_name
-    ).upper()
+    bcds1.patient.surname = demographics_translater.surname()
+    bcds1.patient.forename = demographics_translater.forename()
+
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
