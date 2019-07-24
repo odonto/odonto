@@ -142,7 +142,7 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     def get_performer_obj(self):
         for user in User.objects.all():
             if user.get_full_name() == self.performer:
-                return user
+                return user.performernumber_set.first()
 
     class Meta:
         verbose_name = "Performer name and clinic"
