@@ -309,10 +309,10 @@ def get_bcds1(episode, message_reference_number):
 
 
 def translate_episode_to_xml(
-    episode, user, serial_number, message_reference_number
+    episode, serial_number, message_reference_number
 ):
-    bcds1 = get_bcds1(episode, user, message_reference_number)
-    envelope = get_envelope(episode, user, serial_number)
+    bcds1 = get_bcds1(episode, message_reference_number)
+    envelope = get_envelope(episode, serial_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
