@@ -6,6 +6,7 @@ from opal.models import Episode
 from . import dpb_api
 from .exceptions import MessageSendingException
 from . import serializers
+from . import logger
 
 
 class SystemClaim(models.Model):
@@ -50,6 +51,9 @@ class Submission(models.Model):
     state = models.CharField(
         default="", choices=STATUS, max_length=256
     )
+
+    # the response tha we receive immediatly after we send it
+    # NOT the one from the batch process
     response = models.TextField(blank=True, default="")
     claim = models.OneToOneField(
         SystemClaim, blank=True, null=True, on_delete=models.SET_NULL
@@ -88,6 +92,8 @@ class Submission(models.Model):
         return cls.objects.create(
             raw_xml=xml,
             serial_number=serial_number,
+            episode=episode,
+            claim=claim
         )
 
     @classmethod
@@ -104,17 +110,26 @@ from compass for submission {} not sending"
             ex = "We have a submission with state {} ie successfully submitted \
 to compass for submission {} not sending"
             raise MessageSendingException(ex.format(
-                cls.SENT, current_submission.id
+                cls.SUCCESS, current_submission.id
             ))
 
         new_submission = cls.create(episode)
 
         try:
-            dpb_api.send_message(new_submission.xml)
+            new_submission.response = dpb_api.send_message(
+                new_submission.raw_xml
+            )
             new_submission.state = cls.SENT
+            logger.info("Submission for {} has been sent".format(
+                episode
+            ))
             new_submission.save()
         except Exception:
             new_submission.state = cls.FAILED_TO_SEND
+            logger.error("Submission for {} has failed".format(
+                episode
+            ))
             new_submission.save()
             raise
+        return new_submission
 
