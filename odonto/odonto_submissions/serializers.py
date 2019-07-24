@@ -267,11 +267,9 @@ def get_envelope(episode, serial_number):
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
 
-    print("Assumed destination is 1234")
-    # This is probably the correct one, but the above is what we used in test messages
-    # envelope.destination = "A0DPB"
+    envelope.origin = str(settings.DPB_SITE_ID)
+    envelope.destination = settings.DESTINATION
 
-    print("We are expecting to receive a approval number")
     envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     return envelope
