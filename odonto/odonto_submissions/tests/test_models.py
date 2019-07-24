@@ -26,16 +26,18 @@ class SubmissionTestCase(OpalTestCase):
 
     def test_create_second(self, translate_episode_to_xml, send_message):
         """
-        Testing the second submission of the same episode
+        Testing the second submission of the same episode.
+
+        The claim should be the same as the first's claim
         """
         translate_episode_to_xml.return_value = "some_xml"
-        models.Submission.create(self.episode)
+        initial_submission = models.Submission.create(self.episode)
         submission = models.Submission.create(self.episode)
         self.assertEqual(
             submission.serial_number, 2
         )
         self.assertEqual(
-            submission.claim.reference_number, 2
+            submission.claim, initial_submission.claim
         )
 
     def test_send_already_sent(self, translate_episode_to_xml, send_message):

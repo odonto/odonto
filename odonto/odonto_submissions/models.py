@@ -55,7 +55,7 @@ class Submission(models.Model):
     # the response tha we receive immediatly after we send it
     # NOT the one from the batch process
     response = models.TextField(blank=True, default="")
-    claim = models.OneToOneField(
+    claim = models.ForeignKey(
         SystemClaim, blank=True, null=True, on_delete=models.SET_NULL
     )
     episode = models.ForeignKey(
@@ -79,10 +79,10 @@ class Submission(models.Model):
 
         if current_submission is None:
             serial_number = 1
+            claim = SystemClaim.create()
         else:
             serial_number = current_submission.serial_number + 1
-
-        claim = SystemClaim.create()
+            claim = current_submission.claim
 
         xml = serializers.translate_episode_to_xml(
             episode,
