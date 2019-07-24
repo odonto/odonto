@@ -289,7 +289,7 @@ def get_bcds1(episode, message_reference_number):
     # According to the spec this is a required random number
     bcds1.contract_number = 1234567890
     bcds1.message_reference_number = message_reference_number
-    provider = episode.patient.fp17dentalcareprovider_set.get()
+    provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = settings.LOCATION
     performer = provider.get_performer_obj()
 
