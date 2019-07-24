@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db import transaction
 from opal.models import Episode
 from . import dpb_api
 from .exceptions import MessageSendingException
