@@ -16,10 +16,17 @@ def send_message(xml):
         )
     )
     if settings.SEND_MESSAGES:
+        request_kwargs = {
+            "auth": HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
+            "data":  xml
+        }
+        if hasattr(settings, "PROXY"):
+            proxy = {
+                settings.PROXY["IP"]: settings.PROXY["PORT"]
+            }
+            request_kwargs["proxies"] = proxy
         result = requests.post(
-            CLAIMS_URL,
-            auth=HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
-            data=xml
+            CLAIMS_URL, **request_kwargs
         )
         logger.info(
             "result {} {}".format(
