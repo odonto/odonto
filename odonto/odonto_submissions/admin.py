@@ -41,9 +41,13 @@ class EpisodeAdmin(VersionAdmin):
         return qs
 
 
+class SubmissionAdmin(VersionAdmin):
+    list_display = ('id', 'episode_id', 'created', 'state',)
+
+
 admin.site.unregister(opal_models.Episode)
 admin.site.register(opal_models.Episode, EpisodeAdmin)
 
 admin.site.register(models.CompassBatchResponse)
-admin.site.register(models.Submission)
+admin.site.register(models.Submission, SubmissionAdmin)
 admin.site.register(models.SystemClaim)
