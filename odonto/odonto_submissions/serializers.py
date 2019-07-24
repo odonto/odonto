@@ -243,7 +243,7 @@ class DemographicsTranslater(object):
             cleaned_line = ''.join(
                 i for i in address_line if i.isalnum() or i == ' '
             )
-            result.append(cleaned_line[:32])
+            result.append(cleaned_line[:32].upper())
         return result
 
     def forename(self):
