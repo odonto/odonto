@@ -301,7 +301,7 @@ def get_bcds1(episode, message_reference_number):
             )
         )
 
-    bcds1.performer_number = performer.number
+    bcds1.performer_number = int(performer.number)
     bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
