@@ -24,6 +24,42 @@ class SystemClaim(models.Model):
         return instance
 
 
+class CompassBatchResponse(models.Model):
+    """
+    This requests and stores everything from the dpb api get_responses method
+    """
+
+    SUCCESS = "Success"
+    FAILED = "Failed"
+
+    STATUS = (
+        (SUCCESS, SUCCESS),
+        (FAILED, FAILED),
+    )
+    created = models.DateTimeField(default=timezone.now)
+    content = models.TextField(default="")
+    state = models.CharField(
+        default="", choices=STATUS, max_length=256
+    )
+
+    @classmethod
+    def get(cls):
+        batch_response = cls()
+        response = None
+        try:
+            response = dpb_api.get_responses()
+            batch_response.content = response.content
+            batch_response.state = cls.SUCCESS
+            batch_response.save()
+            logger.info("Successfully requested the batch responses")
+            return batch_response
+        except Exception:
+            batch_response.state = cls.FAILED
+            batch_response.save()
+            logger.error("Batch response failed")
+            raise
+
+
 class Submission(models.Model):
     # Message is sent but we don't know if its successful
     SENT = "Sent"
