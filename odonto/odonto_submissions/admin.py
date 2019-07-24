@@ -32,7 +32,7 @@ class EpisodeAdmin(VersionAdmin):
     def last_submission_created(self, obj):
         if obj.submission_set.all():
             submission = list(obj.submission_set.all())[-1]
-            return submission.submission_dt
+            return submission.created
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
