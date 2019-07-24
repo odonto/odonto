@@ -262,7 +262,7 @@ def get_envelope(episode, serial_number):
     Gets the envelope information
     """
     envelope = Envelope()
-    care_provider = episode.patient.fp17dentalcareprovider_set.get()
+    care_provider = episode.fp17dentalcareprovider_set.get()
     envelope.origin = care_provider.provider_location_number
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
