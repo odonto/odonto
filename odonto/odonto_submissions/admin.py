@@ -1,16 +1,78 @@
+import datetime
 from django.contrib import admin
 from opal import models as opal_models
+from odonto import models as odonto_models
 from . import models
 from reversion.admin import VersionAdmin
 from odonto import episode_categories
-import dateutil.relativedelta
+from dateutil.relativedelta import relativedelta
+from django.utils.html import format_html
+
+
+class OldestFP17(admin.SimpleListFilter):
+    title = "Old FP17s"
+    NEARLY_THREE_MONTHS = 'nearly_3_months'
+    OVER_THREE_MONTHS = 'over_3_months'
+
+    parameter_name = "deadline"
+
+    def lookups(self, request, model_admin):
+        return (
+            (self.NEARLY_THREE_MONTHS, 'Nearly 3 months'),
+            (self.OVER_THREE_MONTHS, 'Does not have ethnicity'),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        treatments = odonto_models.Fp17IncompleteTreatment.objects.filter(
+            episode__stage="Submitted"
+        )
+        treatments = treatments.filter(
+            episode__category_name=episode_categories.FP17Episode.display_name
+        )
+        treatments = treatments.exclude(completion_or_last_visit=None)
+        three_mo = datetime.date.today() - relativedelta(
+            months=3
+        )
+        if self.value() == self.OVER_THREE_MONTHS:
+            treatments = treatments.filter(
+                completion_or_last_visit__lte=three_mo
+            )
+            return queryset.filter(
+                id__in=treatments.values_list('episode_id', flat=True)
+            )
+        if self.value() == self.NEARLY_THREE_MONTHS:
+            treatments = treatments.exclude(
+                completion_or_last_visit__lte=three_mo
+            ).filter(
+                completion_or_last_visit__lte=three_mo + datetime.timedelta(7)
+            )
+            return queryset.filter(
+                id__in=treatments.values_list('episode_id', flat=True)
+            )
 
 
 class EpisodeAdmin(VersionAdmin):
     list_display = (
         'id', 'category_name', 'stage', 'submission_deadline',
-        'last_submission_state', 'last_submission_created'
+        'last_submission_state', 'last_submission_created',
+        'summary'
     )
+
+    list_filter = (OldestFP17,)
+
+    def summary(self, obj):
+        fp17_name = episode_categories.FP17Episode.display_name
+        if not obj.category_name == fp17_name:
+            return
+        return format_html(
+            "<a href='/#/summary/fp17/{}/{}'>summary</a>",
+            obj.patient_id, obj.id
+        )
 
     def submission_deadline(self, obj):
         fp17_name = episode_categories.FP17Episode.display_name
@@ -19,7 +81,7 @@ class EpisodeAdmin(VersionAdmin):
         fp17_incomplete_treatment = obj.fp17incompletetreatment_set.all()[0]
         last_visit = fp17_incomplete_treatment.completion_or_last_visit
         if last_visit:
-            return last_visit + dateutil.relativedelta.relativedelta(months=3)
+            return last_visit + relativedelta(months=3)
 
     def last_submission_state(self, obj):
         fp17_name = episode_categories.FP17Episode.display_name
