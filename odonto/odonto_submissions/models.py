@@ -123,7 +123,7 @@ class Submission(models.Model):
 
     @classmethod
     def create(cls, episode):
-        current_submission = episode.submission_set.latest()
+        current_submission = episode.submission_set.first()
         # Claim needs to be incrememted each time
         claim = SystemClaim.create()
 
@@ -146,7 +146,7 @@ class Submission(models.Model):
 
     @classmethod
     def send(cls, episode):
-        current_submission = episode.submission_set.latest()
+        current_submission = episode.submission_set.first()
         if current_submission and current_submission.state == cls.SENT:
             ex = "We have a submission with state {} ie awaiting a response \
 from compass for submission {} not sending"
