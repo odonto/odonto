@@ -124,13 +124,13 @@ class Submission(models.Model):
     @classmethod
     def create(cls, episode):
         current_submission = episode.submission_set.last()
+        # Claim needs to be incrememted each time
+        claim = SystemClaim.create()
 
         if current_submission is None:
             serial_number = 1
-            claim = SystemClaim.create()
         else:
             serial_number = current_submission.serial_number + 1
-            claim = current_submission.claim
 
         xml = serializers.translate_episode_to_xml(
             episode,
