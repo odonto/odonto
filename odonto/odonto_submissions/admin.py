@@ -65,6 +65,14 @@ class EpisodeAdmin(VersionAdmin):
 
     list_filter = (OldestFP17,)
 
+    actions = ["submit_episode_to_compass"]
+
+    def submit_episode_to_compass(self, request, queryset):
+        for episode in queryset:
+            models.Submission.send(episode)
+
+    submit_episode_to_compass.short_description = "Submit episode to compass"
+
     def summary(self, obj):
         fp17_name = episode_categories.FP17Episode.display_name
         if not obj.category_name == fp17_name:
