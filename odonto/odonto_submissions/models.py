@@ -123,7 +123,7 @@ class Submission(models.Model):
 
     @classmethod
     def create(cls, episode):
-        current_submission = episode.submission_set.last()
+        current_submission = episode.submission_set.first()
         # Claim needs to be incrememted each time
         claim = SystemClaim.create()
 
@@ -146,8 +146,6 @@ class Submission(models.Model):
 
     @classmethod
     def send(cls, episode):
-        # submissions are ordered in reverse order so first is the most
-        # recent
         current_submission = episode.submission_set.first()
         if current_submission and current_submission.state == cls.SENT:
             ex = "We have a submission with state {} ie awaiting a response \
