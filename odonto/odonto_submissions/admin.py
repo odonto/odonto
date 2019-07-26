@@ -13,13 +13,17 @@ class OldestFP17(admin.SimpleListFilter):
     title = "Old FP17s"
     NEARLY_THREE_MONTHS = 'nearly_3_months'
     OVER_THREE_MONTHS = 'over_3_months'
+    NEARLY_TWO_MONTHS = 'nearly_2_months'
+    OVER_TWO_MONTHS = 'over_2_months'
 
     parameter_name = "deadline"
 
     def lookups(self, request, model_admin):
         return (
             (self.NEARLY_THREE_MONTHS, 'Nearly 3 months'),
-            (self.OVER_THREE_MONTHS, 'Does not have ethnicity'),
+            (self.OVER_THREE_MONTHS, 'Over 3 month'),
+            (self.NEARLY_TWO_MONTHS, 'Nearly 2 months'),
+            (self.OVER_TWO_MONTHS, 'Oever 2 months'),
         )
 
     def queryset(self, request, queryset):
@@ -38,6 +42,9 @@ class OldestFP17(admin.SimpleListFilter):
         three_mo = datetime.date.today() - relativedelta(
             months=3
         )
+        two_mo = datetime.date.today() - relativedelta(
+            months=2
+        )
         if self.value() == self.OVER_THREE_MONTHS:
             treatments = treatments.filter(
                 completion_or_last_visit__lte=three_mo
@@ -50,6 +57,23 @@ class OldestFP17(admin.SimpleListFilter):
                 completion_or_last_visit__lte=three_mo
             ).filter(
                 completion_or_last_visit__lte=three_mo + datetime.timedelta(7)
+            )
+            return queryset.filter(
+                id__in=treatments.values_list('episode_id', flat=True)
+            )
+
+        if self.value() == self.OVER_TWO_MONTHS:
+            treatments = treatments.filter(
+                completion_or_last_visit__lte=two_mo
+            )
+            return queryset.filter(
+                id__in=treatments.values_list('episode_id', flat=True)
+            )
+        if self.value() == self.NEARLY_TWO_MONTHS:
+            treatments = treatments.exclude(
+                completion_or_last_visit__lte=two_mo
+            ).filter(
+                completion_or_last_visit__lte=two_mo + datetime.timedelta(7)
             )
             return queryset.filter(
                 id__in=treatments.values_list('episode_id', flat=True)
