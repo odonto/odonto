@@ -113,7 +113,7 @@ class EpisodeAdmin(VersionAdmin):
         fp17_incomplete_treatment = obj.fp17incompletetreatment_set.all()[0]
         last_visit = fp17_incomplete_treatment.completion_or_last_visit
         if last_visit:
-            return last_visit + relativedelta(months=3)
+            return last_visit + relativedelta(months=2)
 
     def last_submission_state(self, obj):
         fp17_name = episode_categories.FP17Episode.display_name
