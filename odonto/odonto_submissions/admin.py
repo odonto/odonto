@@ -120,12 +120,12 @@ class EpisodeAdmin(VersionAdmin):
         if not obj.category_name == fp17_name:
             return "NA"
         if obj.submission_set.all():
-            submission = list(obj.submission_set.all())[-1]
+            submission = list(obj.submission_set.all())[0]
             return submission.state
 
     def last_submission_created(self, obj):
         if obj.submission_set.all():
-            submission = list(obj.submission_set.all())[-1]
+            submission = list(obj.submission_set.all())[0]
             return submission.created
 
     def get_queryset(self, request):
