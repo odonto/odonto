@@ -246,7 +246,7 @@ class DemographicsTranslater(object):
         return result
 
 
-def get_envelope(episode, user, serial_number):
+def get_envelope(episode, serial_number):
     """
     Gets the envelope information
     """
@@ -266,7 +266,7 @@ def get_envelope(episode, user, serial_number):
     return envelope
 
 
-def get_bcds1(episode, user, message_reference_number):
+def get_bcds1(episode, message_reference_number):
     """
     creates a a BDCS1 message segmant.
 
@@ -277,27 +277,30 @@ def get_bcds1(episode, user, message_reference_number):
     bcds1 = BCDS1()
     bcds1.contract_number = "194689/0001"
     bcds1.message_reference_number = message_reference_number
-    bcds1.dpb_pin = user.performernumber_set.get().dpb_pin
     provider = episode.patient.fp17dentalcareprovider_set.get()
     bcds1.location = provider.provider_location_number
-    performer_number = user.performernumber_set.first()
+    performer = provider.get_performer_obj()
 
-    if not performer_number:
+    if not performer:
         raise ValueError(
-            "No performer number for user {}".format(user.id)
+            "Unable to get the performer name {} from care provider {}".format(
+                provider.performer,
+                provider.id
+            )
         )
 
-    bcds1.performer_number = performer_number.number
+    bcds1.performer_number = performer.number
+    bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
     return bcds1
 
 
 def translate_episode_to_xml(
-    episode, user, serial_number, message_reference_number
+    episode, serial_number, message_reference_number
 ):
-    bcds1 = get_bcds1(episode, user, message_reference_number)
-    envelope = get_envelope(episode, user, serial_number)
+    bcds1 = get_bcds1(episode, message_reference_number)
+    envelope = get_envelope(episode, serial_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
