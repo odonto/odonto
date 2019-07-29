@@ -218,7 +218,7 @@ class DemographicsTranslater(object):
         )
 
     def ethnicity(self):
-        return self.ETHNICITY_MAPPINGS.get(self.model_instance.ethnicity)
+        return self.ETHNICITY_MAPPINGS[self.model_instance.ethnicity]
 
     def address(self):
         address_list = [
