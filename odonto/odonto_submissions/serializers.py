@@ -251,7 +251,7 @@ def get_envelope(episode, serial_number):
     Gets the envelope information
     """
     envelope = Envelope()
-    care_provider = episode.patient.fp17dentalcareprovider_set.get()
+    care_provider = episode.fp17dentalcareprovider_set.get()
     envelope.origin = care_provider.provider_location_number
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
@@ -277,7 +277,7 @@ def get_bcds1(episode, message_reference_number):
     bcds1 = BCDS1()
     bcds1.contract_number = "194689/0001"
     bcds1.message_reference_number = message_reference_number
-    provider = episode.patient.fp17dentalcareprovider_set.get()
+    provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = provider.provider_location_number
     performer = provider.get_performer_obj()
 
