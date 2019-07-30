@@ -1,5 +1,6 @@
 import datetime
 from collections import OrderedDict
+from django.conf import settings
 from fp17.bcds1 import Patient, Treatment
 from odonto import models
 from django.db import models as django_models
@@ -250,16 +251,10 @@ def get_envelope(episode, serial_number):
     Gets the envelope information
     """
     envelope = Envelope()
-    care_provider = episode.patient.fp17dentalcareprovider_set.get()
-    envelope.origin = care_provider.provider_location_number
     envelope.release_timestamp = datetime.datetime.utcnow()
     envelope.serial_number = serial_number
-
-    print("Assumed destination is 1234")
-    # This is probably the correct one, but the above is what we used in test messages
-    # envelope.destination = "A0DPB"
-
-    print("We are expecting to receive a approval number")
+    envelope.origin = str(settings.DPB_SITE_ID)
+    envelope.destination = settings.DESTINATION
     envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     return envelope
@@ -276,8 +271,8 @@ def get_bcds1(episode, message_reference_number):
     bcds1 = BCDS1()
     bcds1.contract_number = "194689/0001"
     bcds1.message_reference_number = message_reference_number
-    provider = episode.patient.fp17dentalcareprovider_set.get()
-    bcds1.location = provider.provider_location_number
+    provider = episode.fp17dentalcareprovider_set.get()
+    bcds1.location = settings.LOCATION
     performer = provider.get_performer_obj()
 
     if not performer:
