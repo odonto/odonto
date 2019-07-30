@@ -138,6 +138,7 @@ class EpisodeAdmin(VersionAdmin):
 class SubmissionAdmin(VersionAdmin):
     list_display = ('id', 'episode_id', 'created', 'state',)
     list_editable = ("state",)
+    list_filter = ('state',)
 
 
 admin.site.unregister(opal_models.Episode)
