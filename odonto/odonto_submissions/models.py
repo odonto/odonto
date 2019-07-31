@@ -135,3 +135,42 @@ to compass for submission {} not sending"
         return new_submission
 
 
+class CompassBatchResponse(models.Model):
+    """
+    This requests and stores everything from the dpb api get_responses method
+    """
+
+    SUCCESS = "Success"
+    FAILED = "Failed"
+
+    STATUS = (
+        (SUCCESS, SUCCESS),
+        (FAILED, FAILED),
+    )
+    created = models.DateTimeField(default=timezone.now)
+    content = models.TextField(default="")
+    state = models.CharField(
+        default="", choices=STATUS, max_length=256
+    )
+
+    def __str__(self):
+        return "id={0.id} created={0.created} state={0.state}".format(
+            self
+        )
+
+    @classmethod
+    def get(cls):
+        batch_response = cls()
+        response = None
+        try:
+            response = dpb_api.get_responses()
+            batch_response.content = response.content
+            batch_response.state = cls.SUCCESS
+            batch_response.save()
+            logger.info("Successfully requested the batch responses")
+            return batch_response
+        except Exception:
+            batch_response.state = cls.FAILED
+            batch_response.save()
+            logger.error("Batch response failed")
+            raise
