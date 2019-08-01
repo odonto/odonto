@@ -167,7 +167,7 @@ class CompassBatchResponse(models.Model):
             batch_response.content = response.content
             batch_response.state = cls.SUCCESS
             batch_response.save()
-            logger.info("Successfully requested the batch responses")
+            logger.info("Successfully retreived the batch responses")
             return batch_response
         except Exception:
             batch_response.state = cls.FAILED
