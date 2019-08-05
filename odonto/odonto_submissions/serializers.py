@@ -1,7 +1,7 @@
 import datetime
 from collections import OrderedDict
 from django.conf import settings
-from fp17.bcds1 import Patient, Treatment
+from fp17.bcds1 import Treatment
 from odonto import models
 from django.db import models as django_models
 from fp17 import treatments as t
@@ -207,6 +207,16 @@ class DemographicsTranslater(object):
         "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED
     }
 
+    def forename(self):
+        return clean_non_alphanumeric(
+            self.model_instance.first_name
+        ).upper()
+
+    def surname(self):
+        return clean_non_alphanumeric(
+            self.model_instance.surname
+        ).upper()
+
     def sex(self):
         if self.model_instance.sex == "Female":
             return "F"
@@ -242,7 +252,7 @@ class DemographicsTranslater(object):
             cleaned_line = ''.join(
                 i for i in address_line if i.isalnum() or i == ' '
             )
-            result.append(cleaned_line[:32])
+            result.append(cleaned_line[:32].upper())
         return result
 
 
@@ -283,7 +293,7 @@ def get_bcds1(episode, message_reference_number):
             )
         )
 
-    bcds1.performer_number = performer.number
+    bcds1.performer_number = int(performer.number)
     bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
@@ -315,13 +325,8 @@ def clean_non_alphanumeric(name):
 def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
-    # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = clean_non_alphanumeric(
-        demographics.surname
-    ).upper()
-    bcds1.patient.forename = clean_non_alphanumeric(
-        demographics.first_name
-    ).upper()
+    bcds1.patient.surname = demographics_translater.surname()
+    bcds1.patient.forename = demographics_translater.forename()
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
