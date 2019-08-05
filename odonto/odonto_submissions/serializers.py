@@ -1,5 +1,6 @@
 import datetime
 from collections import OrderedDict
+from lxml import etree
 from django.conf import settings
 from fp17.bcds1 import Treatment
 from odonto import models
@@ -310,6 +311,7 @@ def translate_episode_to_xml(
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
+    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
 
 
 def clean_non_alphanumeric(name):
