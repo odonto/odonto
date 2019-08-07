@@ -263,6 +263,13 @@ def get_envelope(episode, serial_number):
     """
     envelope = Envelope()
     envelope.release_timestamp = datetime.datetime.utcnow()
+
+    # The serial number of the message. 
+    # this is seperate from the message reference number on the claim
+    # the message number on the claim is the episode id
+    # and can be used multiple times for submitting the same episode
+    # the serial number of the message must be unique and is
+    # kept on the SystemClaim model
     envelope.serial_number = serial_number
     envelope.origin = str(settings.DPB_SITE_ID)
     envelope.destination = settings.DESTINATION
@@ -271,7 +278,7 @@ def get_envelope(episode, serial_number):
     return envelope
 
 
-def get_bcds1(episode, message_reference_number):
+def get_bcds1(episode, submission_count):
     """
     creates a a BDCS1 message segmant.
 
@@ -281,7 +288,13 @@ def get_bcds1(episode, message_reference_number):
 
     bcds1 = BCDS1()
     bcds1.contract_number = "194689/0001"
-    bcds1.message_reference_number = message_reference_number
+
+    # every claim needs to be given a unique referece.
+    # we may as well use the episode id
+    bcds1.message_reference_number = episode.id
+
+    # they number of times an episode has been submitted
+    bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = settings.LOCATION
     performer = provider.get_performer_obj()
@@ -302,10 +315,10 @@ def get_bcds1(episode, message_reference_number):
 
 
 def translate_episode_to_xml(
-    episode, serial_number, message_reference_number
+    episode, submission_count, message_reference_number
 ):
-    bcds1 = get_bcds1(episode, message_reference_number)
-    envelope = get_envelope(episode, serial_number)
+    bcds1 = get_bcds1(episode, submission_count)
+    envelope = get_envelope(episode, message_reference_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
