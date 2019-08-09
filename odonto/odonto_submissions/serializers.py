@@ -211,12 +211,12 @@ class DemographicsTranslater(object):
     def forename(self):
         return clean_non_alphanumeric(
             self.model_instance.first_name
-        ).upper()
+        )
 
     def surname(self):
         return clean_non_alphanumeric(
             self.model_instance.surname
-        ).upper()
+        )
 
     def sex(self):
         if self.model_instance.sex == "Female":
@@ -334,7 +334,7 @@ def clean_non_alphanumeric(name):
     Upper case only
     No hyphens, apostrophes or embedded spaces
     """
-    return ''.join(c for c in name if c.isalnum())
+    return ''.join(c for c in name if c.isalnum()).upper()
 
 
 def translate_to_bdcs1(bcds1, episode):
