@@ -132,5 +132,5 @@ class SerializerTestCase(OpalTestCase):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(
             serializers.clean_non_alphanumeric(name),
-            "McWilsonSmithjones"
+            "MCWILSONSMITHJONES"
         )

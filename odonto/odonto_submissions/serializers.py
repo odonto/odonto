@@ -1,7 +1,8 @@
 import datetime
 from collections import OrderedDict
+from lxml import etree
 from django.conf import settings
-from fp17.bcds1 import Patient, Treatment
+from fp17.bcds1 import Treatment
 from odonto import models
 from django.db import models as django_models
 from fp17 import treatments as t
@@ -207,6 +208,16 @@ class DemographicsTranslater(object):
         "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED
     }
 
+    def forename(self):
+        return clean_non_alphanumeric(
+            self.model_instance.first_name
+        )
+
+    def surname(self):
+        return clean_non_alphanumeric(
+            self.model_instance.surname
+        )
+
     def sex(self):
         if self.model_instance.sex == "Female":
             return "F"
@@ -242,7 +253,7 @@ class DemographicsTranslater(object):
             cleaned_line = ''.join(
                 i for i in address_line if i.isalnum() or i == ' '
             )
-            result.append(cleaned_line[:32])
+            result.append(cleaned_line[:32].upper())
         return result
 
 
@@ -252,6 +263,13 @@ def get_envelope(episode, serial_number):
     """
     envelope = Envelope()
     envelope.release_timestamp = datetime.datetime.utcnow()
+
+    # The serial number of the message. 
+    # this is seperate from the message reference number on the claim
+    # the message number on the claim is the episode id
+    # and can be used multiple times for submitting the same episode
+    # the serial number of the message must be unique and is
+    # kept on the SystemClaim model
     envelope.serial_number = serial_number
     envelope.origin = str(settings.DPB_SITE_ID)
     envelope.destination = settings.DESTINATION
@@ -260,7 +278,7 @@ def get_envelope(episode, serial_number):
     return envelope
 
 
-def get_bcds1(episode, message_reference_number):
+def get_bcds1(episode, submission_count):
     """
     creates a a BDCS1 message segmant.
 
@@ -270,7 +288,13 @@ def get_bcds1(episode, message_reference_number):
 
     bcds1 = BCDS1()
     bcds1.contract_number = "194689/0001"
-    bcds1.message_reference_number = message_reference_number
+
+    # every claim needs to be given a unique referece.
+    # we may as well use the episode id
+    bcds1.message_reference_number = episode.id
+
+    # they number of times an episode has been submitted
+    bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = settings.LOCATION
     performer = provider.get_performer_obj()
@@ -283,7 +307,7 @@ def get_bcds1(episode, message_reference_number):
             )
         )
 
-    bcds1.performer_number = performer.number
+    bcds1.performer_number = int(performer.number)
     bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
     translate_to_bdcs1(bcds1, episode)
@@ -291,15 +315,16 @@ def get_bcds1(episode, message_reference_number):
 
 
 def translate_episode_to_xml(
-    episode, serial_number, message_reference_number
+    episode, submission_count, message_reference_number
 ):
-    bcds1 = get_bcds1(episode, message_reference_number)
-    envelope = get_envelope(episode, serial_number)
+    bcds1 = get_bcds1(episode, submission_count)
+    envelope = get_envelope(episode, message_reference_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
+    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
 
 
 def clean_non_alphanumeric(name):
@@ -309,19 +334,14 @@ def clean_non_alphanumeric(name):
     Upper case only
     No hyphens, apostrophes or embedded spaces
     """
-    return ''.join(c for c in name if c.isalnum())
+    return ''.join(c for c in name if c.isalnum()).upper()
 
 
 def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translater = DemographicsTranslater(demographics)
-    # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = clean_non_alphanumeric(
-        demographics.surname
-    ).upper()
-    bcds1.patient.forename = clean_non_alphanumeric(
-        demographics.first_name
-    ).upper()
+    bcds1.patient.surname = demographics_translater.surname()
+    bcds1.patient.forename = demographics_translater.forename()
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
