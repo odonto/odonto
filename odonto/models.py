@@ -230,6 +230,14 @@ class Fp17Exemptions(models.EpisodeSubrecord):
     class Meta:
         verbose_name = "Exemptions and remissions"
 
+    def to_dict(self, *args, **kwargs):
+        as_dict = super().to_dict(*args, **kwargs)
+        if as_dict["patient_charge_collected"]:
+            as_dict["patient_charge_collected"] = float(
+                as_dict["patient_charge_collected"]
+            )
+        return as_dict
+
 
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
