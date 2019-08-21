@@ -10,7 +10,7 @@ def gen_bcds1():
     msg = BCDS1()
     msg.message_reference_number = 12345
     msg.performer_number = 123456
-    msg.dpb_pin = 123456
+    msg.dpb_pin = "123456"
     msg.contract_number = 1234567890
     msg.location = 123456
 

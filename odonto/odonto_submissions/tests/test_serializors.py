@@ -17,7 +17,7 @@ def generate_bcds1():
     contract_number = 1000000000
     performer_number = 100000
     location_id = 4
-    pin = 100000
+    pin = "100000"
     start_claim_number = 7
 
     bcds1 = message.BCDS1()
@@ -132,5 +132,5 @@ class SerializerTestCase(OpalTestCase):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(
             serializers.clean_non_alphanumeric(name),
-            "McWilsonSmithjones"
+            "MCWILSONSMITHJONES"
         )
