@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 from reversion.admin import VersionAdmin
 from odonto import models
+from opal.admin import UserProfileAdmin
 
 
 class HasEthnicity(admin.SimpleListFilter):
@@ -47,6 +49,26 @@ class PerformerNumberAdmin(VersionAdmin):
     list_display = ('user', 'number', 'dpb_pin')
 
 
+user_admin_list_display = list(UserProfileAdmin.list_display)
+user_admin_list_display += ["performer_number", "dpb_pin"]
+
+
+class OdontoUserAdmin(UserProfileAdmin):
+    list_display = user_admin_list_display
+
+    def dpb_pin(self, obj):
+        if obj.performernumber_set.count() > 0:
+            return obj.performernumber_set.get().dpb_pin
+        return ''
+
+    def performer_number(self, obj):
+        if obj.performernumber_set.count() > 0:
+            return obj.performernumber_set.get().number
+        return ''
+
+
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
 admin.site.register(models.PerformerNumber, PerformerNumberAdmin)
+admin.site.unregister(User)
+admin.site.register(User, OdontoUserAdmin)
