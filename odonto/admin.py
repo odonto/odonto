@@ -50,7 +50,7 @@ class PerformerNumberAdmin(VersionAdmin):
 
 
 user_admin_list_display = list(UserProfileAdmin.list_display)
-user_admin_list_display.append("dpb_pin")
+user_admin_list_display += ["performer_number", "dpb_pin"]
 
 
 class OdontoUserAdmin(UserProfileAdmin):
@@ -60,6 +60,12 @@ class OdontoUserAdmin(UserProfileAdmin):
         if obj.performernumber_set.count() > 0:
             return obj.performernumber_set.get().dpb_pin
         return ''
+
+    def performer_number(self, obj):
+        if obj.performernumber_set.count() > 0:
+            return obj.performernumber_set.get().number
+        return ''
+
 
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
