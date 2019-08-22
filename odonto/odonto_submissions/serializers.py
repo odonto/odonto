@@ -5,6 +5,7 @@ from django.conf import settings
 from fp17.bcds1 import Treatment
 from odonto import models
 from django.db import models as django_models
+from odonto import episode_categories
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
@@ -287,7 +288,10 @@ def get_bcds1(episode, submission_count):
     """
 
     bcds1 = BCDS1()
-    bcds1.contract_number = "194689/0001"
+    if episode.category_name == episode_categories.FP17Episode.display_name:
+        bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
+    elif episode.category_name == episode_categories.FP17OEpisode.display_name:
+        bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
 
     # every claim needs to be given a unique referece.
     # we may as well use the episode id
