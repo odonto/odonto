@@ -6,6 +6,7 @@ from django.conf import settings
 from odonto import models
 from odonto import episode_categories
 from django.db import models as django_models
+from odonto import episode_categories
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
@@ -294,9 +295,9 @@ def get_bcds1(episode, message_reference_number, submission_count):
     # According to the spec this is a required random number
     # however upscompass have requested the following numbers
     if episode.category_name == episode_categories.FP17Episode.display_name:
-        bcds1.contract_number = 1946890001
+        bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
     elif episode.category_name == episode_categories.FP17OEpisode.display_name:
-        bcds1.contract_number = 1946890002
+        bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
     bcds1.message_reference_number = message_reference_number
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
