@@ -1,6 +1,10 @@
+import xmltodict
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.functional import cached_property
+from django.conf import settings
 from django.db import transaction
 from opal.models import Episode
 from . import dpb_api
@@ -63,6 +67,11 @@ class Submission(models.Model):
     episode = models.ForeignKey(
         Episode,
         on_delete=models.CASCADE
+    )
+    compasss_response = models.ForeignKey(
+        "CompassBatchResponse",
+        null=True,
+        on_delete=models.SET_NULL
     )
 
     class Meta:
@@ -134,6 +143,13 @@ to compass for submission {} not sending"
             raise
         return new_submission
 
+    def get_rejection_reason(self):
+        if not self.STATUS == self.REJECTED_BY_COMPASS:
+            raise ValueError(
+                "Submission {} has not been rejected".format(self.id)
+            )
+        return self.response.rejected_submissions()[self.id]
+
 
 class CompassBatchResponse(models.Model):
     """
@@ -174,3 +190,110 @@ class CompassBatchResponse(models.Model):
             batch_response.save()
             logger.error("Batch response failed")
             raise
+
+    @cached_property
+    def content_as_dict(self):
+        """
+        An example response is "b'<xml>\r\n</xml
+        this method cleans out the xml and casts the content to a dict
+        """
+        if not self.content:
+            raise ValueError("Content not populated for {} id: {}".format(
+                self.__class__, self.id
+            ))
+        response_text = self.content.strip()[2:][:-1]
+        response_text = response_text.replace("\n", "")
+        response_text = response_text.replace("\t", "").replace("\r", "")
+        return xmltodict.parse(response_text)
+
+    def is_empty(self):
+        if "receipt" in self.content_as_dict:
+            err = self.content_as_dict["receipt"]["@err"]
+            if err == "There are no responses waiting for site {}".format(
+                settings.DPB_SITE_ID
+            ):
+                return True
+            else:
+                raise ValueError("Unknown error in {} for {}: {}".format(
+                    self.content_as_dict["receipt"]
+                ))
+        return False
+
+    def get_all_submissions(self):
+        """
+        All submissions mentioned in this batch response
+        """
+        if self.is_empty():
+            return Submission.objects.none()
+        content_as_dict = self.content_as_dict
+
+        parsed_submissions = content_as_dict["icset"]["ic"]["contrl"]
+
+        if not isinstance(parsed_submissions, list):
+            claim_reference_numbers = [int(parsed_submissions["@seq"])]
+        else:
+            claim_reference_numbers = [
+                int(i["@seq"]) for i in parsed_submissions
+            ]
+        return Submission.objects.filter(
+            claim__reference_number__in=claim_reference_numbers
+        )
+
+    def get_rejected_submissions(self):
+        """
+        Returns a dictionary of failed submissions to error message
+        """
+        result = {}
+
+        # no submissions were mentioned in this message
+        if self.is_empty():
+            return {}
+
+        # no submissions were rejected
+        if "respce" not in self.content_as_dict["icset"]["ic"]:
+            return {}
+
+        responses = self.content_as_dict["icset"]["ic"]["respce"]
+        if not isinstance(responses, list):
+            responses = [responses]
+        for i in responses:
+            response = i["rsp"]
+            # initially the unique number we put on claims was equal to the
+            # claim reference number, this was changed to the  episode id
+            if self.created.date() < datetime.date(2019, 8, 28):
+                submission = self.get_all_submissions().filter(
+                    claim__reference_number=int(response["@clrn"])
+                ).get()
+            else:
+                submission = self.all_submissions.filter(
+                    episode_id=int(response["@clrn"])
+                ).get()
+
+            if isinstance(response["mstxt"], list):
+                result[submission] = [y["#text"] for y in response["mstxt"]]
+            else:
+                result[submission] = [response["mstxt"]["#text"]]
+        return result
+
+    def get_successfull_submissions(self):
+        """
+        Returns all successful submissions in this response
+        """
+        if self.is_empty():
+            return Submission.objects.none()
+        rejected_submissions = self.get_rejected_submissions()
+        return self.get_all_submissions().exclude(
+            id__in=[i.id for i in rejected_submissions.keys()]
+        )
+
+    def update_submissions(self):
+        """
+        Updates the state of all submissions mentioned in this response
+        """
+        self.get_successfull_submissions().update(state=Submission.SUCCESS)
+        rejected_submissions = Submission.objects.filter(
+            id__in=[i.id for i in self.get_rejected_submissions().keys()]
+        )
+        rejected_submissions.update(
+            state=Submission.REJECTED_BY_COMPASS
+        )
