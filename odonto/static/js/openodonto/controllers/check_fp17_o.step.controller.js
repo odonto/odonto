@@ -14,7 +14,6 @@ angular.module('opal.controllers').controller(
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
-    ExemptionsAndRemissionsValidator,
     DateOfBirthRequired
   ];
 
