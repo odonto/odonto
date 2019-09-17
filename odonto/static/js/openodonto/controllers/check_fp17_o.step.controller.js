@@ -7,14 +7,12 @@ angular.module('opal.controllers').controller(
     $timeout,
     $rootScope,
     FormValidation,
-    ExemptionsAndRemissionsValidator,
     DateOfBirthRequired
 ){
   "use strict";
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
-    ExemptionsAndRemissionsValidator,
     DateOfBirthRequired,
     AddressRequired
   ];
