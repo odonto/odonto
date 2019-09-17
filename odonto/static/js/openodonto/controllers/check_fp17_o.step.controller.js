@@ -13,7 +13,8 @@ angular.module('opal.controllers').controller(
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
-    DateOfBirthRequired
+    DateOfBirthRequired,
+    AddressRequired
   ];
 
   var validate = function(){
