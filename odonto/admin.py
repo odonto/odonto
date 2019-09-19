@@ -56,14 +56,18 @@ user_admin_list_display += ["performer_number", "dpb_pin"]
 class OdontoUserAdmin(UserProfileAdmin):
     list_display = user_admin_list_display
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("performernumber_set")
+
     def dpb_pin(self, obj):
-        if obj.performernumber_set.count() > 0:
-            return obj.performernumber_set.get().dpb_pin
+        if obj.performernumber_set.all():
+            return obj.performernumber_set.all()[0].dpb_pin
         return ''
 
     def performer_number(self, obj):
-        if obj.performernumber_set.count() > 0:
-            return obj.performernumber_set.get().number
+        if obj.performernumber_set.all():
+            return obj.performernumber_set.all()[0].number
         return ''
 
 
