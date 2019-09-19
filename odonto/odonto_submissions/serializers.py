@@ -179,7 +179,7 @@ class ExceptionSerializer(object):
             return int(self.model_instance.patient_charge_collected * 100)
 
 
-class DemographicsTranslater(object):
+class DemographicsTranslator(object):
     def __init__(self, model_instance):
         self.model_instance = model_instance
 
@@ -258,9 +258,10 @@ class DemographicsTranslater(object):
         ).upper()
 
     def post_code(self):
-        return clean_non_alphanumeric(
-            self.model_instance.post_code
-        ).upper()
+        if self.model_instance.post_code:
+            return clean_non_alphanumeric(
+                self.model_instance.post_code
+            ).upper()
 
 
 def get_envelope(episode, message_reference_number):
@@ -344,15 +345,18 @@ def clean_non_alphanumeric(name):
 
 def translate_to_bdcs1(bcds1, episode):
     demographics = episode.patient.demographics()
-    demographics_translater = DemographicsTranslater(demographics)
+    demographics_translator = DemographicsTranslator(demographics)
     # surname must be upper case according to the form submitting guidelines
-    bcds1.patient.surname = demographics_translater.surname()
-    bcds1.patient.forename = demographics_translater.forename()
+    bcds1.patient.surname = demographics_translator.surname()
+    bcds1.patient.forename = demographics_translator.forename()
 
     bcds1.patient.date_of_birth = demographics.date_of_birth
-    bcds1.patient.address = demographics_translater.address()
-    bcds1.patient.sex = demographics_translater.sex()
-    bcds1.patient.postcode = demographics_translater.post_code()
+    bcds1.patient.address = demographics_translator.address()
+    bcds1.patient.sex = demographics_translator.sex()
+    post_code = demographics_translator.post_code()
+
+    if post_code:
+        bcds1.patient.postcode = post_code
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance
@@ -374,7 +378,7 @@ def translate_to_bdcs1(bcds1, episode):
                 translator(instance).to_messages()
             )
 
-    ethnicity_treatment = demographics_translater.ethnicity()
+    ethnicity_treatment = demographics_translator.ethnicity()
 
     if ethnicity_treatment:
         bcds1.treatments.append(ethnicity_treatment)
