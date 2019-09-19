@@ -21,6 +21,7 @@ def annotate(bcds1):
     # Treatments: "None"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(1),
+        treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]
 
     return bcds1
@@ -34,6 +35,7 @@ def from_model(bcds1, patient, episode):
     demographics.street = "HIGH STREET"
     demographics.sex = "Female"
     demographics.date_of_birth = datetime.date(1990, 6, 21)
+    demographics.ethnicity = "Patient declined"
     demographics.save()
 
     episode.fp17treatmentcategory_set.update(

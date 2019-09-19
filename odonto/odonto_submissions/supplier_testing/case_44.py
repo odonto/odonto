@@ -18,6 +18,7 @@ def annotate(bcds1):
     # Treatments: "Crowns x 2, Missing Permanent 8"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(3),
+        treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]
 
     return bcds1
@@ -30,6 +31,7 @@ def from_model(bcds1, patient, episode):
     demographics.house_number_or_name = "41"
     demographics.street = "HIGH STREET"
     demographics.sex = "Male"
+    demographics.ethnicity = "Patient declined"
     demographics.date_of_birth = datetime.date(1935, 11, 17)
     demographics.save()
 

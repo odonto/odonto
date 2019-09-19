@@ -258,9 +258,10 @@ class DemographicsTranslater(object):
         ).upper()
 
     def post_code(self):
-        return clean_non_alphanumeric(
-            self.model_instance.post_code
-        ).upper()
+        if self.model_instance.post_code:
+            return clean_non_alphanumeric(
+                self.model_instance.post_code
+            ).upper()
 
 
 def get_envelope(episode, message_reference_number):
@@ -352,7 +353,10 @@ def translate_to_bdcs1(bcds1, episode):
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translater.address()
     bcds1.patient.sex = demographics_translater.sex()
-    bcds1.patient.postcode = demographics_translater.post_code()
+    post_code = demographics_translater.post_code()
+
+    if post_code:
+        bcds1.patient.postcode = post_code
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance
