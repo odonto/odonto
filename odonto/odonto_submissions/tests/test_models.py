@@ -28,16 +28,36 @@ class SubmissionTestCase(OpalTestCase):
         """
         Testing the second submission of the same episode.
 
-        The claim should be the same as the first's claim
+        order of circumastances we are testing.
+
+        1. we send down the initial submission
+        2. we send down a submission for a different episode
+        3. we send down a second submission
+
+        We expect
+
+        The second submission to have a claim of 3 (as its the third message)
+        It should have a serial number of 2 (as its the second submission for the
+        episode)
         """
         translate_episode_to_xml.return_value = "some_xml"
-        initial_submission = models.Submission.create(self.episode)
+
+        # intital submission
+        models.Submission.create(self.episode)
+        _, other_episode = self.new_patient_and_episode_please()
+
+        # other submission
+        models.Submission.create(other_episode)
+
         submission = models.Submission.create(self.episode)
         self.assertEqual(
             submission.serial_number, 2
         )
         self.assertEqual(
-            submission.claim, initial_submission.claim
+            submission.claim.reference_number,
+            models.SystemClaim.objects.order_by(
+                "reference_number"
+            ).last().reference_number
         )
 
     def test_send_already_sent(self, translate_episode_to_xml, send_message):
