@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import datetime
 from opal.models import Episode
 from . import dpb_api
 from .exceptions import MessageSendingException
@@ -129,11 +130,17 @@ class Submission(models.Model):
 
         if current_submission is None:
             serial_number = 1
+            episode_claim_id = claim.reference_number
         else:
             serial_number = current_submission.serial_number + 1
+            first_submission = Submission.objects.all().order_by(
+                'created'
+            ).first()
+            episode_claim_id = first_submission.claim.reference_number
 
         xml = serializers.translate_episode_to_xml(
             episode,
+            episode_claim_id,
             serial_number,
             claim.reference_number
         )

@@ -1,3 +1,4 @@
+import datetime
 from unittest import mock
 from opal.core.test import OpalTestCase
 from .. import models
@@ -119,6 +120,54 @@ to compass for submission {} not sending"
         )
         self.assertEqual(
             submission.state, models.Submission.FAILED_TO_SEND
+        )
+
+    def test_episode_claim_id_for_second_submission(
+        self, translate_episode_to_xml, send_message
+    ):
+        # should use claim id rather than episode id
+        # we create another claim so that claim.id !== episode.id
+        models.SystemClaim.create()
+
+        translate_episode_to_xml.return_value = "some_xml"
+        first_submission = models.Submission.create(self.episode)
+        first_submission.created = datetime.date(2018, 1, 1)
+        first_submission.save()
+        models.Submission.create(self.episode)
+        models.Submission.create(self.episode)
+
+        latest_claim_number = models.SystemClaim.objects.order_by(
+            "-reference_number"
+        )[0].reference_number
+        call_args = list(translate_episode_to_xml.call_args_list[-1][0])
+        self.assertEqual(
+            call_args,
+            [
+                self.episode,
+                first_submission.claim.reference_number,
+                3,
+                latest_claim_number,
+            ]
+        )
+
+    def test_episode_claim_id_where_no_previous_submission(
+        self, translate_episode_to_xml, send_message
+    ):
+        translate_episode_to_xml.return_value = "some_xml"
+        models.Submission.create(self.episode)
+
+        latest_claim_number = models.SystemClaim.objects.order_by(
+            "-reference_number"
+        )[0].reference_number
+        call_args = list(translate_episode_to_xml.call_args_list[-1][0])
+        self.assertEqual(
+            call_args,
+            [
+                self.episode,
+                self.episode.id,
+                1,
+                latest_claim_number,
+            ]
         )
 
 

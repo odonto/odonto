@@ -283,7 +283,7 @@ def get_envelope(episode, message_reference_number):
     return envelope
 
 
-def get_bcds1(episode, message_reference_number, submission_count):
+def get_bcds1(episode, episode_claim_id, submission_count):
     """
     creates a a BDCS1 message segmant.
 
@@ -298,7 +298,7 @@ def get_bcds1(episode, message_reference_number, submission_count):
         bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
     elif episode.category_name == episode_categories.FP17OEpisode.display_name:
         bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
-    bcds1.message_reference_number = message_reference_number
+    bcds1.message_reference_number = episode_claim_id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = settings.LOCATION
@@ -321,10 +321,11 @@ def get_bcds1(episode, message_reference_number, submission_count):
 
 def translate_episode_to_xml(
     episode,
+    episode_claim_id,
     submission_count,
     message_reference_number
 ):
-    bcds1 = get_bcds1(episode, message_reference_number, submission_count)
+    bcds1 = get_bcds1(episode, episode_claim_id, submission_count)
     envelope = get_envelope(episode, message_reference_number)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
