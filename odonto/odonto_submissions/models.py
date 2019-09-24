@@ -75,16 +75,16 @@ class CompassBatchResponse(models.Model):
 
 
 class Submission(models.Model):
-    # Message is sent but we don't know if its successful
+    # Message is sent but we are waiting on a response message
     SENT = "Sent"
 
-    # Message is sent and we've recieved a successful response from compass
+    # Message is sent and we've received a successful response from Compass
     SUCCESS = "Success"
 
-    # We've attempted to send the message but were rejected on the post
+    # We've attempted to send the message but the POST request failed
     FAILED_TO_SEND = "Failed to send"
 
-    # Message has been sent but rejected by get_responses
+    # Message has been sent, a response collected, it was rejected by Compass
     REJECTED_BY_COMPASS = "Rejected by compass"
     STATUS = (
         (SENT, SENT,),
@@ -100,7 +100,7 @@ class Submission(models.Model):
         default="", choices=STATUS, max_length=256
     )
 
-    # the response tha we receive immediatly after we send it
+    # The response tha we receive immediately after we send it
     # NOT the one from the batch process
     response = models.TextField(blank=True, default="")
     claim = models.ForeignKey(
@@ -180,4 +180,3 @@ to compass for submission {} not sending"
             new_submission.save()
             raise
         return new_submission
-
