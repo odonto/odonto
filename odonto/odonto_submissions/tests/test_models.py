@@ -20,7 +20,7 @@ class SubmissionTestCase(OpalTestCase):
             submission.raw_xml, "some_xml"
         )
         self.assertEqual(
-            submission.serial_number, 1
+            submission.submission_count, 1
         )
         self.assertEqual(
             submission.transmission.transmission_id, 1
@@ -53,7 +53,7 @@ class SubmissionTestCase(OpalTestCase):
 
         submission = models.Submission.create(self.episode)
         self.assertEqual(
-            submission.serial_number, 2
+            submission.submission_count, 2
         )
         self.assertEqual(
             submission.transmission.transmission_id,

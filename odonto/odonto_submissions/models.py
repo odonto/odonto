@@ -204,7 +204,7 @@ class Submission(models.Model):
 
     raw_xml = models.TextField()
     created = models.DateTimeField(default=timezone.now)
-    serial_number = models.IntegerField(default=1)
+    submission_count = models.IntegerField(default=1)
     state = models.CharField(
         default="", choices=STATUS, max_length=256
     )
@@ -229,10 +229,10 @@ class Submission(models.Model):
     )
 
     class Meta:
-        ordering = ('-serial_number',)
-        get_latest_by = 'serial_number'
+        ordering = ('-submission_count',)
+        get_latest_by = 'submission_count'
         unique_together = (
-            ('episode', 'serial_number'),
+            ('episode', 'submission_count'),
         )
 
     def __str__(self):
@@ -245,18 +245,18 @@ class Submission(models.Model):
         transmission = Transmission.create()
 
         if current_submission is None:
-            serial_number = 1
+            submission_count = 1
         else:
-            serial_number = current_submission.serial_number + 1
+            submission_count = current_submission.submission_count + 1
 
         xml = serializers.translate_episode_to_xml(
             episode,
-            serial_number,
+            submission_count,
             transmission.transmission_id
         )
         return cls.objects.create(
             raw_xml=xml,
-            serial_number=serial_number,
+            submission_count=submission_count,
             episode=episode,
             transmission=transmission
         )
