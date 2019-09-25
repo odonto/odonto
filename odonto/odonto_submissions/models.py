@@ -55,22 +55,21 @@ class CompassBatchResponse(models.Model):
             self
         )
 
-
     @classmethod
     def get(cls):
         batch_response = cls()
         response = None
         try:
             response = dpb_api.get_responses()
-            batch_response.content = response.text
+            batch_response.content = response
             batch_response.state = cls.SUCCESS
             batch_response.save()
             logger.info("Successfully requested the batch responses")
             return batch_response
-        except Exception:
+        except Exception as e:
             batch_response.state = cls.FAILED
             batch_response.save()
-            logger.error("Batch response failed")
+            logger.error(f"Batch response failed with {e}")
             raise
 
 
