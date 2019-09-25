@@ -127,7 +127,7 @@ to compass for submission {} not sending"
 @mock.patch("odonto.odonto_submissions.dpb_api.get_responses")
 class CompassBatchResponseGetTestCase(OpalTestCase):
     def test_get_success(self, get_responses):
-        get_responses.return_value.content = "some response"
+        get_responses.return_value = "some response"
         batch_response = models.CompassBatchResponse.get()
         self.assertEqual(batch_response.content, "some response")
         self.assertEqual(
