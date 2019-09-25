@@ -1,5 +1,9 @@
+import xmltodict
+import datetime
 from django.db import models
 from django.utils import timezone
+from django.utils.functional import cached_property
+from django.conf import settings
 from opal.models import Episode
 from . import dpb_api
 from .exceptions import MessageSendingException
@@ -72,6 +76,112 @@ class CompassBatchResponse(models.Model):
             logger.error(f"Batch response failed with {e}")
             raise
 
+    @cached_property
+    def content_as_dict(self):
+        """
+        This method cleans out the xml and casts the content to a dict
+        """
+        if not self.content:
+            raise ValueError("Content not populated for {} id: {}".format(
+                self.__class__, self.id
+            ))
+        return xmltodict.parse(self.content)
+
+    def is_empty(self):
+        if "receipt" in self.content_as_dict:
+            err = self.content_as_dict["receipt"]["@err"]
+            if err == "There are no responses waiting for site {}".format(
+                settings.DPB_SITE_ID
+            ):
+                return True
+            else:
+                raise ValueError("Unknown error in {} with {}".format(
+                    self.id, self.content_as_dict["receipt"]["@err"]
+                ))
+        return False
+
+    def get_all_submissions(self):
+        """
+        All submissions mentioned in this batch response
+        """
+        if self.is_empty():
+            return Submission.objects.none()
+        content_as_dict = self.content_as_dict
+
+        parsed_submissions = content_as_dict["icset"]["ic"]["contrl"]
+
+        if not isinstance(parsed_submissions, list):
+            claim_reference_numbers = [int(parsed_submissions["@seq"])]
+        else:
+            claim_reference_numbers = [
+                int(i["@seq"]) for i in parsed_submissions
+            ]
+        return Submission.objects.filter(
+            claim__reference_number__in=claim_reference_numbers
+        )
+
+    def get_rejected_submissions(self):
+        """
+        Returns a dictionary of failed submissions to error message
+        """
+        result = {}
+
+        # no submissions were mentioned in this message
+        if self.is_empty():
+            return {}
+
+        # no submissions were rejected
+        if "respce" not in self.content_as_dict["icset"]["ic"]:
+            return {}
+
+        responses = self.content_as_dict["icset"]["ic"]["respce"]
+        if not isinstance(responses, list):
+            responses = [responses]
+        for i in responses:
+            response = i["rsp"]
+            submission = self.get_all_submissions().filter(
+                claim__reference_number=int(response["@clrn"])
+            ).get()
+
+            if isinstance(response["mstxt"], list):
+                result[submission] = ", ".join([
+                    y["#text"] for y in response["mstxt"]
+                ])
+            else:
+                result[submission] = response["mstxt"]["#text"]
+        return result
+
+    def get_successfull_submissions(self):
+        """
+        Returns all successful submissions in this response
+        """
+        if self.is_empty():
+            return Submission.objects.none()
+        rejected_submissions = self.get_rejected_submissions()
+        return self.get_all_submissions().exclude(
+            id__in=[i.id for i in rejected_submissions.keys()]
+        )
+
+    def update_submissions(self):
+        """
+        Updates the state of all submissions mentioned in this response
+        """
+        successful_submissions = self.get_successfull_submissions()
+        successful_submissions.update(state=Submission.SUCCESS)
+        self.submission_set.add(*successful_submissions)
+        rejected_submissions_to_reasons = self.get_rejected_submissions()
+        rejected_submissions = Submission.objects.filter(
+            id__in=[i.id for i in rejected_submissions_to_reasons.keys()]
+        )
+        for rejected_submission in rejected_submissions:
+            rejected_submission.rejection = rejected_submissions_to_reasons[
+                rejected_submission
+            ]
+            rejected_submission.state = Submission.REJECTED_BY_COMPASS
+            rejected_submission.save()
+
+        self.submission_set.add(*rejected_submissions)
+
 
 class Submission(models.Model):
     # Message is sent but we don't know if its successful
@@ -102,12 +212,20 @@ class Submission(models.Model):
     # the response tha we receive immediatly after we send it
     # NOT the one from the batch process
     response = models.TextField(blank=True, default="")
+
+    rejection = models.TextField(blank=True, default="")
+
     claim = models.ForeignKey(
         SystemClaim, blank=True, null=True, on_delete=models.SET_NULL
     )
     episode = models.ForeignKey(
         Episode,
         on_delete=models.CASCADE
+    )
+    compass_response = models.ForeignKey(
+        "CompassBatchResponse",
+        null=True,
+        on_delete=models.SET_NULL
     )
 
     class Meta:
@@ -180,3 +298,9 @@ to compass for submission {} not sending"
             raise
         return new_submission
 
+    def get_rejection_reason(self):
+        if not self.STATUS == self.REJECTED_BY_COMPASS:
+            raise ValueError(
+                "Submission {} has not been rejected".format(self.id)
+            )
+        return self.response.rejected_submissions()[self.id]
