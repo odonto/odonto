@@ -57,7 +57,7 @@ class SubmissionTestCase(OpalTestCase):
         )
         self.assertEqual(
             submission.claim.reference_number,
-            models.SystemClaim.objects.order_by(
+            models.Transmission.objects.order_by(
                 "reference_number"
             ).last().reference_number
         )
@@ -251,26 +251,26 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
         # successful submissions
         self.successful_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=3),
+            claim=models.Transmission.objects.create(reference_number=3),
             episode=episode_1
         )
 
         # rejected submissions
         self.rejected_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=538),
+            claim=models.Transmission.objects.create(reference_number=538),
             episode=episode_2
         )
 
         self.rejected_combination_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=539),
+            claim=models.Transmission.objects.create(reference_number=539),
             episode=episode_4
         )
 
         self.success_combination_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=540),
+            claim=models.Transmission.objects.create(reference_number=540),
             episode=episode_3
         )
 

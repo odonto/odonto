@@ -146,4 +146,4 @@ admin.site.register(opal_models.Episode, EpisodeAdmin)
 
 admin.site.register(models.CompassBatchResponse)
 admin.site.register(models.Submission, SubmissionAdmin)
-admin.site.register(models.SystemClaim)
+admin.site.register(models.Transmission)

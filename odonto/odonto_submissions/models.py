@@ -11,7 +11,7 @@ from . import serializers
 from . import logger
 
 
-class SystemClaim(models.Model):
+class Transmission(models.Model):
     reference_number = models.IntegerField(unique=True)
 
     class Meta:
@@ -216,7 +216,7 @@ class Submission(models.Model):
     rejection = models.TextField(blank=True, default="")
 
     claim = models.ForeignKey(
-        SystemClaim, blank=True, null=True, on_delete=models.SET_NULL
+        Transmission, blank=True, null=True, on_delete=models.SET_NULL
     )
     episode = models.ForeignKey(
         Episode,
@@ -242,7 +242,7 @@ class Submission(models.Model):
     def create(cls, episode):
         current_submission = episode.submission_set.first()
         # Claim needs to be incrememted each time
-        claim = SystemClaim.create()
+        claim = Transmission.create()
 
         if current_submission is None:
             serial_number = 1
