@@ -12,13 +12,13 @@ from . import logger
 
 
 class Transmission(models.Model):
-    reference_number = models.IntegerField(unique=True)
+    transmission_id = models.IntegerField(unique=True)
 
     class Meta:
-        ordering = ('-reference_number',)
+        ordering = ('-transmission_id',)
 
     def __str__(self):
-        return "id={0.id} reference number={0.reference_number}".format(
+        return "id={0.id} transmission id={0.transmission_id}".format(
             self
         )
 
@@ -26,12 +26,12 @@ class Transmission(models.Model):
     def create(cls):
         instance = cls()
         if not cls.objects.exists():
-            instance.reference_number = 1
+            instance.transmission_id = 1
         else:
             max_number = cls.objects.aggregate(
-                number=models.Max("reference_number")
+                number=models.Max("transmission_id")
             )["number"] + 1
-            instance.reference_number = max_number
+            instance.transmission_id = max_number
         instance.save()
         return instance
 
@@ -111,13 +111,13 @@ class CompassBatchResponse(models.Model):
         parsed_submissions = content_as_dict["icset"]["ic"]["contrl"]
 
         if not isinstance(parsed_submissions, list):
-            claim_reference_numbers = [int(parsed_submissions["@seq"])]
+            transmission_ids = [int(parsed_submissions["@seq"])]
         else:
-            claim_reference_numbers = [
+            transmission_ids = [
                 int(i["@seq"]) for i in parsed_submissions
             ]
         return Submission.objects.filter(
-            claim__reference_number__in=claim_reference_numbers
+            transmission__transmission_id__in=transmission_ids
         )
 
     def get_rejected_submissions(self):
@@ -140,7 +140,7 @@ class CompassBatchResponse(models.Model):
         for i in responses:
             response = i["rsp"]
             submission = self.get_all_submissions().filter(
-                claim__reference_number=int(response["@clrn"])
+                transmission__transmission_id=int(response["@clrn"])
             ).get()
 
             if isinstance(response["mstxt"], list):
@@ -215,7 +215,7 @@ class Submission(models.Model):
 
     rejection = models.TextField(blank=True, default="")
 
-    claim = models.ForeignKey(
+    transmission = models.ForeignKey(
         Transmission, blank=True, null=True, on_delete=models.SET_NULL
     )
     episode = models.ForeignKey(
@@ -242,7 +242,7 @@ class Submission(models.Model):
     def create(cls, episode):
         current_submission = episode.submission_set.first()
         # Claim needs to be incrememted each time
-        claim = Transmission.create()
+        transmission = Transmission.create()
 
         if current_submission is None:
             serial_number = 1
@@ -252,13 +252,13 @@ class Submission(models.Model):
         xml = serializers.translate_episode_to_xml(
             episode,
             serial_number,
-            claim.reference_number
+            transmission.transmission_id
         )
         return cls.objects.create(
             raw_xml=xml,
             serial_number=serial_number,
             episode=episode,
-            claim=claim
+            transmission=transmission
         )
 
     @classmethod

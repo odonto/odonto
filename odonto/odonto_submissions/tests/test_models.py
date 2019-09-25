@@ -23,7 +23,7 @@ class SubmissionTestCase(OpalTestCase):
             submission.serial_number, 1
         )
         self.assertEqual(
-            submission.claim.reference_number, 1
+            submission.transmission.transmission_id, 1
         )
 
     def test_create_second(self, translate_episode_to_xml, send_message):
@@ -38,7 +38,7 @@ class SubmissionTestCase(OpalTestCase):
 
         We expect
 
-        The second submission to have a claim of 3 (as its the third message)
+        The second submission to have a transmission of 3 (as its the third message)
         It should have a serial number of 2 (as its the second submission for the
         episode)
         """
@@ -56,10 +56,10 @@ class SubmissionTestCase(OpalTestCase):
             submission.serial_number, 2
         )
         self.assertEqual(
-            submission.claim.reference_number,
+            submission.transmission.transmission_id,
             models.Transmission.objects.order_by(
-                "reference_number"
-            ).last().reference_number
+                "transmission_id"
+            ).last().transmission_id
         )
 
     def test_send_already_sent(self, translate_episode_to_xml, send_message):
@@ -251,26 +251,26 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
         # successful submissions
         self.successful_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.Transmission.objects.create(reference_number=3),
+            transmission=models.Transmission.objects.create(transmission_id=3),
             episode=episode_1
         )
 
         # rejected submissions
         self.rejected_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.Transmission.objects.create(reference_number=538),
+            transmission=models.Transmission.objects.create(transmission_id=538),
             episode=episode_2
         )
 
         self.rejected_combination_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.Transmission.objects.create(reference_number=539),
+            transmission=models.Transmission.objects.create(transmission_id=539),
             episode=episode_4
         )
 
         self.success_combination_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
-            claim=models.Transmission.objects.create(reference_number=540),
+            transmission=models.Transmission.objects.create(transmission_id=540),
             episode=episode_3
         )
 
