@@ -62,7 +62,7 @@ class CompassBatchResponse(models.Model):
         response = None
         try:
             response = dpb_api.get_responses()
-            batch_response.content = response.content
+            batch_response.content = response.text
             batch_response.state = cls.SUCCESS
             batch_response.save()
             logger.info("Successfully requested the batch responses")
