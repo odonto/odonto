@@ -52,7 +52,14 @@ def get_responses():
     }
     if hasattr(settings, "PROXY"):
         request_kwargs["proxies"] = settings.PROXY
-    return requests.get(
+    response = requests.get(
         RESPONSES_URL,
         **request_kwargs
+    )
+
+    if response.ok:
+        return response.text
+
+    raise ValueError(
+        f'Unable to get responses {response.status_code} {response.content}'
     )
