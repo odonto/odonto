@@ -123,6 +123,51 @@ to compass for submission {} not sending"
             submission.state, models.Submission.FAILED_TO_SEND
         )
 
+    def test_episode_claim_id_for_second_submission(
+        self, translate_episode_to_xml, send_message
+    ):
+        # should use claim id rather than episode id
+        # we create another claim so that claim.id !== episode.id
+        models.Transmission.create()
+
+        translate_episode_to_xml.return_value = "some_xml"
+        first_submission = models.Submission.create(self.episode)
+        first_submission.save()
+        models.Submission.create(self.episode)
+        models.Submission.create(self.episode)
+
+        latest_transmission_id = models.Transmission.objects.order_by(
+            "-transmission_id"
+        )[0].transmission_id
+        call_args = list(translate_episode_to_xml.call_args_list[-1][0])
+        self.assertEqual(
+            call_args,
+            [
+                self.episode,
+                3,
+                latest_transmission_id,
+            ]
+        )
+
+    def test_episode_claim_id_where_no_previous_submission(
+        self, translate_episode_to_xml, send_message
+    ):
+        translate_episode_to_xml.return_value = "some_xml"
+        models.Submission.create(self.episode)
+
+        latest_transmission_id = models.Transmission.objects.order_by(
+            "-transmission_id"
+        )[0].transmission_id
+        call_args = list(translate_episode_to_xml.call_args_list[-1][0])
+        self.assertEqual(
+            call_args,
+            [
+                self.episode,
+                self.episode.id,
+                latest_transmission_id,
+            ]
+        )
+
 
 @mock.patch("odonto.odonto_submissions.dpb_api.get_responses")
 class CompassBatchResponseGetTestCase(OpalTestCase):

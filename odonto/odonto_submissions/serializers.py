@@ -265,7 +265,7 @@ class DemographicsTranslator(object):
             ).upper()
 
 
-def get_envelope(episode, message_reference_number):
+def get_envelope(episode, transmission_id):
     """
     Gets the envelope information
     """
@@ -273,7 +273,7 @@ def get_envelope(episode, message_reference_number):
     care_provider = episode.fp17dentalcareprovider_set.get()
     envelope.origin = care_provider.provider_location_number
     envelope.release_timestamp = datetime.datetime.utcnow()
-    envelope.serial_number = message_reference_number
+    envelope.serial_number = transmission_id
 
     envelope.origin = str(settings.DPB_SITE_ID)
     envelope.destination = settings.DESTINATION
@@ -283,7 +283,7 @@ def get_envelope(episode, message_reference_number):
     return envelope
 
 
-def get_bcds1(episode, message_reference_number, submission_count):
+def get_bcds1(episode, submission_count):
     """
     creates a a BDCS1 message segmant.
 
@@ -298,7 +298,7 @@ def get_bcds1(episode, message_reference_number, submission_count):
         bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
     elif episode.category_name == episode_categories.FP17OEpisode.display_name:
         bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
-    bcds1.message_reference_number = message_reference_number
+    bcds1.message_reference_number = episode.id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = settings.LOCATION
@@ -322,10 +322,10 @@ def get_bcds1(episode, message_reference_number, submission_count):
 def translate_episode_to_xml(
     episode,
     submission_count,
-    message_reference_number
+    transmission_id
 ):
-    bcds1 = get_bcds1(episode, message_reference_number, submission_count)
-    envelope = get_envelope(episode, message_reference_number)
+    bcds1 = get_bcds1(episode, submission_count)
+    envelope = get_envelope(episode, transmission_id)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()
     assert not envelope.get_errors(), envelope.get_errors()
