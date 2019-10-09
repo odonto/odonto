@@ -11,7 +11,7 @@ django-axes==1.7.0
 ffs==0.0.8.2
 letter==0.5
 requests==2.20.1
-djangorestframework==3.7.4
+djangorestframework==3.9.1
 django-compressor==2.2
 python-dateutil==2.7.5
 xmlschema==0.9.20
