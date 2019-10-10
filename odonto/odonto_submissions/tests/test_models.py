@@ -147,129 +147,105 @@ class CompassBatchResponseGetTestCase(OpalTestCase):
 
 
 class CompassBatchResponseParseTestCase(OpalTestCase):
-    EMPTY_MESSAGE = " ".join(
-        [
-            """<receipt schvn="1.0" err="There are no responses waiting""",
-            """for site 89651"/>""",
-        ]
-    )
-    UNKOWN_ERR = " ".join(
-        [
-            """<receipt schvn="1.0" err="Boom""",
-            """for site 89651"/>""",
-        ]
-    )
-    SUCCESS_MESSAGE = " ".join(
-        [
-            '<icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190730" tim="0203" seq="000009" xmcat="1">\r\n\t\t',
-            "\r\n\t\t",
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000003" accd="1"',
-            '/>',
-            "r\n\t\t",
-            "</ic></icset>\r\n",
-        ]
-    )
+    EMPTY_MESSAGE = """
+        <receipt schvn="1.0" err="There are no
+responses waiting for site 89651"/>
+    """
 
-    MULTIPLE_SUCCESS_MESSAGES = " ".join(
-        [
-            '<icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190730" tim="0203" seq="000009" xmcat="1">',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000544" accd="1"',
-            '/>',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000545" accd="1"',
-            '/>',
-            "</ic></icset>",
-        ]
-    )
+    UNKOWN_ERR = """
+        <receipt schvn="1.0" err="Boom for site 89651"/>
+    """
 
-    REJECTION_MESSAGE = " ".join(
-        [
-            '<icset>',
-            '<ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190725" tim="0155" seq="000005" xmcat="1">',
-            '\r\n\t\t',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000538"',
-            'accd="4"/>\r\n\t\t',
-            '<respce schvn="1.0">\r\n\t\t\t',
-            '<rsp cno="00000000000000" clrn="000538">\r\n\t\t\t\t',
-            '<mstxt rspty="@312">',
-            'No significant treatment on an EDI claim',
-            '</mstxt>\r\n\t\t\t',
-            '</rsp>',
-            "\r\n\t\t</respce>\r\n\t</ic></icset>\r\n"
-        ]
-    )
+    SUCCESS_MESSAGE = """
+        <icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190730" tim="0203" seq="000009" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000003" accd="1"
+        />r
+        </ic></icset>
+    """
 
-    MULTUPLE_REJECTION_MESSAGE = " ".join(
-        [
+    MULTIPLE_SUCCESS_MESSAGES = """
+        <icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190730" tim="0203" seq="000009" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000544" accd="1" />
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000545" accd="1" />
+        </ic></icset>
+    """
 
-            '<icset>',
-            '<ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190725" tim="0155" seq="000005" xmcat="1">',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000541"',
-            'accd="4"/>',
-            '<respce schvn="1.0">',
-            '<rsp cno="00000000000000" clrn="000541">',
-            '<mstxt rspty="@312">',
-            'No significant treatment on an EDI claim',
-            '</mstxt>',
-            '<mstxt rspty="870">',
-            'Free Repair/Replacement Within 12 Months invalid',
-            '</mstxt>',
-            '</rsp>',
-            "</respce>",
-            "</ic>",
-            "</icset>"
-        ]
-    )
+    REJECTION_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000538"
+        accd="4"/>
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000538">
+        <mstxt rspty="@312">No significant treatment on an EDI claim
+        </mstxt>
+        </rsp>
+        </respce></ic></icset>
+    """
 
-    MULTIPLE_REJECTIONS_MESSAGE = " ".join(
-        [
+    MULTUPLE_REJECTION_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000541"
+        accd="4"/>
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000541">
+        <mstxt rspty="@312">
+        No significant treatment on an EDI claim
+        </mstxt>s
+        <mstxt rspty="870">
+        Free Repair/Replacement Within 12 Months invalid
+        </mstxt>
+        </rsp>
+        </respce>
+        </ic>
+        </icset>
+    """
 
-            '<icset>',
-            '<ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190725" tim="0155" seq="000005" xmcat="1">',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000542"',
-            'accd="4"/>',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000543"',
-            'accd="4"/>',
-            '<respce schvn="1.0">',
-            '<rsp cno="00000000000000" clrn="000542">',
-            '<mstxt rspty="@312">',
-            'No significant treatment on an EDI claim',
-            '</mstxt>',
-            '</rsp>',
-            '<rsp cno="00000000000000" clrn="000543">',
-            '<mstxt rspty="870">',
-            'Free Repair/Replacement Within 12 Months invalid',
-            '</mstxt>',
-            '</rsp>',
-            "</respce>",
-            "</ic>",
-            "</icset>"
-        ]
-    )
+    MULTIPLE_REJECTIONS_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000542"
+        accd="4"/>
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000543"
+        accd="4"/>
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000542">
+        <mstxt rspty="@312">
+        No significant treatment on an EDI claim
+        </mstxt>
+        </rsp>
+        <rsp cno="00000000000000" clrn="000543">
+        <mstxt rspty="870">
+        Free Repair/Replacement Within 12 Months invalid
+        </mstxt>
+        </rsp>
+        </respce>
+        </ic>
+        </icset>
+    """
 
-    COMBINATION_MESSAGE = " ".join(
-        [
-            '<icset>',
-            '<ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190725" tim="0155" seq="000005" xmcat="1">',
-            '\r\n\t\t',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000539"',
-            'accd="4"/>\r\n\t\t',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000540" accd="1"',
-            '/>',
-            '<respce schvn="1.0">\r\n\t\t\t',
-            '<rsp cno="00000000000000" clrn="000539">\r\n\t\t\t\t',
-            '<mstxt rspty="@312">',
-            'No significant treatment on an EDI claim',
-            '</mstxt>\r\n\t\t\t',
-            '</rsp>',
-            "\r\n\t\t</respce>\r\n\t</ic></icset>\r\n"
-        ]
-    )
+    COMBINATION_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000539"
+        accd="4"/>
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000540" accd="1"
+        />
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000539">
+        <mstxt rspty="@312">
+        No significant treatment on an EDI claim
+        </mstxt>
+        </rsp>
+        </respce></ic></icset>
+    """
 
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
