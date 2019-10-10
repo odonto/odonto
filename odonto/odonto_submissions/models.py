@@ -133,21 +133,26 @@ class CompassBatchResponse(models.Model):
         if "respce" not in self.content_as_dict["icset"]["ic"]:
             return {}
 
-        responses = self.content_as_dict["icset"]["ic"]["respce"]
-        if not isinstance(responses, list):
-            responses = [responses]
-        for i in responses:
-            response = i["rsp"]
-            submission = self.get_all_submissions().filter(
-                transmission__transmission_id=int(response["@clrn"])
-            ).get()
+        responses_sections = self.content_as_dict["icset"]["ic"]["respce"]
+        if not isinstance(responses_sections, list):
+            responses_sections = [responses_sections]
+        for response_section in responses_sections:
+            responses = response_section["rsp"]
 
-            if isinstance(response["mstxt"], list):
-                result[submission] = ", ".join([
-                    y["#text"] for y in response["mstxt"]
-                ])
-            else:
-                result[submission] = response["mstxt"]["#text"]
+            if not isinstance(responses, list):
+                responses = [responses]
+
+            for response in responses:
+                submission = self.get_all_submissions().filter(
+                    claim__reference_number=int(response["@clrn"])
+                ).get()
+
+                if isinstance(response["mstxt"], list):
+                    result[submission] = ", ".join([
+                        y["#text"] for y in response["mstxt"]
+                    ])
+                else:
+                    result[submission] = response["mstxt"]["#text"]
         return result
 
     def get_successfull_submissions(self):

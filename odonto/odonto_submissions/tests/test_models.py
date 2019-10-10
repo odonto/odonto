@@ -192,68 +192,105 @@ class CompassBatchResponseGetTestCase(OpalTestCase):
 
 
 class CompassBatchResponseParseTestCase(OpalTestCase):
-    EMPTY_MESSAGE = " ".join(
-        [
-            """<receipt schvn="1.0" err="There are no responses waiting""",
-            """for site 89651"/>""",
-        ]
-    )
-    UNKOWN_ERR = " ".join(
-        [
-            """<receipt schvn="1.0" err="Boom""",
-            """for site 89651"/>""",
-        ]
-    )
-    SUCCESS_MESSAGE = " ".join(
-        [
-            '<icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190730" tim="0203" seq="000009" xmcat="1">\r\n\t\t',
-            "\r\n\t\t",
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000003" accd="1"',
-            '/>',
-            "r\n\t\t",
-            "</ic></icset>\r\n",
-        ]
-    )
+    EMPTY_MESSAGE = """
+        <receipt schvn="1.0" err="There are no
+responses waiting for site 89651"/>
+    """
 
-    REJECTION_MESSAGE = " ".join(
-        [
+    UNKOWN_ERR = """
+        <receipt schvn="1.0" err="Boom for site 89651"/>
+    """
 
-            '<icset>',
-            '<ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190725" tim="0155" seq="000005" xmcat="1">',
-            '\r\n\t\t',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000538"',
-            'accd="4"/>\r\n\t\t',
-            '<respce schvn="1.0">\r\n\t\t\t',
-            '<rsp cno="00000000000000" clrn="000538">\r\n\t\t\t\t',
-            '<mstxt rspty="@312">',
-            'No significant treatment on an EDI claim',
-            '</mstxt>\r\n\t\t\t',
-            '</rsp>',
-            "\r\n\t\t</respce>\r\n\t</ic></icset>\r\n"
-        ]
-    )
+    SUCCESS_MESSAGE = """
+        <icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190730" tim="0203" seq="000009" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000003" accd="1"
+        />r
+        </ic></icset>
+    """
 
-    COMBINATION_MESSAGE = " ".join(
-        [
-            '<icset>',
-            '<ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"',
-            'datrel="190725" tim="0155" seq="000005" xmcat="1">',
-            '\r\n\t\t',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000539"',
-            'accd="4"/>\r\n\t\t',
-            '<contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000540" accd="1"',
-            '/>',
-            '<respce schvn="1.0">\r\n\t\t\t',
-            '<rsp cno="00000000000000" clrn="000539">\r\n\t\t\t\t',
-            '<mstxt rspty="@312">',
-            'No significant treatment on an EDI claim',
-            '</mstxt>\r\n\t\t\t',
-            '</rsp>',
-            "\r\n\t\t</respce>\r\n\t</ic></icset>\r\n"
-        ]
-    )
+    MULTIPLE_SUCCESS_MESSAGES = """
+        <icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190730" tim="0203" seq="000009" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000544" accd="1" />
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000545" accd="1" />
+        </ic></icset>
+    """
+
+    REJECTION_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000538"
+        accd="4"/>
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000538">
+        <mstxt rspty="@312">No significant treatment on an EDI claim
+        </mstxt>
+        </rsp>
+        </respce></ic></icset>
+    """
+
+    MULTUPLE_REJECTION_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000541"
+        accd="4"/>
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000541">
+        <mstxt rspty="@312">
+        No significant treatment on an EDI claim
+        </mstxt>s
+        <mstxt rspty="870">
+        Free Repair/Replacement Within 12 Months invalid
+        </mstxt>
+        </rsp>
+        </respce>
+        </ic>
+        </icset>
+    """
+
+    MULTIPLE_REJECTIONS_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000542"
+        accd="4"/>
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000543"
+        accd="4"/>
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000542">
+        <mstxt rspty="@312">
+        No significant treatment on an EDI claim
+        </mstxt>
+        </rsp>
+        <rsp cno="00000000000000" clrn="000543">
+        <mstxt rspty="870">
+        Free Repair/Replacement Within 12 Months invalid
+        </mstxt>
+        </rsp>
+        </respce>
+        </ic>
+        </icset>
+    """
+
+    COMBINATION_MESSAGE = """
+        <icset>
+        <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
+        datrel="190725" tim="0155" seq="000005" xmcat="1">
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000539"
+        accd="4"/>
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000540" accd="1"
+        />
+        <respce schvn="1.0">
+        <rsp cno="00000000000000" clrn="000539">
+        <mstxt rspty="@312">
+        No significant treatment on an EDI claim
+        </mstxt>
+        </rsp>
+        </respce></ic></icset>
+    """
 
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
@@ -276,9 +313,27 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
             created=created_dt
         )
 
+        self.multiple_successful_response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.MULTIPLE_SUCCESS_MESSAGES,
+            created=created_dt
+        )
+
         self.rejected_response = models.CompassBatchResponse.objects.create(
             state=models.CompassBatchResponse.SUCCESS,
             content=self.REJECTION_MESSAGE,
+            created=created_dt
+        )
+
+        self.multiple_rejected_response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.MULTUPLE_REJECTION_MESSAGE,
+            created=created_dt
+        )
+
+        self.multiple_rejections_response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.MULTIPLE_REJECTIONS_MESSAGE,
             created=created_dt
         )
 
@@ -292,12 +347,29 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
         _, episode_2 = self.new_patient_and_episode_please()
         _, episode_3 = self.new_patient_and_episode_please()
         _, episode_4 = self.new_patient_and_episode_please()
+        _, episode_5 = self.new_patient_and_episode_please()
+        _, episode_6 = self.new_patient_and_episode_please()
+        _, episode_7 = self.new_patient_and_episode_please()
+        _, episode_8 = self.new_patient_and_episode_please()
+        _, episode_9 = self.new_patient_and_episode_please()
 
         # successful submissions
         self.successful_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
             transmission=models.Transmission.objects.create(transmission_id=3),
             episode=episode_1
+        )
+
+        # multiple successful submissions
+        self.successful_submission_1 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            claim=models.SystemClaim.objects.create(reference_number=544),
+            episode=episode_8
+        )
+        self.successful_submission_2 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            claim=models.SystemClaim.objects.create(reference_number=545),
+            episode=episode_9
         )
 
         # rejected submissions
@@ -307,6 +379,26 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
             episode=episode_2
         )
 
+        # rejected with multiple reasons
+        self.multiple_rejected_submission = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            claim=models.SystemClaim.objects.create(reference_number=541),
+            episode=episode_5
+        )
+
+        # multiple episodes rejected
+        self.multiple_rejections_submission_1 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            claim=models.SystemClaim.objects.create(reference_number=542),
+            episode=episode_6
+        )
+        self.multiple_rejections_submission_2 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            claim=models.SystemClaim.objects.create(reference_number=543),
+            episode=episode_7
+        )
+
+        # rejected multiple episodes
         self.rejected_combination_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
             transmission=models.Transmission.objects.create(transmission_id=539),
@@ -427,6 +519,35 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
             self.successful_response
         )
 
+    def test_update_multipe_submissions_success(self):
+        self.assertEqual(
+            self.successful_submission_1.state,
+            models.Submission.SENT
+        )
+        self.assertEqual(
+            self.successful_submission_2.state,
+            models.Submission.SENT
+        )
+        self.multiple_successful_response.update_submissions()
+        self.successful_submission_1.refresh_from_db()
+        self.successful_submission_2.refresh_from_db()
+        self.assertEqual(
+            self.successful_submission_1.state,
+            models.Submission.SUCCESS
+        )
+        self.assertEqual(
+            self.successful_submission_1.compass_response,
+            self.multiple_successful_response
+        )
+        self.assertEqual(
+            self.successful_submission_2.state,
+            models.Submission.SUCCESS
+        )
+        self.assertEqual(
+            self.successful_submission_2.compass_response,
+            self.multiple_successful_response
+        )
+
     def test_update_submissions_rejected(self):
         self.assertEqual(
             self.rejected_submission.state,
@@ -445,6 +566,68 @@ class CompassBatchResponseParseTestCase(OpalTestCase):
         self.assertEqual(
             self.rejected_submission.rejection,
             "No significant treatment on an EDI claim"
+        )
+
+    def test_update_submissions_multiple_rejection_reasons(self):
+        self.assertEqual(
+            self.multiple_rejected_submission.state,
+            models.Submission.SENT
+        )
+        self.multiple_rejected_response.update_submissions()
+        self.multiple_rejected_submission.refresh_from_db()
+        self.assertEqual(
+            self.multiple_rejected_submission.state,
+            models.Submission.REJECTED_BY_COMPASS
+        )
+        self.assertEqual(
+            self.multiple_rejected_submission.compass_response,
+            self.multiple_rejected_response
+        )
+        reject_reason = "".join([
+            "No significant treatment on an EDI claim, ",
+            "Free Repair/Replacement Within 12 Months invalid"
+        ])
+        self.assertEqual(
+            self.multiple_rejected_submission.rejection,
+            reject_reason
+        )
+
+    def test_update_submissions_multiple_rejected_episodes(self):
+        self.assertEqual(
+            self.multiple_rejections_submission_1.state,
+            models.Submission.SENT
+        )
+        self.assertEqual(
+            self.multiple_rejections_submission_2.state,
+            models.Submission.SENT
+        )
+        self.multiple_rejections_response.update_submissions()
+        self.multiple_rejections_submission_1.refresh_from_db()
+        self.multiple_rejections_submission_2.refresh_from_db()
+        self.assertEqual(
+            self.multiple_rejections_submission_1.state,
+            models.Submission.REJECTED_BY_COMPASS
+        )
+        self.assertEqual(
+            self.multiple_rejections_submission_2.state,
+            models.Submission.REJECTED_BY_COMPASS
+        )
+        self.assertEqual(
+            self.multiple_rejections_submission_1.compass_response,
+            self.multiple_rejections_response
+        )
+        self.assertEqual(
+            self.multiple_rejections_submission_2.compass_response,
+            self.multiple_rejections_response
+        )
+
+        self.assertEqual(
+            self.multiple_rejections_submission_1.rejection,
+            "No significant treatment on an EDI claim"
+        )
+        self.assertEqual(
+            self.multiple_rejections_submission_2.rejection,
+            "Free Repair/Replacement Within 12 Months invalid"
         )
 
     def test_update_submission_accepted_and_rejected(self):
