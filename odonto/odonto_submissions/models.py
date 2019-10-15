@@ -1,3 +1,4 @@
+import datetime
 import xmltodict
 from django.db import models
 from django.utils import timezone
@@ -8,6 +9,14 @@ from . import dpb_api
 from .exceptions import MessageSendingException
 from . import serializers
 from . import logger
+
+# before this date we used transmission id, after this date
+# we use episode id.
+# transmission id was used because it was easier but in the
+# case where we are repeatedly sending down a submission
+# given a submission is on a per episode basis it makes more
+# sense to use the episode id
+SUBMISSION_ID_DATE_CHANGE = datetime.date(2019, 10, 16)
 
 
 class Transmission(models.Model):
@@ -122,6 +131,9 @@ class CompassBatchResponse(models.Model):
     def get_rejected_submissions(self):
         """
         Returns a dictionary of failed submissions to error message
+
+        Things are complicated because the id used is the submission_id
+        which is episode_id after 10/10/2019 but transmission_id before hand
         """
         result = {}
 
@@ -142,10 +154,22 @@ class CompassBatchResponse(models.Model):
             if not isinstance(responses, list):
                 responses = [responses]
 
+            submission_id_to_response = {}
+
             for response in responses:
-                submission = self.get_all_submissions().filter(
-                    claim__reference_number=int(response["@clrn"])
-                ).get()
+                submission_id_to_response[int(response["@clrn"])] = response
+
+            submissions = self.get_all_submissions()
+
+            for submission in submissions:
+                submission_id = submission.get_submission_id()
+                # if the submission id isn't in the reponse
+                # then its been successful
+                if submission_id not in submission_id_to_response:
+                    continue
+                response = submission_id_to_response[
+                    submission_id
+                ]
 
                 if isinstance(response["mstxt"], list):
                     result[submission] = ", ".join([
@@ -244,17 +268,22 @@ class Submission(models.Model):
 
     @classmethod
     def create(cls, episode):
-        current_submission = episode.submission_set.first()
+        latest_submission = episode.submission_set.order_by(
+            "-created"
+        ).first()
         # Claim needs to be incrememted each time
         transmission = Transmission.create()
 
-        if current_submission is None:
+        if latest_submission is None:
             submission_count = 1
+            submission_id = episode.id
         else:
-            submission_count = current_submission.submission_count + 1
+            submission_count = latest_submission.submission_count + 1
+            submission_id = latest_submission.get_submission_id()
 
         xml = serializers.translate_episode_to_xml(
             episode,
+            submission_id,
             submission_count,
             transmission.transmission_id
         )
@@ -267,19 +296,21 @@ class Submission(models.Model):
 
     @classmethod
     def send(cls, episode):
-        current_submission = episode.submission_set.first()
-        if current_submission and current_submission.state == cls.SENT:
+        latest_submission = episode.submission_set.order_by(
+            "-created"
+        ).first()
+        if latest_submission and latest_submission.state == cls.SENT:
             ex = "We have a submission with state {} ie awaiting a response \
 from compass for submission {} not sending"
             raise MessageSendingException(ex.format(
-                cls.SENT, current_submission.id
+                cls.SENT, latest_submission.id
             ))
 
-        if current_submission and current_submission.state == cls.SUCCESS:
+        if latest_submission and latest_submission.state == cls.SUCCESS:
             ex = "We have a submission with state {} ie successfully submitted \
 to compass for submission {} not sending"
             raise MessageSendingException(ex.format(
-                cls.SUCCESS, current_submission.id
+                cls.SUCCESS, latest_submission.id
             ))
 
         new_submission = cls.create(episode)
@@ -301,6 +332,15 @@ to compass for submission {} not sending"
             new_submission.save()
             raise
         return new_submission
+
+    def get_submission_id(self):
+        first_submission = self.episode.submission_set.order_by(
+            "created"
+        ).first()
+        if first_submission.created.date() < SUBMISSION_ID_DATE_CHANGE:
+            return first_submission.transmission.id
+        else:
+            return first_submission.episode.id
 
     def get_rejection_reason(self):
         if not self.STATUS == self.REJECTED_BY_COMPASS:

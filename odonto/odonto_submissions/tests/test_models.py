@@ -1,6 +1,6 @@
 import datetime
 from unittest import mock
-from collections import OrderedDict
+from django.utils import timezone
 from opal.core.test import OpalTestCase
 from .. import models
 from .. import exceptions
@@ -132,8 +132,22 @@ to compass for submission {} not sending"
 
         translate_episode_to_xml.return_value = "some_xml"
         first_submission = models.Submission.create(self.episode)
+        first_submission.created = timezone.make_aware(datetime.datetime(
+            models.SUBMISSION_ID_DATE_CHANGE.year,
+            models.SUBMISSION_ID_DATE_CHANGE.month,
+            models.SUBMISSION_ID_DATE_CHANGE.day,
+            6, 6
+        ))
+
         first_submission.save()
-        models.Submission.create(self.episode)
+        second_submission = models.Submission.create(self.episode)
+        second_submission.created = timezone.make_aware(datetime.datetime(
+            models.SUBMISSION_ID_DATE_CHANGE.year,
+            models.SUBMISSION_ID_DATE_CHANGE.month,
+            models.SUBMISSION_ID_DATE_CHANGE.day,
+            7, 6
+        ))
+        second_submission.save()
         models.Submission.create(self.episode)
 
         latest_transmission_id = models.Transmission.objects.order_by(
@@ -144,8 +158,37 @@ to compass for submission {} not sending"
             call_args,
             [
                 self.episode,
+                self.episode.id,
                 3,
                 latest_transmission_id,
+            ]
+        )
+
+    def test_episode_claim_id_for_second_submission_before_dt_change(
+        self, translate_episode_to_xml, send_message
+    ):
+        # should use claim id rather than episode id
+        # we create another claim so that claim.id !== episode.id
+        models.Transmission.create()
+
+        translate_episode_to_xml.return_value = "some_xml"
+        first_submission = models.Submission.create(self.episode)
+        first_submission.created = datetime.date(2018, 1, 1)
+        first_submission.save()
+        models.Submission.create(self.episode)
+        models.Submission.create(self.episode)
+
+        latest_transmission_number = models.Transmission.objects.order_by(
+            "-transmission_id"
+        )[0].transmission_id
+        call_args = list(translate_episode_to_xml.call_args_list[-1][0])
+        self.assertEqual(
+            call_args,
+            [
+                self.episode,
+                first_submission.transmission.transmission_id,
+                3,  # should be 3 because there have been 3 submissions
+                latest_transmission_number,
             ]
         )
 
@@ -164,6 +207,7 @@ to compass for submission {} not sending"
             [
                 self.episode,
                 self.episode.id,
+                1,
                 latest_transmission_id,
             ]
         )
@@ -204,41 +248,120 @@ responses waiting for site 89651"/>
     SUCCESS_MESSAGE = """
         <icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
         datrel="190730" tim="0203" seq="000009" xmcat="1">
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000003" accd="1"
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id}" accd="1"
         />r
         </ic></icset>
     """
 
+    def get_success_messages(self):
+        """
+        A successful message, returns the submission and th
+        """
+        _, episode = self.new_patient_and_episode_please()
+        created_dt = datetime.datetime(2019, 12, 1)
+        transmission = models.Transmission.objects.create(transmission_id=3)
+        successful_submission = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission,
+            episode=episode
+        )
+        successful_response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.SUCCESS_MESSAGE.format(
+                transmission_id=transmission.transmission_id
+            ),
+            created=created_dt
+        )
+        return dict(
+            submission=successful_submission,
+            response=successful_response
+        )
+
     MULTIPLE_SUCCESS_MESSAGES = """
         <icset><ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
         datrel="190730" tim="0203" seq="000009" xmcat="1">
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000544" accd="1" />
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000545" accd="1" />
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id_1}"
+        accd="1" />
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id_2}"
+        accd="1" />
         </ic></icset>
     """
+
+    def get_multiple_success_messages(self):
+        _, episode_1 = self.new_patient_and_episode_please()
+        _, episode_2 = self.new_patient_and_episode_please()
+        created_dt = datetime.datetime(2019, 12, 1)
+        transmission_1 = models.Transmission.objects.create(transmission_id=1)
+        successful_submission_1 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission_1,
+            episode=episode_1
+        )
+        transmission_2 = models.Transmission.objects.create(transmission_id=2)
+        successful_submission_2 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission_2,
+            episode=episode_2
+        )
+
+        successful_response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.MULTIPLE_SUCCESS_MESSAGES.format(
+                transmission_id_1=transmission_1.transmission_id,
+                transmission_id_2=transmission_2.transmission_id,
+            ),
+            created=created_dt
+        )
+        return dict(
+            submissions=[successful_submission_1, successful_submission_2],
+            response=successful_response
+        )
 
     REJECTION_MESSAGE = """
         <icset>
         <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
         datrel="190725" tim="0155" seq="000005" xmcat="1">
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000538"
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id}"
         accd="4"/>
         <respce schvn="1.0">
-        <rsp cno="00000000000000" clrn="000538">
+        <rsp cno="00000000000000" clrn="{submission_id}">
         <mstxt rspty="@312">No significant treatment on an EDI claim
         </mstxt>
         </rsp>
         </respce></ic></icset>
     """
 
+    def get_rejection_messages(self):
+        _, episode = self.new_patient_and_episode_please()
+        created_dt = datetime.datetime(2019, 12, 1)
+        transmission = models.Transmission.objects.create(transmission_id=1)
+        submission = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission,
+            episode=episode,
+            created=created_dt
+        )
+        response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.REJECTION_MESSAGE.format(
+                transmission_id=transmission.transmission_id,
+                submission_id=episode.id
+            ),
+            created=created_dt
+        )
+        return dict(
+            submission=submission,
+            response=response
+        )
+
     MULTUPLE_REJECTION_MESSAGE = """
         <icset>
         <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
         datrel="190725" tim="0155" seq="000005" xmcat="1">
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000541"
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id}"
         accd="4"/>
         <respce schvn="1.0">
-        <rsp cno="00000000000000" clrn="000541">
+        <rsp cno="00000000000000" clrn="{submission_id}">
         <mstxt rspty="@312">
         No significant treatment on an EDI claim
         </mstxt>s
@@ -251,21 +374,43 @@ responses waiting for site 89651"/>
         </icset>
     """
 
+    def get_messages_with_multiple_rejections(self):
+        _, episode = self.new_patient_and_episode_please()
+        created_dt = datetime.datetime(2019, 12, 1)
+        transmission = models.Transmission.objects.create(transmission_id=3)
+        submission = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission,
+            episode=episode
+        )
+        response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.MULTUPLE_REJECTION_MESSAGE.format(
+                transmission_id=transmission.transmission_id,
+                submission_id=episode.id
+            ),
+            created=created_dt
+        )
+        return dict(
+            submission=submission,
+            response=response
+        )
+
     MULTIPLE_REJECTIONS_MESSAGE = """
         <icset>
         <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
         datrel="190725" tim="0155" seq="000005" xmcat="1">
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000542"
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id_1}"
         accd="4"/>
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000543"
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id_2}"
         accd="4"/>
         <respce schvn="1.0">
-        <rsp cno="00000000000000" clrn="000542">
+        <rsp cno="00000000000000" clrn="{submission_id_1}">
         <mstxt rspty="@312">
         No significant treatment on an EDI claim
         </mstxt>
         </rsp>
-        <rsp cno="00000000000000" clrn="000543">
+        <rsp cno="00000000000000" clrn="{submission_id_2}">
         <mstxt rspty="870">
         Free Repair/Replacement Within 12 Months invalid
         </mstxt>
@@ -275,16 +420,48 @@ responses waiting for site 89651"/>
         </icset>
     """
 
+    def get_multiple_rejection_messages(self):
+        _, episode_1 = self.new_patient_and_episode_please()
+        _, episode_2 = self.new_patient_and_episode_please()
+        created_dt = datetime.datetime(2019, 12, 1)
+        transmission_1 = models.Transmission.objects.create(transmission_id=1)
+        submission_1 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission_1,
+            episode=episode_1
+        )
+        transmission_2 = models.Transmission.objects.create(transmission_id=2)
+        submission_2 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission_2,
+            episode=episode_2
+        )
+
+        response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.MULTIPLE_REJECTIONS_MESSAGE.format(
+                transmission_id_1=transmission_1.transmission_id,
+                transmission_id_2=transmission_2.transmission_id,
+                submission_id_1=episode_1.id,
+                submission_id_2=episode_2.id,
+            ),
+            created=created_dt
+        )
+        return dict(
+            submissions=[submission_1, submission_2],
+            response=response
+        )
+
     COMBINATION_MESSAGE = """
         <icset>
         <ic schvn="1.0" synv="1" ori="A0DPB" dest="89651"
         datrel="190725" tim="0155" seq="000005" xmcat="1">
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000539"
-        accd="4"/>
-        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="000540" accd="1"
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id_1}"
+        accd="1"/>
+        <contrl schvn="1.0" ori="89651" dest="A0DPB" seq="{transmission_id_2}" accd="1"
         />
         <respce schvn="1.0">
-        <rsp cno="00000000000000" clrn="000539">
+        <rsp cno="00000000000000" clrn="{submission_id}">
         <mstxt rspty="@312">
         No significant treatment on an EDI claim
         </mstxt>
@@ -292,9 +469,40 @@ responses waiting for site 89651"/>
         </respce></ic></icset>
     """
 
+    def get_combination_message(self):
+        _, episode_1 = self.new_patient_and_episode_please()
+        _, episode_2 = self.new_patient_and_episode_please()
+        created_dt = datetime.datetime(2019, 12, 1)
+        transmission_1 = models.Transmission.objects.create(transmission_id=1)
+        submission_1 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission_1,
+            episode=episode_1
+        )
+        transmission_2 = models.Transmission.objects.create(transmission_id=2)
+        submission_2 = models.Submission.objects.create(
+            state=models.Submission.SENT,
+            transmission=transmission_2,
+            episode=episode_2
+        )
+
+        response = models.CompassBatchResponse.objects.create(
+            state=models.CompassBatchResponse.SUCCESS,
+            content=self.COMBINATION_MESSAGE.format(
+                transmission_id_1=transmission_1.transmission_id,
+                transmission_id_2=transmission_2.transmission_id,
+                submission_id=episode_1.id,
+            ),
+            created=created_dt
+        )
+        return dict(
+            submissions=[submission_1, submission_2],
+            response=response
+        )
+
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
-        created_dt = datetime.datetime(2018, 1, 1)
+        created_dt = datetime.datetime(2019, 12, 1)
         self.empty_response = models.CompassBatchResponse.objects.create(
             state=models.CompassBatchResponse.SUCCESS,
             content=self.EMPTY_MESSAGE,
@@ -307,177 +515,10 @@ responses waiting for site 89651"/>
             created=created_dt
         )
 
-        self.successful_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
-            content=self.SUCCESS_MESSAGE,
-            created=created_dt
-        )
-
-        self.multiple_successful_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
-            content=self.MULTIPLE_SUCCESS_MESSAGES,
-            created=created_dt
-        )
-
-        self.rejected_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
-            content=self.REJECTION_MESSAGE,
-            created=created_dt
-        )
-
-        self.multiple_rejected_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
-            content=self.MULTUPLE_REJECTION_MESSAGE,
-            created=created_dt
-        )
-
-        self.multiple_rejections_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
-            content=self.MULTIPLE_REJECTIONS_MESSAGE,
-            created=created_dt
-        )
-
-        self.combination_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
-            content=self.COMBINATION_MESSAGE,
-            created=created_dt
-        )
-
-        _, episode_1 = self.new_patient_and_episode_please()
-        _, episode_2 = self.new_patient_and_episode_please()
-        _, episode_3 = self.new_patient_and_episode_please()
-        _, episode_4 = self.new_patient_and_episode_please()
-        _, episode_5 = self.new_patient_and_episode_please()
-        _, episode_6 = self.new_patient_and_episode_please()
-        _, episode_7 = self.new_patient_and_episode_please()
-        _, episode_8 = self.new_patient_and_episode_please()
-        _, episode_9 = self.new_patient_and_episode_please()
-
-        # successful submissions
-        self.successful_submission = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            transmission=models.Transmission.objects.create(transmission_id=3),
-            episode=episode_1
-        )
-
-        # multiple successful submissions
-        self.successful_submission_1 = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=544),
-            episode=episode_8
-        )
-        self.successful_submission_2 = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=545),
-            episode=episode_9
-        )
-
-        # rejected submissions
-        self.rejected_submission = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            transmission=models.Transmission.objects.create(transmission_id=538),
-            episode=episode_2
-        )
-
-        # rejected with multiple reasons
-        self.multiple_rejected_submission = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=541),
-            episode=episode_5
-        )
-
-        # multiple episodes rejected
-        self.multiple_rejections_submission_1 = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=542),
-            episode=episode_6
-        )
-        self.multiple_rejections_submission_2 = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            claim=models.SystemClaim.objects.create(reference_number=543),
-            episode=episode_7
-        )
-
-        # rejected multiple episodes
-        self.rejected_combination_submission = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            transmission=models.Transmission.objects.create(transmission_id=539),
-            episode=episode_4
-        )
-
-        self.success_combination_submission = models.Submission.objects.create(
-            state=models.Submission.SENT,
-            transmission=models.Transmission.objects.create(transmission_id=540),
-            episode=episode_3
-        )
-
-    def test_content_as_dict(self):
-        expected_empty = OrderedDict(
-            [
-                (
-                    "receipt",
-                    OrderedDict(
-                        [
-                            ("@schvn", "1.0"),
-                            (
-                                "@err",
-                                "There are no responses waiting for site 89651"
-                            ),
-                        ]
-                    ),
-                )
-            ]
-        )
-        expected_success = OrderedDict(
-            [
-                (
-                    "icset",
-                    OrderedDict(
-                        [
-                            (
-                                "ic",
-                                OrderedDict(
-                                    [
-                                        ("@schvn", "1.0"),
-                                        ("@synv", "1"),
-                                        ("@ori", "A0DPB"),
-                                        ("@dest", "89651"),
-                                        ("@datrel", "190730"),
-                                        ("@tim", "0203"),
-                                        ("@seq", "000009"),
-                                        ("@xmcat", "1"),
-                                        (
-                                            "contrl",
-                                            OrderedDict(
-                                                [
-                                                    ("@schvn", "1.0"),
-                                                    ("@ori", "89651"),
-                                                    ("@dest", "A0DPB"),
-                                                    ("@seq", "000003"),
-                                                    ("@accd", "1"),
-                                                ]
-                                            ),
-                                        ),
-                                        ("#text", "r"),
-                                    ]
-                                ),
-                            )
-                        ]
-                    ),
-                )
-            ]
-        )
-        self.assertEqual(
-            self.empty_response.content_as_dict, expected_empty
-        )
-        self.assertEqual(
-            self.successful_response.content_as_dict, expected_success
-        )
-
     def test_is_empty(self):
         self.assertTrue(self.empty_response.is_empty())
-        self.assertFalse(self.successful_response.is_empty())
-        self.assertFalse(self.rejected_response.is_empty())
+        self.assertFalse(self.get_success_messages()["response"].is_empty())
+        self.assertFalse(self.get_rejection_messages()["response"].is_empty())
 
     def test_unknown_error(self):
         with self.assertRaises(ValueError) as e:
@@ -492,11 +533,11 @@ responses waiting for site 89651"/>
     def test_update_submissions_empty(self):
         self.empty_response.update_submissions()
         self.assertEqual(
-            self.successful_submission.state,
+            self.get_success_messages()["submission"].state,
             models.Submission.SENT
         )
         self.assertEqual(
-            self.rejected_submission.state,
+            self.get_rejection_messages()["submission"].state,
             models.Submission.SENT
         )
         self.assertFalse(
@@ -504,154 +545,173 @@ responses waiting for site 89651"/>
         )
 
     def test_update_submissions_success(self):
+        successful_messages = self.get_success_messages()
+        submission = successful_messages["submission"]
+        response = successful_messages["response"]
         self.assertEqual(
-            self.successful_submission.state,
+            submission.state,
             models.Submission.SENT
         )
-        self.successful_response.update_submissions()
-        self.successful_submission.refresh_from_db()
+        response.update_submissions()
+        submission.refresh_from_db()
         self.assertEqual(
-            self.successful_submission.state,
+            submission.state,
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            self.successful_submission.compass_response,
-            self.successful_response
+            submission.compass_response,
+            response
         )
 
     def test_update_multipe_submissions_success(self):
+        successful_messages = self.get_multiple_success_messages()
+        submission_1, submission_2 = successful_messages["submissions"]
+        response = successful_messages["response"]
         self.assertEqual(
-            self.successful_submission_1.state,
+            submission_1.state,
             models.Submission.SENT
         )
         self.assertEqual(
-            self.successful_submission_2.state,
+            submission_2.state,
             models.Submission.SENT
         )
-        self.multiple_successful_response.update_submissions()
-        self.successful_submission_1.refresh_from_db()
-        self.successful_submission_2.refresh_from_db()
+        response.update_submissions()
+        submission_1.refresh_from_db()
+        submission_2.refresh_from_db()
         self.assertEqual(
-            self.successful_submission_1.state,
+            submission_1.state,
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            self.successful_submission_1.compass_response,
-            self.multiple_successful_response
+            submission_1.compass_response,
+            response
         )
         self.assertEqual(
-            self.successful_submission_2.state,
+            submission_2.state,
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            self.successful_submission_2.compass_response,
-            self.multiple_successful_response
+            submission_2.compass_response,
+            response
         )
 
     def test_update_submissions_rejected(self):
+        rejection_messages = self.get_rejection_messages()
+        submission = rejection_messages["submission"]
+        response = rejection_messages["response"]
         self.assertEqual(
-            self.rejected_submission.state,
+            submission.state,
             models.Submission.SENT
         )
-        self.rejected_response.update_submissions()
-        self.rejected_submission.refresh_from_db()
+        response.update_submissions()
+        submission.refresh_from_db()
         self.assertEqual(
-            self.rejected_submission.state,
+            submission.state,
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            self.rejected_submission.compass_response,
-            self.rejected_response
+            submission.compass_response,
+            response
         )
         self.assertEqual(
-            self.rejected_submission.rejection,
+            submission.rejection,
             "No significant treatment on an EDI claim"
         )
 
     def test_update_submissions_multiple_rejection_reasons(self):
+        rejection_messages = self.get_messages_with_multiple_rejections()
+        submission = rejection_messages["submission"]
+        response = rejection_messages["response"]
         self.assertEqual(
-            self.multiple_rejected_submission.state,
+            submission.state,
             models.Submission.SENT
         )
-        self.multiple_rejected_response.update_submissions()
-        self.multiple_rejected_submission.refresh_from_db()
+        response.update_submissions()
+        submission.refresh_from_db()
         self.assertEqual(
-            self.multiple_rejected_submission.state,
+            submission.state,
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            self.multiple_rejected_submission.compass_response,
-            self.multiple_rejected_response
+            submission.compass_response,
+            response
         )
         reject_reason = "".join([
             "No significant treatment on an EDI claim, ",
             "Free Repair/Replacement Within 12 Months invalid"
         ])
         self.assertEqual(
-            self.multiple_rejected_submission.rejection,
+            submission.rejection,
             reject_reason
         )
 
     def test_update_submissions_multiple_rejected_episodes(self):
+        rejection_messages = self.get_multiple_rejection_messages()
+        response = rejection_messages["response"]
+        submission_1, submission_2 = rejection_messages["submissions"]
         self.assertEqual(
-            self.multiple_rejections_submission_1.state,
+            submission_1.state,
             models.Submission.SENT
         )
         self.assertEqual(
-            self.multiple_rejections_submission_2.state,
+            submission_2.state,
             models.Submission.SENT
         )
-        self.multiple_rejections_response.update_submissions()
-        self.multiple_rejections_submission_1.refresh_from_db()
-        self.multiple_rejections_submission_2.refresh_from_db()
+        response.update_submissions()
+        submission_1.refresh_from_db()
+        submission_2.refresh_from_db()
         self.assertEqual(
-            self.multiple_rejections_submission_1.state,
+            submission_1.state,
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            self.multiple_rejections_submission_2.state,
+            submission_2.state,
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            self.multiple_rejections_submission_1.compass_response,
-            self.multiple_rejections_response
+            submission_1.compass_response,
+            response
         )
         self.assertEqual(
-            self.multiple_rejections_submission_2.compass_response,
-            self.multiple_rejections_response
+            submission_2.compass_response,
+            response
         )
 
         self.assertEqual(
-            self.multiple_rejections_submission_1.rejection,
+            submission_1.rejection,
             "No significant treatment on an EDI claim"
         )
         self.assertEqual(
-            self.multiple_rejections_submission_2.rejection,
+            submission_2.rejection,
             "Free Repair/Replacement Within 12 Months invalid"
         )
 
     def test_update_submission_accepted_and_rejected(self):
-        self.combination_response.update_submissions()
-        self.rejected_combination_submission.refresh_from_db()
+        messages = self.get_combination_message()
+        response = messages["response"]
+        rejected_submission, successful_submission = messages["submissions"]
+
+        response.update_submissions()
+        rejected_submission.refresh_from_db()
         self.assertEqual(
-            self.rejected_combination_submission.state,
+            rejected_submission.state,
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            self.rejected_combination_submission.compass_response,
-            self.combination_response
+            rejected_submission.compass_response,
+            response
         )
         self.assertEqual(
-            self.rejected_combination_submission.rejection,
+            rejected_submission.rejection,
             "No significant treatment on an EDI claim"
         )
 
-        self.success_combination_submission.refresh_from_db()
+        successful_submission.refresh_from_db()
         self.assertEqual(
-            self.success_combination_submission.state,
+            successful_submission.state,
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            self.success_combination_submission.compass_response,
-            self.combination_response
+            successful_submission.compass_response,
+            response
         )

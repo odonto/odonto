@@ -5,5 +5,5 @@
 
 `transmission_id` the id of specific transmission that we sent to a compass, on the envelope, their term is the `serial number`
 
-`episode_id` the id of an episode and the id sent in a bdcs1 as the `message reference  number` (their term)
+`submission_id` is the id of an episode and the id sent in a bdcs1 as the `message reference  number` (their term). Previously it was transmission id. However given the case where we send a single episode multiple times it makes more sense to use episode id.
 
