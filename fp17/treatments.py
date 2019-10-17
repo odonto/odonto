@@ -329,3 +329,155 @@ ETHNIC_ORIGIN_PATIENT_DECLINED = Treatment(code=9025, instance_count=99)
 # "Part 6 Other Services"
 DOMICILIARY_SERVICES = Treatment(code=9152)
 SEDATION_SERVICES = Treatment(code=9166)
+
+
+# FP17O exclusive treatments
+
+
+# Orthodontic Data Set
+REMOVABLE_UPPER_APPLIANCE = Treatment(code=9401)
+REMOVABLE_LOWER_APPLIANCE = Treatment(code=9402)
+FUNCTIONAL_APPLIANCE = Treatment(code=9403)
+FIXED_UPPER_APPLIANCE = Treatment(code=9404)
+FIXED_LOWER_APPLIANCE = Treatment(code=9405)
+RETAINER_UPPER = Treatment(code=9406)
+RETAINER_LOWER = Treatment(code=9407)
+
+
+class ORTHODONTIC_EXTRACTIONS(Treatment):
+    """
+    Code plus tooth notation.
+    Two digit code used to specify unique tooth.
+    1st digit – quadrant clockwise from upper right 1-4 for permanent teeth
+    and 5-8 for deciduous teeth
+    2nd digit – tooth in quadrant counting out from midline 1-8 for permanent
+    teeth, 1-5 for deciduous teeth.
+    Supernumerary teeth identified as 9
+    Enter the tooth notation(s) for extractions proposed/performed.
+    """
+
+    def __init__(self, teeth_quadrant):
+        super().__init__(code=9408, instance_count=teeth_quadrant)
+
+
+# Orthodontic Assessment
+ASSESS_AND_REVIEW = Treatment(code=9012)
+ASSESS_AND_REFUSE = Treatment(code=9013)
+ASSESS_AND_APPLIANCE_FITTED = Treatment(code=9014)
+
+
+class IOTN(Treatment):
+    """
+    Numeric value 00-05
+    Can occur with Assess and Review, Assess and Refuse or Assess and
+    Appliance Fitted
+    If a value of 03 is present then the aesthetic component (9165)
+    with a numeric value 01-10 must be present
+
+    A valid IOTN score is between 01-05.
+
+    If ‘IOTN not applicable’ (e.g not possible to calculate because the
+    patient has transferred mid treatment to a new Provider contract)
+    a value of 0 (zero) should be entered
+
+    Must be present on both assessment forms and the completion of active
+    treatment
+    """
+    def __init__(self, iotn):
+        super().__init__(code=9015, instance_count=iotn)
+
+
+class AESTHETIC_COMPONENT(Treatment):
+    """
+    Numeric value 01-10
+
+    Can occur with Assess and Review,
+    Assess and Refuse or Assess and Appliance Fitted
+
+    Must be present if IOTN (9015) value is 03
+    """
+    def __init__(self, numeric_value):
+        super().__init__(code=9165, instance_count=numeric_value)
+
+
+# Date of referral is weirdly multiple field
+# Assess and Review, Assess and Refuse or Assess and Appliance
+# Fitted must be present
+# 9017 Numeric value 01-31
+# 9018 Numeric value 01-12
+# 9019 Numeric value 00-99
+# Ignored if entered on a final ortho claim
+# Must be on or before the Date of Assessment
+# Cannot be a future date
+class DAY_OF_REFERRAL(Treatment):
+    def __init__(self, day_num):
+        super().__init__(code=9017, instance_count=day_num)
+
+
+class MONTH_OF_REFERRAL(Treatment):
+    def __init__(self, month_num):
+        super().__init__(code=9018, instance_count=month_num)
+
+
+class YEAR_OF_REFERRAL(Treatment):
+    def __init__(self, year_num):
+        super().__init__(code=9019, instance_count=year_num)
+
+
+# Assess and Appliance Fitted and Date of assessment must be present
+# 9169 Numeric value 01-31
+# 9170 Numeric value 01-12
+# 9171 Numeric value 00-99
+# The Date Appliance Fitted must be on or after the Date of Assessment.
+# Cannot be a future date
+class DAY_APPLIANCE_FITTED(Treatment):
+    def __init__(self, day_num):
+        super().__init__(code=9169, instance_count=day_num)
+
+
+class MONTH_APPLIANCE_FITTED(Treatment):
+    def __init__(self, month_num):
+        super().__init__(code=9170, instance_count=month_num)
+
+
+class YEAR_APPLIANCE_FITTED(Treatment):
+    def __init__(self, year_num):
+        super().__init__(code=9171, instance_count=year_num)
+
+
+# Orthodontic Completion
+TREATMENT_ABANDONED = Treatment(
+    code=9161, instance_count=1
+)
+
+# the 2 reasons for treatment being abandoned
+PATIENT_FAILED_TO_RETURN = Treatment(code=9409)
+PATIENT_REQUESTED = Treatment(code=9410)
+
+
+TREATMENT_DISCONTINUED = Treatment(
+    code=9161, instance_code=2
+)
+
+TREATMENT_COMPLETED = Treatment(
+    code=9161, instance_code=3
+)
+
+PAR_SCORES_CALCULATED = Treatment(
+    code=9411
+)
+
+
+REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST = Treatment(code=9159)
+REGULATION_11_REPLACEMENT_APPLIANCE = Treatment(code=9167)
+
+
+
+
+
+
+
+
+
+
+
