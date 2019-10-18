@@ -15,5 +15,6 @@ libpeerconnection.log
 odonto/local_settings.py
 *sqlite*
 .vscode
+.DS_Store
 node_modules
 package-lock.json

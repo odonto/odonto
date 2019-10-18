@@ -456,11 +456,11 @@ PATIENT_REQUESTED = Treatment(code=9410)
 
 
 TREATMENT_DISCONTINUED = Treatment(
-    code=9161, instance_code=2
+    code=9161, instance_count=2
 )
 
 TREATMENT_COMPLETED = Treatment(
-    code=9161, instance_code=3
+    code=9161, instance_count=3
 )
 
 PAR_SCORES_CALCULATED = Treatment(

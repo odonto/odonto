@@ -181,7 +181,7 @@ class ExceptionSerializer(object):
 
 
 class OrthodonticDataSetTranslator(TreatmentSerializer):
-    model = models.Fp17OtherDentalServices
+    model = models.OrthodonticDataSet
 
     TREATMENT_MAPPINGS = {
         "radiograph": t.RADIOGRAPHS,
@@ -207,21 +207,21 @@ class ExtractionChartTranslator(TreatmentSerializer):
         Supernumerary teeth identified as 9
         """
         quadrents = ["ur", "lr", "ll", "ul"]
-        permanent_teeth = list(range(1-9))
+        permanent_teeth = list(range(1, 9))
         deciduous_teeth = ["a", "b", "c", "d", "e"]
         teeth = permanent_teeth + deciduous_teeth
         teeth_fields_to_code = {}
 
         for quadrant_idx, quadrant in enumerate(quadrents):
             for tooth in teeth:
-                tooth_field = f"${quadrant}_{tooth}"
-                if t in deciduous_teeth:
+                tooth_field = f"{quadrant}_{tooth}"
+                if tooth in deciduous_teeth:
                     quadrant_code = (quadrant_idx + 5)
-                    tooth_code = deciduous_teeth.index(t) + 1
+                    tooth_code = deciduous_teeth.index(tooth) + 1
                 else:
                     quadrant_code = quadrant_idx + 1
-                    tooth_code = t
-                code = f"{quadrant_code}{tooth_code}"
+                    tooth_code = tooth
+                code = int(f"{quadrant_code}{tooth_code}")
                 teeth_fields_to_code[tooth_field] = code
 
         return teeth_fields_to_code
@@ -229,11 +229,9 @@ class ExtractionChartTranslator(TreatmentSerializer):
     def to_messages(self):
         teeth_fields_to_code = self.get_teeth_field_to_code_mapping()
         result = []
-
-        for field, code in teeth_fields_to_code:
+        for field, code in teeth_fields_to_code.items():
             if getattr(self.model_instance, field):
                 result.append(t.ORTHODONTIC_EXTRACTIONS(code))
-
         return result
 
 
@@ -246,8 +244,6 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
         "assess_and_appliance_fitted": t.ASSESS_AND_APPLIANCE_FITTED,
         "aesthetic_component": t.AESTHETIC_COMPONENT,
         "iotn": t.IOTN,
-        "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
-        "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
     }
 
     def to_messages(self):
@@ -266,13 +262,13 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
             dt = self.model_instance.date_of_referral
             result.append(t.DAY_OF_REFERRAL(dt.day))
             result.append(t.MONTH_OF_REFERRAL(dt.month))
-            result.append(int(str(t.YEAR_OF_REFERRAL(dt.year))[2:]))
+            result.append(t.YEAR_OF_REFERRAL(int(str(dt.year)[2:])))
 
         if self.model_instance.date_of_appliance_fitted:
             dt = self.model_instance.date_of_referral
             result.append(t.DAY_APPLIANCE_FITTED(dt.day))
             result.append(t.MONTH_APPLIANCE_FITTED(dt.month))
-            result.append(int(str(t.YEAR_APPLIANCE_FITTED(dt.year))[2:]))
+            result.append(t.YEAR_APPLIANCE_FITTED(int(str(dt.year)[2:])))
 
         return result
 
@@ -302,7 +298,7 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
                 t.IOTN(0)
             )
 
-        if(sum[
+        if sum([
             self.model_instance.patient_failed_to_return,
             self.model_instance.patient_requested_stop,
             self.model_instance.treatment_discontinued,
@@ -317,6 +313,7 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
         if self.model_instance.patient_requested_stop:
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_REQUESTED)
+        return result
 
 
 class DemographicsTranslator(object):
@@ -512,7 +509,8 @@ def translate_to_fp17o(bcds1, episode):
     orthodontic_assessment = episode.orthodonticassessment_set.get()
     bcds1.date_of_acceptance = orthodontic_assessment.date_of_assessment
     orthodontic_treatment = episode.orthodontictreatment_set.get()
-    bcds1.date_of_completion = orthodontic_treatment.date_of_completion
+    if orthodontic_treatment.date_of_completion:
+        bcds1.date_of_completion = orthodontic_treatment.date_of_completion
     bcds1.treatments = []
 
     translators = [
