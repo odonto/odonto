@@ -180,6 +180,142 @@ class ExceptionSerializer(object):
             return int(self.model_instance.patient_charge_collected * 100)
 
 
+class OrthodonticDataSetTranslator(TreatmentSerializer):
+    model = models.OrthodonticDataSet
+
+    TREATMENT_MAPPINGS = {
+        "radiograph": t.RADIOGRAPHS,
+        "removable_upper_appliance": t.REMOVABLE_UPPER_APPLIANCE,
+        "removable_lower_appliance": t.REMOVABLE_LOWER_APPLIANCE,
+        "fixed_upper_appliance": t.FIXED_UPPER_APPLIANCE,
+        "fixed_lower_appliance": t.FIXED_LOWER_APPLIANCE,
+        "function_appliance": t.FUNCTIONAL_APPLIANCE,
+        "retainer_upper": t.RETAINER_UPPER,
+        "retainer_lower": t.RETAINER_LOWER
+    }
+
+
+class ExtractionChartTranslator(TreatmentSerializer):
+    model = models.ExtractionChart
+
+    def get_teeth_field_to_code_mapping(self):
+        """
+        1st digit – quadrant clockwise from upper right 1-4 for
+        permanent teeth and 5-8 for deciduous teeth
+        2nd digit – tooth in quadrant counting out from midline 1-8
+        for permanent teeth, 1-5 for deciduous teeth.
+        Supernumerary teeth identified as 9
+        """
+        quadrents = ["ur", "lr", "ll", "ul"]
+        permanent_teeth = list(range(1, 9))
+        deciduous_teeth = ["a", "b", "c", "d", "e"]
+        teeth = permanent_teeth + deciduous_teeth
+        teeth_fields_to_code = {}
+
+        for quadrant_idx, quadrant in enumerate(quadrents):
+            for tooth in teeth:
+                tooth_field = f"{quadrant}_{tooth}"
+                if tooth in deciduous_teeth:
+                    quadrant_code = (quadrant_idx + 5)
+                    tooth_code = deciduous_teeth.index(tooth) + 1
+                else:
+                    quadrant_code = quadrant_idx + 1
+                    tooth_code = tooth
+                code = int(f"{quadrant_code}{tooth_code}")
+                teeth_fields_to_code[tooth_field] = code
+
+        return teeth_fields_to_code
+
+    def to_messages(self):
+        teeth_fields_to_code = self.get_teeth_field_to_code_mapping()
+        result = []
+        for field, code in teeth_fields_to_code.items():
+            if getattr(self.model_instance, field):
+                result.append(t.ORTHODONTIC_EXTRACTIONS(code))
+        return result
+
+
+class OrthodonticAssessmentTranslator(TreatmentSerializer):
+    model = models.OrthodonticAssessment
+
+    TREATMENT_MAPPINGS = {
+        "assessment_and_review": t.ASSESS_AND_REVIEW,
+        "assess_and_refuse_treatment": t.ASSESS_AND_REFUSE,
+        "assess_and_appliance_fitted": t.ASSESS_AND_APPLIANCE_FITTED,
+        "aesthetic_component": t.AESTHETIC_COMPONENT,
+        "iotn": t.IOTN,
+    }
+
+    def to_messages(self):
+        result = super().to_messages()
+
+        if self.model_instance.iotn_not_applicable:
+            # If ‘IOTN not applicable’ (e.g not possible to calculate
+            # because the patient has transferred mid treatment to a new
+            # Provider contract)
+            # a value of 0 (zero) should be entered
+            result.append(
+                t.IOTN(0)
+            )
+
+        if self.model_instance.date_of_referral:
+            dt = self.model_instance.date_of_referral
+            result.append(t.DAY_OF_REFERRAL(dt.day))
+            result.append(t.MONTH_OF_REFERRAL(dt.month))
+            result.append(t.YEAR_OF_REFERRAL(int(str(dt.year)[2:])))
+
+        if self.model_instance.date_of_appliance_fitted:
+            dt = self.model_instance.date_of_referral
+            result.append(t.DAY_APPLIANCE_FITTED(dt.day))
+            result.append(t.MONTH_APPLIANCE_FITTED(dt.month))
+            result.append(t.YEAR_APPLIANCE_FITTED(int(str(dt.year)[2:])))
+
+        return result
+
+
+class OrthodonticTreatmentTranslator(TreatmentSerializer):
+    model = models.OrthodonticTreatment
+
+    TREATMENT_MAPPINGS = {
+        "aesthetic_component": t.AESTHETIC_COMPONENT,
+        "iotn": t.IOTN,
+        "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
+        "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
+        "treatment_discontinued": t.TREATMENT_DISCONTINUED,
+        "treatment_completed": t.TREATMENT_COMPLETED,
+        "par_scores_calculated": t.PAR_SCORES_CALCULATED
+    }
+
+    def to_messages(self):
+        result = super().to_messages()
+
+        if self.model_instance.iotn_not_applicable:
+            # If ‘IOTN not applicable’ (e.g not possible to calculate
+            # because the patient has transferred mid treatment to a new
+            # Provider contract)
+            # a value of 0 (zero) should be entered
+            result.append(
+                t.IOTN(0)
+            )
+
+        if sum([
+            self.model_instance.patient_failed_to_return,
+            self.model_instance.patient_requested_stop,
+            self.model_instance.treatment_discontinued,
+            self.model_instance.treatment_completed
+        ]) > 1:
+            raise ValueError("Inconsistent reasons for stopping an FP17O")
+
+        if self.model_instance.patient_failed_to_return:
+            result.append(t.TREATMENT_ABANDONED)
+            result.append(t.PATIENT_FAILED_TO_RETURN)
+
+        if self.model_instance.patient_requested_stop:
+            result.append(t.TREATMENT_ABANDONED)
+            result.append(t.PATIENT_REQUESTED)
+        return result
+
+
 class DemographicsTranslator(object):
     def __init__(self, model_instance):
         self.model_instance = model_instance
@@ -345,6 +481,70 @@ def clean_non_alphanumeric(name):
 
 
 def translate_to_bdcs1(bcds1, episode):
+    if episode.category_name == episode_categories.FP17Episode.display_name:
+        return translate_to_fp17(bcds1, episode)
+    elif episode.category_name == episode_categories.FP17OEpisode.display_name:
+        return translate_to_fp17o(bcds1, episode)
+    raise ValueError(
+        f"Unable to recognise episode category {episode.category_name} \
+for episode {episode.id}"
+    )
+
+
+def translate_to_fp17o(bcds1, episode):
+    demographics = episode.patient.demographics()
+    demographics_translator = DemographicsTranslator(demographics)
+    # surname must be upper case according to the form submitting guidelines
+    bcds1.patient.surname = demographics_translator.surname()
+    bcds1.patient.forename = demographics_translator.forename()
+
+    bcds1.patient.date_of_birth = demographics.date_of_birth
+    bcds1.patient.address = demographics_translator.address()
+    bcds1.patient.sex = demographics_translator.sex()
+    post_code = demographics_translator.post_code()
+
+    if post_code:
+        bcds1.patient.postcode = post_code
+
+    orthodontic_assessment = episode.orthodonticassessment_set.get()
+    bcds1.date_of_acceptance = orthodontic_assessment.date_of_assessment
+    orthodontic_treatment = episode.orthodontictreatment_set.get()
+    if orthodontic_treatment.date_of_completion:
+        bcds1.date_of_completion = orthodontic_treatment.date_of_completion
+    bcds1.treatments = []
+
+    translators = [
+        OrthodonticDataSetTranslator,
+        ExtractionChartTranslator,
+        OrthodonticAssessmentTranslator,
+        OrthodonticTreatmentTranslator
+    ]
+
+    for translator in translators:
+        model = translator.model
+        qs = model.objects.filter(episode=episode)
+        for instance in qs:
+            bcds1.treatments.extend(
+                translator(instance).to_messages()
+            )
+
+    ethnicity_treatment = demographics_translator.ethnicity()
+
+    if ethnicity_treatment:
+        bcds1.treatments.append(ethnicity_treatment)
+
+    fp17_exemption = episode.fp17exemptions_set.get()
+    exemption_translator = ExceptionSerializer(fp17_exemption)
+    exemptions = exemption_translator.exemptions()
+    charge = exemption_translator.charge()
+    if exemptions:
+        bcds1.exemption_remission = exemptions
+    if charge:
+        bcds1.patient_charge_pence = charge
+    return bcds1
+
+
+def translate_to_fp17(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(demographics)
     # surname must be upper case according to the form submitting guidelines
