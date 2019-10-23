@@ -22,4 +22,5 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/form_validation.js',
         'js/openodonto/services/validators/date_of_birth_required.js',
         'js/openodonto/services/validators/address_required.js',
+        'js/openodonto/services/validators/appliance_greater_than_assessment.js',
     ]
