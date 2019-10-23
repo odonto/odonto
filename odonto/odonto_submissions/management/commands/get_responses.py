@@ -12,4 +12,5 @@ from odonto.odonto_submissions.models import CompassBatchResponse
 class Command(BaseCommand):
     def handle(self, *args, **options):
         response = CompassBatchResponse.get()
+        response.update_submissions()
         print(response.content)
