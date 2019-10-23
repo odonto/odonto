@@ -246,7 +246,18 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
         "iotn": t.IOTN,
     }
 
+    def validate(self):
+        fitted = self.model_instance.date_of_appliance_fitted
+        assessment = self.model_instance.date_of_assessment
+
+        if fitted and assessment:
+            if fitted < assessment:
+                raise ValueError(
+                    "Date appliance fitted prior to date of assessment"
+                )
+
     def to_messages(self):
+        self.validate()
         result = super().to_messages()
 
         if self.model_instance.iotn_not_applicable:
@@ -265,7 +276,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
             result.append(t.YEAR_OF_REFERRAL(int(str(dt.year)[2:])))
 
         if self.model_instance.date_of_appliance_fitted:
-            dt = self.model_instance.date_of_referral
+            dt = self.model_instance.date_of_appliance_fitted
             result.append(t.DAY_APPLIANCE_FITTED(dt.day))
             result.append(t.MONTH_APPLIANCE_FITTED(dt.month))
             result.append(t.YEAR_APPLIANCE_FITTED(int(str(dt.year)[2:])))
