@@ -1,5 +1,6 @@
 from opal.core.test import OpalTestCase
 import datetime
+from django.utils import timezone
 from django.utils.module_loading import import_string
 from fp17 import bcds1 as message
 from fp17.envelope import Envelope
@@ -140,7 +141,7 @@ class SerializerTestCase(OpalTestCase):
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 4):
+        for case_number in range(1, 5):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -151,3 +152,25 @@ class SerializerTestCase(OpalTestCase):
             serializers.clean_non_alphanumeric(name),
             "McWilsonSmithjones"
         )
+
+
+class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
+    def test_validate(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        orthodontic_assessment = self.episode.orthodonticassessment_set.get()
+        today = timezone.now().date()
+        yesterday = (timezone.now() - datetime.timedelta(1)).date()
+        orthodontic_assessment.date_of_assessment = today
+        orthodontic_assessment.date_of_appliance_fitted = yesterday
+        orthodontic_assessment.save()
+        translator = serializers.OrthodonticAssessmentTranslator(
+            orthodontic_assessment
+        )
+        with self.assertRaises(ValueError) as v:
+            translator.validate()
+
+        self.assertEqual(
+            str(v.exception),
+            "Date appliance fitted prior to date of assessment"
+        )
+
