@@ -7,7 +7,6 @@ from odonto import models
 from odonto import episode_categories
 from opal.core import subrecords
 from django.db import models as django_models
-from odonto import episode_categories
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
