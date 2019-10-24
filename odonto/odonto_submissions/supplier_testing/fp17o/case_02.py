@@ -26,7 +26,11 @@ def annotate(bcds1):
         treatments.RETAINER_UPPER,
         treatments.TREATMENT_COMPLETED,
         treatments.PAR_SCORES_CALCULATED,
-        treatments.IOTN(2)
+        treatments.DAY_OF_REFERRAL(9),
+        treatments.MONTH_OF_REFERRAL(10),
+        treatments.YEAR_OF_REFERRAL(19),
+        treatments.IOTN(2),
+        treatments.ASSESS_AND_REVIEW
     ]
 
     return bcds1
@@ -64,7 +68,9 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.orthodonticassessment_set.update(
+        assessment_and_review=True,
         date_of_assessment=datetime.date(2019, 10, 11),
+        date_of_referral=datetime.date(2019, 10, 9),
     )
 
     translate_to_bdcs1(bcds1, episode)
