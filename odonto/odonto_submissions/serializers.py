@@ -5,6 +5,7 @@ from fp17.bcds1 import Treatment
 from django.conf import settings
 from odonto import models
 from odonto import episode_categories
+from opal.core import subrecords
 from django.db import models as django_models
 from odonto import episode_categories
 from fp17 import treatments as t
@@ -17,8 +18,17 @@ class TreatmentSerializer(object):
     message = Treatment
     TREATMENT_MAPPINGS = None
 
-    def __init__(self, model_instance):
-        self.model_instance = model_instance
+    def __init__(self, episode):
+        self.episode = episode
+        self.patient = episode.patient
+
+        model_attribute_name = f"{self.model.__name__}_set".lower()
+
+        if self.model in subrecords.patient_subrecords():
+            parent = self.patient
+        else:
+            parent = self.episode
+        self.model_instance = getattr(parent, model_attribute_name).get()
 
     def get_field(self, name):
         return self.model_instance._meta.get_field(name)
@@ -327,9 +337,8 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
         return result
 
 
-class DemographicsTranslator(object):
-    def __init__(self, model_instance):
-        self.model_instance = model_instance
+class DemographicsTranslator(TreatmentSerializer):
+    model = models.Demographics
 
     ETHNICITY_MAPPINGS = {
         "White british": t.ETHNIC_ORIGIN_1_WHITE_BRITISH,
@@ -533,12 +542,9 @@ def translate_to_fp17o(bcds1, episode):
     ]
 
     for translator in translators:
-        model = translator.model
-        qs = model.objects.filter(episode=episode)
-        for instance in qs:
-            bcds1.treatments.extend(
-                translator(instance).to_messages()
-            )
+        bcds1.treatments.extend(
+            translator(episode).to_messages()
+        )
 
     ethnicity_treatment = demographics_translator.ethnicity()
 
@@ -558,7 +564,7 @@ def translate_to_fp17o(bcds1, episode):
 
 def translate_to_fp17(bcds1, episode):
     demographics = episode.patient.demographics()
-    demographics_translator = DemographicsTranslator(demographics)
+    demographics_translator = DemographicsTranslator(episode)
     # surname must be upper case according to the form submitting guidelines
     bcds1.patient.surname = demographics_translator.surname()
     bcds1.patient.forename = demographics_translator.forename()
@@ -584,12 +590,9 @@ def translate_to_fp17(bcds1, episode):
     ]
 
     for translator in translators:
-        model = translator.model
-        qs = model.objects.filter(episode=episode)
-        for instance in qs:
-            bcds1.treatments.extend(
-                translator(instance).to_messages()
-            )
+        bcds1.treatments.extend(
+            translator(episode).to_messages()
+        )
 
     ethnicity_treatment = demographics_translator.ethnicity()
 

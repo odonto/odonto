@@ -164,7 +164,7 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
         orthodontic_assessment.date_of_appliance_fitted = yesterday
         orthodontic_assessment.save()
         translator = serializers.OrthodonticAssessmentTranslator(
-            orthodontic_assessment
+            self.episode
         )
         with self.assertRaises(ValueError) as v:
             translator.validate()
