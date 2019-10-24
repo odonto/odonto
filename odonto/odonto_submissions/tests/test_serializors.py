@@ -155,18 +155,38 @@ class SerializerTestCase(OpalTestCase):
 
 
 class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
-    def test_validate(self):
+    def setUp(self):
+        self.today = timezone.now().date()
+        self.yesterday = (timezone.now() - datetime.timedelta(1)).date()
+        self.two_days_ago = (timezone.now() - datetime.timedelta(2)).date()
+
+    def test_validate_no_exception(self):
         _, self.episode = self.new_patient_and_episode_please()
         orthodontic_assessment = self.episode.orthodonticassessment_set.get()
-        today = timezone.now().date()
-        yesterday = (timezone.now() - datetime.timedelta(1)).date()
-        orthodontic_assessment.date_of_assessment = today
-        orthodontic_assessment.date_of_appliance_fitted = yesterday
+
+        orthodontic_assessment.assessment_and_review = True
+        orthodontic_assessment.date_of_referral = self.two_days_ago
+        orthodontic_assessment.date_of_assessment = self.yesterday
+        orthodontic_assessment.date_of_appliance_fitted = self.today
         orthodontic_assessment.save()
         translator = serializers.OrthodonticAssessmentTranslator(
             self.episode
         )
-        with self.assertRaises(ValueError) as v:
+        translator.validate()
+
+    def test_validate_date_of_assessment_exception(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        orthodontic_assessment = self.episode.orthodonticassessment_set.get()
+
+        orthodontic_assessment.assessment_and_review = True
+        orthodontic_assessment.date_of_referral = self.two_days_ago
+        orthodontic_assessment.date_of_assessment = self.today
+        orthodontic_assessment.date_of_appliance_fitted = self.yesterday
+        orthodontic_assessment.save()
+        translator = serializers.OrthodonticAssessmentTranslator(
+            self.episode
+        )
+        with self.assertRaises(serializers.SerializerValidationError) as v:
             translator.validate()
 
         self.assertEqual(

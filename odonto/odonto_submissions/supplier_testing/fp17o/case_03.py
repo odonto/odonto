@@ -24,6 +24,10 @@ def annotate(bcds1):
         treatments.RADIOGRAPHS(1),
         treatments.FIXED_UPPER_APPLIANCE,
         treatments.IOTN(0),
+        treatments.DAY_OF_REFERRAL(9),
+        treatments.MONTH_OF_REFERRAL(10),
+        treatments.YEAR_OF_REFERRAL(19),
+        treatments.ASSESS_AND_REVIEW
     ]
 
     return bcds1
@@ -46,6 +50,8 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.orthodonticassessment_set.update(
+        assessment_and_review=True,
+        date_of_referral=datetime.date(2019, 10, 9),
         date_of_assessment=datetime.date(2019, 10, 12),
     )
     episode.orthodonticdataset_set.update(

@@ -261,19 +261,75 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
 
     def validate(self):
         today = datetime.date.today()
-        fitted = self.model_instance.date_of_appliance_fitted
-        assessment = self.model_instance.date_of_assessment
+        date_fitted = self.model_instance.date_of_appliance_fitted
+        date_of_assessment = self.model_instance.date_of_assessment
+        review = self.model_instance.assessment_and_review
+        refuse_treatment = self.model_instance.assess_and_refuse_treatment
+        appliance_fitted = self.model_instance.assess_and_appliance_fitted
+        date_of_referral = self.model_instance.date_of_referral
 
-        if fitted and assessment:
-            if fitted < assessment:
+
+        # assess and * checks
+        # there cannot be more than 1
+        if sum([review, refuse_treatment, appliance_fitted]) > 1:
+            raise SerializerValidationError(
+                'There can only be one "Assess and review", \
+"Assess and refuse treatment", "Assess and appliance fitted"'
+            )
+
+
+        # date of referral checks
+        if date_of_referral:
+            if date_of_referral > today:
+                raise SerializerValidationError(
+                    "Date of referral must not be in the future"
+                )
+
+            if not(review or refuse_treatment or appliance_fitted):
+                raise SerializerValidationError(
+                    '"Assess and review", "Assess and refuse treatment" \
+or "Assess and appliance fitted" are required if there is a date of referral'
+                )
+
+            if date_of_assessment and date_of_referral > date_of_assessment:
+                raise SerializerValidationError(
+                    "Date of assessment must be greater than the date of referral"
+                )
+
+        if date_of_assessment and date_of_assessment >= datetime.date(
+            2019, 4, 1
+        ):
+            if not date_of_referral:
+                raise SerializerValidationError(
+                    "Date of referral is required if there is a date of assessment"
+                )
+
+        # date of assessment checks
+        if date_of_assessment and date_of_assessment > today:
+            raise SerializerValidationError(
+                "Date of assessment must not be in the future"
+            )
+
+        if review and refuse_treatment and appliance_fitted:
+            if not date_of_assessment:
+                raise SerializerValidationError(
+                    'Date of assessment is required if "Assess and review", \
+"Assess and refuse treatment" or "Assess and appliance fitted" are populated'
+                )
+
+        # date of appliance fitted checks
+        if date_fitted and date_of_assessment:
+            if date_fitted < date_of_assessment:
                 raise SerializerValidationError(
                     "Date appliance fitted prior to date of assessment"
                 )
 
-        if assessment and assessment < today:
-            raise SerializerValidationError(
-                "Date of assessment must not be in the future"
-            )
+        if appliance_fitted:
+            if not date_fitted:
+                raise SerializerValidationError(
+                    'Date of appliance fitted is required if "Assess and \
+appliance fitted"'
+                )
 
     def to_messages(self):
         self.validate()
