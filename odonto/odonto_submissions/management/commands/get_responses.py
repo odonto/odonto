@@ -6,11 +6,11 @@ that have been processed since the last time this has
 run.
 """
 from django.core.management.base import BaseCommand
-from odonto.odonto_submissions.models import CompassBatchResponse
+from odonto.odonto_submissions.models import Response
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        response = CompassBatchResponse.get()
+        response = Response.get()
         response.update_submissions()
         print(response.content)
