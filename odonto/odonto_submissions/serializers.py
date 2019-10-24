@@ -13,6 +13,10 @@ from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
 
 
+class SerializerValidationError(Exception):
+    pass
+
+
 class TreatmentSerializer(object):
     message = Treatment
     TREATMENT_MAPPINGS = None
@@ -256,14 +260,20 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
     }
 
     def validate(self):
+        today = datetime.date.today()
         fitted = self.model_instance.date_of_appliance_fitted
         assessment = self.model_instance.date_of_assessment
 
         if fitted and assessment:
             if fitted < assessment:
-                raise ValueError(
+                raise SerializerValidationError(
                     "Date appliance fitted prior to date of assessment"
                 )
+
+        if assessment and assessment < today:
+            raise SerializerValidationError(
+                "Date of assessment must not be in the future"
+            )
 
     def to_messages(self):
         self.validate()
