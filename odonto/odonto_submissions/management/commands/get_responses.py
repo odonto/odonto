@@ -12,4 +12,5 @@ from odonto.odonto_submissions.models import Response
 class Command(BaseCommand):
     def handle(self, *args, **options):
         response = Response.get()
+        response.update_submissions()
         print(response.content)

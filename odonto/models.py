@@ -592,9 +592,6 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
         default=False,
         verbose_name="PAR "
     )
-    iotn = fields.IntegerField(
-        blank=True, null=True, verbose_name="IOTN"
-    )
     # Index of Orthodontic Treatment Need
     # Only accepts 1-5
     iotn = fields.IntegerField(
