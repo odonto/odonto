@@ -144,6 +144,6 @@ class SubmissionAdmin(VersionAdmin):
 admin.site.unregister(opal_models.Episode)
 admin.site.register(opal_models.Episode, EpisodeAdmin)
 
-admin.site.register(models.CompassBatchResponse)
+admin.site.register(models.Response)
 admin.site.register(models.Submission, SubmissionAdmin)
 admin.site.register(models.Transmission)

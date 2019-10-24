@@ -44,7 +44,7 @@ class Transmission(models.Model):
         return instance
 
 
-class CompassBatchResponse(models.Model):
+class Response(models.Model):
     """
     This requests and stores everything from the dpb api get_responses method
     """
@@ -53,8 +53,8 @@ class CompassBatchResponse(models.Model):
     FAILED = "Failed"
 
     STATUS = (
-        (SUCCESS, SUCCESS),
-        (FAILED, FAILED),
+        (SUCCESS, SUCCESS,),
+        (FAILED, FAILED,),
     )
     created = models.DateTimeField(default=timezone.now)
     content = models.TextField(default="")
@@ -239,7 +239,7 @@ class Submission(models.Model):
 
     # The response tha we receive immediately after we send it
     # NOT the one from the batch process
-    response = models.TextField(blank=True, default="")
+    request_response = models.TextField(blank=True, default="")
 
     rejection = models.TextField(blank=True, default="")
 
@@ -250,8 +250,8 @@ class Submission(models.Model):
         Episode,
         on_delete=models.CASCADE
     )
-    compass_response = models.ForeignKey(
-        "CompassBatchResponse",
+    response = models.ForeignKey(
+        "Response",
         null=True,
         on_delete=models.SET_NULL
     )
@@ -316,7 +316,7 @@ to compass for submission {} not sending"
         new_submission = cls.create(episode)
 
         try:
-            new_submission.response = dpb_api.send_message(
+            new_submission.request_response = dpb_api.send_message(
                 new_submission.raw_xml
             )
             new_submission.state = cls.SENT

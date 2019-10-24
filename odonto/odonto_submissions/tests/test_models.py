@@ -100,7 +100,7 @@ to compass for submission {} not sending"
         # refetch the submission to make sure its saved
         submission = models.Submission.objects.get(id=sent_submission.id)
         self.assertEqual(
-            submission.response, "some response"
+            submission.request_response, "some response"
         )
         self.assertEqual(
             submission.raw_xml, "some_xml"
@@ -117,7 +117,7 @@ to compass for submission {} not sending"
         # refetch the submission to make sure its saved
         submission = self.episode.submission_set.last()
         self.assertEqual(
-            submission.response, ""
+            submission.request_response, ""
         )
         self.assertEqual(
             submission.state, models.Submission.FAILED_TO_SEND
@@ -214,28 +214,28 @@ to compass for submission {} not sending"
 
 
 @mock.patch("odonto.odonto_submissions.dpb_api.get_responses")
-class CompassBatchResponseGetTestCase(OpalTestCase):
+class ResponseGetTestCase(OpalTestCase):
     def test_get_success(self, get_responses):
         get_responses.return_value = "some response"
-        batch_response = models.CompassBatchResponse.get()
+        batch_response = models.Response.get()
         self.assertEqual(batch_response.content, "some response")
         self.assertEqual(
-            batch_response.state, models.CompassBatchResponse.SUCCESS
+            batch_response.state, models.Response.SUCCESS
         )
 
     def test_get_failed(self, get_responses):
         get_responses.side_effect = ValueError("failed")
 
         with self.assertRaises(ValueError):
-            models.CompassBatchResponse.get()
+            models.Response.get()
 
         self.assertEqual(
-            models.CompassBatchResponse.objects.last().state,
-            models.CompassBatchResponse.FAILED
+            models.Response.objects.last().state,
+            models.Response.FAILED
         )
 
 
-class CompassBatchResponseParseTestCase(OpalTestCase):
+class ResponseParseTestCase(OpalTestCase):
     EMPTY_MESSAGE = """
         <receipt schvn="1.0" err="There are no
 responses waiting for site 89651"/>
@@ -265,8 +265,8 @@ responses waiting for site 89651"/>
             transmission=transmission,
             episode=episode
         )
-        successful_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        successful_response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.SUCCESS_MESSAGE.format(
                 transmission_id=transmission.transmission_id
             ),
@@ -304,8 +304,8 @@ responses waiting for site 89651"/>
             episode=episode_2
         )
 
-        successful_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        successful_response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.MULTIPLE_SUCCESS_MESSAGES.format(
                 transmission_id_1=transmission_1.transmission_id,
                 transmission_id_2=transmission_2.transmission_id,
@@ -341,8 +341,8 @@ responses waiting for site 89651"/>
             episode=episode,
             created=created_dt
         )
-        response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.REJECTION_MESSAGE.format(
                 transmission_id=transmission.transmission_id,
                 submission_id=episode.id
@@ -383,8 +383,8 @@ responses waiting for site 89651"/>
             transmission=transmission,
             episode=episode
         )
-        response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.MULTUPLE_REJECTION_MESSAGE.format(
                 transmission_id=transmission.transmission_id,
                 submission_id=episode.id
@@ -437,8 +437,8 @@ responses waiting for site 89651"/>
             episode=episode_2
         )
 
-        response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.MULTIPLE_REJECTIONS_MESSAGE.format(
                 transmission_id_1=transmission_1.transmission_id,
                 transmission_id_2=transmission_2.transmission_id,
@@ -486,8 +486,8 @@ responses waiting for site 89651"/>
             episode=episode_2
         )
 
-        response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.COMBINATION_MESSAGE.format(
                 transmission_id_1=transmission_1.transmission_id,
                 transmission_id_2=transmission_2.transmission_id,
@@ -503,14 +503,14 @@ responses waiting for site 89651"/>
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
         created_dt = datetime.datetime(2019, 12, 1)
-        self.empty_response = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        self.empty_response = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.EMPTY_MESSAGE,
             created=created_dt
         )
 
-        self.unkown_err = models.CompassBatchResponse.objects.create(
-            state=models.CompassBatchResponse.SUCCESS,
+        self.unkown_err = models.Response.objects.create(
+            state=models.Response.SUCCESS,
             content=self.UNKOWN_ERR,
             created=created_dt
         )
@@ -559,7 +559,7 @@ responses waiting for site 89651"/>
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            submission.compass_response,
+            submission.response,
             response
         )
 
@@ -583,7 +583,7 @@ responses waiting for site 89651"/>
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            submission_1.compass_response,
+            submission_1.response,
             response
         )
         self.assertEqual(
@@ -591,7 +591,7 @@ responses waiting for site 89651"/>
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            submission_2.compass_response,
+            submission_2.response,
             response
         )
 
@@ -610,7 +610,7 @@ responses waiting for site 89651"/>
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            submission.compass_response,
+            submission.response,
             response
         )
         self.assertEqual(
@@ -633,7 +633,7 @@ responses waiting for site 89651"/>
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            submission.compass_response,
+            submission.response,
             response
         )
         reject_reason = "".join([
@@ -669,11 +669,11 @@ responses waiting for site 89651"/>
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            submission_1.compass_response,
+            submission_1.response,
             response
         )
         self.assertEqual(
-            submission_2.compass_response,
+            submission_2.response,
             response
         )
 
@@ -698,7 +698,7 @@ responses waiting for site 89651"/>
             models.Submission.REJECTED_BY_COMPASS
         )
         self.assertEqual(
-            rejected_submission.compass_response,
+            rejected_submission.response,
             response
         )
         self.assertEqual(
@@ -712,6 +712,6 @@ responses waiting for site 89651"/>
             models.Submission.SUCCESS
         )
         self.assertEqual(
-            successful_submission.compass_response,
+            successful_submission.response,
             response
         )
