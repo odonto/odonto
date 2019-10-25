@@ -544,7 +544,10 @@ class ExtractionChart(models.EpisodeSubrecord):
 class OrthodonticAssessment(models.EpisodeSubrecord):
     _is_singleton = True
 
-    assessment_and_review = fields.BooleanField(default=False)
+    assessment_and_review = fields.BooleanField(
+        default=False,
+        verbose_name="Assess & review"
+    )
     assess_and_refuse_treatment = fields.BooleanField(
         default=False,
         verbose_name="Assess & refuse treatment"
