@@ -1,0 +1,16 @@
+<tr>
+  <td>
+    {{ display_name }}
+  </td>
+  <td>
+    <span ng-show="{{ model }}">
+    {% if is_boolean %}
+      X
+    {% elif is_date %}
+      [[ {{ model }} | displayDate ]]
+    {% else %}
+      [[ {{ model }} ]]
+    {% endif %}
+    </span>
+  </td>
+</tr>

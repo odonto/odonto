@@ -1,48 +1,19 @@
-<span ng-show="item.radiograph">
-  [[ item.radiograph ]]
-  <br />
-</span>
-<span ng-show="item.removable_upper_appliance">
-  Removable Upper Appliance
-  <br />
-</span>
-<span ng-show="item.removable_lower_appliance">
-  Removable Lower Appliance
-  <br />
-</span>
-<span ng-show="item.fixed_upper_appliance">
-  Fixed Upper Appliance
-  <br />
-</span>
-<span ng-show="item.fixed_lower_appliance">
-  Fixed Lower Appliance
-  <br />
-</span>
-<span ng-show="item.function_appliance">
-  Function Appliance
-  <br />
-</span>
-<span ng-show="item.retainer_upper">
-  Retainer Upper
-  <br />
-</span>
-<span ng-show="item.retainer_lower">
-  Retainer Lower
-  <br />
-</span>
-<span ng-show="item.extractions_upper_right">
-  [[ item.extractions_upper_right ]]
-  <br />
-</span>
-<span ng-show="item.extractions_upper_left">
-  [[ item.extractions_upper_left ]]
-  <br />
-</span>
-<span ng-show="item.extractions_lower_right">
-  [[ item.extractions_lower_right ]]
-  <br />
-</span>
-<span ng-show="item.extractions_lower_left">
-  [[ item.extractions_lower_left ]]
-  <br />
-</span>
+{% load odonto_subrecords %}
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-striped">
+      {% table_row_field_display "OrthodonticDataSet.radiograph" %}
+      {% table_row_field_display "OrthodonticDataSet.removable_upper_appliance" %}
+      {% table_row_field_display "OrthodonticDataSet.removable_lower_appliance" %}
+      {% table_row_field_display "OrthodonticDataSet.fixed_upper_appliance" %}
+      {% table_row_field_display "OrthodonticDataSet.fixed_lower_appliance" %}
+      {% table_row_field_display "OrthodonticDataSet.retainer_upper" %}
+      {% table_row_field_display "OrthodonticDataSet.retainer_lower" %}
+      {% table_row_field_display "OrthodonticDataSet.extractions_upper_right" %}
+      {% table_row_field_display "OrthodonticDataSet.extractions_upper_left" %}
+      {% table_row_field_display "OrthodonticDataSet.extractions_lower_right" %}
+      {% table_row_field_display "OrthodonticDataSet.extractions_lower_left" %}
+    </table>
+  </div>
+</div>
+

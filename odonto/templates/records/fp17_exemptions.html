@@ -1,127 +1,23 @@
+{% load odonto_subrecords %}
 <div class="row">
-
   <div class="col-md-6">
     <table class="table table-striped">
-      <tr>
-        <td>
-          Patient under 18
-        </td>
-        <td>
-          <span ng-show="item.patient_under_18">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Full remission HC2 cert
-        </td>
-        <td>
-          <span ng-show="item.full_remission_hc2_cert">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Partial remission HC3 cert
-        </td>
-        <td>
-          <span ng-show="item.partial_remission_hc3_cert">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Expectant mother
-        </td>
-        <td>
-          <span ng-show="item.expectant_mother">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Nursing mother
-        </td>
-        <td>
-          <span ng-show="item.nursing_mother">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Aged 18 in full time education
-        </td>
-        <td>
-          <span ng-show="item.aged_18_in_full_time_education">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Income support
-        </td>
-        <td>
-          <span ng-show="item.income_support">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          NHS tax credit exemption
-        </td>
-        <td>
-          <span ng-show="item.nhs_tax_credit_exemption">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Income based jobseekers allowance
-        </td>
-        <td>
-          <span ng-show="item.income_based_jobseekers_allowance">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Pension credit guarantee credit
-        </td>
-        <td>
-          <span ng-show="item.pension_credit_guarantee_credit">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Prisoner
-        </td>
-        <td>
-          <span ng-show="item.prisoner">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Income related employment and support allowance
-        </td>
-        <td>
-          <span ng-show="item.income_related_employment_and_support_allowance">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Universal credit
-        </td>
-        <td>
-          <span ng-show="item.universal_credit">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Evidence of exception or remission seen
-        </td>
-        <td>
-          <span ng-show="item.evidence_of_exception_or_remission_seen">X</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Patient charge collected
-        </td>
-        <td>
-          [[ item.patient_charge_collected ]]
-        </td>
-      </tr>
+      {% table_row_field_display "Fp17Exemptions.patient_under_18" %}
+      {% table_row_field_display "Fp17Exemptions.full_remission_hc2_cert" %}
+      {% table_row_field_display "Fp17Exemptions.partial_remission_hc3_cert" %}
+      {% table_row_field_display "Fp17Exemptions.expectant_mother" %}
+      {% table_row_field_display "Fp17Exemptions.nursing_mother" %}
+      {% table_row_field_display "Fp17Exemptions.aged_18_in_full_time_education" %}
+      {% table_row_field_display "Fp17Exemptions.income_support" %}
+      {% table_row_field_display "Fp17Exemptions.nhs_tax_credit_exemption" %}
+      {% table_row_field_display "Fp17Exemptions.income_based_jobseekers_allowance" %}
+      {% table_row_field_display "Fp17Exemptions.pension_credit_guarantee_credit" %}
+      {% table_row_field_display "Fp17Exemptions.prisoner" %}
+      {% table_row_field_display "Fp17Exemptions.income_related_employment_and_support_allowance" %}
+      {% table_row_field_display "Fp17Exemptions.universal_credit" %}
+      {% table_row_field_display "Fp17Exemptions.evidence_of_exception_or_remission_seen" %}
+      {% table_row_field_display "Fp17Exemptions.patient_charge_collected" %}
     </table>
   </div>
 </div>
+
