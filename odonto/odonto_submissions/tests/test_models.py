@@ -515,21 +515,6 @@ responses waiting for site 89651"/>
             created=created_dt
         )
 
-    def test_is_empty(self):
-        self.assertTrue(self.empty_response.is_empty())
-        self.assertFalse(self.get_success_messages()["response"].is_empty())
-        self.assertFalse(self.get_rejection_messages()["response"].is_empty())
-
-    def test_unknown_error(self):
-        with self.assertRaises(ValueError) as e:
-            self.unkown_err.is_empty()
-        self.assertEqual(
-            "Unknown error in {} with Boom for site 89651".format(
-                self.unkown_err.id
-            ),
-            str(e.exception)
-        )
-
     def test_update_submissions_empty(self):
         self.empty_response.update_submissions()
         self.assertEqual(
