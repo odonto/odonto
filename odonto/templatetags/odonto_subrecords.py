@@ -2,6 +2,8 @@
 Odonto Subrecord rendering
 """
 from django import template
+from opal.templatetags import forms
+from django.db import models
 
 register = template.Library()
 
@@ -19,3 +21,17 @@ def subrecord_row(context, model, object_list=None, pathway=None):
         'model': model,
         'object_list': object_list
     }
+
+
+@register.inclusion_tag('templatetags/table_row_field_display.html')
+def table_row_field_display(model_and_field):
+    model, field = forms._model_and_field_from_path(model_and_field)
+    ctx = {
+        "model": "item.{}".format(field.attname),
+        "display_name": model._get_field_title(field.attname)
+    }
+    if isinstance(field, (models.BooleanField, models.NullBooleanField,)):
+        ctx["is_boolean"] = True
+    if isinstance(field, models.DateField):
+        ctx["is_date"] = True
+    return ctx
