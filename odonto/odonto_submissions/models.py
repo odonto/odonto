@@ -15,7 +15,7 @@ from . import logger
 # case where we are repeatedly sending down a submission
 # given a submission is on a per episode basis it makes more
 # sense to use the episode id
-SUBMISSION_ID_DATE_CHANGE = datetime.date(2019, 10, 16)
+SUBMISSION_ID_DATE_CHANGE = datetime.date(2019, 11, 5)
 
 
 class Transmission(models.Model):
