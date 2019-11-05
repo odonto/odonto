@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-striped">
+      <tr>
+        <td>Extractions</td>
+        <td>
+          {# render with palmer notation #}
+          <span ng-repeat="location in item | extractionDisplay track by $index">
+            <span ng-show="location.split('_')[0] === 'UR'">
+                <sup>┘[[ location.split("_")[1] ]]</sup>
+            </span>
+            <span ng-show="location.split('_')[0] === 'UL'">
+                <sup>└[[ location.split("_")[1] ]]</sup>
+            </span>
+            <span ng-show="location.split('_')[0] === 'LR'">
+                <sub>┐[[ location.split("_")[1] ]]</sub>
+            </span>
+            <span ng-show="location.split('_')[0] === 'LL'">
+                <sub>┌[[ location.split("_")[1] ]]</sub>
+            </span>
+            <span ng-hide="$last">
+              &nbsp;
+            </span>
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

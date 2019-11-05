@@ -11,6 +11,7 @@ class Application(application.OpalApplication):
     javascripts = [
         'js/openodonto/routes.js',
         'js/opal/controllers/discharge.js',
+        'js/openodonto/filters.js',
         'js/openodonto/controllers/careprovider.step.controller.js',
         'js/openodonto/controllers/fp17treatment.step.controller.js',
         'js/openodonto/controllers/complete_fp17_other_dental_services.controller.step.js',
