@@ -468,10 +468,6 @@ class OrthodonticDataSet(models.EpisodeSubrecord):
     function_appliance        = fields.BooleanField(default=False)
     retainer_upper            = fields.BooleanField(default=False)
     retainer_lower            = fields.BooleanField(default=False)
-    extractions_upper_right = fields.IntegerField(blank=True, null=True)
-    extractions_upper_left = fields.IntegerField(blank=True, null=True)
-    extractions_lower_right = fields.IntegerField(blank=True, null=True)
-    extractions_lower_left = fields.IntegerField(blank=True, null=True)
 
 
 class ExtractionChart(models.EpisodeSubrecord):
