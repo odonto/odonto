@@ -335,6 +335,9 @@ FP17_CONTRACT_NUMBER = 1946890001
 FP17O_CONTRACT_NUMBER = 1946890002
 # DPB Credentials ------>
 
+# above this the email about the daily submissins will say URGENT
+FAILED_TO_SEND_WARNING_THRESHOLD = 6
+
 
 try:
     from odonto.local_settings import *
