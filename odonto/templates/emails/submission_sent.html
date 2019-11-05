@@ -1,0 +1,37 @@
+<html>
+<body>
+  {% if threshold_breached %}
+  <h1 style="color: red">{{ title }}</h1>
+  {% else %}
+  <h1>{{ title }}</h1>
+  {% endif %}
+  <h3>Summary</h4>
+  <table>
+    <tr>
+      <td>Total Success</td><td><strong>{{ total_success}}</strong></td>
+    </tr>
+    <tr>
+      <td>Total Failure</td><td><strong>{{ total_failure}}</strong></td>
+    </tr>
+  </table>
+  <h3>Breakdown</h4>
+  <h4>FP17s</h4>
+  <table>
+    <tr>
+      <td>Success</td><td><strong>{{ fp17_success_count }}</strong></td>
+    </tr>
+    <tr>
+      <td>Failure</td><td><strong>{{ fp17_failure_count }}</strong></td>
+    </tr>
+  </table>
+  <h4>FP17Os</h4>
+  <table>
+    <tr>
+      <td>Success</td><td><strong>{{ fp17o_success_count }}</strong></td>
+    </tr>
+    <tr>
+      <td>Failure</td><td><strong>{{ fp17o_failure_count }}</strong></td>
+    </tr>
+  </table>
+</body>
+</html>
