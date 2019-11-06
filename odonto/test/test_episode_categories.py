@@ -2,8 +2,9 @@ import datetime
 from unittest import mock
 from django.utils import timezone
 from opal.core.test import OpalTestCase
+from opal.models import Episode
 from odonto.odonto_submissions.models import Submission
-from odonto.episode_categories import FP17Episode
+from odonto.episode_categories import FP17Episode, FP17OEpisode
 
 
 class FP17EpisodeTestCase(OpalTestCase):
@@ -47,9 +48,7 @@ translate_episode_to_xml"
         successful_submission.created = self.yesterday
         successful_submission.save()
 
-        self.get_submission(
-            episode, Submission.REJECTED_BY_COMPASS
-        )
+        self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
 
         self.assertEqual(episode.category.submission(), successful_submission)
 
@@ -115,9 +114,7 @@ translate_episode_to_xml"
         rejected_submission.save()
 
         successful_episode = self.get_episode()
-        self.get_submission(
-            successful_episode, Submission.SUCCESS
-        )
+        self.get_submission(successful_episode, Submission.SUCCESS)
         rejection_to_episode = FP17Episode.get_episodes_by_rejection()
         self.assertEqual(len(rejection_to_episode.keys()), 1)
         self.assertEqual(rejection_to_episode["boom"].get(), rejected_episode)
@@ -125,3 +122,48 @@ translate_episode_to_xml"
     def test_get_episodes_by_rejection_none(self):
         rejection_to_episode = FP17Episode.get_episodes_by_rejection()
         self.assertEqual(len(rejection_to_episode.keys()), 0)
+
+
+class FP17OEpisodeTestCase(OpalTestCase):
+    def setUp(self):
+        # this episode should never be found
+        _, self.open_episode = self.new_patient_and_episode_please()
+
+        # this episode
+        self.open_episode.category_name = FP17OEpisode.display_name
+        self.open_episode.stage = FP17OEpisode.OPEN
+        self.open_episode.save()
+        self.today = datetime.date.today()
+
+    def test_no_unsubmitted_episodes(self):
+        self.assertFalse(FP17OEpisode.get_unsubmitted(Episode.objects.all()).exists())
+
+    def test_get_unsubmitted_date_of_assessment(self):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = FP17OEpisode.display_name
+        episode.stage = FP17OEpisode.OPEN
+        episode.save()
+        episode.orthodonticassessment_set.update(date_of_assessment=self.today)
+        self.assertEqual(
+            FP17OEpisode.get_unsubmitted(Episode.objects.all()).get(), episode
+        )
+
+    def test_get_unsubmitted_date_of_appliance_fitted(self):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = FP17OEpisode.display_name
+        episode.stage = FP17OEpisode.OPEN
+        episode.save()
+        episode.orthodonticassessment_set.update(date_of_appliance_fitted=self.today)
+        self.assertEqual(
+            FP17OEpisode.get_unsubmitted(Episode.objects.all()).get(), episode
+        )
+
+    def test_get_unsubmitted_date_of_completion(self):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = FP17OEpisode.display_name
+        episode.stage = FP17OEpisode.OPEN
+        episode.save()
+        episode.orthodontictreatment_set.update(date_of_completion=self.today)
+        self.assertEqual(
+            FP17OEpisode.get_unsubmitted(Episode.objects.all()).get(), episode
+        )
