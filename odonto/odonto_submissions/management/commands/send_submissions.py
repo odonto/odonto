@@ -1,7 +1,5 @@
-"""
-Send a test message to the upstream web service
-"""
 import json
+import traceback
 from datetime import date
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
@@ -22,7 +20,19 @@ class Command(BaseCommand):
             .filter(submission=None)
         )
 
-        # we currently are only sending down a subset
+        # we currently are only sending down a subset based on...
+
+        # 1. Before demographics was made mandatory some patients were
+        # added without demogrphaics so skip those.
+
+        # 2 there are essentialy, logic for FP17Os when treatment
+        # is complete is still in development
+        # just send down those who have been assessed for the time
+        # being.
+
+        # 3. Referral is requires if there is an assessment, again
+        # some fp17os have been created without this. So we
+        # exclude those for the time being.
         return (
             episodes.exclude(patient__demographics__ethnicity_fk_id=None)
             .exclude(orthodonticassessment__date_of_assessment=None)
@@ -37,15 +47,15 @@ class Command(BaseCommand):
             .filter(submission=None)
         )
 
-    def send_submission(self, episode, success_count, failure_count):
+    def send_submission(self, episode):
         logger.info(f"Sending {episode.id}")
         try:
             models.Submission.send(episode)
-            success_count += 1
         except Exception as e:
             logger.info(f"Sending failed for Episode {episode.id} with {e}")
-            failure_count += 1
-        return success_count, failure_count
+            logger.info(traceback.format_exc())
+            return False
+        return True
 
     def send_email(
         self,
@@ -96,13 +106,22 @@ class Command(BaseCommand):
         fp17s = self.get_fp17_qs()
         fp17os = self.get_fp17o_qs()
         for episode in fp17s:
-            fp17_success_count, fp17_failure_count = self.send_submission(
-                episode, fp17_success_count, fp17_failure_count
+            successful = self.send_submission(
+                episode
             )
+            if successful:
+                fp17_success_count += 1
+            else:
+                fp17_failure_count += 1
+
         for episode in fp17os:
-            fp17o_success_count, fp17o_failure_count = self.send_submission(
-                episode, fp17o_success_count, fp17o_failure_count
+            successful = self.send_submission(
+                episode
             )
+            if successful:
+                fp17o_success_count += 1
+            else:
+                fp17o_failure_count += 1
 
         self.send_email(
             fp17_success_count,
