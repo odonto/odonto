@@ -23,9 +23,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.yesterday = self.today - datetime.timedelta(1)
 
     def test_success_fp17(self, logger, render_to_string, send_submission, send_email):
-        Episode.objects.update(
-            category_name=FP17Episode.display_name
-        )
+        Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertFalse(ctx["threshold_breached"])
@@ -38,10 +36,8 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertFalse(ctx["title"].startswith("Urgent"))
 
     def test_fail_fp17(self, logger, render_to_string, send_submission, send_email):
-        send_submission.side_effect = ValueError('boom')
-        Episode.objects.update(
-            category_name=FP17Episode.display_name
-        )
+        send_submission.side_effect = ValueError("boom")
+        Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertFalse(ctx["threshold_breached"])
@@ -55,16 +51,11 @@ class SendSubmissionTestCase(OpalTestCase):
     def test_success_fp17o(self, logger, render_to_string, send_submission, send_email):
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
-        self.patient.demographics_set.update(
-            ethnicity_fk_id=1
-        )
+        self.patient.demographics_set.update(ethnicity_fk_id=1)
         self.episode.orthodonticassessment_set.update(
-            date_of_referral=self.yesterday,
-            date_of_assessment=self.today
+            date_of_referral=self.yesterday, date_of_assessment=self.today
         )
-        Episode.objects.update(
-            category_name=FP17OEpisode.display_name
-        )
+        Episode.objects.update(category_name=FP17OEpisode.display_name)
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertFalse(ctx["threshold_breached"])
@@ -76,19 +67,14 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_failure_count"], 0)
 
     def test_fail_fp17o(self, logger, render_to_string, send_submission, send_email):
-        send_submission.side_effect = ValueError('boom')
+        send_submission.side_effect = ValueError("boom")
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
-        self.patient.demographics_set.update(
-            ethnicity_fk_id=1
-        )
+        self.patient.demographics_set.update(ethnicity_fk_id=1)
         self.episode.orthodonticassessment_set.update(
-            date_of_referral=self.yesterday,
-            date_of_assessment=self.today
+            date_of_referral=self.yesterday, date_of_assessment=self.today
         )
-        Episode.objects.update(
-            category_name=FP17OEpisode.display_name
-        )
+        Episode.objects.update(category_name=FP17OEpisode.display_name)
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertFalse(ctx["threshold_breached"])
@@ -99,16 +85,14 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_success_count"], 0)
         self.assertEqual(ctx["fp17o_failure_count"], 1)
 
-    def test_ignores_some_fp17o(self, logger, render_to_string, send_submission, send_email):
-        send_submission.side_effect = ValueError('boom')
+    def test_ignores_some_fp17o(
+        self, logger, render_to_string, send_submission, send_email
+    ):
+        send_submission.side_effect = ValueError("boom")
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
-        self.patient.demographics_set.update(
-            ethnicity_fk_id=1
-        )
-        Episode.objects.update(
-            category_name=FP17OEpisode.display_name
-        )
+        self.patient.demographics_set.update(ethnicity_fk_id=1)
+        Episode.objects.update(category_name=FP17OEpisode.display_name)
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertFalse(ctx["threshold_breached"])
@@ -120,11 +104,11 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_failure_count"], 0)
 
     @override_settings(FAILED_TO_SEND_WARNING_THRESHOLD=0)
-    def test_threshold_breached(self, logger, render_to_string, send_submission, send_email):
-        send_submission.side_effect = ValueError('boom')
-        Episode.objects.update(
-            category_name=FP17Episode.display_name
-        )
+    def test_threshold_breached(
+        self, logger, render_to_string, send_submission, send_email
+    ):
+        send_submission.side_effect = ValueError("boom")
+        Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertTrue(ctx["threshold_breached"])
