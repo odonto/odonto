@@ -76,7 +76,8 @@ class Command(BaseCommand):
         }
         html_message = render_to_string("emails/submission_sent.html", context)
         plain_message = strip_tags(html_message)
-        logger.info(f"sending email to {','.join(settings.ADMINS)}")
+        admin_emails = ", ".join([i[1] for i in settings.ADMINS])
+        logger.info(f"sending email to {admin_emails}")
         logger.info(json.dumps(context, indent=4))
         send_mail(
             title,
