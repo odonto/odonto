@@ -12,6 +12,7 @@ BASE_STR = "odonto.odonto_submissions.management.commands.send_submissions"
 @patch(BASE_STR + ".send_mail")
 @patch(BASE_STR + ".models.Submission.send")
 @patch(BASE_STR + ".render_to_string")
+@patch(BASE_STR + ".logger")
 class SendSubmissionTestCase(OpalTestCase):
     def setUp(self):
         self.cmd = send_submissions.Command()
@@ -21,7 +22,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.today = datetime.date.today()
         self.yesterday = self.today - datetime.timedelta(1)
 
-    def test_success_fp17(self, render_to_string, send_submission, send_email):
+    def test_success_fp17(self, logger, render_to_string, send_submission, send_email):
         Episode.objects.update(
             category_name=FP17Episode.display_name
         )
@@ -36,7 +37,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_failure_count"], 0)
         self.assertFalse(ctx["title"].startswith("Urgent"))
 
-    def test_fail_fp17(self, render_to_string, send_submission, send_email):
+    def test_fail_fp17(self, logger, render_to_string, send_submission, send_email):
         send_submission.side_effect = ValueError('boom')
         Episode.objects.update(
             category_name=FP17Episode.display_name
@@ -51,7 +52,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_success_count"], 0)
         self.assertEqual(ctx["fp17o_failure_count"], 0)
 
-    def test_success_fp17o(self, render_to_string, send_submission, send_email):
+    def test_success_fp17o(self, logger, render_to_string, send_submission, send_email):
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
         self.patient.demographics_set.update(
@@ -74,7 +75,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_success_count"], 1)
         self.assertEqual(ctx["fp17o_failure_count"], 0)
 
-    def test_fail_fp17o(self, render_to_string, send_submission, send_email):
+    def test_fail_fp17o(self, logger, render_to_string, send_submission, send_email):
         send_submission.side_effect = ValueError('boom')
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
@@ -98,7 +99,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_success_count"], 0)
         self.assertEqual(ctx["fp17o_failure_count"], 1)
 
-    def test_ignores_some_fp17o(self, render_to_string, send_submission, send_email):
+    def test_ignores_some_fp17o(self, logger, render_to_string, send_submission, send_email):
         send_submission.side_effect = ValueError('boom')
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
@@ -119,7 +120,7 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_failure_count"], 0)
 
     @override_settings(FAILED_TO_SEND_WARNING_THRESHOLD=0)
-    def test_threshold_breached(self, render_to_string, send_submission, send_email):
+    def test_threshold_breached(self, logger, render_to_string, send_submission, send_email):
         send_submission.side_effect = ValueError('boom')
         Episode.objects.update(
             category_name=FP17Episode.display_name
@@ -135,6 +136,6 @@ class SendSubmissionTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_failure_count"], 0)
         self.assertTrue(ctx["title"].startswith("URGENT"))
 
-    def test_none(self, render_to_string, send_submission, send_email):
+    def test_none(self, logger, render_to_string, send_submission, send_email):
         Episode.objects.all().delete()
         self.assertIsNone(render_to_string.call_args)

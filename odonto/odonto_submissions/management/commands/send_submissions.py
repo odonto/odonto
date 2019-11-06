@@ -1,6 +1,7 @@
 """
 Send a test message to the upstream web service
 """
+import json
 from datetime import date
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
@@ -75,6 +76,8 @@ class Command(BaseCommand):
         }
         html_message = render_to_string("emails/submission_sent.html", context)
         plain_message = strip_tags(html_message)
+        logger.info(f"sending email to {','.join(settings.ADMINS)}")
+        logger.info(json.dumps(context, indent=4))
         send_mail(
             title,
             plain_message,
