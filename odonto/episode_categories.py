@@ -132,9 +132,9 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         unsubmitted_fp7O_ids = []
         for episode in fp17os:
             orthodontic_assessment = episode.orthodonticassessment_set.all()[0]
-            if not orthodontic_assessment.date_of_assessment:
+            if orthodontic_assessment.date_of_assessment:
                 unsubmitted_fp7O_ids.append(episode.id)
-            if not orthodontic_assessment.date_of_appliance_fitted:
+            if orthodontic_assessment.date_of_appliance_fitted:
                 unsubmitted_fp7O_ids.append(episode.id)
             orthodontic_treatment = episode.orthodontictreatment_set.all()[0]
             if orthodontic_treatment.date_of_completion:
