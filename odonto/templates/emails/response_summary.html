@@ -1,0 +1,16 @@
+<html>
+<body>
+  <h1>{{ title }}</h1>
+  {% for section_title, section in summary.items %}
+  <h3>{{ section_title }}</h3>
+  <table>
+    {% for field, value in section.items %}
+    <tr>
+      <td>{{ field }}</td>
+      <td>{{ value }}</td>
+    </tr>
+    {% endfor %}
+    {% endfor %}
+  </table>
+</body>
+</html>

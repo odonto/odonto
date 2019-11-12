@@ -9,7 +9,8 @@ from odonto.episode_categories import FP17Episode, FP17OEpisode
 
 class FP17EpisodeTestCase(OpalTestCase):
     def setUp(self):
-        self.yesterday = timezone.now() - datetime.timedelta(1)
+        self.yesterday_dt = timezone.now() - datetime.timedelta(1)
+        self.yesterday = self.yesterday_dt.date()
 
     def get_episode(self):
         _, episode = self.new_patient_and_episode_please()
@@ -45,7 +46,7 @@ translate_episode_to_xml"
     def test_submission_success_even_when_rejected(self):
         episode = self.get_episode()
         successful_submission = self.get_submission(episode, Submission.SUCCESS)
-        successful_submission.created = self.yesterday
+        successful_submission.created = self.yesterday_dt
         successful_submission.save()
 
         self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
@@ -64,7 +65,7 @@ translate_episode_to_xml"
     def test_get_successful_episodes_previously_rejected(self):
         episode = self.get_episode()
         rejected = self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
-        rejected.created = self.yesterday
+        rejected.created = self.yesterday_dt
         rejected.save()
 
         self.get_submission(episode, Submission.SUCCESS)
@@ -89,7 +90,7 @@ translate_episode_to_xml"
         rejected_submission = self.get_submission(
             rejected_episode, Submission.REJECTED_BY_COMPASS
         )
-        rejected_submission.created = self.yesterday
+        rejected_submission.created = self.yesterday_dt
         rejected_submission.rejection = "not this"
         rejected_submission.save()
 
@@ -123,6 +124,65 @@ translate_episode_to_xml"
         rejection_to_episode = FP17Episode.get_episodes_by_rejection()
         self.assertEqual(len(rejection_to_episode.keys()), 0)
 
+    def test_get_oldest_unsent_not_submitted(self):
+        episode = self.get_episode()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.yesterday
+        )
+        self.assertEqual(FP17Episode.get_oldest_unsent(), episode)
+
+    def test_get_oldest_unsent_not_failed(self):
+        episode = self.get_episode()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.yesterday
+        )
+        self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
+        self.assertEqual(FP17Episode.get_oldest_unsent(), episode)
+
+    def test_get_oldest_unsent_none(self):
+        episode = self.get_episode()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.yesterday
+        )
+        self.get_submission(episode, Submission.SUCCESS)
+        self.assertIsNone(FP17Episode.get_oldest_unsent())
+
+    def test_get_sign_off_date(self):
+        episode = self.get_episode()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.yesterday
+        )
+        self.assertEqual(episode.category.get_sign_off_date(), self.yesterday)
+
+    def test_summary_rejected(self):
+        episode = self.get_episode()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.yesterday
+        )
+        self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
+        expected = {
+            "Open": 0,
+            "Oldest unsent": self.yesterday,
+            Submission.REJECTED_BY_COMPASS: 1
+        }
+        self.assertEqual(
+            expected, FP17Episode.summary()
+        )
+
+    def test_summary_open(self):
+        episode = self.get_episode()
+        episode.stage = FP17Episode.OPEN
+        episode.save()
+
+        self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
+        expected = {
+            "Open": 1,
+            "Oldest unsent": None,
+        }
+        self.assertEqual(
+            expected, FP17Episode.summary()
+        )
+
 
 class FP17OEpisodeTestCase(OpalTestCase):
     def setUp(self):
@@ -138,7 +198,7 @@ class FP17OEpisodeTestCase(OpalTestCase):
     def test_no_unsubmitted_episodes(self):
         self.assertFalse(FP17OEpisode.get_unsubmitted(Episode.objects.all()).exists())
 
-    def test_get_unsubmitted_date_of_assessment(self):
+    def test_get_unsubmitted(self):
         _, episode = self.new_patient_and_episode_please()
         episode.category_name = FP17OEpisode.display_name
         episode.stage = FP17OEpisode.OPEN
@@ -148,22 +208,27 @@ class FP17OEpisodeTestCase(OpalTestCase):
             FP17OEpisode.get_unsubmitted(Episode.objects.all()).get(), episode
         )
 
-    def test_get_unsubmitted_date_of_appliance_fitted(self):
+    def test_get_sign_off_date_date_of_assessment(self):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = FP17OEpisode.display_name
+        episode.stage = FP17OEpisode.OPEN
+        episode.save()
+        episode.orthodonticassessment_set.update(date_of_assessment=self.today)
+        self.assertEqual(episode.category.get_sign_off_date(), self.today)
+
+    def test_get_sign_off_date_date_of_appliance_fitted(self):
         _, episode = self.new_patient_and_episode_please()
         episode.category_name = FP17OEpisode.display_name
         episode.stage = FP17OEpisode.OPEN
         episode.save()
         episode.orthodonticassessment_set.update(date_of_appliance_fitted=self.today)
-        self.assertEqual(
-            FP17OEpisode.get_unsubmitted(Episode.objects.all()).get(), episode
-        )
+        self.assertEqual(episode.category.get_sign_off_date(), self.today)
 
-    def test_get_unsubmitted_date_of_completion(self):
+    def test_get_sign_off_date_date_of_completion(self):
         _, episode = self.new_patient_and_episode_please()
         episode.category_name = FP17OEpisode.display_name
         episode.stage = FP17OEpisode.OPEN
         episode.save()
         episode.orthodontictreatment_set.update(date_of_completion=self.today)
-        self.assertEqual(
-            FP17OEpisode.get_unsubmitted(Episode.objects.all()).get(), episode
-        )
+        self.assertEqual(episode.category.get_sign_off_date(), self.today)
+
