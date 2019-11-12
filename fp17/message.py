@@ -3,6 +3,7 @@ import inspect
 import cerberus
 import datetime
 import xmlschema
+from django.conf import settings
 
 
 class Message(object):
@@ -21,7 +22,7 @@ class Message(object):
     @classmethod
     def validate_xml(cls, root):
         schema = xmlschema.XMLSchema(os.path.join(
-            'odonto', 'odonto_submissions', 'xsd', cls.Meta.xsd
+            settings.PROJECT_PATH, 'odonto_submissions', 'xsd', cls.Meta.xsd
         ))
 
         schema.validate(root)
