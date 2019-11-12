@@ -34,7 +34,7 @@ class Command(BaseCommand):
             "FP17O Rejected": rejected.filter(episode__category_name=fp17o_category).count(),
         }
         context["summary"]["FP17"] = FP17Episode.summary()
-        context["summary"]["FP17O"] = FP17Episode.summary()
+        context["summary"]["FP17O"] = FP17OEpisode.summary()
         today = datetime.date.today()
         title = f"Odonto response information for {today}"
         context["title"] = title
