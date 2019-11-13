@@ -136,9 +136,15 @@ class EpisodeAdmin(VersionAdmin):
 
 
 class SubmissionAdmin(VersionAdmin):
-    list_display = ('id', 'episode_id', 'created', 'state',)
+    list_display = ('id', 'episode_id', 'first_name', 'surname', 'created', 'state',)
     list_editable = ("state",)
     list_filter = ('state',)
+
+    def first_name(self, obj):
+        return obj.episode.patient.demographics().first_name
+
+    def surname(self, obj):
+        return obj.episode.patient.demographics().surname
 
 
 admin.site.unregister(opal_models.Episode)
