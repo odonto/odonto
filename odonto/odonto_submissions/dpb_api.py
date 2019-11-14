@@ -58,9 +58,12 @@ def get_responses():
     if response.ok:
         logger.info(f"Responses recieved {response.text}")
         dt = datetime.datetime.now().strftime("%d-%m-%y-%H-%M")
-        file_name = f"responses-{dt}.xml"
+        file_name = os.path.join(responses_dir, f"responses-{dt}.xml")
 
-        with open(os.path.join(responses_dir, file_name), "w") as r:
+        if os.path.exists(file_name):
+            raise ValueError(f'File {file_name} already exists')
+
+        with open(file_name, "w") as r:
             r.write(response.text)
         return response.text
 
