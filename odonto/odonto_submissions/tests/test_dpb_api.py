@@ -21,7 +21,9 @@ class DpbApiTestCase(OpalTestCase):
             get.return_value.text = "job done"
             result = dpb_api.get_responses()
             self.assertEqual(result, "job done")
-            expected_file_name = "my_project/../responses/responses-10-11-19-09-08.xml"
+            expected_file_name = (
+                "my_project/../../responses/responses-10-11-19-09-08.xml"
+            )
             m.assert_called_once_with(expected_file_name, "w")
             m.return_value.write.assert_called_once_with("job done")
 
@@ -68,5 +70,5 @@ class DpbApiTestCase(OpalTestCase):
 
             self.assertEqual(
                 str(e.exception),
-                "File my_project/../responses/responses-10-11-19-09-08.xml already exists",
+                "File my_project/../../responses/responses-10-11-19-09-08.xml already exists",
             )

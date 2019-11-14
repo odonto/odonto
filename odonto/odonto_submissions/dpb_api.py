@@ -38,7 +38,7 @@ def send_message(xml):
 
 def get_responses():
     logger.info("getting responses")
-    responses_dir = os.path.join(f"{settings.PROJECT_PATH}", "..", "responses")
+    responses_dir = os.path.join(f"{settings.PROJECT_PATH}", "..", "..", "responses")
     if not os.path.exists(responses_dir):
         raise ValueError(
             f"Unable to get responses as the save dir {responses_dir} does not exist"
@@ -61,7 +61,7 @@ def get_responses():
         file_name = os.path.join(responses_dir, f"responses-{dt}.xml")
 
         if os.path.exists(file_name):
-            raise ValueError(f'File {file_name} already exists')
+            raise ValueError(f"File {file_name} already exists")
 
         with open(file_name, "w") as r:
             r.write(response.text)
