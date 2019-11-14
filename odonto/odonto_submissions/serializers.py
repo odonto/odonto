@@ -13,6 +13,80 @@ from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
 
 
+def get_iotn_treatment(episode):
+    """
+    IOTN is stored on assessment and treatment
+    and we also have a field of iotn not applicable.
+
+    We should error if this has been entered as different things in
+    multiple places.
+
+    We should otherwise return what it is
+    """
+    treatment = episode.orthodontictreatment_set.get()
+    assessment = episode.orthodonticassessment_set.get()
+    treatment_iotn = treatment.iotn
+    treatment_iotn_na = treatment.iotn_not_applicable
+    assessment_iotn = assessment.iotn
+    assessment_iotn_na = assessment.iotn_not_applicable
+
+    iotn_na = treatment_iotn_na or assessment_iotn_na
+
+    if treatment_iotn and assessment_iotn:
+        if not treatment_iotn == assessment_iotn:
+            raise SerializerValidationError(
+                "Treatmeant IOTN does not equal Assessment IOTN"
+            )
+
+    iotn = treatment_iotn
+    if assessment_iotn:
+        iotn = assessment_iotn
+
+    if iotn and iotn_na:
+        raise SerializerValidationError("We should not have an IOTN and IOTN NA")
+
+    if iotn:
+        if not iotn == 3 and get_aesthetic_component(episode):
+            raise SerializerValidationError(
+                "If a value of 3 is present then the aesthetic component must be present"
+            )
+        return t.IOTN(iotn)
+
+    if iotn_na:
+        # If ‘IOTN not applicable’ (e.g not possible to calculate
+        # because the patient has transferred mid treatment to a new
+        # Provider contract)
+        # a value of 0 (zero) should be entered
+        return t.IOTN(0)
+
+    return None
+
+
+def get_aesthetic_component(episode):
+    """
+    Aesthetic component is on both assessment and treatment.
+
+    Make sure we don't add it twice.
+
+    Also it requires an IOTN of 3
+    """
+    treatment = episode.orthodontictreatment_set.get()
+    assessment = episode.orthodonticassessment_set.get()
+
+    if treatment.aesthetic_component and assessment.aesthetic_component:
+        if not treatment.aesthetic_component == assessment.aesthetic_component:
+            raise SerializerValidationError(
+                "treatment aesthetic component differs from assessment aesthetic component"
+            )
+
+    aesthetic_component = (
+        treatment.aesthetic_component or assessment.aesthetic_component
+    )
+    if aesthetic_component:
+        return t.AESTHETIC_COMPONENT(aesthetic_component)
+    return None
+
+
 class SerializerValidationError(Exception):
     pass
 
@@ -65,76 +139,74 @@ class TreatmentSerializer(object):
 class Fp17TreatmentCategorySerializer(TreatmentSerializer):
     model = models.Fp17TreatmentCategory
 
-    TREATMENT_MAPPINGS = OrderedDict([
-        ("urgent_treatment", t.TREATMENT_CATEGORY_URGENT),
-        ("regulation_11_replacement_appliance", t.REGULATION_11_APPLIANCE),
-        ("prescription_only", t.PRESCRIPTION),
-        ("denture_repairs", t.DENTURE_REPAIRS),
-        ("bridge_repairs", t.BRIDGE_REPAIRS),
-        ("arrest_of_bleeding", t.ARREST_OF_BLEEDING),
-        ("removal_of_sutures", t.REMOVAL_OF_SUTURES)
-    ])
+    TREATMENT_MAPPINGS = OrderedDict(
+        [
+            ("urgent_treatment", t.TREATMENT_CATEGORY_URGENT),
+            ("regulation_11_replacement_appliance", t.REGULATION_11_APPLIANCE),
+            ("prescription_only", t.PRESCRIPTION),
+            ("denture_repairs", t.DENTURE_REPAIRS),
+            ("bridge_repairs", t.BRIDGE_REPAIRS),
+            ("arrest_of_bleeding", t.ARREST_OF_BLEEDING),
+            ("removal_of_sutures", t.REMOVAL_OF_SUTURES),
+        ]
+    )
 
     def to_messages(self):
         messages = super().to_messages()
         category = ["Band 1", "Band 2", "Band 3"]
         if self.model_instance.treatment_category:
             # urgent treatments do not have a treatment category
-            band_number = category.index(
-                self.model_instance.treatment_category
-            )
+            band_number = category.index(self.model_instance.treatment_category)
             band_number = band_number + 1
-            messages.insert(
-                0, t.TREATMENT_CATEGORY(band_number)
-            )
+            messages.insert(0, t.TREATMENT_CATEGORY(band_number))
         return messages
 
 
 class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
     model = models.Fp17ClinicalDataSet
 
-    TREATMENT_MAPPINGS = OrderedDict([
-        ("examination", t.EXAMINATION),
-        ("scale_and_polish", t.SCALE_AND_POLISH),
-        ("fluoride_varnish", t.FLUORIDE_VARNISH),
-        ("fissure_sealants", t.FISSURE_SEALANTS),
-        ("radiographs_taken", t.RADIOGRAPHS),
-        ("endodontic_treatment", t.ENDODONTIC_TREATMENT),
-        (
-            "permanent_fillings_and_sealant_restorations",
-            t.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS
-        ),
-        ("extractions", t.EXTRACTION),
-        ("crowns_provided", t.CROWN),
-        ("upper_denture_acrylic", t.UPPER_DENTURE_ACRYLIC),
-        ("lower_denture_acrylic", t.LOWER_DENTURE_ACRYLIC),
-        ("upper_denture_metal", t.UPPER_DENTURE_METAL),
-        ("lower_denture_metal", t.LOWER_DENTURE_METAL),
-        ("veneers_applied", t.VENEERS_APPLIED),
-        ("inlays", t.INLAYS),
-        ("bridges_fitted", t.BRIDGES_FITTED),
-        (
-            "referral_for_advanced_mandatory_services_band",
-            t.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES
-        ),
-        ("antibiotic_items_prescribed", t.ANTIBIOTIC_ITEMS),
-        ("other_treatment", t.OTHER_TREATMENT),
-        ("best_practice_prevention", t.BEST_PRACTICE_PREVENTION),
-        ("decayed_teeth_permanent", t.DECAYED_PERMANENT),
-        ("decayed_teeth_deciduous", t.DECAYED_DECIDUOUS),
-        ("missing_teeth_permanent", t.MISSING_PERMANENT),
-        ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
-        ("filled_teeth_permanent", t.FILLED_PERMANENT),
-        ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
-    ])
+    TREATMENT_MAPPINGS = OrderedDict(
+        [
+            ("examination", t.EXAMINATION),
+            ("scale_and_polish", t.SCALE_AND_POLISH),
+            ("fluoride_varnish", t.FLUORIDE_VARNISH),
+            ("fissure_sealants", t.FISSURE_SEALANTS),
+            ("radiographs_taken", t.RADIOGRAPHS),
+            ("endodontic_treatment", t.ENDODONTIC_TREATMENT),
+            (
+                "permanent_fillings_and_sealant_restorations",
+                t.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS,
+            ),
+            ("extractions", t.EXTRACTION),
+            ("crowns_provided", t.CROWN),
+            ("upper_denture_acrylic", t.UPPER_DENTURE_ACRYLIC),
+            ("lower_denture_acrylic", t.LOWER_DENTURE_ACRYLIC),
+            ("upper_denture_metal", t.UPPER_DENTURE_METAL),
+            ("lower_denture_metal", t.LOWER_DENTURE_METAL),
+            ("veneers_applied", t.VENEERS_APPLIED),
+            ("inlays", t.INLAYS),
+            ("bridges_fitted", t.BRIDGES_FITTED),
+            (
+                "referral_for_advanced_mandatory_services_band",
+                t.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES,
+            ),
+            ("antibiotic_items_prescribed", t.ANTIBIOTIC_ITEMS),
+            ("other_treatment", t.OTHER_TREATMENT),
+            ("best_practice_prevention", t.BEST_PRACTICE_PREVENTION),
+            ("decayed_teeth_permanent", t.DECAYED_PERMANENT),
+            ("decayed_teeth_deciduous", t.DECAYED_DECIDUOUS),
+            ("missing_teeth_permanent", t.MISSING_PERMANENT),
+            ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
+            ("filled_teeth_permanent", t.FILLED_PERMANENT),
+            ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
+        ]
+    )
 
 
 class Fp17RecallSerializer(TreatmentSerializer):
     model = models.Fp17Recall
 
-    TREATMENT_MAPPINGS = {
-        "number_of_months": t.RECALL_INTERVAL
-    }
+    TREATMENT_MAPPINGS = {"number_of_months": t.RECALL_INTERVAL}
 
 
 class Fp17OtherDentalServiceTranslator(TreatmentSerializer):
@@ -143,8 +215,7 @@ class Fp17OtherDentalServiceTranslator(TreatmentSerializer):
     TREATMENT_MAPPINGS = {
         # "treatment_on_referral":  #TODO this is not mapped
         "free_repair_or_replacement": t.FREE_REPAIR_REPLACEMENT,
-        "further_treatment_within_2_months":
-            t.FURTHER_TREATMENT_WITHIN_TWO_MONTHS,
+        "further_treatment_within_2_months": t.FURTHER_TREATMENT_WITHIN_TWO_MONTHS,
         "domicillary_services": t.DOMICILIARY_SERVICES,
         "sedation_services": t.SEDATION_SERVICES,
     }
@@ -164,8 +235,7 @@ class ExceptionSerializer(object):
         "pension_credit_guarantee_credit": e.PENSION_CREDIT_GUARANTEE_CREDIT,
         "prisoner": e.PRISONER,
         "universal_credit": e.UNIVERSAL_CREDIT,
-        "income_related_employment_and_support_allowance":
-            e.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE,
+        "income_related_employment_and_support_allowance": e.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE,
         # "patient_charge_collected" TODO this is not exist
     }
 
@@ -204,7 +274,7 @@ class OrthodonticDataSetTranslator(TreatmentSerializer):
         "fixed_lower_appliance": t.FIXED_LOWER_APPLIANCE,
         "function_appliance": t.FUNCTIONAL_APPLIANCE,
         "retainer_upper": t.RETAINER_UPPER,
-        "retainer_lower": t.RETAINER_LOWER
+        "retainer_lower": t.RETAINER_LOWER,
     }
 
 
@@ -229,7 +299,7 @@ class ExtractionChartTranslator(TreatmentSerializer):
             for tooth in teeth:
                 tooth_field = f"{quadrant}_{tooth}"
                 if tooth in deciduous_teeth:
-                    quadrant_code = (quadrant_idx + 5)
+                    quadrant_code = quadrant_idx + 5
                     tooth_code = deciduous_teeth.index(tooth) + 1
                 else:
                     quadrant_code = quadrant_idx + 1
@@ -255,8 +325,6 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
         "assessment_and_review": t.ASSESS_AND_REVIEW,
         "assess_and_refuse_treatment": t.ASSESS_AND_REFUSE,
         "assess_and_appliance_fitted": t.ASSESS_AND_APPLIANCE_FITTED,
-        "aesthetic_component": t.AESTHETIC_COMPONENT,
-        "iotn": t.IOTN,
     }
 
     def validate(self):
@@ -268,7 +336,6 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
         appliance_fitted = self.model_instance.assess_and_appliance_fitted
         date_of_referral = self.model_instance.date_of_referral
 
-
         # assess and * checks
         # there cannot be more than 1
         if sum([review, refuse_treatment, appliance_fitted]) > 1:
@@ -277,6 +344,13 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
 "Assess and refuse treatment", "Assess and appliance fitted"'
             )
 
+        if not get_iotn_treatment(self.episode):
+            if any([review, refuse_treatment, appliance_fitted]):
+                raise SerializerValidationError(
+                    'IOTN (or IOTN NA) need to be populated if "Assess and review", \
+    "Assess and refuse treatment", "Assess and appliance fitted"'
+                )
+
         # date of referral checks
         if date_of_referral:
             if date_of_referral > today:
@@ -284,7 +358,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
                     "Date of referral must not be in the future"
                 )
 
-            if not(review or refuse_treatment or appliance_fitted):
+            if not (review or refuse_treatment or appliance_fitted):
                 raise SerializerValidationError(
                     '"Assess and review", "Assess and refuse treatment" \
 or "Assess and appliance fitted" are required if there is a date of referral'
@@ -305,9 +379,7 @@ or "Assess and appliance fitted" are required if there is a date of referral'
                     "Date of referral is mandatory if there is a date of referral"
                 )
 
-        if date_of_assessment and date_of_assessment >= datetime.date(
-            2019, 4, 1
-        ):
+        if date_of_assessment and date_of_assessment >= datetime.date(2019, 4, 1):
             if not date_of_referral:
                 raise SerializerValidationError(
                     "Date of referral is required if there is a date of assessment"
@@ -344,15 +416,6 @@ appliance fitted"'
         self.validate()
         result = super().to_messages()
 
-        if self.model_instance.iotn_not_applicable:
-            # If ‘IOTN not applicable’ (e.g not possible to calculate
-            # because the patient has transferred mid treatment to a new
-            # Provider contract)
-            # a value of 0 (zero) should be entered
-            result.append(
-                t.IOTN(0)
-            )
-
         if self.model_instance.date_of_referral:
             dt = self.model_instance.date_of_referral
             result.append(t.DAY_OF_REFERRAL(dt.day))
@@ -372,34 +435,15 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
     model = models.OrthodonticTreatment
 
     TREATMENT_MAPPINGS = {
-        "aesthetic_component": t.AESTHETIC_COMPONENT,
-        "iotn": t.IOTN,
         "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
         "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
         "treatment_discontinued": t.TREATMENT_DISCONTINUED,
         "treatment_completed": t.TREATMENT_COMPLETED,
-        "par_scores_calculated": t.PAR_SCORES_CALCULATED
+        "par_scores_calculated": t.PAR_SCORES_CALCULATED,
     }
 
     def to_messages(self):
         result = super().to_messages()
-
-        if self.model_instance.iotn_not_applicable:
-            # If ‘IOTN not applicable’ (e.g not possible to calculate
-            # because the patient has transferred mid treatment to a new
-            # Provider contract)
-            # a value of 0 (zero) should be entered
-            result.append(
-                t.IOTN(0)
-            )
-
-        if sum([
-            self.model_instance.patient_failed_to_return,
-            self.model_instance.patient_requested_stop,
-            self.model_instance.treatment_discontinued,
-            self.model_instance.treatment_completed
-        ]) > 1:
-            raise ValueError("Inconsistent reasons for stopping an FP17O")
 
         if self.model_instance.patient_failed_to_return:
             result.append(t.TREATMENT_ABANDONED)
@@ -410,6 +454,28 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
             result.append(t.PATIENT_REQUESTED)
         return result
 
+    def validate(self):
+        treatment_outcome = [
+            i for i in [
+                self.model_instance.patient_failed_to_return,
+                self.model_instance.patient_requested_stop,
+                self.model_instance.treatment_discontinued,
+                self.model_instance.treatment_completed,
+            ] if i
+        ]
+        if len(treatment_outcome) > 1:
+            raise SerializerValidationError(
+                "Inconsistent reasons for stopping an FP17O"
+            )
+
+        iotn = get_iotn_treatment(self.episode)
+
+        if not iotn:
+            if len(treatment_outcome):
+                raise SerializerValidationError(
+                    "IOTN (or IOTN NA) need to be populated if treatment is abandoned, discontinued or completed"
+                )
+
 
 class DemographicsTranslator(TreatmentSerializer):
     model = models.Demographics
@@ -418,26 +484,20 @@ class DemographicsTranslator(TreatmentSerializer):
         "White british": t.ETHNIC_ORIGIN_1_WHITE_BRITISH,
         "White irish": t.ETHNIC_ORIGIN_2_WHITE_IRISH,
         "White other": t.ETHNIC_ORIGIN_3_WHITE_OTHER,
-        "White and black caribbean":
-            t.ETHNIC_ORIGIN_4_WHITE_AND_BLACK_CARIBBEAN,
+        "White and black caribbean": t.ETHNIC_ORIGIN_4_WHITE_AND_BLACK_CARIBBEAN,
         "White and black african": t.ETHNIC_ORIGIN_5_WHITE_AND_BLACK_AFRICAN,
         "White and asian": t.ETHNIC_ORIGIN_6_WHITE_AND_ASIAN,
         "Other mixed background": t.ETHNIC_ORIGIN_7_OTHER_MIXED_BACKGROUND,
-        "Asian or asian british indian":
-            t.ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN,
-        "Asian or asian british pakistani":
-            t.ETHNIC_ORIGIN_9_ASIAN_OR_ASIAN_BRITISH_PAKISTANI,
-        "Asian or asian british bangladeshi":
-            t.ETHNIC_ORIGIN_10_ASIAN_OR_ASIAN_BRITISH_BANGLADESHI,
+        "Asian or asian british indian": t.ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN,
+        "Asian or asian british pakistani": t.ETHNIC_ORIGIN_9_ASIAN_OR_ASIAN_BRITISH_PAKISTANI,
+        "Asian or asian british bangladeshi": t.ETHNIC_ORIGIN_10_ASIAN_OR_ASIAN_BRITISH_BANGLADESHI,
         "Other asian background": t.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
-        "Black or black british caribbean":
-            t.ETHNIC_ORIGIN_12_BLACK_OR_BLACK_BRITISH_CARIBBEAN,
-        "Black or black british african":
-            t.ETHNIC_ORIGIN_13_BLACK_OR_BLACK_BRITISH_AFRICAN,
+        "Black or black british caribbean": t.ETHNIC_ORIGIN_12_BLACK_OR_BLACK_BRITISH_CARIBBEAN,
+        "Black or black british african": t.ETHNIC_ORIGIN_13_BLACK_OR_BLACK_BRITISH_AFRICAN,
         "Other black background": t.ETHNIC_ORIGIN_14_OTHER_BLACK_BACKGROUND,
         "Chinese": t.ETHNIC_ORIGIN_15_CHINESE,
         "Other ethnic group": t.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP,
-        "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED
+        "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED,
     }
 
     def sex(self):
@@ -446,7 +506,7 @@ class DemographicsTranslator(TreatmentSerializer):
         elif self.model_instance.sex == "Male":
             return "M"
 
-        raise ValueError(
+        raise SerializerValidationError(
             "The form requires a sex of either 'Female' or 'Male'"
         )
 
@@ -456,8 +516,7 @@ class DemographicsTranslator(TreatmentSerializer):
     def address(self):
         address_list = [
             "{} {}".format(
-                self.model_instance.house_number_or_name,
-                self.model_instance.street
+                self.model_instance.house_number_or_name, self.model_instance.street
             )
         ]
         if self.model_instance.city_or_town:
@@ -466,33 +525,23 @@ class DemographicsTranslator(TreatmentSerializer):
         if self.model_instance.county:
             address_list.append(self.model_instance.county)
 
-        address_list = [
-            i for i in address_list
-        ]
+        address_list = [i for i in address_list]
 
         result = []
         for address_line in address_list:
-            cleaned_line = ''.join(
-                i for i in address_line if i.isalnum() or i == ' '
-            )
+            cleaned_line = "".join(i for i in address_line if i.isalnum() or i == " ")
             result.append(cleaned_line[:32].upper())
         return result
 
     def forename(self):
-        return clean_non_alphanumeric(
-            self.model_instance.first_name
-        ).upper()
+        return clean_non_alphanumeric(self.model_instance.first_name).upper()
 
     def surname(self):
-        return clean_non_alphanumeric(
-            self.model_instance.surname
-        ).upper()
+        return clean_non_alphanumeric(self.model_instance.surname).upper()
 
     def post_code(self):
         if self.model_instance.post_code:
-            return clean_non_alphanumeric(
-                self.model_instance.post_code
-            ).upper()
+            return clean_non_alphanumeric(self.model_instance.post_code).upper()
 
 
 def get_envelope(episode, transmission_id):
@@ -537,8 +586,7 @@ def get_bcds1(episode, submission_id, submission_count):
     if not performer:
         raise ValueError(
             "Unable to get the performer name {} from care provider {}".format(
-                provider.performer,
-                provider.id
+                provider.performer, provider.id
             )
         )
 
@@ -549,12 +597,7 @@ def get_bcds1(episode, submission_id, submission_count):
     return bcds1
 
 
-def translate_episode_to_xml(
-    episode,
-    submission_id,
-    submission_count,
-    transmission_id
-):
+def translate_episode_to_xml(episode, submission_id, submission_count, transmission_id):
     bcds1 = get_bcds1(episode, submission_id, submission_count)
     envelope = get_envelope(episode, transmission_id)
     envelope.add_message(bcds1)
@@ -562,7 +605,7 @@ def translate_episode_to_xml(
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
-    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
+    return etree.tostring(root, encoding="unicode", pretty_print=True).strip()
 
 
 def clean_non_alphanumeric(name):
@@ -572,7 +615,7 @@ def clean_non_alphanumeric(name):
     Upper case only
     No hyphens, apostrophes or embedded spaces
     """
-    return ''.join(c for c in name if c.isalnum())
+    return "".join(c for c in name if c.isalnum())
 
 
 def translate_to_bdcs1(bcds1, episode):
@@ -602,8 +645,25 @@ def translate_to_fp17o(bcds1, episode):
         bcds1.patient.postcode = post_code
 
     orthodontic_assessment = episode.orthodonticassessment_set.get()
-    bcds1.date_of_acceptance = orthodontic_assessment.date_of_assessment
     orthodontic_treatment = episode.orthodontictreatment_set.get()
+
+    if any(
+        [
+            orthodontic_treatment.patient_failed_to_return,
+            orthodontic_treatment.patient_requested_stop,
+            orthodontic_treatment.treatment_discontinued,
+            orthodontic_treatment.treatment_completed,
+            orthodontic_treatment.repair,
+            orthodontic_treatment.replacement,
+        ]
+    ):
+        # based on the documentation...
+        # "A date of last visit must be present in the Date of Completion
+        # which moves into the Date of Acceptance"
+        bcds1.date_of_acceptance = orthodontic_treatment.date_of_completion
+    else:
+        bcds1.date_of_acceptance = orthodontic_assessment.date_of_assessment
+
     if orthodontic_treatment.date_of_completion:
         bcds1.date_of_completion = orthodontic_treatment.date_of_completion
     bcds1.treatments = []
@@ -612,13 +672,20 @@ def translate_to_fp17o(bcds1, episode):
         OrthodonticDataSetTranslator,
         ExtractionChartTranslator,
         OrthodonticAssessmentTranslator,
-        OrthodonticTreatmentTranslator
+        OrthodonticTreatmentTranslator,
     ]
 
     for translator in translators:
-        bcds1.treatments.extend(
-            translator(episode).to_messages()
-        )
+        bcds1.treatments.extend(translator(episode).to_messages())
+
+    iotn = get_iotn_treatment(episode)
+    if iotn:
+        bcds1.treatments.append(iotn)
+
+    aesthetic_component = get_aesthetic_component(episode)
+
+    if aesthetic_component:
+        bcds1.treatments.append(aesthetic_component)
 
     ethnicity_treatment = demographics_translator.ethnicity()
 
@@ -660,13 +727,11 @@ def translate_to_fp17(bcds1, episode):
         Fp17TreatmentCategorySerializer,
         Fp17ClinicalDataSetSerializer,
         Fp17RecallSerializer,
-        Fp17OtherDentalServiceTranslator
+        Fp17OtherDentalServiceTranslator,
     ]
 
     for translator in translators:
-        bcds1.treatments.extend(
-            translator(episode).to_messages()
-        )
+        bcds1.treatments.extend(translator(episode).to_messages())
 
     ethnicity_treatment = demographics_translator.ethnicity()
 
@@ -682,12 +747,4 @@ def translate_to_fp17(bcds1, episode):
     if charge:
         bcds1.patient_charge_pence = charge
     return bcds1
-
-
-
-
-
-
-
-
 

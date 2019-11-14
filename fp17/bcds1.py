@@ -139,6 +139,18 @@ class Treatment(Message):
         return
         yield
 
+    def __eq__(self, x):
+        if isinstance(x, self.__class__):
+            instance_count = getattr(self, "instance_count")
+            other_instance_count = getattr(x, "instance_count")
+
+            code = self.code
+            other_code = x.code
+            return (instance_count == other_instance_count) and (
+                code == other_code
+            )
+        return False
+
     class Meta:
         schema = {
             # Treatment code
