@@ -3,7 +3,7 @@
   <h1>{{ title }}</h1>
   {% for section_title, section in summary.items %}
   <h3>{{ section_title }}</h3>
-  <table>
+  <table table width="200" cellpadding="0" cellspacing="0" border="0">
     {% for field, value in section.items %}
     <tr>
       <td>{{ field }}</td>
