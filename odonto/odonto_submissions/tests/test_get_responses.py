@@ -8,7 +8,7 @@ from odonto.odonto_submissions.management.commands import get_responses
 BASE_STR = "odonto.odonto_submissions.management.commands.get_responses"
 
 
-@patch(BASE_STR + ".send_mail")
+@patch(BASE_STR + ".mail_managers")
 @patch(BASE_STR + ".Response.get")
 @patch(BASE_STR + ".render_to_string")
 @patch(BASE_STR + ".logger")
@@ -33,12 +33,12 @@ translate_episode_to_xml"
         submission.save()
         return submission
 
-    def test_with_error(self, logger, render_to_string, response_get, send_mail):
+    def test_with_error(self, logger, render_to_string, response_get, mail_managers):
         response_get.side_effect = ValueError("boom")
         self.cmd.handle()
         logger.error.assert_called_once_with("Failed to get responses")
 
-    def test_without_none(self, logger, render_to_string, response_get, send_mail):
+    def test_without_none(self, logger, render_to_string, response_get, mail_managers):
         response = response_get.return_value
         response.get_successfull_submissions.return_value = Submission.objects.all()
         response.get_rejected_submissions.return_value = {}
@@ -53,7 +53,7 @@ translate_episode_to_xml"
         self.assertEqual(ctx["summary"]["Latest response"], expected_summary)
         self.assertTrue(ctx["title"].startswith("Odonto response information for"))
 
-    def test_with_success(self, logger, render_to_string, response_get, send_mail):
+    def test_with_success(self, logger, render_to_string, response_get, mail_managers):
         episode = self.get_episode()
         self.get_submission(episode, Submission.SUCCESS)
         response = response_get.return_value
@@ -70,7 +70,7 @@ translate_episode_to_xml"
         self.assertEqual(ctx["summary"]["Latest response"], expected_summary)
         self.assertTrue(ctx["title"].startswith("Odonto response information for"))
 
-    def test_with_rejection(self, logger, render_to_string, response_get, send_mail):
+    def test_with_rejection(self, logger, render_to_string, response_get, mail_managers):
         episode = self.get_episode()
         self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
         response = response_get.return_value
