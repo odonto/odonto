@@ -4,10 +4,8 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from opal.models import Episode
-from . import dpb_api
-from .exceptions import MessageSendingException
-from . import serializers
-from . import logger
+from odonto.odonto_submissions import dpb_api, logger, serializers
+from odonto.odonto_submissions.exceptions import MessageSendingException
 
 # before this date we used transmission id, after this date
 # we use episode id.
