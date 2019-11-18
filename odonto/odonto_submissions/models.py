@@ -223,9 +223,9 @@ class Submission(models.Model):
     @classmethod
     def create(cls, episode):
         latest_submission = episode.submission_set.order_by(
-            "-created"
+            "-submission_count"
         ).first()
-        # Claim needs to be incrememted each time
+        
         transmission = Transmission.create()
 
         if latest_submission is None:
