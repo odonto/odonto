@@ -1,4 +1,4 @@
-# Glossory
+# Glossary
 
 `envelope` The wrapper to a claim about an episode
 `bdcs1` An episode translated into the fp17/fp17O claim
