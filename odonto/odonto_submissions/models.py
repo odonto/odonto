@@ -35,7 +35,7 @@ class Transmission(models.Model):
         ordering = ('-transmission_id',)
 
     def __str__(self):
-        return "id={0.id} transmission id={0.transmission_id}".format(
+        return "<Transmission id={0.id} transmission id={0.transmission_id}>".format(
             self
         )
 
@@ -72,7 +72,7 @@ class Response(models.Model):
     )
 
     def __str__(self):
-        return "id={0.id} created={0.created} state={0.state}".format(
+        return "<Response id={0.id} created={0.created} state={0.state}>".format(
             self
         )
 
@@ -220,7 +220,7 @@ class Submission(models.Model):
         )
 
     def __str__(self):
-        return "pk={0.pk} raw_xml={0.raw_xml!r}".format(self)
+        return "<Submission pk={0.pk} raw_xml={0.raw_xml!r} >".format(self)
 
     @classmethod
     def create(cls, episode):
