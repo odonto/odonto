@@ -2,7 +2,7 @@ import json
 import traceback
 from datetime import date
 from django.core.management.base import BaseCommand
-from django.core.mail import send_mail
+from django.core.mail import mail_managers
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
@@ -89,11 +89,9 @@ class Command(BaseCommand):
         admin_emails = ", ".join([i[1] for i in settings.ADMINS])
         logger.info(f"sending email to {admin_emails}")
         logger.info(json.dumps(context, indent=4))
-        send_mail(
+        mail_managers(
             title,
             plain_message,
-            settings.DEFAULT_FROM_EMAIL,
-            settings.ADMINS,
             html_message=html_message,
         )
 

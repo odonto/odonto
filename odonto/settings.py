@@ -301,7 +301,7 @@ INTEGRATING = False
 # OPAL required Django settings you should edit
 
 CONTACT_EMAIL = []
-DEFAULT_FROM_EMAIL = 'hello@example.com'
+SERVER_EMAIL = 'hello@example.com'
 DEFAULT_DOMAIN = 'http://openodonto.com/'
 
 # Begins OPAL Settings you should edit !
