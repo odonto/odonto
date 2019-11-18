@@ -19,6 +19,16 @@ SUBMISSION_ID_DATE_CHANGE = datetime.date(2019, 11, 5)
 
 
 class Transmission(models.Model):
+    """
+    A transmission is an occassion on which we send a message to an
+    upstream system.
+    
+    In our current implementation when we send data upstream we make 
+    one transmission per episode, however this is not mandated by the
+    upstream spec.
+    
+    This model provides such transmissions with a uniquie ID.
+    """
     transmission_id = models.IntegerField(unique=True)
 
     class Meta:
