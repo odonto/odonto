@@ -9,7 +9,8 @@ angular.module('opal.controllers').controller(
     FormValidation,
     DateOfBirthRequired,
     AddressRequired,
-    ApplianceGreaterThanAssessment
+    ApplianceGreaterThanAssessment,
+    Fp17oUnder18
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -17,7 +18,8 @@ angular.module('opal.controllers').controller(
   var validators = [
     DateOfBirthRequired,
     AddressRequired,
-    ApplianceGreaterThanAssessment
+    ApplianceGreaterThanAssessment,
+    Fp17oUnder18
   ];
 
   var validate = function(){
