@@ -1,7 +1,7 @@
 angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter){
 
   /*
-  * An FP17 can have multiple dates so look at them all starting with the earliest
+  * An FP17O can have multiple dates so look at them all starting with the earliest
   * and make sure the patient was under 20 at the time (let's give some leeway)
   */
   return function(editing){
