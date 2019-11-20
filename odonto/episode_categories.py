@@ -67,7 +67,7 @@ class AbstractOdontoCategory(object):
         )
 
     @classmethod
-    def _get_submitted(cls, qs):
+    def _get_submitted(cls, qs=None):
         from opal.models import Episode
 
         if qs is None:
@@ -98,14 +98,8 @@ class AbstractOdontoCategory(object):
 
     @classmethod
     def get_oldest_unsent(cls, qs=None):
-        from opal.models import Episode
-
-        if qs is None:
-            qs = Episode.objects.all()
-        qs = qs.filter(category_name=cls.display_name)
         unsent_date = datetime.datetime.max.date()
         unsent_episode = None
-
         for episode in qs:
             submission = episode.category.submission()
             if not submission or submission.state == submission.REJECTED_BY_COMPASS:
@@ -171,9 +165,14 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
         ].completion_or_last_visit
 
     @classmethod
-    def oldest_unsent(cls, qs=None):
-        qs = qs.prefetch_related("fp17incompletetreatment")
-        return super().oldest_unsent(qs)
+    def get_oldest_unsent(cls, qs=None):
+        from opal.models import Episode
+
+        if qs is None:
+            qs = Episode.objects.all()
+        qs = qs.filter(category_name=cls.display_name)
+        qs = qs.prefetch_related("fp17incompletetreatment_set")
+        return super().get_oldest_unsent(qs)
 
 
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
@@ -235,9 +234,16 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         return largest_date
 
     @classmethod
-    def oldest_unsent(cls, qs=None):
-        qs = qs.prefetch_related("orthodontic_assessment", "orthodontic_treatment")
-        return super().oldest_unsent(qs)
+    def get_oldest_unsent(cls, qs=None):
+        from opal.models import Episode
+
+        if qs is None:
+            qs = Episode.objects.all()
+        qs = qs.filter(category_name=cls.display_name)
+        qs = qs.prefetch_related(
+            "orthodonticassessment_set", "orthodontictreatment_set"
+        )
+        return super().get_oldest_unsent(qs)
 
 
 def get_unsubmitted_fp17_and_fp17os(qs):
