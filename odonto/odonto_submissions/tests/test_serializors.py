@@ -66,15 +66,13 @@ def from_message(number, category_name):
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
-    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
+    return etree.tostring(root, encoding="unicode", pretty_print=True).strip()
 
 
 def from_model(number, category_name):
     patient = opal_models.Patient.objects.create()
     episode = patient.create_episode()
-    episode.fp17dentalcareprovider_set.update(
-        provider_location_number="site_number"
-    )
+    episode.fp17dentalcareprovider_set.update(provider_location_number="site_number")
     episode.category_name = category_name
     bcds1 = generate_bcds1()
     envelope = generate_envelope()
@@ -85,13 +83,11 @@ def from_model(number, category_name):
     assert not envelope.get_errors(), envelope.get_errors()
     root = envelope.generate_xml()
     Envelope.validate_xml(root)
-    return etree.tostring(root, encoding='unicode', pretty_print=True).strip()
+    return etree.tostring(root, encoding="unicode", pretty_print=True).strip()
 
 
 def get_treatments(some_xml):
-    return set([
-        etree.tostring(y).strip() for y in some_xml.findall(".//reptrtty")]
-    )
+    return set([etree.tostring(y).strip() for y in some_xml.findall(".//reptrtty")])
 
 
 def equalise_treatments(old_xml, new_xml):
@@ -148,10 +144,7 @@ class SerializerTestCase(OpalTestCase):
 
     def test_clean_non_alphanumeric(self):
         name = "Mc'Wilson-Smith-jones"
-        self.assertEqual(
-            serializers.clean_non_alphanumeric(name),
-            "McWilsonSmithjones"
-        )
+        self.assertEqual(serializers.clean_non_alphanumeric(name), "McWilsonSmithjones")
 
 
 class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
@@ -169,9 +162,7 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
         orthodontic_assessment.date_of_assessment = self.yesterday
         orthodontic_assessment.date_of_appliance_fitted = self.today
         orthodontic_assessment.save()
-        translator = serializers.OrthodonticAssessmentTranslator(
-            self.episode
-        )
+        translator = serializers.OrthodonticAssessmentTranslator(self.episode)
         translator.validate()
 
     def test_validate_date_of_assessment_exception(self):
@@ -183,14 +174,11 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
         orthodontic_assessment.date_of_assessment = self.today
         orthodontic_assessment.date_of_appliance_fitted = self.yesterday
         orthodontic_assessment.save()
-        translator = serializers.OrthodonticAssessmentTranslator(
-            self.episode
-        )
+        translator = serializers.OrthodonticAssessmentTranslator(self.episode)
         with self.assertRaises(serializers.SerializerValidationError) as v:
             translator.validate()
 
         self.assertEqual(
-            str(v.exception),
-            "Date appliance fitted prior to date of assessment"
+            str(v.exception), "Date appliance fitted prior to date of assessment"
         )
 
