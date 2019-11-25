@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 from django.utils.module_loading import import_string
 from fp17 import bcds1 as message
+from fp17 import treatments
 from fp17.envelope import Envelope
 from odonto.odonto_submissions import serializers
 from odonto import episode_categories
@@ -182,3 +183,45 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
             str(v.exception), "Date appliance fitted prior to date of assessment"
         )
 
+
+class GetAestheticComponentTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.treatment = self.episode.orthodontictreatment_set.get()
+        self.assessment = self.episode.orthodonticassessment_set.get()
+
+    def test_component_differs(self):
+        self.treatment.aesthetic_component = 4
+        self.treatment.save()
+
+        self.assessment.aesthetic_component = 3
+        self.assessment.save()
+
+        with self.assertRaises(serializers.SerializerValidationError) as v:
+            serializers.get_aesthetic_component(self.episode)
+        self.assertEqual(
+            str(v.exception),
+            "treatment aesthetic component differs from assessment aesthetic component",
+        )
+
+    def test_component_same(self):
+        self.treatment.aesthetic_component = 4
+        self.treatment.save()
+
+        self.assessment.aesthetic_component = 4
+        self.assessment.save()
+        self.assertEqual(
+            serializers.get_aesthetic_component(self.episode),
+            treatments.AESTHETIC_COMPONENT(4),
+        )
+
+    def test_component_only_set_on_one(self):
+        self.treatment.aesthetic_component = 4
+        self.treatment.save()
+        self.assertEqual(
+            serializers.get_aesthetic_component(self.episode),
+            treatments.AESTHETIC_COMPONENT(4),
+        )
+
+    def test_component_not_set(self):
+        self.assertIsNone(serializers.get_aesthetic_component(self.episode))
