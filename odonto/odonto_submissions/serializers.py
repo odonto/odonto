@@ -555,6 +555,26 @@ for episode {episode.id}"
     )
 
 
+def get_fp17o_date_of_acceptance(episode):
+    orthodontic_assessment = episode.orthodonticassessment_set.get()
+    orthodontic_treatment = episode.orthodontictreatment_set.get()
+
+    if any(
+        [
+            orthodontic_treatment.patient_failed_to_return,
+            orthodontic_treatment.patient_requested_stop,
+            orthodontic_treatment.treatment_discontinued,
+            orthodontic_treatment.treatment_completed,
+        ]
+    ):
+        # based on the documentation...
+        # "A date of last visit must be present in the Date of Completion
+        # which moves into the Date of Acceptance"
+        return orthodontic_treatment.date_of_completion
+    else:
+        return orthodontic_assessment.date_of_assessment
+
+
 def translate_to_fp17o(bcds1, episode):
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(demographics)
@@ -570,11 +590,12 @@ def translate_to_fp17o(bcds1, episode):
     if post_code:
         bcds1.patient.postcode = post_code
 
-    orthodontic_assessment = episode.orthodonticassessment_set.get()
-    bcds1.date_of_acceptance = orthodontic_assessment.date_of_assessment
+    bcds1.date_of_acceptance = get_fp17o_date_of_acceptance(episode)
+
     orthodontic_treatment = episode.orthodontictreatment_set.get()
     if orthodontic_treatment.date_of_completion:
         bcds1.date_of_completion = orthodontic_treatment.date_of_completion
+
     bcds1.treatments = []
 
     translators = [

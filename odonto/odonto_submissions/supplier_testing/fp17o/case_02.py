@@ -10,7 +10,7 @@ def annotate(bcds1):
     bcds1.patient.sex = 'M'
     bcds1.patient.date_of_birth = datetime.date(2006, 10, 15)
 
-    bcds1.date_of_acceptance = datetime.date(2019, 10, 11)
+    bcds1.date_of_acceptance = datetime.date(2019, 10, 12)
     bcds1.date_of_completion = datetime.date(2019, 10, 12)
 
     bcds1.exemption_remission = {
