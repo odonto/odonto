@@ -17,6 +17,28 @@ class SerializerValidationError(Exception):
     pass
 
 
+def get_aesthetic_component(episode):
+    """
+    Aesthetic component is on both assessment and treatment.
+    Make sure we don't add it twice.
+    """
+    treatment = episode.orthodontictreatment_set.get()
+    assessment = episode.orthodonticassessment_set.get()
+
+    if treatment.aesthetic_component and assessment.aesthetic_component:
+        if not treatment.aesthetic_component == assessment.aesthetic_component:
+            raise SerializerValidationError(
+                "treatment aesthetic component differs from assessment aesthetic component"
+            )
+
+    aesthetic_component = (
+        treatment.aesthetic_component or assessment.aesthetic_component
+    )
+    if aesthetic_component:
+        return t.AESTHETIC_COMPONENT(aesthetic_component)
+    return None
+
+
 class TreatmentSerializer(object):
     message = Treatment
     TREATMENT_MAPPINGS = None
@@ -251,7 +273,6 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
         "assessment_and_review": t.ASSESS_AND_REVIEW,
         "assess_and_refuse_treatment": t.ASSESS_AND_REFUSE,
         "assess_and_appliance_fitted": t.ASSESS_AND_APPLIANCE_FITTED,
-        "aesthetic_component": t.AESTHETIC_COMPONENT,
         "iotn": t.IOTN,
     }
 
@@ -363,7 +384,6 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
     model = models.OrthodonticTreatment
 
     TREATMENT_MAPPINGS = {
-        "aesthetic_component": t.AESTHETIC_COMPONENT,
         "iotn": t.IOTN,
         "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
         "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
@@ -632,6 +652,11 @@ def translate_to_fp17(bcds1, episode):
 
     for translator in translators:
         bcds1.treatments.extend(translator(episode).to_messages())
+
+    aesthetic_component = get_aesthetic_component(episode)
+
+    if aesthetic_component:
+        bcds1.treatments.append(aesthetic_component)
 
     ethnicity_treatment = demographics_translator.ethnicity()
 
