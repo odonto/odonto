@@ -2,6 +2,7 @@
 source =
        odonto
        odontotheme
+       fp17
 
 omit =
     */migrations/*
