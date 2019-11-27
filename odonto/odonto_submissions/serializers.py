@@ -289,16 +289,6 @@ or "Assess and appliance fitted" are required if there is a date of referral'
                 raise SerializerValidationError(
                     "Date of assessment must be greater than the date of referral"
                 )
-        else:
-            if date_of_assessment:
-                # Not this is not explicitly mandatory based on their
-                # requirements document however it states...
-                # "Must be on or before the Date of Assessment"
-                # and we've had rejections where the is a date of
-                # assessment and no date of referral
-                raise SerializerValidationError(
-                    "Date of referral is mandatory if there is a date of referral"
-                )
 
         if date_of_assessment and date_of_assessment >= datetime.date(2019, 4, 1):
             if not date_of_referral:
