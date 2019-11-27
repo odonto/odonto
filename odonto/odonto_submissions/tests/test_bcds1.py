@@ -56,8 +56,8 @@ def gen_bcds1():
         'supporting_details': "SUPPORTING DETAILS",
     }
 
-    t1 = Treatment(code=1234, instance_count=1, teeth=['12'])
-    t2 = Treatment(code=5678, instance_count=3, teeth=['12'])
+    t1 = Treatment(code=1234, instance_count=1)
+    t2 = Treatment(code=5678, instance_count=3)
 
     msg.treatments = [t1, t2]
     msg.treatments_specific = [t2, t1]

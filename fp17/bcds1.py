@@ -128,9 +128,11 @@ class Treatment(Message):
 
     _lookup_by_code = {}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    def __init__(self, code, instance_count=None):
+        self.code = code
+        if instance_count:
+            self.instance_count = instance_count
+        super().__init__()
         self._lookup_by_code[self.code] = self
 
     def validate(self, document):
@@ -170,20 +172,6 @@ class Treatment(Message):
                 'min': min_digits(0),
                 'max': max_digits(2),
                 'required': False,
-            },
-
-            # Tooth identification code
-            'teeth': {
-                'type': 'list',
-                'schema': {
-                    'type': 'string',
-                    'regex': '^[1-8][1-9]$',
-                    'required': True,
-                },
-                'default': [],
-                'required': True,
-                'minlength': 0,
-                'maxlength': 36,
             },
         }
 
@@ -606,10 +594,6 @@ class BCDS1(Message):
                 if 'instance_count' in treatment:
                     reptrtty.attrib['noins'] = \
                         '{:02d}'.format(treatment['instance_count'])
-
-                for x in treatment['teeth']:
-                    toid = etree.SubElement(reptrtty, 'toid')
-                    toid.text = str(x)
 
         create_treatments('tst', x['treatments'])
         create_treatments('cur', x['treatments_specific'])
