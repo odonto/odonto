@@ -540,17 +540,21 @@ class ExtractionChart(models.EpisodeSubrecord):
 class OrthodonticAssessment(models.EpisodeSubrecord):
     _is_singleton = True
 
-    assessment_and_review = fields.BooleanField(
-        default=False,
-        verbose_name="Assess & review"
+    ASSESSMENT_AND_REVIEW = "Assess & review"
+    ASSESS_AND_REFUSE_TREATMENT = "Assess & refuse treatment"
+    ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted"
+
+    ASSESSMENT_CHOICES = (
+        (ASSESSMENT_AND_REVIEW, ASSESSMENT_AND_REVIEW,),
+        (ASSESS_AND_REFUSE_TREATMENT, ASSESS_AND_REFUSE_TREATMENT,),
+        (ASSESS_AND_APPLIANCE_FITTED, ASSESS_AND_APPLIANCE_FITTED,),
     )
-    assess_and_refuse_treatment = fields.BooleanField(
-        default=False,
-        verbose_name="Assess & refuse treatment"
-    )
-    assess_and_appliance_fitted = fields.BooleanField(
-        default=False,
-        verbose_name="Assess & appliance fitted"
+
+    assessment = fields.CharField(
+        choices=ASSESSMENT_CHOICES,
+        default="",
+        max_length=256,
+        verbose_name="Assessment Type"
     )
 
     # Index of Orthodontic Treatment Need
