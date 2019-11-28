@@ -16,19 +16,12 @@ describe('Fp17ODateOfReferral', function() {
   });
 
   describe('required date of referral', function(){
-    it('should error if date of referral is not there and assessment is after 1Apr2019', function(){
+    it('should error if date of referral is not there and the date of assessment is populated', function(){
       editing.orthodontic_assessment.date_of_referral = undefined;
-      editing.orthodontic_assessment.date_of_assessment = moment('2019-04-01').toDate();
+      editing.orthodontic_assessment.date_of_assessment = moment('2019-04-05').toDate();
       var result = Fp17ODateOfReferral(editing);
       var error = result.orthodontic_assessment.date_of_referral;
       expect(error).toBe("Date of referral is required when there's a date of assessment");
-    });
-
-    it('should not error if date of assessment is less that 1Apr2019', function(){
-      editing.orthodontic_assessment.date_of_referral = undefined;
-      editing.orthodontic_assessment.date_of_assessment = moment('2019-03-01').toDate();
-      var result = Fp17ODateOfReferral(editing);
-      expect(result).toBeUndefined();
     });
 
     it('should not error if date of assessment is not present', function(){
@@ -45,7 +38,7 @@ describe('Fp17ODateOfReferral', function() {
       editing.orthodontic_assessment.date_of_assessment = moment('2019-04-05').toDate();
       var result = Fp17ODateOfReferral(editing);
       var error = result.orthodontic_assessment.date_of_referral;
-      expect(error).toBe("Date of referral must be equal or less than the date of assessment");
+      expect(error).toBe("Date of referral must be the same day or before the date of assessment");
     });
 
     it('should not error if the date of assessment is the same as the date of referral', function(){
