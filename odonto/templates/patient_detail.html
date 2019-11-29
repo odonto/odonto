@@ -70,15 +70,17 @@
             </div>
 
             <div class="row content-offset-20">
-              <table class="table">
-                <tr ng-repeat="e in patient.episodes">
-                  <td>Episode type</td>
-                  <td>[[ e.stage ]]</td>
-                  <td>Start date ? </td>
-                  <td></td>
-                  <td><a href="#" class="btn btn-small btn-primary">Edit &nbsp;</a></td>
-                </tr>
-              </table>
+              <div class="col-md-12">
+                <table class="table">
+                    <tr ng-repeat="e in patient.episodes">
+                      <td>Episode type</td>
+                      <td>[[ e.stage ]]</td>
+                      <td>Start date ? </td>
+                      <td></td>
+                      <td><a href="#" class="btn btn-small btn-primary">Edit &nbsp;</a></td>
+                    </tr>
+                  </table>
+              </div>
             </div>
 
             {% for detail in detail_views %}
