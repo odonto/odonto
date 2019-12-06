@@ -34,10 +34,6 @@ class Treatment(models.Treatment):
     pass
 
 
-class Investigation(models.Investigation):
-    pass
-
-
 class SymptomComplex(models.SymptomComplex):
     pass
 
