@@ -38,6 +38,14 @@
           <div id="logout">
 
             <ul class="app-info">
+              {% if view.request.user.profile.can_extract %}
+                <li>
+                  <a href="/search/#/extract" title="Query">
+                    <i class="fa fa-download"></i>
+                    Query
+                  </a>
+                </li>
+              {% endif %}
               {% if view.request.user.is_superuser %}
                 <li>
                   <a href="/admin/" title="Admin">
