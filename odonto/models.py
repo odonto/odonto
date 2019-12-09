@@ -15,7 +15,8 @@ opal.models but can be customised here with extra / altered fields.
 
 
 class Location(models.Location):
-    pass
+    _exclude_from_extract = True
+    _advanced_searchable = False
 
 
 class Allergies(models.Allergies):
