@@ -528,4 +528,13 @@ table.patient-list {
     display: block;
   }
 }
+
+.extraction-chart .upper {
+  border-bottom: 2px solid #ddd;
+}
+
+.extraction-chart .patient-right {
+  border-right: 2px solid #ddd;
+  text-align: right;
+}
 /*# sourceMappingURL=odonto.css.map */

@@ -523,3 +523,12 @@ table.patient-list {
     }
 }
 
+.extraction-chart{
+    .upper{
+        border-bottom: 2px solid #ddd;
+    }
+    .patient-right{
+        border-right: 2px solid #ddd;
+        text-align: right;
+    }
+}
