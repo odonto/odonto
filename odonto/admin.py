@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils.html import format_html
 from reversion.admin import VersionAdmin
 from odonto import models
+from opal.models import Patient
 from opal.admin import UserProfileAdmin
 
 
@@ -71,8 +74,34 @@ class OdontoUserAdmin(UserProfileAdmin):
         return ''
 
 
+class PatientAdmin(VersionAdmin):
+    list_display = ('__str__', 'patient_detail_link')
+
+    search_fields = [
+        'demographics__first_name',
+        'demographics__surname',
+        'demographics__hospital_number'
+    ]
+
+    def patient_detail_url(self, obj):
+        return reverse('odonto-patient-detail', kwargs={"pk": obj.id})
+
+    def patient_detail_link(self, obj):
+        url = self.patient_detail_url(obj)
+        return format_html(
+            "<a href='{url}'>{url}</a>", url=url
+        )
+
+    def view_on_site(self, obj):
+        return self.patient_detail_url(obj)
+
+    patient_detail_url.short_description = "Patient Detail Url"
+
+
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
+admin.site.unregister(Patient)
+admin.site.register(Patient, PatientAdmin)
 admin.site.register(models.PerformerNumber, PerformerNumberAdmin)
 admin.site.unregister(User)
 admin.site.register(User, OdontoUserAdmin)
