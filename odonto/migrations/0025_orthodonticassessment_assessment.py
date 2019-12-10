@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='orthodonticassessment',
             name='assessment',
-            field=models.CharField(choices=[('Assess & review', 'Assess & review'), ('Assess & refuse treatment', 'Assess & refuse treatment'), ('Assess & appliance fitted', 'Assess & appliance fitted')], default='', max_length=256, verbose_name='Assessment Type'),
+            field=models.CharField(choices=[('Assessment & review', 'Assessment & review'), ('Assess & refuse treatment', 'Assess & refuse treatment'), ('Assess & appliance fitted', 'Assess & appliance fitted')], default='', max_length=256, verbose_name='Assessment Type'),
         ),
     ]

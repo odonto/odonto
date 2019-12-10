@@ -3,7 +3,7 @@ from django.db import migrations
 from django.db import transaction
 
 fields_to_values = {
-    "assessment_and_review": "Assess & review",
+    "assessment_and_review": "Assessment & review",
     "assess_and_refuse_treatment": "Assess & refuse treatment",
     "assess_and_appliance_fitted": "Assess & appliance fitted"
 }
