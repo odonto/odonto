@@ -528,4 +528,13 @@ table.patient-list {
   border-right: 2px solid #ddd;
   text-align: right;
 }
+
+@media (max-width: 768px) {
+  .radio-buttons .btn-group {
+    width: 100%;
+  }
+  .radio-buttons .btn-radio-group {
+    display: block;
+  }
+}
 /*# sourceMappingURL=odonto.css.map */
