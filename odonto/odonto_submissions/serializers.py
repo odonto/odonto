@@ -248,9 +248,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
     model = models.OrthodonticAssessment
 
     TREATMENT_MAPPINGS = {
-        "assessment_and_review": t.ASSESS_AND_REVIEW,
-        "assess_and_refuse_treatment": t.ASSESS_AND_REFUSE,
-        "assess_and_appliance_fitted": t.ASSESS_AND_APPLIANCE_FITTED,
+
         "aesthetic_component": t.AESTHETIC_COMPONENT,
         "iotn": t.IOTN,
     }
@@ -259,18 +257,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
         today = datetime.date.today()
         date_fitted = self.model_instance.date_of_appliance_fitted
         date_of_assessment = self.model_instance.date_of_assessment
-        review = self.model_instance.assessment_and_review
-        refuse_treatment = self.model_instance.assess_and_refuse_treatment
-        appliance_fitted = self.model_instance.assess_and_appliance_fitted
         date_of_referral = self.model_instance.date_of_referral
-
-        # assess and * checks
-        # there cannot be more than 1
-        if sum([review, refuse_treatment, appliance_fitted]) > 1:
-            raise SerializerValidationError(
-                'There can only be one "Assess and review", \
-"Assess and refuse treatment", "Assess and appliance fitted"'
-            )
 
         # date of referral checks
         if date_of_referral:
@@ -279,7 +266,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
                     "Date of referral must not be in the future"
                 )
 
-            if not (review or refuse_treatment or appliance_fitted):
+            if not self.model_instance.assessment:
                 raise SerializerValidationError(
                     '"Assess and review", "Assess and refuse treatment" \
 or "Assess and appliance fitted" are required if there is a date of referral'
@@ -302,7 +289,7 @@ or "Assess and appliance fitted" are required if there is a date of referral'
                 "Date of assessment must not be in the future"
             )
 
-        if review and refuse_treatment and appliance_fitted:
+        if self.model_instance.assessment:
             if not date_of_assessment:
                 raise SerializerValidationError(
                     'Date of assessment is required if "Assess and review", \
@@ -316,7 +303,7 @@ or "Assess and appliance fitted" are required if there is a date of referral'
                     "Date appliance fitted prior to date of assessment"
                 )
 
-        if appliance_fitted:
+        if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
             if not date_fitted:
                 raise SerializerValidationError(
                     'Date of appliance fitted is required if "Assess and \
@@ -333,6 +320,15 @@ appliance fitted"'
             # Provider contract)
             # a value of 0 (zero) should be entered
             result.append(t.IOTN(0))
+
+        if self.model_instance.assessment == self.model_instance.ASSESSMENT_AND_REVIEW:
+            result.append(t.ASSESS_AND_REVIEW)
+
+        if self.model_instance.assessment == self.model_instance.ASSESS_AND_REFUSE_TREATMENT:
+            result.append(t.ASSESS_AND_REFUSE)
+
+        if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
+            result.append(t.ASSESS_AND_APPLIANCE_FITTED)
 
         if self.model_instance.date_of_referral:
             dt = self.model_instance.date_of_referral

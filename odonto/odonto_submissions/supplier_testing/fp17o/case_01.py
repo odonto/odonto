@@ -1,5 +1,6 @@
 import datetime
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
+from odonto import models
 from fp17 import treatments, exemptions
 
 
@@ -61,7 +62,7 @@ def from_model(bcds1, patient, episode):
     episode.orthodonticassessment_set.update(
         date_of_referral=date_of_referral,
         date_of_assessment=date_of_assessment,
-        assessment_and_review=True,
+        assessment=models.OrthodonticAssessment.ASSESSMENT_AND_REVIEW,
         iotn_not_applicable=True
     )
 
