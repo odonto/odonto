@@ -7,6 +7,7 @@ $black_coral: #595F72;
 $gunmetal: #21232A;
 $bone: #DDD8C4;
 $error_red: #DE3C4B;
+$screen-sm-min: 768px;
 
 // Color and typography
 .cambridge_blue {
@@ -510,3 +511,15 @@ table.patient-list {
   text-align: center;
   padding: 8px 0px 0px 0px;
 }
+
+.radio-buttons{
+    @media(max-width: $screen-sm-min){
+        .btn-group{
+                width: 100%;
+        }
+        .btn-radio-group{
+            display: block;
+        }
+    }
+}
+
