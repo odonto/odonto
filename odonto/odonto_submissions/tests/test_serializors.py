@@ -6,6 +6,7 @@ from fp17 import bcds1 as message
 from fp17.envelope import Envelope
 from odonto.odonto_submissions import serializers
 from odonto import episode_categories
+from odonto import models
 from opal import models as opal_models
 from lxml import etree
 
@@ -157,7 +158,7 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
         _, self.episode = self.new_patient_and_episode_please()
         orthodontic_assessment = self.episode.orthodonticassessment_set.get()
 
-        orthodontic_assessment.assessment_and_review = True
+        orthodontic_assessment.assessment=models.OrthodonticAssessment.ASSESSMENT_AND_REVIEW
         orthodontic_assessment.date_of_referral = self.two_days_ago
         orthodontic_assessment.date_of_assessment = self.yesterday
         orthodontic_assessment.date_of_appliance_fitted = self.today
@@ -169,7 +170,7 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
         _, self.episode = self.new_patient_and_episode_please()
         orthodontic_assessment = self.episode.orthodonticassessment_set.get()
 
-        orthodontic_assessment.assessment_and_review = True
+        orthodontic_assessment.assessment=models.OrthodonticAssessment.ASSESSMENT_AND_REVIEW
         orthodontic_assessment.date_of_referral = self.two_days_ago
         orthodontic_assessment.date_of_assessment = self.today
         orthodontic_assessment.date_of_appliance_fitted = self.yesterday

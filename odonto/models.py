@@ -537,7 +537,7 @@ class ExtractionChart(models.EpisodeSubrecord):
 class OrthodonticAssessment(models.EpisodeSubrecord):
     _is_singleton = True
 
-    ASSESSMENT_AND_REVIEW = "Assess & review"
+    ASSESSMENT_AND_REVIEW = "Assessment & review"
     ASSESS_AND_REFUSE_TREATMENT = "Assess & refuse treatment"
     ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted"
 
