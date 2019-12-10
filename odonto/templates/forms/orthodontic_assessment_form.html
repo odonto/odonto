@@ -1,14 +1,8 @@
 {% load forms %}
 {% load odonto_forms %}
 <div class="row content-offset-20">
-  <div class="col-md-3">
-    {% btn_checkbox field="OrthodonticAssessment.assessment_and_review" %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="OrthodonticAssessment.assess_and_refuse_treatment" %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="OrthodonticAssessment.assess_and_appliance_fitted" %}
+  <div class="col-md-12">
+    {% btn_radio field="OrthodonticAssessment.assessment" required=False %}
   </div>
 </div>
 <div class="row content-offset-20">
