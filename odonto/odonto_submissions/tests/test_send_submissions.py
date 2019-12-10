@@ -13,7 +13,11 @@ BASE_STR = "odonto.odonto_submissions.management.commands.send_submissions"
 @patch(BASE_STR + ".models.Submission.send")
 @patch(BASE_STR + ".render_to_string")
 @patch(BASE_STR + ".logger")
-class SendSubmissionTestCase(OpalTestCase):
+class SendSubmissionEmailTestCase(OpalTestCase):
+    """
+    Tests the summary email that get's sent out of everything that
+    has been sent downstream
+    """
     def setUp(self):
         self.cmd = send_submissions.Command()
         self.patient, self.episode = self.new_patient_and_episode_please()
@@ -123,3 +127,99 @@ class SendSubmissionTestCase(OpalTestCase):
     def test_none(self, logger, render_to_string, send_submission, send_email):
         Episode.objects.all().delete()
         self.assertIsNone(render_to_string.call_args)
+
+
+class SendSubmissionGetQSTestCase(OpalTestCase):
+    """
+    Tests that the correct episodes are being sent downstream
+    """
+    def setUp(self):
+        self.cmd = send_submissions.Command()
+        self.patient, self.fp17_episode = self.new_patient_and_episode_please()
+        today = datetime.date.today()
+
+        # an fp17 episode ready to be submitted
+        self.fp17_episode.stage = FP17Episode.SUBMITTED
+        self.fp17_episode.category_name = FP17Episode.display_name
+        self.fp17_episode.save()
+
+        # an fp17o episode ready to be submitted
+        self.fp17o_episode = self.patient.create_episode()
+        self.fp17o_episode.stage = FP17OEpisode.SUBMITTED
+        self.fp17o_episode.category_name = FP17OEpisode.display_name
+        self.fp17o_episode.save()
+        self.fp17o_episode.patient.demographics_set.update(
+            ethnicity_fk_id=1
+        )
+        self.fp17o_episode.orthodonticassessment_set.update(
+            date_of_assessment=today,
+            date_of_referral=today
+        )
+        self.fp17o_episode.orthodontictreatment_set.update(
+            date_of_completion=None
+        )
+
+    def test_get_fp17o_qs_success(self):
+        self.assertEqual(
+            self.cmd.get_fp17o_qs().get(),
+            self.fp17o_episode
+        )
+
+    def test_get_fp17o_qs_category(self):
+        self.fp17o_episode.category_name = FP17Episode.display_name
+        self.fp17o_episode.save()
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17o_qs_submitted(self):
+        self.fp17o_episode.stage = FP17OEpisode.OPEN
+        self.fp17o_episode.save()
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17o_qs_with_submissions(self):
+        self.fp17o_episode.submission_set.create()
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17o_qs_with_no_demographics(self):
+        self.fp17o_episode.patient.demographics_set.update(
+            ethnicity_fk_id=None
+        )
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17o_qs_with_no_date_of_assessment(self):
+        self.fp17o_episode.orthodonticassessment_set.update(
+            date_of_assessment=None
+        )
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17o_qs_with_date_of_referral(self):
+        self.fp17o_episode.orthodonticassessment_set.update(
+            date_of_referral=None
+        )
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17o_qs_without_date_of_completion(self):
+        self.fp17o_episode.orthodontictreatment_set.update(
+            date_of_completion=datetime.date.today()
+        )
+        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+
+    def test_get_fp17_qs_success(self):
+        self.assertEqual(
+            self.cmd.get_fp17_qs().get(),
+            self.fp17_episode
+        )
+
+    def test_get_fp17_qs_category(self):
+        self.fp17_episode.category_name = FP17OEpisode.display_name
+        self.fp17_episode.save()
+        self.assertFalse(self.cmd.get_fp17_qs().exists())
+
+    def test_get_fp17_qs_submitted(self):
+        self.fp17_episode.stage = FP17OEpisode.OPEN
+        self.fp17_episode.save()
+        self.assertFalse(self.cmd.get_fp17_qs().exists())
+
+    def test_get_fp17_qs_with_submissions(self):
+        self.fp17_episode.submission_set.create()
+        self.assertFalse(self.cmd.get_fp17_qs().exists())
+
