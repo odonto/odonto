@@ -95,8 +95,6 @@ class PatientAdmin(VersionAdmin):
     def view_on_site(self, obj):
         return self.patient_detail_url(obj)
 
-    patient_detail_url.short_description = "Patient Detail Url"
-
 
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
