@@ -268,8 +268,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
 
             if not self.model_instance.assessment:
                 raise SerializerValidationError(
-                    '"Assess and review", "Assess and refuse treatment" \
-or "Assess and appliance fitted" are required if there is a date of referral'
+                    "An assessment is required if there is a date of referral"
                 )
 
             if date_of_assessment and date_of_referral > date_of_assessment:
