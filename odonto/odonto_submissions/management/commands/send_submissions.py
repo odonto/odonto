@@ -14,12 +14,7 @@ from odonto.odonto_submissions import logger
 
 class Command(BaseCommand):
     def get_fp17o_qs(self):
-        episodes = (
-            Episode.objects.filter(category_name=FP17OEpisode.display_name)
-            .filter(stage="Submitted")
-            .filter(submission=None)
-        )
-
+        episodes = FP17OEpisode.get_submitted_episodes().filter(submission=None)
         # we currently are only sending down a subset based on...
 
         # 1. Before demographics was made mandatory some patients were
@@ -41,11 +36,7 @@ class Command(BaseCommand):
         )
 
     def get_fp17_qs(self):
-        return (
-            Episode.objects.filter(category_name=FP17Episode.display_name)
-            .filter(stage="Submitted")
-            .filter(submission=None)
-        )
+        return FP17Episode.get_submitted_episodes().filter(submission=None)
 
     def send_submission(self, episode):
         logger.info(f"Sending {episode.id}")

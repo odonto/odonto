@@ -3,6 +3,7 @@ import datetime
 from django.utils import timezone
 from django.utils.module_loading import import_string
 from fp17 import bcds1 as message
+from fp17 import treatments
 from fp17.envelope import Envelope
 from odonto.odonto_submissions import serializers
 from odonto import episode_categories
@@ -146,6 +147,26 @@ class SerializerTestCase(OpalTestCase):
     def test_clean_non_alphanumeric(self):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(serializers.clean_non_alphanumeric(name), "McWilsonSmithjones")
+
+class DemographicsTranslatorTestCase(OpalTestCase):
+    def setUp(self):
+        patient, episode = self.new_patient_and_episode_please()
+        self.demographics = patient.demographics()
+
+    def test_with_demographics(self):
+        self.demographics.ethnicity = "Other ethnic group"
+        self.demographics.save()
+        self.assertEqual(
+            serializers.DemographicsTranslator(self.demographics).ethnicity(),
+            treatments.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP
+        )
+
+    def test_without_ethnicity(self):
+        with self.assertRaises(serializers.SerializerValidationError) as e:
+            serializers.DemographicsTranslator(self.demographics).ethnicity()
+        self.assertEqual(
+            str(e.exception), f"Unable to find an ethnicity for patient {self.demographics.patient_id}"
+        )
 
 
 class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
