@@ -558,9 +558,15 @@ def get_fp17o_date_of_acceptance(episode):
         # based on the documentation...
         # "A date of last visit must be present in the Date of Completion
         # which moves into the Date of Acceptance"
-        return orthodontic_treatment.date_of_completion
+        result = orthodontic_treatment.date_of_completion
     else:
-        return orthodontic_assessment.date_of_assessment
+        result = orthodontic_assessment.date_of_assessment
+
+    if result is None:
+        raise SerializerValidationError(
+            f"Unable to get a date of acceptance for fp17O episode {episode.id}"
+        )
+    return result
 
 
 def translate_to_fp17o(bcds1, episode):
