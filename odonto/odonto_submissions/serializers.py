@@ -422,7 +422,10 @@ class DemographicsTranslator(TreatmentSerializer):
         raise ValueError("The form requires a sex of either 'Female' or 'Male'")
 
     def ethnicity(self):
-        return self.ETHNICITY_MAPPINGS[self.model_instance.ethnicity]
+        patient_ethnicity =  self.ETHNICITY_MAPPINGS.get(self.model_instance.ethnicity)
+        if not patient_ethnicity:
+            raise SerializerValidationError(f'Unable to find an ethnicity for patient {self.model_instance.patient_id}')
+        return patient_ethnicity
 
     def address(self):
         address_list = [
