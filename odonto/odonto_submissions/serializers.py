@@ -635,6 +635,10 @@ def translate_to_fp17(bcds1, episode):
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance
+
+    if not bcds1.date_of_acceptance:
+        raise SerializerValidationError("Date of acceptance is not populated for fp17 episode {episode.id}")
+
     bcds1.date_of_completion = incomplete_treatment.completion_or_last_visit
     bcds1.treatments = []
 
