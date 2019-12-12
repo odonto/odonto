@@ -520,6 +520,10 @@ table.patient-list {
   padding: 8px 0px 0px 0px;
 }
 
+.extraction-chart {
+  padding-left: 20px;
+}
+
 .extraction-chart .upper {
   border-bottom: 2px solid #ddd;
 }
