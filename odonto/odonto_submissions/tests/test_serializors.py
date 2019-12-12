@@ -250,3 +250,10 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
         self.assertEqual(
             serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date
         )
+
+    def test_date_of_assessment_not_populated(self):
+        with self.assertRaises(serializers.SerializerValidationError) as e:
+             serializers.get_fp17o_date_of_acceptance(self.episode)
+        self.assertEqual(
+            str(e.exception), f"Unable to get a date of acceptance for fp17O episode"
+        )
