@@ -15,6 +15,7 @@ class Command(BaseCommand):
     def get_rejected_row(self, episode):
         return {
             "category": episode.category_name,
+            "date": episode.category.get_sign_off_date(),
             "location": episode.fp17dentalcareprovider_set.get().provider_location_number,
             "submit_link": episode.category.get_submit_link(),
             "rejection_reason": episode.category.submission().rejection
@@ -29,6 +30,7 @@ class Command(BaseCommand):
         except Exception as e:
             return {
                 "category": episode.category_name,
+                "date": episode.category.get_sign_off_date(),
                 "location": episode.fp17dentalcareprovider_set.get().provider_location_number,
                 "submit_link": episode.category.get_submit_link(),
                 "rejection_reason": f"{e.__class__} {e}"
@@ -38,6 +40,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         with open(FILE_NAME, 'w', newline='') as csvfile:
             fieldnames = [
+                'date',
                 'category',
                 'location',
                 'submit_link',
