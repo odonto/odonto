@@ -534,6 +534,19 @@ class ExtractionChart(models.EpisodeSubrecord):
     ll_e = fields.BooleanField(default=False)
 
 
+    def has_extractions(self):
+        quadrents = ["ur", "lr", "ll", "ul"]
+        permanent_teeth = list(range(1, 9))
+        deciduous_teeth = ["a", "b", "c", "d", "e"]
+        teeth = permanent_teeth + deciduous_teeth
+        teeth_fields_to_code = {}
+
+        for quadrant in quadrents:
+            for tooth in teeth:
+                tooth_field = f"{quadrant}_{tooth}"
+                if getattr(self, tooth_field) == True:
+                    return True
+
 class OrthodonticAssessment(models.EpisodeSubrecord):
     _is_singleton = True
 
