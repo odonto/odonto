@@ -75,3 +75,76 @@ class Fp17ExemptionsToDictTestCase(OpalTestCase):
         self.assertEqual(
             as_dict["patient_charge_collected"], None
         )
+
+
+class ExtractChartTestCase(OpalTestCase):
+    def setUp(self, *args, **kwargs):
+        _, episode = self.new_patient_and_episode_please()
+        self.extraction_chart = episode.extractionchart_set.get()
+
+    def test_has_extractions(self):
+        fields = [
+            "ur_1",
+            "ur_2",
+            "ur_3",
+            "ur_4",
+            "ur_5",
+            "ur_6",
+            "ur_7",
+            "ur_8",
+            "ur_9",
+            "ur_a",
+            "ur_b",
+            "ur_c",
+            "ur_d",
+            "ur_e",
+            "ul_1",
+            "ul_2",
+            "ul_3",
+            "ul_4",
+            "ul_5",
+            "ul_6",
+            "ul_7",
+            "ul_8",
+            "ul_9",
+            "ul_a",
+            "ul_b",
+            "ul_c",
+            "ul_d",
+            "ul_e",
+            "lr_1",
+            "lr_2",
+            "lr_3",
+            "lr_4",
+            "lr_5",
+            "lr_6",
+            "lr_7",
+            "lr_8",
+            "lr_9",
+            "lr_a",
+            "lr_b",
+            "lr_c",
+            "lr_d",
+            "lr_e",
+            "ll_1",
+            "ll_2",
+            "ll_3",
+            "ll_4",
+            "ll_5",
+            "ll_6",
+            "ll_7",
+            "ll_8",
+            "ll_9",
+            "ll_a",
+            "ll_b",
+            "ll_c",
+            "ll_d",
+            "ll_e",
+        ]
+
+        self.assertFalse(self.extraction_chart.has_extractions())
+
+        for field in fields:
+            setattr(self.extraction_chart, field, True)
+            self.extraction_chart.save()
+            self.assertTrue(self.extraction_chart.has_extractions())
