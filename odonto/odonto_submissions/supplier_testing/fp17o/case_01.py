@@ -22,7 +22,7 @@ def annotate(bcds1):
         treatments.ASSESS_AND_REVIEW,
         treatments.RADIOGRAPHS(3),
         treatments.ORTHODONTIC_EXTRACTIONS(54),
-        treatments.ORTHODONTIC_EXTRACTIONS(25),
+        treatments.ORTHODONTIC_EXTRACTIONS(45),
         treatments.DAY_OF_REFERRAL(11),
         treatments.MONTH_OF_REFERRAL(10),
         treatments.YEAR_OF_REFERRAL(19),
