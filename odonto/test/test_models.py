@@ -148,3 +148,5 @@ class ExtractChartTestCase(OpalTestCase):
             setattr(self.extraction_chart, field, True)
             self.extraction_chart.save()
             self.assertTrue(self.extraction_chart.has_extractions())
+            setattr(self.extraction_chart, field, False)
+            self.extraction_chart.save()
