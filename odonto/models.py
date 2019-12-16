@@ -239,8 +239,13 @@ class Fp17Exemptions(models.EpisodeSubrecord):
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
 
+    BAND_1 = "Band 1"
+    BAND_2 = "Band 2"
+    BAND_3 = "Band 3"
+    URGENT_TREATMENT = "Urgent treatment"
+
     TREATMENT_CATEGORIES = enum(
-        "Band 1", "Band 2", "Band 3", "Urgent treatment"
+        BAND_1, BAND_2, BAND_3, URGENT_TREATMENT
     )
 
     treatment_category = fields.CharField(
