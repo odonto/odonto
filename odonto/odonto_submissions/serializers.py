@@ -564,7 +564,7 @@ def get_fp17o_date_of_acceptance(episode):
 
     if result is None:
         raise SerializerValidationError(
-            f"Unable to get a date of acceptance for fp17O episode"
+            f"Unable to get a date of acceptance for FP17O episode"
         )
     return result
 
