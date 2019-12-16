@@ -536,7 +536,7 @@ class ExtractionChart(models.EpisodeSubrecord):
 
     def has_extractions(self):
         quadrents = ["ur", "lr", "ll", "ul"]
-        permanent_teeth = list(range(1, 9))
+        permanent_teeth = list(range(1, 10))
         deciduous_teeth = ["a", "b", "c", "d", "e"]
         teeth = permanent_teeth + deciduous_teeth
 
