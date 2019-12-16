@@ -539,7 +539,6 @@ class ExtractionChart(models.EpisodeSubrecord):
         permanent_teeth = list(range(1, 9))
         deciduous_teeth = ["a", "b", "c", "d", "e"]
         teeth = permanent_teeth + deciduous_teeth
-        teeth_fields_to_code = {}
 
         for quadrant in quadrents:
             for tooth in teeth:
