@@ -13,27 +13,16 @@ from odonto.odonto_submissions import logger
 
 
 class Command(BaseCommand):
-    def get_fp17o_qs(self):
+    def get_fp17os(self):
         episodes = FP17OEpisode.get_submitted_episodes().filter(submission=None)
-        # we currently are only sending down a subset based on...
+        result = []
+        for episode in episodes:
+            # The expected form of how to send extractions down is ambiguous in the
+            # documentation so lets exclude them for the time being.
+            if not episode.extractionchart_set.get().has_extractions():
+                result.append(episode)
+        return result
 
-        # 1. Before demographics was made mandatory some patients were
-        # added without demogrphaics so skip those.
-
-        # 2 there are essentialy, logic for FP17Os when treatment
-        # is complete is still in development
-        # just send down those who have been assessed for the time
-        # being.
-
-        # 3. Referral is requires if there is an assessment, again
-        # some fp17os have been created without this. So we
-        # exclude those for the time being.
-        return (
-            episodes.exclude(patient__demographics__ethnicity_fk_id=None)
-            .exclude(orthodonticassessment__date_of_assessment=None)
-            .exclude(orthodonticassessment__date_of_referral=None)
-            .filter(orthodontictreatment__date_of_completion=None)
-        )
 
     def get_fp17_qs(self):
         return FP17Episode.get_submitted_episodes().filter(submission=None)
@@ -95,7 +84,7 @@ class Command(BaseCommand):
         fp17o_success_count = 0
         fp17o_failure_count = 0
         fp17s = self.get_fp17_qs()
-        fp17os = self.get_fp17o_qs()
+        fp17os = self.get_fp17os()
         for episode in fp17s:
             successful = self.send_submission(
                 episode
