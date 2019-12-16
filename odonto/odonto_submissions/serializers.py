@@ -223,8 +223,8 @@ class ExtractionChartTranslator(TreatmentSerializer):
         for permanent teeth, 1-5 for deciduous teeth.
         Supernumerary teeth identified as 9
         """
-        quadrents = ["ur", "lr", "ll", "ul"]
-        permanent_teeth = list(range(1, 9))
+        quadrents = ["ur", "ul",  "ll", "lr"]
+        permanent_teeth = list(range(1, 10))
         deciduous_teeth = ["a", "b", "c", "d", "e"]
         teeth = permanent_teeth + deciduous_teeth
         teeth_fields_to_code = {}

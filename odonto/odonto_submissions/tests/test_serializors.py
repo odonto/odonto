@@ -149,6 +149,7 @@ class SerializerTestCase(OpalTestCase):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(serializers.clean_non_alphanumeric(name), "McWilsonSmithjones")
 
+
 class DemographicsTranslatorTestCase(OpalTestCase):
     def setUp(self):
         patient, episode = self.new_patient_and_episode_please()
@@ -168,6 +169,7 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         self.assertEqual(
             str(e.exception), f"Unable to find an ethnicity for patient {self.demographics.patient_id}"
         )
+
 
 class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
     def setUp(self):
@@ -224,6 +226,39 @@ class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
                 result, [treatments.TREATMENT_CATEGORY(1)]
             )
         self.assertTrue(validate.called)
+
+
+class ExtractionChartTranslatorTestCase(OpalTestCase):
+    def test_get_teeth_field_to_code_mapping(self):
+        field_to_result = {
+            "ur_1": 11,
+            "ur_8": 18,
+            "ur_9": 19,
+            "ur_a": 51,
+            "ur_e": 55,
+            "ul_1": 21,
+            "ul_8": 28,
+            "ul_9": 29,
+            "ul_a": 61,
+            "ul_e": 65,
+            "ll_1": 31,
+            "ll_8": 38,
+            "ll_9": 39,
+            "ll_a": 71,
+            "ll_e": 75,
+            "lr_1": 41,
+            "lr_8": 48,
+            "lr_9": 49,
+            "lr_a": 81,
+            "lr_e": 85,
+        }
+        for field, fdi_notation_result in field_to_result.items():
+            _, episode = self.new_patient_and_episode_please()
+            episode.extractionchart_set.update(**{field: True})
+            translator = serializers.ExtractionChartTranslator(episode)
+            self.assertEqual(
+                translator.get_teeth_field_to_code_mapping()[field], fdi_notation_result
+            )
 
 
 class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
