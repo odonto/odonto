@@ -9,11 +9,14 @@ from .bcds1 import Treatment
 
 
 class TREATMENT_CATEGORY(Treatment):
+    # band 1 is 1
+    # band 2 is 2
+    # band 3 is 3
+    # band 4 is urgent treatment
     def __init__(self, band):
         super().__init__(code=9150, instance_count=band)
 
 
-TREATMENT_CATEGORY_URGENT = Treatment(code=9150, instance_count=4)
 TREATMENT_CATEGORY_CONTRACT_PILOT_INTERIM_CARE_APPOINTMENT = Treatment(
     code=9150, instance_count=5
 )

@@ -1,4 +1,5 @@
 import datetime
+from odonto import models
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 from fp17 import treatments
 
@@ -14,7 +15,7 @@ def annotate(bcds1):
     bcds1.date_of_completion = datetime.date(2017, 5, 1)
 
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_URGENT,
+        treatments.TREATMENT_CATEGORY(4),
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]
 
@@ -33,7 +34,7 @@ def from_model(bcds1, patient, episode):
     demographics.save()
 
     episode.fp17treatmentcategory_set.update(
-        urgent_treatment=True,
+        treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT,
     )
 
     episode.fp17incompletetreatment_set.update(

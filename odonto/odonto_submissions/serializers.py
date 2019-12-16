@@ -67,7 +67,6 @@ class Fp17TreatmentCategorySerializer(TreatmentSerializer):
 
     TREATMENT_MAPPINGS = OrderedDict(
         [
-            ("urgent_treatment", t.TREATMENT_CATEGORY_URGENT),
             ("regulation_11_replacement_appliance", t.REGULATION_11_APPLIANCE),
             ("prescription_only", t.PRESCRIPTION),
             ("denture_repairs", t.DENTURE_REPAIRS),
@@ -77,9 +76,18 @@ class Fp17TreatmentCategorySerializer(TreatmentSerializer):
         ]
     )
 
+    def validate(self):
+        if self.model_instance.urgent_treatment:
+            if not self.model_instance.treatment_category == self.model_instance.URGENT_TREATMENT:
+                raise SerializerValidationError(
+                    "There cannot be both a treatment category and urgent treatment"
+                )
+
+
     def to_messages(self):
+        self.validate()
         messages = super().to_messages()
-        category = ["Band 1", "Band 2", "Band 3"]
+        category = ["Band 1", "Band 2", "Band 3", "Urgent treatment"]
         if self.model_instance.treatment_category:
             # urgent treatments do not have a treatment category
             band_number = category.index(self.model_instance.treatment_category)

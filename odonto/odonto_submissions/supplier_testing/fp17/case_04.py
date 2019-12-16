@@ -1,5 +1,5 @@
 import datetime
-
+from odonto import models
 from fp17 import treatments
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 
@@ -19,7 +19,7 @@ def annotate(bcds1):
     # Treatments: "Antibiotic Items (9318 1), Decayed Permanent 0, Missing
     # Permanent 1, Filled Permanent 12, Ethnic Origin 4"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY_URGENT,
+        treatments.TREATMENT_CATEGORY(4),
         treatments.ANTIBIOTIC_ITEMS(1),
         treatments.DECAYED_PERMANENT(0),
         treatments.MISSING_PERMANENT(1),
@@ -42,7 +42,7 @@ def from_model(bcds1, patient, episode):
     demographics.save()
 
     episode.fp17treatmentcategory_set.update(
-        urgent_treatment=True,
+        treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT,
     )
 
     episode.fp17clinicaldataset_set.update(

@@ -1,3 +1,4 @@
+from unittest import mock
 from opal.core.test import OpalTestCase
 import datetime
 from django.utils import timezone
@@ -167,6 +168,62 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         self.assertEqual(
             str(e.exception), f"Unable to find an ethnicity for patient {self.demographics.patient_id}"
         )
+
+class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
+    def setUp(self):
+        patient, self.episode = self.new_patient_and_episode_please()
+        self.treatment_category = self.episode.fp17treatmentcategory_set.get()
+
+    def test_validate_raises(self):
+        self.treatment_category.treatment_category = self.treatment_category.BAND_1
+        self.treatment_category.urgent_treatment = True
+        self.treatment_category.save()
+        translator = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        with self.assertRaises(serializers.SerializerValidationError) as e:
+            translator.validate()
+        self.assertEqual(
+            str(e.exception),
+            "There cannot be both a treatment category and urgent treatment"
+        )
+
+    def test_validate_passes_with_urgent(self):
+        self.treatment_category.treatment_category = self.treatment_category.URGENT_TREATMENT
+        self.treatment_category.urgent_treatment = True
+        self.treatment_category.save()
+        translator = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        translator.validate()
+
+    def test_validate_passes_with_only_treatment(self):
+        self.treatment_category.treatment_category = self.treatment_category.BAND_1
+        self.treatment_category.save()
+        translator = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        translator.validate()
+
+    def test_validate_passes_with_neither_urgent_or_treament(self):
+        translator = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        translator.validate()
+
+    def test_to_messages_with_urgent(self):
+        self.treatment_category.treatment_category = self.treatment_category.URGENT_TREATMENT
+        self.treatment_category.save()
+        translator = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        with mock.patch.object(translator, "validate") as validate:
+            result = translator.to_messages()
+            self.assertEqual(
+                result, [treatments.TREATMENT_CATEGORY(4)]
+            )
+        self.assertTrue(validate.called)
+
+    def test_to_messages_with_band_1(self):
+        self.treatment_category.treatment_category = self.treatment_category.BAND_1
+        self.treatment_category.save()
+        translator = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        with mock.patch.object(translator, "validate") as validate:
+            result = translator.to_messages()
+            self.assertEqual(
+                result, [treatments.TREATMENT_CATEGORY(1)]
+            )
+        self.assertTrue(validate.called)
 
 
 class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
