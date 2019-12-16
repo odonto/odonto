@@ -240,7 +240,7 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
 
     TREATMENT_CATEGORIES = enum(
-        "Band 1", "Band 2", "Band 3"
+        "Band 1", "Band 2", "Band 3", "Urgent treatment"
     )
 
     treatment_category = fields.CharField(
