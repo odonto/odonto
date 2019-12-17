@@ -269,34 +269,6 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
         choices=TREATMENT_CATEGORIES,
         verbose_name="Treatment category"
     )
-    urgent_treatment = fields.BooleanField(
-        default=False,
-        verbose_name="Urgent treatment"
-    )
-    regulation_11_replacement_appliance = fields.BooleanField(
-        default=False,
-        verbose_name="Regulation 11 replacement appliance"
-    )
-    prescription_only = fields.BooleanField(
-        default=False,
-        verbose_name="Prescription only"
-    )
-    denture_repairs = fields.BooleanField(
-        default=False,
-        verbose_name="Denture repairs"
-    )
-    bridge_repairs = fields.BooleanField(
-        default=False,
-        verbose_name="Bridge repairs"
-    )
-    arrest_of_bleeding = fields.BooleanField(
-        default=False,
-        verbose_name="Arrest of bleeding"
-    )
-    removal_of_sutures = fields.BooleanField(
-        default=False,
-        verbose_name="Removal of sutures"
-    )
 
     class Meta:
         verbose_name = "Treatment category"
