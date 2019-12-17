@@ -139,7 +139,7 @@ class SerializerTestCase(OpalTestCase):
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 5):
+        for case_number in range(1, 6):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -198,26 +198,26 @@ class Fp17TreatmentCategoryTestCase(OpalTestCase):
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):
         field_to_result = {
-            "ur_1": 11,
-            "ur_8": 18,
-            "ur_9": 19,
-            "ur_a": 51,
-            "ur_e": 55,
-            "ul_1": 21,
-            "ul_8": 28,
-            "ul_9": 29,
-            "ul_a": 61,
-            "ul_e": 65,
-            "ll_1": 31,
-            "ll_8": 38,
-            "ll_9": 39,
-            "ll_a": 71,
-            "ll_e": 75,
-            "lr_1": 41,
-            "lr_8": 48,
-            "lr_9": 49,
-            "lr_a": 81,
-            "lr_e": 85,
+            "ur_1": "11",
+            "ur_8": "18",
+            "ur_9": "19",
+            "ur_a": "51",
+            "ur_e": "55",
+            "ul_1": "21",
+            "ul_8": "28",
+            "ul_9": "29",
+            "ul_a": "61",
+            "ul_e": "65",
+            "ll_1": "31",
+            "ll_8": "38",
+            "ll_9": "39",
+            "ll_a": "71",
+            "ll_e": "75",
+            "lr_1": "41",
+            "lr_8": "48",
+            "lr_9": "49",
+            "lr_a": "81",
+            "lr_e": "85",
         }
         for field, fdi_notation_result in field_to_result.items():
             _, episode = self.new_patient_and_episode_please()

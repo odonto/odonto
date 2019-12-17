@@ -357,7 +357,7 @@ class ORTHODONTIC_EXTRACTIONS(Treatment):
     """
 
     def __init__(self, teeth_quadrant):
-        super().__init__(code=9408, instance_count=teeth_quadrant)
+        super().__init__(code=9408, teeth=teeth_quadrant)
 
 
 # Orthodontic Assessment
