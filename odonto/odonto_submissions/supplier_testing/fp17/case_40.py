@@ -1,4 +1,5 @@
 import datetime
+from odonto import models
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 from fp17 import treatments, exemptions
 
@@ -42,7 +43,7 @@ def from_model(bcds1, patient, episode):
     demographics.save()
 
     episode.fp17treatmentcategory_set.update(
-        urgent_treatment=True,
+        treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT
     )
 
     episode.fp17exemptions_set.update(

@@ -1,6 +1,7 @@
 import datetime
 
 from fp17 import treatments
+from odonto import models
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 
 
@@ -35,7 +36,7 @@ def from_model(bcds1, patient, episode):
     demographics.ethnicity = "White and asian"
     demographics.save()
     episode.fp17treatmentcategory_set.update(
-        prescription_only=True
+        treatment_category=models.Fp17TreatmentCategory.PRESCRIPTION_ONLY
     )
 
     episode.fp17clinicaldataset_set.update(
