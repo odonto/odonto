@@ -239,8 +239,29 @@ class Fp17Exemptions(models.EpisodeSubrecord):
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
 
+    BAND_1 = "Band 1"
+    BAND_2 = "Band 2"
+    BAND_3 = "Band 3"
+    URGENT_TREATMENT = "Urgent treatment"
+    REGULATION_11_REPLACEMENT_APPLIANCE = "Regulation 11 replacement appliance"
+    PRESCRIPTION_ONLY = "Prescription only"
+    DENTURE_REPAIRS = "Denture repairs"
+    BRIDGE_REPAIRS = "Bridge repairs"
+    ARREST_OF_BLEEDING = "Arrest of bleeding"
+    REMOVAL_OF_SUTURES = "Removal of sutures"
+
+
     TREATMENT_CATEGORIES = enum(
-        "Band 1", "Band 2", "Band 3"
+        BAND_1,
+        BAND_2,
+        BAND_3,
+        URGENT_TREATMENT,
+        REGULATION_11_REPLACEMENT_APPLIANCE,
+        PRESCRIPTION_ONLY,
+        DENTURE_REPAIRS,
+        BRIDGE_REPAIRS,
+        ARREST_OF_BLEEDING,
+        REMOVAL_OF_SUTURES,
     )
 
     treatment_category = fields.CharField(
