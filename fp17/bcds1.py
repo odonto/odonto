@@ -607,7 +607,7 @@ class BCDS1(Message):
                     reptrtty.attrib['noins'] = \
                         '{:02d}'.format(treatment['instance_count'])
 
-                for x in treatment['teeth']:
+                for x in sorted(treatment['teeth'], key=lambda x: int(x)):
                     toid = etree.SubElement(reptrtty, 'toid')
                     toid.text = str(x)
 

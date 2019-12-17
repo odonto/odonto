@@ -232,7 +232,7 @@ class ExtractionChartTranslator(TreatmentSerializer):
                 else:
                     quadrant_code = quadrant_idx + 1
                     tooth_code = tooth
-                code = int(f"{quadrant_code}{tooth_code}")
+                code = f"{quadrant_code}{tooth_code}"
                 teeth_fields_to_code[tooth_field] = code
 
         return teeth_fields_to_code
@@ -240,10 +240,14 @@ class ExtractionChartTranslator(TreatmentSerializer):
     def to_messages(self):
         teeth_fields_to_code = self.get_teeth_field_to_code_mapping()
         result = []
+        teeth = []
         for field, code in teeth_fields_to_code.items():
             if getattr(self.model_instance, field):
-                result.append(t.ORTHODONTIC_EXTRACTIONS(code))
+                teeth.append(code)
+        if teeth:
+            result.append(t.ORTHODONTIC_EXTRACTIONS(teeth))
         return result
+
 
 
 class OrthodonticAssessmentTranslator(TreatmentSerializer):
