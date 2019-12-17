@@ -65,27 +65,29 @@ class TreatmentSerializer(object):
 class Fp17TreatmentCategorySerializer(TreatmentSerializer):
     model = models.Fp17TreatmentCategory
 
-    TREATMENT_MAPPINGS = OrderedDict(
-        [
-            ("urgent_treatment", t.TREATMENT_CATEGORY_URGENT),
-            ("regulation_11_replacement_appliance", t.REGULATION_11_APPLIANCE),
-            ("prescription_only", t.PRESCRIPTION),
-            ("denture_repairs", t.DENTURE_REPAIRS),
-            ("bridge_repairs", t.BRIDGE_REPAIRS),
-            ("arrest_of_bleeding", t.ARREST_OF_BLEEDING),
-            ("removal_of_sutures", t.REMOVAL_OF_SUTURES),
-        ]
-    )
+    TREATMENT_MAPPINGS = OrderedDict()
+
+    CATEGORY_TO_TREATMENT = {
+        models.Fp17TreatmentCategory.BAND_1: t.TREATMENT_CATEGORY(1),
+        models.Fp17TreatmentCategory.BAND_2: t.TREATMENT_CATEGORY(2),
+        models.Fp17TreatmentCategory.BAND_3: t.TREATMENT_CATEGORY(3),
+        models.Fp17TreatmentCategory.URGENT_TREATMENT: t.TREATMENT_CATEGORY_URGENT,
+        models.Fp17TreatmentCategory.REGULATION_11_REPLACEMENT_APPLIANCE: t.REGULATION_11_APPLIANCE,
+        models.Fp17TreatmentCategory.PRESCRIPTION_ONLY: t.PRESCRIPTION,
+        models.Fp17TreatmentCategory.DENTURE_REPAIRS: t.DENTURE_REPAIRS,
+        models.Fp17TreatmentCategory.BRIDGE_REPAIRS: t.BRIDGE_REPAIRS,
+        models.Fp17TreatmentCategory.ARREST_OF_BLEEDING: t.ARREST_OF_BLEEDING,
+        models.Fp17TreatmentCategory.REMOVAL_OF_SUTURES: t.REMOVAL_OF_SUTURES,
+    }
 
     def to_messages(self):
-        messages = super().to_messages()
-        category = ["Band 1", "Band 2", "Band 3"]
-        if self.model_instance.treatment_category:
-            # urgent treatments do not have a treatment category
-            band_number = category.index(self.model_instance.treatment_category)
-            band_number = band_number + 1
-            messages.insert(0, t.TREATMENT_CATEGORY(band_number))
-        return messages
+        category = self.model_instance.treatment_category
+
+        if category:
+            if category not in self.CATEGORY_TO_TREATMENT:
+                raise SerializerValidationError(f"Unknown treatment category {category}")
+            return [self.CATEGORY_TO_TREATMENT[category]]
+        return []
 
 
 class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
