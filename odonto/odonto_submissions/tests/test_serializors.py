@@ -168,6 +168,33 @@ class DemographicsTranslatorTestCase(OpalTestCase):
             str(e.exception), f"Unable to find an ethnicity for patient"
         )
 
+class Fp17TreatmentCategoryTestCase(OpalTestCase):
+    def setUp(self):
+        patient, self.episode = self.new_patient_and_episode_please()
+        self.treatment_category = self.episode.fp17treatmentcategory_set.get()
+        self.serializer = serializers.Fp17TreatmentCategorySerializer
+
+    def test_to_messages_none(self):
+        self.treatment_category.treatment_category = None
+        serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        self.assertEqual(serializer.to_messages(), [])
+
+    def test_to_messages_unknown(self):
+        self.treatment_category.treatment_category = "blah"
+        self.treatment_category.save()
+        serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        with self.assertRaises(serializers.SerializerValidationError) as e:
+            serializer.to_messages()
+        self.assertEqual(
+            str(e.exception), f"Unknown treatment category blah"
+        )
+
+    def test_to_messages_populated(self):
+        self.treatment_category.treatment_category = "Band 1"
+        self.treatment_category.save()
+        serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
+
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):
         field_to_result = {
