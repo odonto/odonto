@@ -424,7 +424,7 @@ class DemographicsTranslator(TreatmentSerializer):
     def ethnicity(self):
         patient_ethnicity =  self.ETHNICITY_MAPPINGS.get(self.model_instance.ethnicity)
         if not patient_ethnicity:
-            raise SerializerValidationError(f'Unable to find an ethnicity for patient {self.model_instance.patient_id}')
+            raise SerializerValidationError(f'Unable to find an ethnicity for patient')
         return patient_ethnicity
 
     def address(self):
@@ -564,7 +564,7 @@ def get_fp17o_date_of_acceptance(episode):
 
     if result is None:
         raise SerializerValidationError(
-            f"Unable to get a date of acceptance for FP17O episode"
+            "Unable to get a date of acceptance for FP17O episode"
         )
     return result
 
@@ -635,6 +635,10 @@ def translate_to_fp17(bcds1, episode):
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance
+
+    if not bcds1.date_of_acceptance:
+        raise SerializerValidationError("Date of acceptance is not populated for fp17 episode")
+
     bcds1.date_of_completion = incomplete_treatment.completion_or_last_visit
     bcds1.treatments = []
 
