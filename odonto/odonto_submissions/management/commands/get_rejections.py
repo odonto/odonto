@@ -39,8 +39,8 @@ class Command(BaseCommand):
 
     def get_acceptances_without_referrals(self):
         return FP17OEpisode.get_submitted_episodes().exclude(
-            orthodonticassessment_date_of_assessment=None
-        ).filter(orthodonticassessment_date_of_referral=None)
+            orthodonticassessment__date_of_assessment=None
+        ).filter(orthodonticassessment__date_of_referral=None)
 
 
     def handle(self, *args, **kwargs):
