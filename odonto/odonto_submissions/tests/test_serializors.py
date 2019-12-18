@@ -165,8 +165,40 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         with self.assertRaises(serializers.SerializerValidationError) as e:
             serializers.DemographicsTranslator(self.demographics).ethnicity()
         self.assertEqual(
-            str(e.exception), f"Unable to find an ethnicity for patient {self.demographics.patient_id}"
+            str(e.exception), f"Unable to find an ethnicity for patient"
         )
+
+class ExtractionChartTranslatorTestCase(OpalTestCase):
+    def test_get_teeth_field_to_code_mapping(self):
+        field_to_result = {
+            "ur_1": 11,
+            "ur_8": 18,
+            "ur_9": 19,
+            "ur_a": 51,
+            "ur_e": 55,
+            "ul_1": 21,
+            "ul_8": 28,
+            "ul_9": 29,
+            "ul_a": 61,
+            "ul_e": 65,
+            "ll_1": 31,
+            "ll_8": 38,
+            "ll_9": 39,
+            "ll_a": 71,
+            "ll_e": 75,
+            "lr_1": 41,
+            "lr_8": 48,
+            "lr_9": 49,
+            "lr_a": 81,
+            "lr_e": 85,
+        }
+        for field, fdi_notation_result in field_to_result.items():
+            _, episode = self.new_patient_and_episode_please()
+            episode.extractionchart_set.update(**{field: True})
+            translator = serializers.ExtractionChartTranslator(episode)
+            self.assertEqual(
+                translator.get_teeth_field_to_code_mapping()[field], fdi_notation_result
+            )
 
 
 class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
@@ -255,5 +287,10 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
         with self.assertRaises(serializers.SerializerValidationError) as e:
              serializers.get_fp17o_date_of_acceptance(self.episode)
         self.assertEqual(
+<<<<<<< HEAD
             str(e.exception), f"Unable to get a date of acceptance for fp17O episode {self.episode.id}"
         )
+=======
+            str(e.exception), f"Unable to get a date of acceptance for FP17O episode"
+        )
+>>>>>>> remove-ids-from-error-messages

@@ -97,6 +97,9 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         self.episode.save()
         self.patient.demographics_set.update(ethnicity_fk_id=1)
         Episode.objects.update(category_name=FP17OEpisode.display_name)
+        extract_chart = self.episode.extractionchart_set.get()
+        extract_chart.ur_1 = True
+        extract_chart.save()
         self.cmd.handle()
         ctx = render_to_string.call_args[0][1]
         self.assertFalse(ctx["threshold_breached"])
@@ -159,49 +162,32 @@ class SendSubmissionGetQSTestCase(OpalTestCase):
             date_of_completion=None
         )
 
-    def test_get_fp17o_qs_success(self):
+    def test_get_fp17os_success(self):
         self.assertEqual(
-            self.cmd.get_fp17o_qs().get(),
+            self.cmd.get_fp17os()[0],
             self.fp17o_episode
         )
 
-    def test_get_fp17o_qs_category(self):
+    def test_get_fp17os_category(self):
         self.fp17o_episode.category_name = FP17Episode.display_name
         self.fp17o_episode.save()
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+        self.assertEqual(len(self.cmd.get_fp17os()), False)
 
-    def test_get_fp17o_qs_submitted(self):
+    def test_get_fp17os_submitted(self):
         self.fp17o_episode.stage = FP17OEpisode.OPEN
         self.fp17o_episode.save()
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+        self.assertEqual(len(self.cmd.get_fp17os()), False)
 
-    def test_get_fp17o_qs_with_submissions(self):
+    def test_get_fp17oswith_submissions(self):
         self.fp17o_episode.submission_set.create()
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+        self.assertEqual(len(self.cmd.get_fp17os()), False)
 
-    def test_get_fp17o_qs_with_no_demographics(self):
-        self.fp17o_episode.patient.demographics_set.update(
-            ethnicity_fk_id=None
-        )
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+    def test_get_fp17os_with_extractions(self):
+        extract_chart = self.fp17o_episode.extractionchart_set.get()
+        extract_chart.ur_1 = True
+        extract_chart.save()
 
-    def test_get_fp17o_qs_with_no_date_of_assessment(self):
-        self.fp17o_episode.orthodonticassessment_set.update(
-            date_of_assessment=None
-        )
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
-
-    def test_get_fp17o_qs_with_date_of_referral(self):
-        self.fp17o_episode.orthodonticassessment_set.update(
-            date_of_referral=None
-        )
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
-
-    def test_get_fp17o_qs_without_date_of_completion(self):
-        self.fp17o_episode.orthodontictreatment_set.update(
-            date_of_completion=datetime.date.today()
-        )
-        self.assertFalse(self.cmd.get_fp17o_qs().exists())
+        self.assertEqual(len(self.cmd.get_fp17os()), False)
 
     def test_get_fp17_qs_success(self):
         self.assertEqual(
