@@ -119,18 +119,10 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
     # ^^^ consider splitting this into a Provider Model
-    provider_name = fields.CharField(
-        max_length=255, blank=True, null=True,
-        verbose_name="Provider name"
-    )
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",
         choices=LOCATION_NUMBERS
-    )
-    provider_address = fields.CharField(
-        max_length=255, blank=True, null=True,
-        verbose_name="Provider address"
     )
     performer = fields.CharField(
         max_length=255, blank=True, null=True
