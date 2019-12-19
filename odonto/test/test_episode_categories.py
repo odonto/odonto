@@ -188,6 +188,11 @@ translate_episode_to_xml"
         l = f"http://ntghcomdent1/pathway/#/fp17-submit/{episode.patient.id}/{episode.id}"
         self.assertEqual(episode.category.get_submit_link(), l)
 
+    def test_get_edit_link(self):
+        episode = self.get_episode()
+        l = f"http://ntghcomdent1/pathway/#/fp17-edit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_edit_link(), l)
+
 
 class FP17OEpisodeTestCase(OpalTestCase):
     def setUp(self):
@@ -241,3 +246,8 @@ class FP17OEpisodeTestCase(OpalTestCase):
         episode = self.open_episode
         l = f"http://ntghcomdent1/pathway/#/fp17-o-submit/{episode.patient.id}/{episode.id}"
         self.assertEqual(episode.category.get_submit_link(), l)
+
+    def test_get_edit_link(self):
+        episode = self.open_episode
+        l = f"http://ntghcomdent1/pathway/#/fp17-o-edit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_edit_link(), l)
