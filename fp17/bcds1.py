@@ -189,6 +189,9 @@ class Treatment(Message):
 
 
 class BCDS1(Message):
+    # There are 5 mandatory segments, including the </bcds1> closing tag.
+    num_segments = 5
+
     class Validator(cerberus.Validator):
         def _validate_treatments(self, treatments, field, value):
             for x in value:
@@ -497,13 +500,7 @@ class BCDS1(Message):
             },
         }
 
-    @staticmethod
-    def get_root_xml_element(x):
-        # There are 5 mandatory segments, including the </bcds1> closing tag.
-        nonlocals = {
-            'num_segments': 5,
-        }
-
+    def get_root_xml_element(self, x):
         root = etree.Element('bcds1')
 
         root.attrib['schvn'] = '1.0'
@@ -597,7 +594,7 @@ class BCDS1(Message):
                 return
 
             elem = etree.SubElement(root, name)
-            nonlocals['num_segments'] += 1
+            self.num_segments += 1
 
             for treatment in data:
                 reptrtty = etree.SubElement(elem, 'reptrtty')
@@ -616,13 +613,12 @@ class BCDS1(Message):
 
         if x['dental_chart']:
             cht = etree.SubElement(root, 'cht')
-            nonlocals['num_segments'] += 1
+            self.num_segments += 1
             for entry in x['dental_chart']:
                 todata = etree.SubElement(cht, 'todata')
                 todata.attrib['toid'] = entry['tooth']
                 todata.attrib['ancd'] = entry['annotation']
 
-        root.attrib['noseg'] = str(nonlocals['num_segments'])
+        root.attrib['noseg'] = str(self.num_segments)
 
         return root
-
