@@ -116,6 +116,8 @@ ROOT_URLCONF = 'odonto.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'odonto.wsgi.application'
+HOST_NAME_AND_PROTOCOL = "http://ntghcomdent1"
+
 
 
 TEMPLATES = [

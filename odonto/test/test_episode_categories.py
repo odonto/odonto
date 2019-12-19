@@ -183,6 +183,11 @@ translate_episode_to_xml"
             expected, FP17Episode.summary()
         )
 
+    def test_get_submit_link(self):
+        episode = self.get_episode()
+        l = f"http://ntghcomdent1/pathway/#/fp17-submit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_submit_link(), l)
+
 
 class FP17OEpisodeTestCase(OpalTestCase):
     def setUp(self):
@@ -232,3 +237,7 @@ class FP17OEpisodeTestCase(OpalTestCase):
         episode.orthodontictreatment_set.update(date_of_completion=self.today)
         self.assertEqual(episode.category.get_sign_off_date(), self.today)
 
+    def test_get_submit_link(self):
+        episode = self.open_episode
+        l = f"http://ntghcomdent1/pathway/#/fp17-o-submit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_submit_link(), l)
