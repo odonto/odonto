@@ -128,10 +128,12 @@ class Treatment(Message):
 
     _lookup_by_code = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, teeth=None, **kwargs):
         super().__init__(*args, **kwargs)
-
         self._lookup_by_code[self.code] = self
+        if teeth is None:
+            teeth = []
+        self.teeth = teeth
 
     def validate(self, document):
         # Generator method returning 0 items. See
@@ -589,7 +591,6 @@ class BCDS1(Message):
                 exrmdet.attrib['sdet'] = \
                     x['exemption_remission']['supporting_details']
 
-
         self.create_treatments(root, 'tst', x['treatments'])
         self.create_treatments(root, 'cur', x['treatments_specific'])
 
@@ -602,7 +603,6 @@ class BCDS1(Message):
                 todata.attrib['ancd'] = entry['annotation']
 
         root.attrib['noseg'] = str(self.num_segments)
-
         return root
 
 
