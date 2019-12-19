@@ -165,7 +165,7 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         with self.assertRaises(serializers.SerializerValidationError) as e:
             serializers.DemographicsTranslator(self.demographics).ethnicity()
         self.assertEqual(
-            str(e.exception), f"Unable to find an ethnicity for patient {self.demographics.patient_id}"
+            str(e.exception), "Unable to find an ethnicity for patient"
         )
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):
