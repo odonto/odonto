@@ -145,12 +145,11 @@ class Treatment(Message):
         if isinstance(x, self.__class__):
             instance_count = getattr(self, "instance_count", None)
             other_instance_count = getattr(x, "instance_count", None)
-
             code = self.code
             other_code = x.code
             return (instance_count == other_instance_count) and (
                 code == other_code
-            )
+            ) and (self.teeth == x.teeth)
         return False
 
     class Meta:
