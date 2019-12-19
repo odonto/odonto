@@ -589,27 +589,9 @@ class BCDS1(Message):
                 exrmdet.attrib['sdet'] = \
                     x['exemption_remission']['supporting_details']
 
-        def create_treatments(name, data):
-            if not data:
-                return
 
-            elem = etree.SubElement(root, name)
-            self.num_segments += 1
-
-            for treatment in data:
-                reptrtty = etree.SubElement(elem, 'reptrtty')
-                reptrtty.attrib['trtcd'] = '{:04d}'.format(treatment['code'])
-
-                if 'instance_count' in treatment:
-                    reptrtty.attrib['noins'] = \
-                        '{:02d}'.format(treatment['instance_count'])
-
-                for x in sorted(treatment['teeth'], key=lambda x: int(x)):
-                    toid = etree.SubElement(reptrtty, 'toid')
-                    toid.text = str(x)
-
-        create_treatments('tst', x['treatments'])
-        create_treatments('cur', x['treatments_specific'])
+        self.create_treatments(root, 'tst', x['treatments'])
+        self.create_treatments(root, 'cur', x['treatments_specific'])
 
         if x['dental_chart']:
             cht = etree.SubElement(root, 'cht')
@@ -622,3 +604,23 @@ class BCDS1(Message):
         root.attrib['noseg'] = str(self.num_segments)
 
         return root
+
+
+    def create_treatments(self, root, name, data):
+        if not data:
+            return
+
+        elem = etree.SubElement(root, name)
+        self.num_segments += 1
+
+        for treatment in data:
+            reptrtty = etree.SubElement(elem, 'reptrtty')
+            reptrtty.attrib['trtcd'] = '{:04d}'.format(treatment['code'])
+
+            if 'instance_count' in treatment:
+                reptrtty.attrib['noins'] = \
+                    '{:02d}'.format(treatment['instance_count'])
+
+            for x in sorted(treatment['teeth'], key=lambda x: int(x)):
+                toid = etree.SubElement(reptrtty, 'toid')
+                toid.text = str(x)
