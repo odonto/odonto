@@ -1,5 +1,6 @@
 import datetime
 from collections import defaultdict
+from django.conf import settings
 from opal.core import episodes
 
 
@@ -145,6 +146,11 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
     display_name = "FP17"
     detail_template = "n/a"
 
+    def get_submit_link(self):
+        patient_id = self.episode.patient_id
+        episode_id = self.episode.id
+        return f"{settings.HOST_NAME_AND_PROTOCOL}/pathway/#/fp17-submit/{patient_id}/{episode_id}"
+
     @classmethod
     def get_unsubmitted(cls, qs):
         """
@@ -178,6 +184,11 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
     display_name = "FP17O"
     detail_template = "n/a"
+
+    def get_submit_link(self):
+        patient_id = self.episode.patient_id
+        episode_id = self.episode.id
+        return f"{settings.HOST_NAME_AND_PROTOCOL}/pathway/#/fp17-o-submit/{patient_id}/{episode_id}"
 
     @classmethod
     def get_unsubmitted(cls, qs):
