@@ -55,3 +55,27 @@ class TreatmentTestCase(OpalTestCase):
         self.assertNotEqual(
             treatments.REGULATION_11_APPLIANCE, treatments.TREATMENT_COMPLETED
         )
+
+    def test_equality_fail_with_teeth(self):
+        self.assertNotEqual(
+            treatments.ORTHODONTIC_EXTRACTIONS(["14"]),
+            treatments.ORTHODONTIC_EXTRACTIONS(["15"])
+        )
+
+    def test_equality_success_with_teeth(self):
+        self.assertEqual(
+            treatments.ORTHODONTIC_EXTRACTIONS(["14"]),
+            treatments.ORTHODONTIC_EXTRACTIONS(["14"])
+        )
+
+    def test_equality_fail_with_multiple_teeth(self):
+        self.assertNotEqual(
+            treatments.ORTHODONTIC_EXTRACTIONS(["15", "16"]),
+            treatments.ORTHODONTIC_EXTRACTIONS(["15", "17"])
+        )
+
+    def test_equality_success_with_multiple_teeth(self):
+        self.assertEqual(
+            treatments.ORTHODONTIC_EXTRACTIONS(["15", "16"]),
+            treatments.ORTHODONTIC_EXTRACTIONS(["15", "16"])
+        )
