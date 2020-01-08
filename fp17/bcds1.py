@@ -128,10 +128,12 @@ class Treatment(Message):
 
     _lookup_by_code = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, teeth=None, **kwargs):
         super().__init__(*args, **kwargs)
-
         self._lookup_by_code[self.code] = self
+        if teeth is None:
+            teeth = []
+        self.teeth = teeth
 
     def validate(self, document):
         # Generator method returning 0 items. See
@@ -143,12 +145,11 @@ class Treatment(Message):
         if isinstance(x, self.__class__):
             instance_count = getattr(self, "instance_count", None)
             other_instance_count = getattr(x, "instance_count", None)
-
             code = self.code
             other_code = x.code
             return (instance_count == other_instance_count) and (
                 code == other_code
-            )
+            ) and (self.teeth == x.teeth)
         return False
 
     class Meta:
@@ -189,6 +190,9 @@ class Treatment(Message):
 
 
 class BCDS1(Message):
+    # There are 5 mandatory segments, including the </bcds1> closing tag.
+    num_segments = 5
+
     class Validator(cerberus.Validator):
         def _validate_treatments(self, treatments, field, value):
             for x in value:
@@ -497,13 +501,7 @@ class BCDS1(Message):
             },
         }
 
-    @staticmethod
-    def get_root_xml_element(x):
-        # There are 5 mandatory segments, including the </bcds1> closing tag.
-        nonlocals = {
-            'num_segments': 5,
-        }
-
+    def get_root_xml_element(self, x):
         root = etree.Element('bcds1')
 
         root.attrib['schvn'] = '1.0'
@@ -592,37 +590,36 @@ class BCDS1(Message):
                 exrmdet.attrib['sdet'] = \
                     x['exemption_remission']['supporting_details']
 
-        def create_treatments(name, data):
-            if not data:
-                return
-
-            elem = etree.SubElement(root, name)
-            nonlocals['num_segments'] += 1
-
-            for treatment in data:
-                reptrtty = etree.SubElement(elem, 'reptrtty')
-                reptrtty.attrib['trtcd'] = '{:04d}'.format(treatment['code'])
-
-                if 'instance_count' in treatment:
-                    reptrtty.attrib['noins'] = \
-                        '{:02d}'.format(treatment['instance_count'])
-
-                for x in treatment['teeth']:
-                    toid = etree.SubElement(reptrtty, 'toid')
-                    toid.text = str(x)
-
-        create_treatments('tst', x['treatments'])
-        create_treatments('cur', x['treatments_specific'])
+        self.create_treatments(root, 'tst', x['treatments'])
+        self.create_treatments(root, 'cur', x['treatments_specific'])
 
         if x['dental_chart']:
             cht = etree.SubElement(root, 'cht')
-            nonlocals['num_segments'] += 1
+            self.num_segments += 1
             for entry in x['dental_chart']:
                 todata = etree.SubElement(cht, 'todata')
                 todata.attrib['toid'] = entry['tooth']
                 todata.attrib['ancd'] = entry['annotation']
 
-        root.attrib['noseg'] = str(nonlocals['num_segments'])
-
+        root.attrib['noseg'] = str(self.num_segments)
         return root
 
+
+    def create_treatments(self, root, name, data):
+        if not data:
+            return
+
+        elem = etree.SubElement(root, name)
+        self.num_segments += 1
+
+        for treatment in data:
+            reptrtty = etree.SubElement(elem, 'reptrtty')
+            reptrtty.attrib['trtcd'] = '{:04d}'.format(treatment['code'])
+
+            if 'instance_count' in treatment:
+                reptrtty.attrib['noins'] = \
+                    '{:02d}'.format(treatment['instance_count'])
+
+            for x in sorted(treatment['teeth'], key=lambda x: int(x)):
+                toid = etree.SubElement(reptrtty, 'toid')
+                toid.text = str(x)

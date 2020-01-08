@@ -1,4 +1,5 @@
 import datetime
+from odonto import models
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 from fp17 import treatments
 
@@ -34,7 +35,7 @@ def from_model(bcds1, patient, episode):
     demographics.save()
 
     episode.fp17treatmentcategory_set.update(
-        removal_of_sutures=True
+        treatment_category=models.Fp17TreatmentCategory.REMOVAL_OF_SUTURES
     )
 
     episode.fp17incompletetreatment_set.update(

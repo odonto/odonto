@@ -119,18 +119,10 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
     # ^^^ consider splitting this into a Provider Model
-    provider_name = fields.CharField(
-        max_length=255, blank=True, null=True,
-        verbose_name="Provider name"
-    )
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",
         choices=LOCATION_NUMBERS
-    )
-    provider_address = fields.CharField(
-        max_length=255, blank=True, null=True,
-        verbose_name="Provider address"
     )
     performer = fields.CharField(
         max_length=255, blank=True, null=True
@@ -239,42 +231,35 @@ class Fp17Exemptions(models.EpisodeSubrecord):
 class Fp17TreatmentCategory(models.EpisodeSubrecord):
     _is_singleton = True
 
+    BAND_1 = "Band 1"
+    BAND_2 = "Band 2"
+    BAND_3 = "Band 3"
+    URGENT_TREATMENT = "Urgent treatment"
+    REGULATION_11_REPLACEMENT_APPLIANCE = "Regulation 11 replacement appliance"
+    PRESCRIPTION_ONLY = "Prescription only"
+    DENTURE_REPAIRS = "Denture repairs"
+    BRIDGE_REPAIRS = "Bridge repairs"
+    ARREST_OF_BLEEDING = "Arrest of bleeding"
+    REMOVAL_OF_SUTURES = "Removal of sutures"
+
+
     TREATMENT_CATEGORIES = enum(
-        "Band 1", "Band 2", "Band 3"
+        BAND_1,
+        BAND_2,
+        BAND_3,
+        URGENT_TREATMENT,
+        REGULATION_11_REPLACEMENT_APPLIANCE,
+        PRESCRIPTION_ONLY,
+        DENTURE_REPAIRS,
+        BRIDGE_REPAIRS,
+        ARREST_OF_BLEEDING,
+        REMOVAL_OF_SUTURES,
     )
 
     treatment_category = fields.CharField(
         max_length=255, blank=True, null=True,
         choices=TREATMENT_CATEGORIES,
         verbose_name="Treatment category"
-    )
-    urgent_treatment = fields.BooleanField(
-        default=False,
-        verbose_name="Urgent treatment"
-    )
-    regulation_11_replacement_appliance = fields.BooleanField(
-        default=False,
-        verbose_name="Regulation 11 replacement appliance"
-    )
-    prescription_only = fields.BooleanField(
-        default=False,
-        verbose_name="Prescription only"
-    )
-    denture_repairs = fields.BooleanField(
-        default=False,
-        verbose_name="Denture repairs"
-    )
-    bridge_repairs = fields.BooleanField(
-        default=False,
-        verbose_name="Bridge repairs"
-    )
-    arrest_of_bleeding = fields.BooleanField(
-        default=False,
-        verbose_name="Arrest of bleeding"
-    )
-    removal_of_sutures = fields.BooleanField(
-        default=False,
-        verbose_name="Removal of sutures"
     )
 
     class Meta:

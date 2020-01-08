@@ -139,7 +139,7 @@ class SerializerTestCase(OpalTestCase):
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 5):
+        for case_number in range(1, 6):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -165,32 +165,59 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         with self.assertRaises(serializers.SerializerValidationError) as e:
             serializers.DemographicsTranslator(self.demographics).ethnicity()
         self.assertEqual(
-            str(e.exception), f"Unable to find an ethnicity for patient"
+            str(e.exception), "Unable to find an ethnicity for patient"
         )
+
+class Fp17TreatmentCategoryTestCase(OpalTestCase):
+    def setUp(self):
+        patient, self.episode = self.new_patient_and_episode_please()
+        self.treatment_category = self.episode.fp17treatmentcategory_set.get()
+        self.serializer = serializers.Fp17TreatmentCategorySerializer
+
+    def test_to_messages_none(self):
+        self.treatment_category.treatment_category = None
+        serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        self.assertEqual(serializer.to_messages(), [])
+
+    def test_to_messages_unknown(self):
+        self.treatment_category.treatment_category = "blah"
+        self.treatment_category.save()
+        serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        with self.assertRaises(serializers.SerializerValidationError) as e:
+            serializer.to_messages()
+        self.assertEqual(
+            str(e.exception), f"Unknown treatment category blah"
+        )
+
+    def test_to_messages_populated(self):
+        self.treatment_category.treatment_category = "Band 1"
+        self.treatment_category.save()
+        serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
+        self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
 
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):
         field_to_result = {
-            "ur_1": 11,
-            "ur_8": 18,
-            "ur_9": 19,
-            "ur_a": 51,
-            "ur_e": 55,
-            "ul_1": 21,
-            "ul_8": 28,
-            "ul_9": 29,
-            "ul_a": 61,
-            "ul_e": 65,
-            "ll_1": 31,
-            "ll_8": 38,
-            "ll_9": 39,
-            "ll_a": 71,
-            "ll_e": 75,
-            "lr_1": 41,
-            "lr_8": 48,
-            "lr_9": 49,
-            "lr_a": 81,
-            "lr_e": 85,
+            "ur_1": "11",
+            "ur_8": "18",
+            "ur_9": "19",
+            "ur_a": "51",
+            "ur_e": "55",
+            "ul_1": "21",
+            "ul_8": "28",
+            "ul_9": "29",
+            "ul_a": "61",
+            "ul_e": "65",
+            "ll_1": "31",
+            "ll_8": "38",
+            "ll_9": "39",
+            "ll_a": "71",
+            "ll_e": "75",
+            "lr_1": "41",
+            "lr_8": "48",
+            "lr_9": "49",
+            "lr_a": "81",
+            "lr_e": "85",
         }
         for field, fdi_notation_result in field_to_result.items():
             _, episode = self.new_patient_and_episode_please()
@@ -287,10 +314,5 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
         with self.assertRaises(serializers.SerializerValidationError) as e:
              serializers.get_fp17o_date_of_acceptance(self.episode)
         self.assertEqual(
-<<<<<<< HEAD
-            str(e.exception), f"Unable to get a date of acceptance for fp17O episode {self.episode.id}"
-        )
-=======
             str(e.exception), f"Unable to get a date of acceptance for FP17O episode"
         )
->>>>>>> remove-ids-from-error-messages
