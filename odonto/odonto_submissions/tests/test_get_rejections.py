@@ -12,6 +12,7 @@ class GetRejectionsTestCase(OpalTestCase):
         self.patient, self.episode = self.new_patient_and_episode_please()
         self.episode.stage = FP17Episode.SUBMITTED
         self.episode.category_name = FP17Episode.display_name
+        self.episode.fp17dentalcareprovider_set.update(performer="Dorothy Dentist")
         self.episode.save()
         self.episode.submission_set.create(
             state=Submission.REJECTED_BY_COMPASS,
@@ -22,14 +23,16 @@ class GetRejectionsTestCase(OpalTestCase):
         )
         self.expected = {
             "category": FP17Episode.display_name,
+            "date": None,
             "location": "29 Acacia Road",
+            "performer": "Dorothy Dentist",
             "submit_link": f"http://ntghcomdent1/pathway/#/fp17-submit/{self.patient.id}/{self.episode.id}",
             "rejection_reason": "faulty"
         }
 
     def test_get_row(self):
         self.assertEqual(
-            self.cmd.get_row(self.episode), self.expected
+            self.cmd.get_row(self.episode, "faulty"), self.expected
         )
 
     @patch(f"{MODULE_ROUTE}.csv")
@@ -39,8 +42,10 @@ class GetRejectionsTestCase(OpalTestCase):
 
         with patch(MOCKING_FILE_NAME_OPEN, m, create=True):
             self.cmd.handle()
-
-        csv_mock.DictWriter.return_value.writerow.assert_called_once_with(self.expected)
+        self.assertEqual(
+            csv_mock.DictWriter.return_value.writerow.call_args_list[0][0][0],
+            self.expected
+        )
 
     @patch(f"{MODULE_ROUTE}.csv")
     def test_handle_fp17o(self, csv_mock):
@@ -55,4 +60,7 @@ class GetRejectionsTestCase(OpalTestCase):
         with patch(MOCKING_FILE_NAME_OPEN, m, create=True):
             self.cmd.handle()
 
-        csv_mock.DictWriter.return_value.writerow.assert_called_once_with(self.expected)
+        self.assertEqual(
+            csv_mock.DictWriter.return_value.writerow.call_args_list[0][0][0],
+            self.expected
+        )
