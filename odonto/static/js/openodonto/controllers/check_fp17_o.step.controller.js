@@ -12,7 +12,8 @@ angular.module('opal.controllers').controller(
     ApplianceGreaterThanAssessment,
     Fp17oUnder18,
     Fp17ODateOfReferral,
-    Fp17ODateOfAssessment
+    Fp17ODateOfAssessment,
+    Fp17OAssessmentType
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -23,7 +24,8 @@ angular.module('opal.controllers').controller(
     ApplianceGreaterThanAssessment,
     Fp17oUnder18,
     Fp17ODateOfReferral,
-    Fp17ODateOfAssessment
+    Fp17ODateOfAssessment,
+    Fp17OAssessmentType
   ];
 
   var validate = function(){
