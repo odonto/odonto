@@ -147,3 +147,9 @@ def chart_tooth(notation, **kwargs):
         'model'         : model
     }
     return ctx
+
+@register.inclusion_tag('_helpers/odonto_select.html')
+def odonto_select(*args, **kwargs):
+    ctx = get_odonto_common_args(kwargs)
+    ctx['lookuplist'] = kwargs.pop("lookuplist", ctx.get("lookuplist", None))
+    return ctx
