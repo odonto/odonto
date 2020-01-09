@@ -30,3 +30,6 @@
   </div>
 </div>
 {% endif %}
+<div ng-show="errors['{{ model_api_name }}']['{{ field_name }}']" class="row content-offset-below-20 content-offset-10 content-offset-below-20 help-block">
+  [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
+</div>
