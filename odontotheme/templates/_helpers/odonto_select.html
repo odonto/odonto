@@ -1,0 +1,25 @@
+<div class="form-group" {% if visibility %} {{ visibility|safe }} {% endif %} ng-class="{'errored-state': errors['{{ model_api_name }}']['{{ field_name }}']}">
+  <span ng-class="{ 'errored-state': {{ formname }}[{{ element_name }}].$dirty && !{{ formname }}[{{ element_name }}].$valid }">
+    {% if label %}
+    <label class="control-label {% ifequal style "horizontal" %}col-sm-3{% endifequal %}">
+      {{ label }}
+    </label>
+    {% endif %}
+    <div class="{% ifequal style "horizontal" %}col-sm-8{% endifequal %}"
+         ng-class='{"errored-state": {{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required}'>
+      <select {% if autofocus %}autofocus {% endif %}name="[[ {{ element_name }} ]]" {% if required %}required{% endif %} class="form-control" ng-model="{{ model }}" {% if change %} ng-change="{{ change }}" {% endif %} {% if disabled %}ng-disabled="{{ disabled }}" {% endif %} {% for d in directives %}{{ d }} {% endfor %}>
+        <option value="" selected>---------</option>
+        <option ng-repeat="i in {{ lookuplist }} track by $index">[[ i ]]</option>
+        {% if other %}<option>Other</option>{% endif %}
+      </select>
+    {% if required %}
+      <span ng-show="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required" class="help-block">
+        {{ label }} is required
+      </span>
+    {% endif %}
+      <span class="help-block" ng-show="errors['{{ model_api_name }}']['{{ field_name }}']">
+        [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
+      </span>
+    </div>
+  </span>
+</div>
