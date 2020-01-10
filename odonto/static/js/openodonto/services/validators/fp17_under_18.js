@@ -18,7 +18,7 @@ angular.module('opal.services').factory('Fp17Under18', function(toMomentFilter){
 
         var dobMoment = toMomentFilter(editing.demographics.date_of_birth);
         var diff = otherMoment.diff(dobMoment, "years", false);
-        if(diff > 20){
+        if(diff > 18){
           return {
             fp17_exemptions: {
               patient_under_18: "The patient's DOB was over 18 years ago"

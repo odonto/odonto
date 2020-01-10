@@ -541,4 +541,8 @@ table.patient-list {
     display: block;
   }
 }
+
+.errored-state select {
+  background-color: #fcc;
+}
 /*# sourceMappingURL=odonto.css.map */

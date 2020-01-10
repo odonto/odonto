@@ -1,9 +1,9 @@
-{% load forms %}
+{% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% select field="Fp17DentalCareProvider.performer" style="vertical" lookuplist="metadata.performer.performer_list" %}
+    {% odonto_select field="Fp17DentalCareProvider.performer" style="vertical" lookuplist="metadata.performer.performer_list" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% select field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
+    {% odonto_select field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
   </div>
 </div>
