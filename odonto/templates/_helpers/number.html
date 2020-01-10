@@ -1,5 +1,6 @@
 <div class="form-group"
      {% if visibility %} {{ visibility|safe }} {% endif %}
+     ng-class="{'errored-state': errors['{{ model_api_name }}']['{{ field_name }}']}"
      >
   <label
     {% ifequal style "horizontal" %}
@@ -57,6 +58,9 @@
         {{ label }} is required
       </span>
     {% endif %}
+    <span class="help-block" ng-show="errors['{{ model_api_name }}']['{{ field_name }}']">
+      [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
+    </span>
   </div>
   {% if unit %}
   <label class="control-label"><small>({{ unit }})</small></label>

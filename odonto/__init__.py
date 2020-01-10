@@ -27,5 +27,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17_under_18.js',
         'js/openodonto/services/validators/fp17o_date_of_referral.js',
         'js/openodonto/services/validators/fp17o_date_of_assessment.js',
+        'js/openodonto/services/validators/assessment_iotn.js',
+        'js/openodonto/services/validators/treatment_iotn.js',
         'js/openodonto/services/validators/fp17_treatment_category.js',
     ]
