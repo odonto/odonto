@@ -13,7 +13,7 @@ angular.module('opal.controllers').controller(
     Fp17oUnder18,
     Fp17ODateOfReferral,
     Fp17ODateOfAssessment,
-    Fp17OAssessmentType
+    Fp17OAssessmentType,
     AssessmentIOTN,
     TreatmentIOTN,
 ){
