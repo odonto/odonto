@@ -358,8 +358,6 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
         "iotn": t.IOTN,
         "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
         "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
-        "treatment_discontinued": t.TREATMENT_DISCONTINUED,
-        "treatment_completed": t.TREATMENT_COMPLETED,
         "par_scores_calculated": t.PAR_SCORES_CALCULATED,
     }
 
@@ -373,26 +371,17 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
             # a value of 0 (zero) should be entered
             result.append(t.IOTN(0))
 
-        if (
-            sum(
-                [
-                    self.model_instance.patient_failed_to_return,
-                    self.model_instance.patient_requested_stop,
-                    self.model_instance.treatment_discontinued,
-                    self.model_instance.treatment_completed,
-                ]
-            )
-            > 1
-        ):
-            raise ValueError("Inconsistent reasons for stopping an FP17O")
-
-        if self.model_instance.patient_failed_to_return:
+        if self.model_instance.resolution == self.model.PATIENT_FAILED_TO_RETURN:
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_FAILED_TO_RETURN)
-
-        if self.model_instance.patient_requested_stop:
+        elif self.model_instance.resolution == self.model.PATIENT_REQUESTED:
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_REQUESTED)
+        elif self.model_instance.resolution == self.model.TREATMENT_DISCONTINUED:
+            result.append(t.TREATMENT_DISCONTINUED)
+        elif self.model_instance.resolution == self.model.TREATMENT_COMPLETED:
+            result.append(t.TREATMENT_COMPLETED)
+
         return result
 
 
@@ -553,14 +542,7 @@ def get_fp17o_date_of_acceptance(episode):
     orthodontic_assessment = episode.orthodonticassessment_set.get()
     orthodontic_treatment = episode.orthodontictreatment_set.get()
 
-    if any(
-        [
-            orthodontic_treatment.patient_failed_to_return,
-            orthodontic_treatment.patient_requested_stop,
-            orthodontic_treatment.treatment_discontinued,
-            orthodontic_treatment.treatment_completed,
-        ]
-    ):
+    if orthodontic_treatment.resolution:
         # based on the documentation...
         # "A date of last visit must be present in the Date of Completion
         # which moves into the Date of Acceptance"
