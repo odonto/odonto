@@ -16,6 +16,7 @@ angular.module('opal.controllers').controller(
     Fp17OAssessmentType,
     AssessmentIOTN,
     TreatmentIOTN,
+    Fp17ODateOfCompletion
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -29,7 +30,8 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfAssessment,
     Fp17OAssessmentType,
     AssessmentIOTN,
-    TreatmentIOTN
+    TreatmentIOTN,
+    Fp17ODateOfCompletion
   ];
 
   var validate = function(){
