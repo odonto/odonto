@@ -62,7 +62,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.orthodontictreatment_set.update(
-        treatment_completed=True,
+        resolution=models.OrthodonticTreatment.TREATMENT_COMPLETED,
         par_scores_calculated=True,
         date_of_completion=datetime.date(2019, 10, 12),
         iotn=2

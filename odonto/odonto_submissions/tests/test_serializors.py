@@ -271,41 +271,10 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
         self.orthodontic_treatment = self.episode.orthodontictreatment_set.get()
         self.some_date = datetime.date.today() - datetime.timedelta(3)
 
-    def test_patient_failed_to_return(self):
-        self.orthodontic_treatment.date_of_completion = self.some_date
-        self.orthodontic_treatment.patient_failed_to_return = True
-        self.orthodontic_treatment.save()
-        self.assertEqual(
-            serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date
-        )
-
     def test_treatment_completed(self):
         self.orthodontic_treatment.date_of_completion = self.some_date
-        self.orthodontic_treatment.treatment_completed = True
+        self.orthodontic_treatment.resolution = self.orthodontic_treatment.TREATMENT_COMPLETED
         self.orthodontic_treatment.save()
-        self.assertEqual(
-            serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date
-        )
-
-    def test_patient_requested_stop(self):
-        self.orthodontic_treatment.date_of_completion = self.some_date
-        self.orthodontic_treatment.patient_requested_stop = True
-        self.orthodontic_treatment.save()
-        self.assertEqual(
-            serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date
-        )
-
-    def test_treatment_discontinued(self):
-        self.orthodontic_treatment.date_of_completion = self.some_date
-        self.orthodontic_treatment.treatment_discontinued = True
-        self.orthodontic_treatment.save()
-        self.assertEqual(
-            serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date
-        )
-
-    def test_treatment_not_completed(self):
-        self.orthodontic_assessment.date_of_assessment = self.some_date
-        self.orthodontic_assessment.save()
         self.assertEqual(
             serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date
         )

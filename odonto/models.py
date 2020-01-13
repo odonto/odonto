@@ -571,20 +571,24 @@ class OrthodonticAssessment(models.EpisodeSubrecord):
 class OrthodonticTreatment(models.EpisodeSubrecord):
     _is_singleton = True
 
-    patient_failed_to_return = fields.BooleanField(
-        default=False,
-        verbose_name="Treatment abandoned - patient failed to return"
+    PATIENT_FAILED_TO_RETURN = "Treatment abandoned - patient failed to return"
+    PATIENT_REQUESTED = "Treatment abandoned - patient requested"
+    TREATMENT_DISCONTINUED = "Treatment discontinued"
+    TREATMENT_COMPLETED = "Treatment completed"
+
+    RESOLUTION_CHOICES = (
+        (PATIENT_FAILED_TO_RETURN, PATIENT_FAILED_TO_RETURN,),
+        (PATIENT_REQUESTED, PATIENT_REQUESTED,),
+        (TREATMENT_DISCONTINUED, TREATMENT_DISCONTINUED,),
+        (TREATMENT_COMPLETED, TREATMENT_COMPLETED,),
     )
-    patient_requested_stop = fields.BooleanField(
-        default=False,
-        verbose_name="Treatment abandoned - patient requested"
+
+    resolution = fields.CharField(
+        choices=RESOLUTION_CHOICES,
+        default="",
+        max_length=256,
     )
-    treatment_discontinued = fields.BooleanField(
-        default=False,
-    )
-    treatment_completed = fields.BooleanField(
-        default=False
-    )
+
     par_scores_calculated = fields.BooleanField(
         default=False,
         verbose_name="PAR "
