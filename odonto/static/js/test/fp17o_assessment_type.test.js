@@ -30,7 +30,18 @@ describe('Fp17OAssessmentType', function() {
       }
       expect(Fp17OAssessmentType(editing)).toEqual(expected);
     });
-  
+
+    it('should error if there is a date of referral but assessment is null', function(){
+      editing.orthodontic_assessment.date_of_referral = new Date();
+      editing.orthodontic_assessment.assessment = null;
+      var expected = {
+        "orthodontic_assessment": {
+          "assessment": "An assessment type is required when there is a date of referral"
+        }
+      }
+      expect(Fp17OAssessmentType(editing)).toEqual(expected);
+    });
+
     it('should not error if there is no date of referral', function(){
       expect(Fp17OAssessmentType(editing)).toBe(undefined);
     });
