@@ -546,7 +546,8 @@ class OrthodonticAssessment(models.EpisodeSubrecord):
 
     assessment = fields.CharField(
         choices=ASSESSMENT_CHOICES,
-        default="",
+        blank=True,
+        null=True,
         max_length=256,
         verbose_name="Assessment Type"
     )
@@ -589,7 +590,8 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
 
     completion_type = fields.CharField(
         choices=COMPLETION_TYPE_CHOICES,
-        default="",
+        null=True,
+        blank=True,
         max_length=256,
     )
 

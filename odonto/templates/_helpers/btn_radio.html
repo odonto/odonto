@@ -12,6 +12,7 @@
         <label class="btn btn-default btn-radio-group"
               ng-model="{{ model }}"
               uib-btn-radio="'[[ i ]]'"
+              uncheckable='true'
               name="[[ {{ element_name }} ]]"
               {% if required %}required {% endif %}
               ng-repeat="i in {{ lookuplist }} track by $index">

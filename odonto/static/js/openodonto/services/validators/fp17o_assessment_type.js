@@ -10,7 +10,7 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(){
     var assessment = editing.orthodontic_assessment;
     var treatment = editing.orthodontic_treatment;
 
-    if(assessment.date_of_referral && !assessment.assessment.length){
+    if(assessment.date_of_referral && !assessment.assessment){
       return {
         "orthodontic_assessment": {
           "assessment": "An assessment type is required when there is a date of referral"
@@ -18,7 +18,7 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(){
       }
     }
 
-    if(!assessment.assessment.length && !treatment.completion_type.length){
+    if(!assessment.assessment && !treatment.completion_type){
       return {
         "orthodontic_assessment": {
           "assessment": "An assessment type or completion type are required"
