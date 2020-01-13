@@ -14,15 +14,7 @@ from odonto.odonto_submissions import logger
 
 class Command(BaseCommand):
     def get_fp17os(self):
-        episodes = FP17OEpisode.get_submitted_episodes().filter(submission=None)
-        result = []
-        for episode in episodes:
-            # The expected form of how to send extractions down is ambiguous in the
-            # documentation so lets exclude them for the time being.
-            if not episode.extractionchart_set.get().has_extractions():
-                result.append(episode)
-        return result
-
+        return FP17OEpisode.get_submitted_episodes().filter(submission=None)
 
     def get_fp17_qs(self):
         return FP17Episode.get_submitted_episodes().filter(submission=None)

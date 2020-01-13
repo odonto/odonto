@@ -89,27 +89,6 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         self.assertEqual(ctx["fp17o_success_count"], 0)
         self.assertEqual(ctx["fp17o_failure_count"], 1)
 
-    def test_ignores_some_fp17o(
-        self, logger, render_to_string, send_submission, send_email
-    ):
-        send_submission.side_effect = ValueError("boom")
-        self.episode.category_name = FP17OEpisode.display_name
-        self.episode.save()
-        self.patient.demographics_set.update(ethnicity_fk_id=1)
-        Episode.objects.update(category_name=FP17OEpisode.display_name)
-        extract_chart = self.episode.extractionchart_set.get()
-        extract_chart.ur_1 = True
-        extract_chart.save()
-        self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        self.assertFalse(ctx["threshold_breached"])
-        self.assertEqual(ctx["total_success"], 0)
-        self.assertEqual(ctx["total_failure"], 0)
-        self.assertEqual(ctx["fp17_success_count"], 0)
-        self.assertEqual(ctx["fp17_failure_count"], 0)
-        self.assertEqual(ctx["fp17o_success_count"], 0)
-        self.assertEqual(ctx["fp17o_failure_count"], 0)
-
     @override_settings(FAILED_TO_SEND_WARNING_THRESHOLD=0)
     def test_threshold_breached(
         self, logger, render_to_string, send_submission, send_email
@@ -180,13 +159,6 @@ class SendSubmissionGetQSTestCase(OpalTestCase):
 
     def test_get_fp17oswith_submissions(self):
         self.fp17o_episode.submission_set.create()
-        self.assertEqual(len(self.cmd.get_fp17os()), False)
-
-    def test_get_fp17os_with_extractions(self):
-        extract_chart = self.fp17o_episode.extractionchart_set.get()
-        extract_chart.ur_1 = True
-        extract_chart.save()
-
         self.assertEqual(len(self.cmd.get_fp17os()), False)
 
     def test_get_fp17_qs_success(self):
