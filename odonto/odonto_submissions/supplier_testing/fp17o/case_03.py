@@ -61,7 +61,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.orthodontictreatment_set.update(
-        resolution=models.OrthodonticTreatment.PATIENT_FAILED_TO_RETURN,
+        completion_type=models.OrthodonticTreatment.PATIENT_FAILED_TO_RETURN,
         date_of_completion=datetime.date(2019, 10, 12),
         iotn_not_applicable=True
     )

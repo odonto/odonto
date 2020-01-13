@@ -273,7 +273,7 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
 
     def test_treatment_completed(self):
         self.orthodontic_treatment.date_of_completion = self.some_date
-        self.orthodontic_treatment.resolution = self.orthodontic_treatment.TREATMENT_COMPLETED
+        self.orthodontic_treatment.completion_type = self.orthodontic_treatment.TREATMENT_COMPLETED
         self.orthodontic_treatment.save()
         self.assertEqual(
             serializers.get_fp17o_date_of_acceptance(self.episode), self.some_date

@@ -371,15 +371,15 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
             # a value of 0 (zero) should be entered
             result.append(t.IOTN(0))
 
-        if self.model_instance.resolution == self.model.PATIENT_FAILED_TO_RETURN:
+        if self.model_instance.completion_type == self.model.PATIENT_FAILED_TO_RETURN:
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_FAILED_TO_RETURN)
-        elif self.model_instance.resolution == self.model.PATIENT_REQUESTED:
+        elif self.model_instance.completion_type == self.model.PATIENT_REQUESTED:
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_REQUESTED)
-        elif self.model_instance.resolution == self.model.TREATMENT_DISCONTINUED:
+        elif self.model_instance.completion_type == self.model.TREATMENT_DISCONTINUED:
             result.append(t.TREATMENT_DISCONTINUED)
-        elif self.model_instance.resolution == self.model.TREATMENT_COMPLETED:
+        elif self.model_instance.completion_type == self.model.TREATMENT_COMPLETED:
             result.append(t.TREATMENT_COMPLETED)
 
         return result
@@ -542,7 +542,7 @@ def get_fp17o_date_of_acceptance(episode):
     orthodontic_assessment = episode.orthodonticassessment_set.get()
     orthodontic_treatment = episode.orthodontictreatment_set.get()
 
-    if orthodontic_treatment.resolution:
+    if orthodontic_treatment.completion_type:
         # based on the documentation...
         # "A date of last visit must be present in the Date of Completion
         # which moves into the Date of Acceptance"

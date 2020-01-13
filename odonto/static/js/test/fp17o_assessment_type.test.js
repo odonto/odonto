@@ -15,7 +15,7 @@ describe('Fp17OAssessmentType', function() {
           assessment: ""
         },
         orthodontic_treatment: {
-          resolution: "Treatment completed"
+          completion_type: "Treatment completed"
         }
       };
   });
@@ -42,27 +42,27 @@ describe('Fp17OAssessmentType', function() {
     });
   });
 
-  describe('either an assessment or a resolution are required', function(){
-    it('should error if there is no assessment or resolution', function(){
+  describe('either an assessment or a completion type are required', function(){
+    it('should error if there is no assessment or completion_type', function(){
       var expected = {
         "orthodontic_assessment": {
-          "assessment": "An assessment type or resolution are required"
+          "assessment": "An assessment type or completion type are required"
         },
         "orthodontic_treatment": {
-          "resolution": "An assessment type or resolution are required"
+          "completion_type": "An assessment type or completion type are required"
         },
       }
-      editing.orthodontic_treatment.resolution = "";
+      editing.orthodontic_treatment.completion_type = "";
       expect(Fp17OAssessmentType(editing)).toEqual(expected);
     });
 
     it('should not error if there is an assessment', function(){
       editing.orthodontic_assessment.assessment = "Assessment & Review";
-      editing.orthodontic_treatment.resolution = "";
+      editing.orthodontic_treatment.completion_type = "";
       expect(Fp17OAssessmentType(editing)).toBe(undefined);
     });
 
-    it('it should not error if there is a resolution', function(){
+    it('it should not error if there is a completion type', function(){
       expect(Fp17OAssessmentType(editing)).toBe(undefined);
     });
   });

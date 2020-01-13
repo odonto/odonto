@@ -569,6 +569,10 @@ class OrthodonticAssessment(models.EpisodeSubrecord):
 
 
 class OrthodonticTreatment(models.EpisodeSubrecord):
+
+    class Meta:
+        verbose_name = "Orthodontic Completion"
+
     _is_singleton = True
 
     PATIENT_FAILED_TO_RETURN = "Treatment abandoned - patient failed to return"
@@ -576,15 +580,15 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
     TREATMENT_DISCONTINUED = "Treatment discontinued"
     TREATMENT_COMPLETED = "Treatment completed"
 
-    RESOLUTION_CHOICES = (
+    COMPLETION_TYPE_CHOICES = (
         (PATIENT_FAILED_TO_RETURN, PATIENT_FAILED_TO_RETURN,),
         (PATIENT_REQUESTED, PATIENT_REQUESTED,),
         (TREATMENT_DISCONTINUED, TREATMENT_DISCONTINUED,),
         (TREATMENT_COMPLETED, TREATMENT_COMPLETED,),
     )
 
-    resolution = fields.CharField(
-        choices=RESOLUTION_CHOICES,
+    completion_type = fields.CharField(
+        choices=COMPLETION_TYPE_CHOICES,
         default="",
         max_length=256,
     )

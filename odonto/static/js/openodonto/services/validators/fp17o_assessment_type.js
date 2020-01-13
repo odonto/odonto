@@ -2,7 +2,7 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(){
   /*
   * If there is a date of referral there must be one an assessment type
   *
-  * If there is no assessment or resolution compass rejects with
+  * If there is no assessment or completion type compass rejects with
   * `No significant treatment on an EDI claim`
   */
   return function(editing){
@@ -18,13 +18,13 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(){
       }
     }
 
-    if(!assessment.assessment.length && !treatment.resolution.length){
+    if(!assessment.assessment.length && !treatment.completion_type.length){
       return {
         "orthodontic_assessment": {
-          "assessment": "An assessment type or resolution are required"
+          "assessment": "An assessment type or completion type are required"
         },
         "orthodontic_treatment": {
-          "resolution": "An assessment type or resolution are required"
+          "completion_type": "An assessment type or completion type are required"
         },
       }
     }
