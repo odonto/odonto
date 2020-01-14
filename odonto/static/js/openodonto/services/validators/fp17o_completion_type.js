@@ -9,8 +9,9 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(){
   * Refuse treatment and then a completion type which seems intuitively
   * problematic.
   *
-  * Also the form guidance states "Cross this box if an
-  * assessment has been performed but NHS orthodontic
+  * Also the form guidance states for Assessment & Refuse" states
+  *
+  * "Cross this box if an assessment has been performed but NHS orthodontic
   * treatment is deemed unnecessary or inappropriate."
   *
   * Which backs this up.
