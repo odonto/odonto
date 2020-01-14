@@ -34,4 +34,5 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17o_date_of_completion.js',
         'js/openodonto/services/validators/fp17_aged_18_full_time_education.js',
         'js/openodonto/services/validators/fp17o_aged_18_full_time_education.js',
+        'js/openodonto/services/validators/completion_type.js',
     ]
