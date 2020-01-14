@@ -23,7 +23,7 @@ describe('Fp17Aged18InFullTimeEducation', function() {
     editing.fp17_exemptions.aged_18_in_full_time_education = true;
     var expected = {
       fp17_exemptions: {
-        aged_18_in_full_time_education: "The patient's DOB was not 18"
+        aged_18_in_full_time_education: "The patient was not 18"
       }
     }
     expect(Fp17Aged18InFullTimeEducation(editing)).toEqual(expected);
@@ -35,7 +35,7 @@ describe('Fp17Aged18InFullTimeEducation', function() {
     editing.fp17_exemptions.aged_18_in_full_time_education = true;
     var expected = {
       fp17_exemptions: {
-        aged_18_in_full_time_education: "The patient's DOB was not 18"
+        aged_18_in_full_time_education: "The patient was not 18"
       }
     }
     expect(Fp17Aged18InFullTimeEducation(editing)).toEqual(expected);

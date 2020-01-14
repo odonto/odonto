@@ -22,7 +22,7 @@ angular.module('opal.services').factory('Fp17Aged18InFullTimeEducation', functio
         if(diff !== 18){
           return {
             fp17_exemptions: {
-              aged_18_in_full_time_education: "The patient's DOB was not 18"
+              aged_18_in_full_time_education: "The patient was not 18"
             }
           }
         }
