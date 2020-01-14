@@ -2,7 +2,7 @@ angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter)
 
   /*
   * An FP17O can have multiple dates so look at them all starting with the earliest
-  * and make sure the patient was under 20 at the time (let's give some leeway)
+  * and make sure the patient was under 18 at the time
   */
   return function(editing){
     if(!editing.fp17_exemptions.patient_under_18){
@@ -19,7 +19,7 @@ angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter)
 
         var dobMoment = toMomentFilter(editing.demographics.date_of_birth);
         var diff = otherMoment.diff(dobMoment, "years", false);
-        if(diff > 20){
+        if(diff > 18){
           return {
             fp17_exemptions: {
               patient_under_18: "The patient's DOB was over 18 years ago"
