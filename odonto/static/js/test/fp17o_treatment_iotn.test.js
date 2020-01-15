@@ -13,11 +13,9 @@ describe('TreatmentIOTN', function() {
       editing = {
         orthodontic_assessment: {
           iotn: undefined,
-          iotn_not_applicable: undefined
         },
         orthodontic_treatment: {
           iotn: undefined,
-          iotn_not_applicable: undefined
         }
       };
   });
