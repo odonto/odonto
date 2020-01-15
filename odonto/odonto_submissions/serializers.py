@@ -254,9 +254,7 @@ class OrthodonticAssessmentTranslator(TreatmentSerializer):
     model = models.OrthodonticAssessment
 
     TREATMENT_MAPPINGS = {
-
         "aesthetic_component": t.AESTHETIC_COMPONENT,
-        "iotn": t.IOTN,
     }
 
     def validate(self):
@@ -319,12 +317,15 @@ appliance fitted"'
         self.validate()
         result = super().to_messages()
 
-        if self.model_instance.iotn_not_applicable:
-            # If ‘IOTN not applicable’ (e.g not possible to calculate
-            # because the patient has transferred mid treatment to a new
-            # Provider contract)
-            # a value of 0 (zero) should be entered
-            result.append(t.IOTN(0))
+        if self.model_instance.iotn:
+            if self.model_instance.iotn == self.model_instance.IOTN_NOT_APPLICABLE:
+                # If ‘IOTN not applicable’ (e.g not possible to calculate
+                # because the patient has transferred mid treatment to a new
+                # Provider contract)
+                # a value of 0 (zero) should be entered
+                result.append(t.IOTN(0))
+            else:
+                result.append(t.IOTN(int(self.model_instance.iotn)))
 
         if self.model_instance.assessment == self.model_instance.ASSESSMENT_AND_REVIEW:
             result.append(t.ASSESS_AND_REVIEW)
@@ -355,7 +356,6 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
 
     TREATMENT_MAPPINGS = {
         "aesthetic_component": t.AESTHETIC_COMPONENT,
-        "iotn": t.IOTN,
         "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
         "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
         "par_scores_calculated": t.PAR_SCORES_CALCULATED,
@@ -364,12 +364,15 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
     def to_messages(self):
         result = super().to_messages()
 
-        if self.model_instance.iotn_not_applicable:
-            # If ‘IOTN not applicable’ (e.g not possible to calculate
-            # because the patient has transferred mid treatment to a new
-            # Provider contract)
-            # a value of 0 (zero) should be entered
-            result.append(t.IOTN(0))
+        if self.model_instance.iotn:
+            if self.model_instance.iotn == self.model_instance.IOTN_NOT_APPLICABLE:
+                # If ‘IOTN not applicable’ (e.g not possible to calculate
+                # because the patient has transferred mid treatment to a new
+                # Provider contract)
+                # a value of 0 (zero) should be entered
+                result.append(t.IOTN(0))
+            else:
+                result.append(t.IOTN(int(self.model_instance.iotn)))
 
         if self.model_instance.completion_type == self.model.PATIENT_FAILED_TO_RETURN:
             result.append(t.TREATMENT_ABANDONED)

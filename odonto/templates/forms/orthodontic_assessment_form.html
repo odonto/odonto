@@ -6,13 +6,10 @@
   </div>
 </div>
 <div class="row content-offset-20">
+  <div class="col-md-4">
+    {% btn_radio field="OrthodonticAssessment.iotn" required=False %}
+  </div>
   <div class="col-md-3">
-    {% number field="OrthodonticAssessment.iotn" min=1 max=5 %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="OrthodonticAssessment.iotn_not_applicable" %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
     {% charfield field="OrthodonticAssessment.aesthetic_component" %}
   </div>
 </div>

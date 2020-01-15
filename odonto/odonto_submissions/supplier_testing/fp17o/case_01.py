@@ -62,7 +62,7 @@ def from_model(bcds1, patient, episode):
         date_of_referral=date_of_referral,
         date_of_assessment=date_of_assessment,
         assessment=models.OrthodonticAssessment.ASSESSMENT_AND_REVIEW,
-        iotn_not_applicable=True
+        iotn=models.OrthodonticAssessment.IOTN_NOT_APPLICABLE
     )
 
     translate_to_bdcs1(bcds1, episode)
