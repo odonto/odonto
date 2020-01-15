@@ -14,7 +14,6 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfReferral,
     Fp17ODateOfAssessment,
     Fp17OAssessmentType,
-    AssessmentIOTN,
     TreatmentIOTN,
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation
@@ -30,7 +29,6 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfReferral,
     Fp17ODateOfAssessment,
     Fp17OAssessmentType,
-    AssessmentIOTN,
     TreatmentIOTN,
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation
