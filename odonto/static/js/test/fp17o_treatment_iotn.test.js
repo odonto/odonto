@@ -35,7 +35,7 @@ describe('TreatmentIOTN', function() {
       editing.orthodontic_treatment.iotn = 1;
       editing.orthodontic_assessment.iotn = 1;
       var expected = {
-        orthodontic_treatment: {iotn: "There cannot be both assessment IOTN and treatment IOTN"}
+        orthodontic_treatment: {iotn: "There cannot be both assessment IOTN and completion IOTN"}
       }
       expect(TreatmentIOTN(editing)).toEqual(expected);
     });

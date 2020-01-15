@@ -14,7 +14,7 @@ angular.module('opal.services').factory('TreatmentIOTN', function(){
     if(assessment.iotn && treatment.iotn){
       return {
         orthodontic_treatment: {
-          iotn: "There cannot be both assessment IOTN and treatment IOTN"
+          iotn: "There cannot be both assessment IOTN and completion IOTN"
         }
       }
     }
