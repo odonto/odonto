@@ -2,16 +2,10 @@
      {% if visibility %} {{ visibility|safe }} {% endif %}
      ng-class="{'errored-state': errors['{{ model_api_name }}']['{{ field_name }}']}"
      >
-  <label
-    {% ifequal style "horizontal" %}
-    class="control-label col-sm-3"
-    {% endifequal %}
-    >
+  <label class="control-label">
     {% if icon %}<i class="{{icon}}"></i> {% endif %}
     {{ label }}
-  </label>
-  <div ng-class="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required"
-       {% ifequal style "horizontal" %}
+  </label> <div ng-class="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required"{% ifequal style "horizontal" %}
        class="col-sm-{% if unit %}2{% else %}8{% endif %}"
        {% endifequal %}
        >
