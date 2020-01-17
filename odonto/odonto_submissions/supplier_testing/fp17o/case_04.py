@@ -56,7 +56,7 @@ def from_model(bcds1, patient, episode):
         date_of_assessment=date_of_assessment,
         date_of_appliance_fitted=date_appliance_fitted,
         assessment=models.OrthodonticAssessment.ASSESS_AND_APPLIANCE_FITTED,
-        iotn=4
+        iotn="4"
     )
     translate_to_bdcs1(bcds1, episode)
 

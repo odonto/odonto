@@ -543,6 +543,16 @@ class OrthodonticAssessment(models.EpisodeSubrecord):
         (ASSESS_AND_REFUSE_TREATMENT, ASSESS_AND_REFUSE_TREATMENT,),
         (ASSESS_AND_APPLIANCE_FITTED, ASSESS_AND_APPLIANCE_FITTED,),
     )
+    IOTN_NOT_APPLICABLE = "N/A"
+
+    IOTN_CHOICES = (
+        ("1", "1",),
+        ("2", "2",),
+        ("3", "3",),
+        ("4", "4",),
+        ("5", "5",),
+        (IOTN_NOT_APPLICABLE, IOTN_NOT_APPLICABLE,),
+    )
 
     assessment = fields.CharField(
         choices=ASSESSMENT_CHOICES,
@@ -552,17 +562,17 @@ class OrthodonticAssessment(models.EpisodeSubrecord):
         verbose_name="Assessment Type"
     )
 
-    # Index of Orthodontic Treatment Need
-    # Only accepts 1-5
-    iotn = fields.IntegerField(
-        blank=True, null=True, verbose_name="IOTN"
+    iotn = fields.CharField(
+        choices=IOTN_CHOICES,
+        blank=True,
+        null=True,
+        max_length=256,
+        verbose_name="IOTN"
     )
+
     # Only accepts 1-10
     aesthetic_component = fields.IntegerField(
         blank=True, null=True
-    )
-    iotn_not_applicable = fields.BooleanField(
-        default=False, verbose_name="IOTN not applicable"
     )
     date_of_referral = fields.DateField(blank=True, null=True)
     date_of_assessment = fields.DateField(blank=True, null=True)
@@ -588,6 +598,17 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
         (PATIENT_FAILED_TO_RETURN, PATIENT_FAILED_TO_RETURN,),
     )
 
+    IOTN_NOT_APPLICABLE = "N/A"
+
+    IOTN_CHOICES = (
+        ("1", "1",),
+        ("2", "2",),
+        ("3", "3",),
+        ("4", "4",),
+        ("5", "5",),
+        (IOTN_NOT_APPLICABLE, IOTN_NOT_APPLICABLE,),
+    )
+
     completion_type = fields.CharField(
         choices=COMPLETION_TYPE_CHOICES,
         null=True,
@@ -595,21 +616,21 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
         max_length=256,
     )
 
+    iotn = fields.CharField(
+        choices=IOTN_CHOICES,
+        blank=True,
+        null=True,
+        max_length=256,
+        verbose_name="IOTN"
+    )
+
     par_scores_calculated = fields.BooleanField(
         default=False,
         verbose_name="PAR "
     )
-    # Index of Orthodontic Treatment Need
-    # Only accepts 1-5
-    iotn = fields.IntegerField(
-        blank=True, null=True, verbose_name="IOTN"
-    )
     # Only accepts 1-10
     aesthetic_component = fields.IntegerField(
         blank=True, null=True
-    )
-    iotn_not_applicable = fields.BooleanField(
-        default=False, verbose_name="IOTN not applicable"
     )
     repair = fields.BooleanField(
         default=False,
