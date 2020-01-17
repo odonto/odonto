@@ -28,11 +28,13 @@ class AbstractOdontoCategory(object):
         Otherwise we return the last rejection.
         """
         from odonto.odonto_submissions import models
-
         submissions = self.episode.submission_set.all()
         submissions = sorted(list(submissions), key=lambda x: x.created)
+        successful_submission_states = [
+            models.Submission.SUCCESS, models.Submission.MANUALLY_PROCESSED
+        ]
         successful_submissions = [
-            i for i in submissions if i.state == models.Submission.SUCCESS
+            i for i in submissions if i.state in successful_submission_states
         ]
         if len(successful_submissions):
             return successful_submissions[-1]
@@ -47,11 +49,15 @@ class AbstractOdontoCategory(object):
         from opal.models import Episode
         from odonto.odonto_submissions import models
 
+        successful_submission_states = [
+            models.Submission.SUCCESS, models.Submission.MANUALLY_PROCESSED
+        ]
+
         if qs is None:
             qs = Episode.objects.all()
         return (
             cls._get_submitted(qs)
-            .filter(submission__state=models.Submission.SUCCESS)
+            .filter(submission__state__in=successful_submission_states)
             .prefetch_related("submission_set")
         )
 
