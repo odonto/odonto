@@ -177,11 +177,16 @@ class Submission(models.Model):
 
     # Message has been sent, a response collected, it was rejected by Compass
     REJECTED_BY_COMPASS = "Rejected by compass"
+
+    # A duplicate paper claim was also submitted
+    MANUALLY_PROCESSED = "Manually Processed"
+
     STATUS = (
         (SENT, SENT,),
         (SUCCESS, SUCCESS,),
         (FAILED_TO_SEND, FAILED_TO_SEND,),
         (REJECTED_BY_COMPASS, REJECTED_BY_COMPASS,),
+        (MANUALLY_PROCESSED, MANUALLY_PROCESSED,),
     )
 
     raw_xml = models.TextField()

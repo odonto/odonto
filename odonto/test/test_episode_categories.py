@@ -38,6 +38,11 @@ translate_episode_to_xml"
         submission = self.get_submission(episode, Submission.SUCCESS)
         self.assertEqual(episode.category.submission(), submission)
 
+    def test_submission_simple_manually_processed(self):
+        episode = self.get_episode()
+        submission = self.get_submission(episode, Submission.MANUALLY_PROCESSED)
+        self.assertEqual(episode.category.submission(), submission)
+
     def test_submission_correct_rejection(self):
         episode = self.get_episode()
         submission = self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
@@ -56,6 +61,15 @@ translate_episode_to_xml"
     def test_get_successful_episodes(self):
         successful_episode = self.get_episode()
         self.get_submission(successful_episode, Submission.SUCCESS)
+        rejected_episode = self.get_episode()
+        self.get_submission(rejected_episode, Submission.REJECTED_BY_COMPASS)
+        self.assertEqual(
+            FP17Episode.get_successful_episodes().get(), successful_episode
+        )
+
+    def test_get_successful_episodes_with_manually_processed(self):
+        successful_episode = self.get_episode()
+        self.get_submission(successful_episode, Submission.MANUALLY_PROCESSED)
         rejected_episode = self.get_episode()
         self.get_submission(rejected_episode, Submission.REJECTED_BY_COMPASS)
         self.assertEqual(
