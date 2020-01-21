@@ -15,7 +15,9 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfAssessment,
     Fp17OAssessmentType,
     FP17OAssessmentIOTN,
+    Fp17OAssessmentAestheticComponent,
     TreatmentIOTN,
+    Fp17OTreatmentAestheticComponent,
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType
@@ -32,7 +34,9 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfAssessment,
     Fp17OAssessmentType,
     FP17OAssessmentIOTN,
+    Fp17OAssessmentAestheticComponent,
     TreatmentIOTN,
+    Fp17OTreatmentAestheticComponent,
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType
