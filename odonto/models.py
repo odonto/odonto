@@ -92,6 +92,7 @@ class Demographics(models.Demographics):
         verbose_name="City or town"
     )
     county = fields.CharField(max_length=255, null=True, blank=True)
+    protected = fields.BooleanField(default=False)
 
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:

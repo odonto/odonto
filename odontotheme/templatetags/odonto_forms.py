@@ -40,7 +40,9 @@ def btn_checkbox(*args, **kwargs):
     - lookuplist: Name of the lookuplist
     - required: label to show when we're required!
     """
-    return get_odonto_common_args(kwargs)
+    result = get_odonto_common_args(kwargs)
+    # import ipdb; ipdb.set_trace()
+    return result
 
 
 @register.inclusion_tag('_helpers/btn_radio.html')

@@ -38,27 +38,32 @@
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% input field="Demographics.house_number_or_name" style="vertical" %}
+              {% input field="Demographics.house_number_or_name" disabled="editing.demographics.protected" style="vertical" %}
             </div>
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% input field="Demographics.street" maxlength="32" style="vertical" %}
+              {% input field="Demographics.street" disabled="editing.demographics.protected" maxlength="32" style="vertical" %}
             </div>
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% input field="Demographics.city_or_town" maxlength="32" style="vertical" %}
+              {% input field="Demographics.city_or_town" disabled="editing.demographics.protected" maxlength="32" style="vertical" %}
             </div>
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% input field="Demographics.county" maxlength="32" style="vertical" %}
+              {% input field="Demographics.county" disabled="editing.demographics.protected" maxlength="32" style="vertical" %}
             </div>
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% charfield field="Demographics.post_code" maxlength="32" pattern='/^[a-zA-Z\d ]+$/' label="Post code" pattern_error="Letters and numbers only" %}
+              {% charfield field="Demographics.post_code" disabled="editing.demographics.protected" maxlength="8" pattern='/^[A-Z0-9 ]{1,8}$'/' label="Post code" pattern_error="Letters and numbers only" %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-5">
+              {% btn_checkbox field="Demographics.protected" change="editing.demographics.house_number_or_name=''; editing.demographics.street=''; editing.demographics.city_or_town=''; editing.demographics.county=''; editing.demographics.post_code=''" maxlength="32" %}
             </div>
           </div>
     </form>
