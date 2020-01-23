@@ -41,7 +41,6 @@ def btn_checkbox(*args, **kwargs):
     - required: label to show when we're required!
     """
     result = get_odonto_common_args(kwargs)
-    # import ipdb; ipdb.set_trace()
     return result
 
 
