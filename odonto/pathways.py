@@ -5,6 +5,7 @@ import logging
 from django.db import transaction
 from opal.core import menus, pathway
 from odonto import models
+from odonto.episode_categories import FP17Episode, FP17OEpisode
 from odonto.odonto_submissions import serializers
 from plugins.add_patient_step import FindPatientStep
 
@@ -107,7 +108,12 @@ class Fp17Pathway(OdontoPagePathway):
         return patient, episode
 
 
-CHECK_STEP_FP17 = pathway.Step(
+class CheckPathwayFp17(pathway.Step):
+    def add_patient_dates(self, episode, patient):
+        pass
+
+
+CHECK_STEP_FP17 = CheckPathwayFp17(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
     step_controller="CheckFP17Step",
@@ -190,6 +196,51 @@ class SubmitFP17OPathway(OdontoPagePathway):
     steps = FP17_O_STEPS + (CHECK_STEP_FP17_O,)
     template = "pathway/templates/check_pathway.html"
     summary_template = "partials/fp17_o_summary.html"
+
+    def get_other_dates(self, patient, episode):
+        """
+        If a patient has:
+            episode one with:
+                date of assessment on Monday
+                date of appliance fitted on Friday
+            episode two with:
+                date of completion on Tuesday
+
+        Then we expect a validation warning to appear on both episodes.
+
+        This adds the dates of other episodes so we can raise this error.
+
+        Note date of referral does not seem to be relevent based on the
+        existing cases submitted errors/responses.
+        """
+        result = []
+        other_episodes = patient.episode_set.exclude(
+            id=episode.id, category_name=FP17OEpisode.display_name
+        )
+        for episode in other_episodes:
+            assessment = episode.orthodonticassessment_set.all()[0]
+            completion = episode.orthodontictreatment_set.all()[0]
+            date_of_assessment = assessment.date_of_assessment
+            date_of_appliance_fitted = assessment.date_of_appliance_fitted
+            date_of_completion = completion.date_of_completion
+            dts = [i for i in [date_of_assessment, date_of_appliance_fitted, date_of_completion] if i]
+            if dts:
+                if len(dts) > 2:
+                    result.append([min(dts), max(dts)])
+                else:
+                    result.append(sorted(dts))
+        return result
+
+    def to_dict(self, *args, **kwargs):
+        patient = kwargs.get('patient')
+        episode = kwargs.get('episode')
+        to_dicted = super().to_dict(*args, **kwargs)
+        check_steps_dict = next(
+            i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17_O.get_step_controller()
+        )
+        check_steps_dict["other_dates"] = self.get_other_dates(patient, episode)
+        return to_dicted
+
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
