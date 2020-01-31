@@ -271,6 +271,10 @@ label {
   margin-top: 100px;
 }
 
+.content-offset-below-150 {
+  margin-bottom: 150px;
+}
+
 .pathway-offset {
   margin-top: 80px;
 }
