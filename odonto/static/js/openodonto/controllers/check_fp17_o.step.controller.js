@@ -13,6 +13,7 @@ angular.module('opal.controllers').controller(
     Fp17oUnder18,
     Fp17ODateOfReferral,
     Fp17ODateOfAssessment,
+    Fp17ODateOfApplianceFitted,
     Fp17OAssessmentType,
     FP17OAssessmentIOTN,
     Fp17OAssessmentAestheticComponent,
@@ -32,6 +33,7 @@ angular.module('opal.controllers').controller(
     Fp17oUnder18,
     Fp17ODateOfReferral,
     Fp17ODateOfAssessment,
+    Fp17ODateOfApplianceFitted,
     Fp17OAssessmentType,
     FP17OAssessmentIOTN,
     Fp17OAssessmentAestheticComponent,
@@ -44,7 +46,7 @@ angular.module('opal.controllers').controller(
 
   var validate = function(){
     if(scope.form.$valid){
-      var errors = FormValidation(scope.editing, validators);
+      var errors = FormValidation(scope.editing, validators, step);
       $rootScope.isFormValid = !_.size(errors);
       $rootScope.errors = errors;
     }
