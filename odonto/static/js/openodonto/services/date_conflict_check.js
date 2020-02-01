@@ -6,8 +6,10 @@ angular.module('opal.services').factory('dateConflictCheck', function(toMomentFi
     _.each(ourRange, function(dt){
       _.each(arrayOfRanges, function(range){
         if(range.length > 1){
-          if(range[0] <= dt <= range[1]){
-            between = true
+          if(range[0] <= dt){
+            if(dt <= range[1]){
+              between = true
+            }
           }
         }
       });
@@ -22,8 +24,10 @@ angular.module('opal.services').factory('dateConflictCheck', function(toMomentFi
     }
     _.each(arrayOfRanges, function(theirRange){
       _.each(theirRange, function(dt){
-        if(ourRange[0] <= dt <= ourRange[1]){
-          surrounds = true
+        if(ourRange[0] <= dt){
+          if(dt <= ourRange[1]){
+            surrounds = true
+          }
         }
       });
     })

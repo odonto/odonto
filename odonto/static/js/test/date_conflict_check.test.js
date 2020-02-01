@@ -1,6 +1,4 @@
-import { triggerAsyncId } from "async_hooks";
-
-fdescribe('dateConflictCheck', function() {
+describe('dateConflictCheck', function() {
   "use strict";
   var dateConflictCheck;
   var day1 = moment().subtract(10, "days");
@@ -9,10 +7,7 @@ fdescribe('dateConflictCheck', function() {
   var day4 = moment().subtract(7, "days");
   var day5 = moment().subtract(6, "days");
   var day6 = moment().subtract(5, "days");
-  var day7 = moment().subtract(4, "days");
-  var day8 = moment().subtract(3, "days");
-  var day9 = moment().subtract(2, "days");
-  var day10 = moment().subtract(1, "days");
+
 
   beforeEach(module('opal.filters'));
   beforeEach(module('opal.services'));
