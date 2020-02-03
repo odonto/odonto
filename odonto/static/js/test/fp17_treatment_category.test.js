@@ -19,6 +19,9 @@ describe('Fp17TreatmentCategory', function() {
         fp17_other_dental_services: {
           free_repair_or_replacement: false,
           further_treatment_within_2_months: false
+        },
+        fp17_incomplete_treatment: {
+          fp17_incomplete_treatment: undefined
         }
       };
   });
@@ -41,7 +44,7 @@ describe('Fp17TreatmentCategory', function() {
     it('should return an error message if treatment category is undefined', function(){
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
-  
+
     it('should not return an error message if treatment category is set', function(){
       editing.fp17_treatment_category.treatment_category = "Urgent treatment";
       expect(Fp17TreatmentCategory(editing)).toBe(undefined);
@@ -101,4 +104,48 @@ describe('Fp17TreatmentCategory', function() {
       expect(Fp17TreatmentCategory(editing)).toBe(undefined);
     });
   });
+
+  describe("A patient cannot have an incomplete treatment band higher than the treatment category", function(){
+    beforeEach(function(){
+      expected = {
+        fp17_treatment_category: {
+          treatment_category: "The incomplete treatment band cannot be greater than the treatment category"
+        },
+      };
+    });
+
+    it('should not error if the treatment category is urgent', function(){
+      editing.fp17_treatment_category.treatment_category = "Urgent treatment";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 1";
+      expect(Fp17TreatmentCategory(editing)).toBe(undefined);
+    });
+
+    it('should not error if incomplete treatment and treatment category are band 1', function(){
+      editing.fp17_treatment_category.treatment_category = "Band 1";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 1";
+      expect(Fp17TreatmentCategory(editing)).toBe(undefined);
+    });
+
+    it('should not error if incomplete treatment and treatment category are band 2', function(){
+      editing.fp17_treatment_category.treatment_category = "Band 2";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 2";
+      expect(Fp17TreatmentCategory(editing)).toBe(undefined);
+    });
+
+    it('should error if the band is higher than the incomplete treatment for band 1', function(){
+      editing.fp17_treatment_category.treatment_category = "Band 1";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 3";
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+
+      editing.fp17_treatment_category.treatment_categorecty = "Band 1";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 2";
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+
+    it('should error if the band is higher than the incomplete treatment for band 2', function(){
+      editing.fp17_treatment_category.treatment_category = "Band 2";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 3";
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+  })
 });
