@@ -140,6 +140,20 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
 
+    BAND_1 = "Band 1"
+    BAND_2 = "Band 2"
+    BAND_3 = "Band 3"
+
+    TREATMENT_CATEGORIES = enum(
+        BAND_1,
+        BAND_2,
+        BAND_3,
+    )
+
+    incomplete_treatment = fields.CharField(
+        max_length=255, blank=True, null=True, choices=TREATMENT_CATEGORIES
+    )
+
     date_of_acceptance = fields.DateField(
         blank=True, null=True,
         verbose_name="Date of acceptance"
