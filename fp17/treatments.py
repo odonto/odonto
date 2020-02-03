@@ -30,6 +30,13 @@ REMOVAL_OF_SUTURES = Treatment(code=9155)
 EXAMINATION = Treatment(code=9317)
 
 
+class INCOMPLETE_TREATMENT(Treatment):
+    """
+    Charge Band for actual treatment provided
+    """
+    def __init__(self, num_units):
+        super().__init__(code=9164, instance_count=num_units)
+
 class BRIDGES_FITTED(Treatment):
     """
     When a bridge or more than one bridge is fitted. The number provided is the
