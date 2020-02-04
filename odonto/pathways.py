@@ -136,6 +136,61 @@ class SubmitFP17Pathway(OdontoPagePathway):
     template = "pathway/templates/check_pathway.html"
     summary_template = "partials/fp17_summary.html"
 
+
+    def get_overlapping_dates(self, patient, episode):
+        """
+        For date of acceptance and date of completion or last_visit
+        we care about whether there are overlapping episodes.
+
+        overlapping episodes are all episodes that are not
+        Urgent treatment/denture repaires/bridge repairs.
+
+        We care if our date of acceptance is between another episodes
+        date of acceptance and date of completion or whether our date of
+        acceptance is between another date of completion.
+
+        Return [date_of_acceptance, date_of_completion_or_last_visit]
+        date_of_completion_or_last_visit may be None.
+        """
+        result = patient.episode_set.filter(
+            category_name=FP17Episode.display_name
+        ).exclude(
+            id=episode.id
+        ).exclude(
+            treatment_category__in=[
+                models.Fp17TreatmentCategory.URGENT_TREATMENT,
+                models.Fp17TreatmentCategory.DENTURE_REPAIRS,
+                models.Fp17TreatmentCategory.BRIDGE_REPAIRS,
+            ]
+        ).values_list(
+            'fp17incompletetreatment__date_of_acceptance',
+            'fp17incompletetreatment__completion_or_last_visit'
+        )
+
+        return [i for i in result if i[0]]
+
+
+    def get_prior_episode_information(self, patient, episode):
+        """
+        If ‘Further treatment within 2 months’ is present then the same provider
+        must have a claim(s) for this patient in the two months prior to the acceptance
+        date of the continuation claim. There must be at least one instance of a valid
+        claim in the two month period.  Valid claims exclude urgent (9150 4), incomplete (9164),
+        Further treatment within 2 months (9163) or a lower band.
+        """
+        result = patient.episode_set.filter(
+            category_name=FP17Episode.display_name
+        ).exclude(
+            id=episode.id
+        ).exclude(
+            treatment_category=Fp17TreatmentCategory.URGENT_TREATMENT
+        ).exclude(
+            
+        )
+
+
+
+
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
