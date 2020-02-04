@@ -5,6 +5,8 @@ import datetime
 from django.urls import reverse
 from opal.models import Episode
 from opal.core.test import OpalTestCase
+from odonto import models
+from odonto import episode_categories
 
 from odonto import pathways
 
@@ -37,6 +39,170 @@ class Fp17PathwayTestCase(OpalTestCase):
         fp17 = Episode.objects.get(pk=fp17.pk)
         self.assertEqual('Open', fp17.stage)
 
+
+class SubmitFP17OathwayTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        self.other_episode = self.patient.create_episode()
+        self.other_episode.category_name = episode_categories.FP17Episode.display_name
+        self.other_episode.save()
+
+        self.date_1 = datetime.date(2019, 10, 4)
+        self.date_2 = datetime.date(2019, 10, 5)
+        self.date_3 = datetime.date(2019, 10, 6)
+        self.assertTrue(
+            self.client.login(
+                username=self.user.username, password=self.PASSWORD
+            )
+        )
+        self.url = reverse(
+            "pathway", kwargs=dict(
+                name="fp17-submit",
+                patient_id=self.patient.id,
+                episode_id=self.episode.id
+            )
+        )
+        self.pathway = pathways.SubmitFP17Pathway()
+
+    def test_get_overlapping_dates_with_result(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=self.date_1,
+            completion_or_last_visit=self.date_2
+        )
+        result = self.pathway.get_overlapping_dates(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, [(self.date_1, self.date_2,)]
+        )
+
+    def test_get_overlapping_dates_with_urgent_treatment(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=self.date_1,
+            completion_or_last_visit=self.date_2
+        )
+        result = self.pathway.get_overlapping_dates(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_get_overlapping_dates_with_no_date_of_acceptance(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.date_2
+        )
+        result = self.pathway.get_overlapping_dates(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_get_overlapping_dates_with_no_dates(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        result = self.pathway.get_overlapping_dates(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_get_overlapping_dates_with_no_other_episodes(self):
+        self.other_episode.delete()
+        result = self.pathway.get_overlapping_dates(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_get_further_treatment_information_with_result(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=self.date_1,
+            completion_or_last_visit=self.date_2
+        )
+        result = self.pathway.get_further_treatment_information(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, [{
+                "category": models.Fp17TreatmentCategory.BAND_1,
+                "date_of_acceptance": self.date_1
+            }]
+        )
+
+    def test_get_further_treatment_information_with_urgent_treatment(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=self.date_1,
+            completion_or_last_visit=self.date_2
+        )
+        result = self.pathway.get_further_treatment_information(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_get_further_treatment_with_information_with_incomplete_treatment(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=self.date_1,
+            completion_or_last_visit=self.date_2,
+            incomplete_treatment=models.Fp17IncompleteTreatment.BAND_1
+        )
+        result = self.pathway.get_further_treatment_information(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_get_further_treatment_with_information_with_no_other_episodes(self):
+        self.other_episode.delete()
+        result = self.pathway.get_further_treatment_information(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, []
+        )
+
+    def test_pathway_get(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=self.date_1,
+            completion_or_last_visit=self.date_2
+        )
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertEqual(result["overlapping_dates"], [['04/10/2019', '05/10/2019']])
+        self.assertEqual(
+            result["further_treatment_information"],
+            [{
+                "category": models.Fp17TreatmentCategory.BAND_1,
+                "date_of_acceptance": '04/10/2019'
+            }]
+        )
 
 class Fp17_O_PathwayTestCase(OpalTestCase):
 

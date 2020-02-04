@@ -157,7 +157,7 @@ class SubmitFP17Pathway(OdontoPagePathway):
         ).exclude(
             id=episode.id
         ).exclude(
-            treatment_category__in=[
+            fp17treatmentcategory__treatment_category__in=[
                 models.Fp17TreatmentCategory.URGENT_TREATMENT,
                 models.Fp17TreatmentCategory.DENTURE_REPAIRS,
                 models.Fp17TreatmentCategory.BRIDGE_REPAIRS,
@@ -166,30 +166,51 @@ class SubmitFP17Pathway(OdontoPagePathway):
             'fp17incompletetreatment__date_of_acceptance',
             'fp17incompletetreatment__completion_or_last_visit'
         )
-
         return [i for i in result if i[0]]
 
 
-    def get_prior_episode_information(self, patient, episode):
+    def get_further_treatment_information(self, patient, episode):
         """
         If ‘Further treatment within 2 months’ is present then the same provider
         must have a claim(s) for this patient in the two months prior to the acceptance
         date of the continuation claim. There must be at least one instance of a valid
         claim in the two month period.  Valid claims exclude urgent (9150 4), incomplete (9164),
         Further treatment within 2 months (9163) or a lower band.
+
+        return [{treatment_category: date_of_acceptance}]
         """
-        result = patient.episode_set.filter(
+        category_and_acceptance = patient.episode_set.filter(
             category_name=FP17Episode.display_name
         ).exclude(
             id=episode.id
         ).exclude(
-            treatment_category=Fp17TreatmentCategory.URGENT_TREATMENT
-        ).exclude(
-            
+            fp17treatmentcategory__treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT
+        ).filter(
+            fp17incompletetreatment__incomplete_treatment=None
+        ).values(
+            "fp17treatmentcategory__treatment_category", "fp17incompletetreatment__date_of_acceptance"
         )
 
+        result = []
+        for i in category_and_acceptance:
+            if i["fp17incompletetreatment__date_of_acceptance"]:
+                result.append({
+                    "category": i["fp17treatmentcategory__treatment_category"],
+                    "date_of_acceptance": i["fp17incompletetreatment__date_of_acceptance"]
+                })
 
+        return result
 
+    def to_dict(self, *args, **kwargs):
+        patient = kwargs.get('patient')
+        episode = kwargs.get('episode')
+        to_dicted = super().to_dict(*args, **kwargs)
+        check_steps_dict = next(
+            i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17.get_step_controller()
+        )
+        check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
+        check_steps_dict["further_treatment_information"] = self.get_further_treatment_information(patient, episode)
+        return to_dicted
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
