@@ -41,11 +41,6 @@ angular.module('opal.services').factory('Fp17ODateOfAssessment', function(toMome
       * If there are multiple dates and the date of assessment is
       * between them, then return an error.
       */
-      var otherDates = _.map(step.overlapping_dates, function(d){
-        return _.map(d, function(x){
-          return x.toDate();
-        })
-      });
       if(dateConflictCheck([dateOfAssessment], step.overlapping_dates)){
         return {
           orthodontic_assessment: {
