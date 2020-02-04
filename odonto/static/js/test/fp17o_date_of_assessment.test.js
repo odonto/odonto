@@ -15,7 +15,7 @@ describe('Fp17ODateOfAssessment', function() {
       orthodontic_assessment: {}
     };
     step = {
-      other_dates: []
+      overlapping_dates: []
     }
   });
 
@@ -56,7 +56,7 @@ describe('Fp17ODateOfAssessment', function() {
     var day3 = moment().subtract(1, "days");
 
     it('should error if the date of assessment is between other dates', function(){
-      step.other_dates = [[day1, day3]];
+      step.overlapping_dates = [[day1, day3]];
       editing.orthodontic_assessment.date_of_assessment = day2;
       var result = Fp17ODateOfAssessment(editing, step);
       var error = result.orthodontic_assessment.date_of_assessment;
@@ -64,7 +64,7 @@ describe('Fp17ODateOfAssessment', function() {
     });
 
     it('should not error if the date of assessment is not between other dates', function(){
-      step.other_dates = [[day2, day3]];
+      step.overlapping_dates = [[day2, day3]];
       editing.orthodontic_assessment.date_of_assessment = day1;
       var result = Fp17ODateOfAssessment(editing, step);
       expect(result).toBeUndefined();

@@ -68,17 +68,17 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
             )
         )
 
-    def test_with_other_dates_singular(self):
+    def test_with_overlapping_dates_singular(self):
         self.other_episode.orthodonticassessment_set.update(
             date_of_assessment=self.date_1
         )
         result = self.client.get(self.url)
         self.assertEqual(
-            result.json()['steps'][-1]["other_dates"],
+            result.json()['steps'][-1]["overlapping_dates"],
             [['04/10/2019']]
         )
 
-    def test_with_two_other_dates(self):
+    def test_with_two_overlapping_dates(self):
         self.other_episode.orthodonticassessment_set.update(
             date_of_appliance_fitted=self.date_1
         )
@@ -87,11 +87,11 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         )
         result = self.client.get(self.url)
         self.assertEqual(
-            result.json()['steps'][-1]["other_dates"],
+            result.json()['steps'][-1]["overlapping_dates"],
             [['04/10/2019', '05/10/2019']]
         )
 
-    def test_with_three_other_dates(self):
+    def test_with_three_overlapping_dates(self):
         self.other_episode.orthodonticassessment_set.update(
             date_of_assessment=self.date_1,
             date_of_appliance_fitted=self.date_2
@@ -101,14 +101,14 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         )
         result = self.client.get(self.url)
         self.assertEqual(
-            result.json()['steps'][-1]["other_dates"],
+            result.json()['steps'][-1]["overlapping_dates"],
             [['04/10/2019', '06/10/2019']]
         )
 
-    def test_no_other_dates(self):
+    def test_no_overlapping_dates(self):
         result = self.client.get(self.url)
         self.assertEqual(
-            result.json()['steps'][-1]["other_dates"],
+            result.json()['steps'][-1]["overlapping_dates"],
             []
         )
 
@@ -122,6 +122,6 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         )
         result = self.client.get(self.url)
         self.assertEqual(
-            result.json()['steps'][-1]["other_dates"],
+            result.json()['steps'][-1]["overlapping_dates"],
             [['05/10/2019'], ['04/10/2019']]
         )

@@ -37,7 +37,7 @@ angular.module('opal.services').factory('Fp17ODateOfCompletion', function(toMome
       // if the startDate is null that's fine dateConflictCheck will clean it out.
       var startDate = assessment.date_of_assessment || assessment.date_of_appliance_fitted;
 
-      if(dateConflictCheck([startDate, dateOfCompletion], step.other_dates)){
+      if(dateConflictCheck([startDate, dateOfCompletion], step.overlapping_dates)){
         return {
           orthodontic_treatment: {
             date_of_completion: "The FP17O overlaps with another FP17O of this patient"

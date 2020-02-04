@@ -197,7 +197,7 @@ class SubmitFP17OPathway(OdontoPagePathway):
     template = "pathway/templates/check_pathway.html"
     summary_template = "partials/fp17_o_summary.html"
 
-    def get_other_dates(self, patient, episode):
+    def get_overlapping_dates(self, patient, episode):
         """
         If a patient has:
             episode one with:
@@ -238,7 +238,7 @@ class SubmitFP17OPathway(OdontoPagePathway):
         check_steps_dict = next(
             i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17_O.get_step_controller()
         )
-        check_steps_dict["other_dates"] = self.get_other_dates(patient, episode)
+        check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
         return to_dicted
 
 

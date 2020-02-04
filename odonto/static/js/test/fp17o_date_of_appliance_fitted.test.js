@@ -15,7 +15,7 @@ describe('Fp17ODateOfApplianceFitted', function() {
       orthodontic_assessment: {}
     };
     step = {
-      other_dates: []
+      overlapping_dates: []
     }
   });
 
@@ -25,7 +25,7 @@ describe('Fp17ODateOfApplianceFitted', function() {
     var day3 = moment().subtract(1, "days");
 
     it('should error if the date of appliance fitted is between other dates', function(){
-      step.other_dates = [[day1, day3]];
+      step.overlapping_dates = [[day1, day3]];
       editing.orthodontic_assessment.date_of_appliance_fitted = day2;
       var result = Fp17ODateOfApplianceFitted(editing, step);
       var error = result.orthodontic_assessment.date_of_appliance_fitted;
@@ -33,14 +33,14 @@ describe('Fp17ODateOfApplianceFitted', function() {
     });
 
     it('should not error if the date of appliance fitted is not between other dates', function(){
-      step.other_dates = [[day2, day3]];
+      step.overlapping_dates = [[day2, day3]];
       editing.orthodontic_assessment.date_of_appliance_fitted = day1;
       var result = Fp17ODateOfApplianceFitted(editing, step);
       expect(result).toBeUndefined();
     });
 
     it('should should error if the date of assessment and date of appliance fitted have a date between them', function(){
-      step.other_dates = [[day2]];
+      step.overlapping_dates = [[day2]];
       editing.orthodontic_assessment.date_of_assessment = day1;
       editing.orthodontic_assessment.date_of_appliance_fitted = day3;
       var result = Fp17ODateOfApplianceFitted(editing, step);
@@ -49,7 +49,7 @@ describe('Fp17ODateOfApplianceFitted', function() {
     });
 
     it('should error the date of appliance fitted is on another date', function(){
-      step.other_dates = [[day2]];
+      step.overlapping_dates = [[day2]];
       editing.orthodontic_assessment.date_of_assessment = day1;
       editing.orthodontic_assessment.date_of_appliance_fitted = day2;
       var result = Fp17ODateOfApplianceFitted(editing, step);
