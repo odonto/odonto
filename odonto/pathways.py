@@ -5,6 +5,7 @@ import logging
 from django.db import transaction
 from opal.core import menus, pathway
 from odonto import models
+from odonto.episode_categories import FP17Episode, FP17OEpisode
 from odonto.odonto_submissions import serializers
 from plugins.add_patient_step import FindPatientStep
 
@@ -130,6 +131,86 @@ class SubmitFP17Pathway(OdontoPagePathway):
     template = "pathway/templates/check_pathway.html"
     summary_template = "partials/fp17_summary.html"
 
+
+    def get_overlapping_dates(self, patient, episode):
+        """
+        For date of acceptance and date of completion or last_visit
+        we care about whether there are overlapping episodes.
+
+        overlapping episodes are all episodes that are not
+        Urgent treatment/denture repaires/bridge repairs.
+
+        We care if our date of acceptance is between another episodes
+        date of acceptance and date of completion or whether our date of
+        acceptance is between another date of completion.
+
+        Return [date_of_acceptance, date_of_completion_or_last_visit]
+        date_of_completion_or_last_visit may be None.
+        """
+        result = patient.episode_set.filter(
+            category_name=FP17Episode.display_name
+        ).exclude(
+            id=episode.id
+        ).exclude(
+            fp17treatmentcategory__treatment_category__in=[
+                models.Fp17TreatmentCategory.URGENT_TREATMENT,
+                models.Fp17TreatmentCategory.DENTURE_REPAIRS,
+                models.Fp17TreatmentCategory.BRIDGE_REPAIRS,
+            ]
+        ).values_list(
+            'fp17incompletetreatment__date_of_acceptance',
+            'fp17incompletetreatment__completion_or_last_visit'
+        )
+        return [i for i in result if i[0]]
+
+
+    def get_further_treatment_information(self, patient, episode):
+        """
+        If ‘Further treatment within 2 months’ is present then the same provider
+        must have a claim(s) for this patient in the two months prior to the acceptance
+        date of the continuation claim. There must be at least one instance of a valid
+        claim in the two month period.  Valid claims exclude urgent (9150 4), incomplete (9164),
+        Further treatment within 2 months (9163) or a lower band.
+
+        return [{treatment_category: date_of_acceptance}]
+        """
+        category_and_acceptance = patient.episode_set.filter(
+            category_name=FP17Episode.display_name
+        ).exclude(
+            id=episode.id
+        ).filter(
+            stage=FP17Episode.SUBMITTED
+        ).exclude(
+            fp17treatmentcategory__treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT
+        ).filter(
+            fp17incompletetreatment__incomplete_treatment=None
+        ).filter(
+            fp17otherdentalservices__further_treatment_within_2_months=False
+        ).values(
+            "fp17treatmentcategory__treatment_category", "fp17incompletetreatment__date_of_acceptance"
+        )
+
+        result = []
+        for i in category_and_acceptance:
+            if i["fp17incompletetreatment__date_of_acceptance"]:
+                result.append({
+                    "category": i["fp17treatmentcategory__treatment_category"],
+                    "date_of_acceptance": i["fp17incompletetreatment__date_of_acceptance"]
+                })
+
+        return result
+
+    def to_dict(self, *args, **kwargs):
+        patient = kwargs.get('patient')
+        episode = kwargs.get('episode')
+        to_dicted = super().to_dict(*args, **kwargs)
+        check_steps_dict = next(
+            i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17.get_step_controller()
+        )
+        check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
+        check_steps_dict["further_treatment_information"] = self.get_further_treatment_information(patient, episode)
+        return to_dicted
+
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
@@ -191,9 +272,55 @@ class SubmitFP17OPathway(OdontoPagePathway):
     template = "pathway/templates/check_pathway.html"
     summary_template = "partials/fp17_o_summary.html"
 
+    def get_overlapping_dates(self, patient, episode):
+        """
+        If a patient has:
+            episode one with:
+                date of assessment on Monday
+                date of appliance fitted on Friday
+            episode two with:
+                date of completion on Tuesday
+
+        Then we expect a validation warning to appear on both episodes.
+
+        This adds the dates of other episodes so we can raise this error.
+
+        Note date of referral does not seem to be relevent based on the
+        existing cases submitted errors/responses.
+        """
+        result = []
+        other_episodes = patient.episode_set.exclude(
+            id=episode.id, category_name=FP17OEpisode.display_name
+        )
+        for episode in other_episodes:
+            assessment = episode.orthodonticassessment_set.all()[0]
+            completion = episode.orthodontictreatment_set.all()[0]
+            date_of_assessment = assessment.date_of_assessment
+            date_of_appliance_fitted = assessment.date_of_appliance_fitted
+            date_of_completion = completion.date_of_completion
+            dts = [i for i in [date_of_assessment, date_of_appliance_fitted, date_of_completion] if i]
+            if dts:
+                if len(dts) > 2:
+                    result.append([min(dts), max(dts)])
+                else:
+                    result.append(sorted(dts))
+        return result
+
+    def to_dict(self, *args, **kwargs):
+        patient = kwargs.get('patient')
+        episode = kwargs.get('episode')
+        to_dicted = super().to_dict(*args, **kwargs)
+        check_steps_dict = next(
+            i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17_O.get_step_controller()
+        )
+        check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
+        return to_dicted
+
+
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
         episode.stage = 'Submitted'
         episode.save()
         return result
+
