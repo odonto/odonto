@@ -147,6 +147,12 @@ class SendSubmissionGetQSTestCase(OpalTestCase):
             self.fp17o_episode
         )
 
+    def test_get_fp17os_no_protected(self):
+        d = self.fp17o_episode.patient.demographics()
+        d.protected = True
+        d.save()
+        self.assertEqual(len(self.cmd.get_fp17os()), False)
+
     def test_get_fp17os_category(self):
         self.fp17o_episode.category_name = FP17Episode.display_name
         self.fp17o_episode.save()
@@ -166,6 +172,12 @@ class SendSubmissionGetQSTestCase(OpalTestCase):
             self.cmd.get_fp17_qs().get(),
             self.fp17_episode
         )
+
+    def test_get_fp17_qs_no_protected(self):
+        d = self.fp17_episode.patient.demographics()
+        d.protected = True
+        d.save()
+        self.assertEqual(len(self.cmd.get_fp17_qs()), False)
 
     def test_get_fp17_qs_category(self):
         self.fp17_episode.category_name = FP17OEpisode.display_name

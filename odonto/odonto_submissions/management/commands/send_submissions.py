@@ -14,10 +14,14 @@ from odonto.odonto_submissions import logger
 
 class Command(BaseCommand):
     def get_fp17os(self):
-        return FP17OEpisode.get_submitted_episodes().filter(submission=None)
+        return FP17OEpisode.get_submitted_episodes().filter(submission=None).filter(
+            patient__demographics__protected=False
+        )
 
     def get_fp17_qs(self):
-        return FP17Episode.get_submitted_episodes().filter(submission=None)
+        return FP17Episode.get_submitted_episodes().filter(submission=None).filter(
+            patient__demographics__protected=False
+        )
 
     def send_submission(self, episode):
         logger.info(f"Sending {episode.id}")

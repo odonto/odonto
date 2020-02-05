@@ -2,6 +2,7 @@
   <label class="col-md-9 control-label">{{ label }}</label>
   <label uib-btn-checkbox
          ng-model="{{ model }}"
+         {% if change %}ng-change="{{ change }}"{% endif %}
          class="btn btn-lg btn-default btn-checkbox col-md-3"
          >
     <span ng-show="{{ model }} == 1">X</span>
