@@ -1,4 +1,4 @@
-angular.module('opal.services').factory('Fp17DateOfAcceptance', function(toMomentFilter, dateConflictCheck){
+angular.module('opal.services').factory('Fp17DateOfAcceptance', function(dateConflictCheck){
   "use strict";
   /*
   * Date of acceptance cannot be a future date
