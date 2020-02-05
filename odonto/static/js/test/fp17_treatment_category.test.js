@@ -22,6 +22,9 @@ describe('Fp17TreatmentCategory', function() {
         },
         fp17_incomplete_treatment: {
           fp17_incomplete_treatment: undefined
+        },
+        fp17_exemptions: {
+          patient_charge_collected: undefined
         }
       };
   });
@@ -137,7 +140,7 @@ describe('Fp17TreatmentCategory', function() {
       editing.fp17_incomplete_treatment.incomplete_treatment = "Band 3";
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
 
-      editing.fp17_treatment_category.treatment_categorecty = "Band 1";
+      editing.fp17_treatment_category.treatment_category = "Band 1";
       editing.fp17_incomplete_treatment.incomplete_treatment = "Band 2";
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
@@ -148,4 +151,22 @@ describe('Fp17TreatmentCategory', function() {
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
   })
+
+  describe('regulation 11', function(){
+    it('should not error if there is a charge', function(){
+      editing.fp17_treatment_category.treatment_category="Regulation 11 replacement appliance"
+      editing.fp17_exemptions.patient_charge_collected = 10;
+      expect(Fp17TreatmentCategory(editing)).toBe(undefined);
+    });
+
+    it('should error if there is not a charge', function(){
+      expected = {
+        fp17_treatment_category: {
+          treatment_category: "A patient charge is required for reg 11"
+        }
+      };
+      editing.fp17_treatment_category.treatment_category="Regulation 11 replacement appliance"
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+  });
 });
