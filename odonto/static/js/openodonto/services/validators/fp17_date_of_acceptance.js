@@ -2,9 +2,10 @@ angular.module('opal.services').factory('Fp17DateOfAcceptance', function(dateCon
   "use strict";
   /*
   * Date of acceptance cannot be a future date
+  *
   * It cannot be between the date of acceptance/completion
   * of another FP17, unless its urgent/denture repair/bridge repair
-  * (That filtering i)
+  * (That filtering done on the server)
   */
   var URGENT_TREATMENT = "Urgent treatment";
   var DENTURE_REPAIRS = "Denture repairs";
@@ -27,6 +28,9 @@ angular.module('opal.services').factory('Fp17DateOfAcceptance', function(dateCon
         }
       }
     }
+
+
+
 
     if(category == URGENT_TREATMENT){
       return
