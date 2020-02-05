@@ -11,6 +11,7 @@ angular.module('opal.controllers').controller(
     DateOfBirthRequired,
     AddressRequired,
     Fp17Under18,
+    Fp17FurtherTreatment,
     Fp17TreatmentCategory,
     Fp17DateOfAcceptance,
     Fp17Aged18InFullTimeEducation
@@ -26,6 +27,7 @@ angular.module('opal.controllers').controller(
     Fp17Under18,
     Fp17TreatmentCategory,
     Fp17DateOfAcceptance,
+    Fp17FurtherTreatment,
     Fp17Aged18InFullTimeEducation
   ];
 

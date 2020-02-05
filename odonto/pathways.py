@@ -178,10 +178,14 @@ class SubmitFP17Pathway(OdontoPagePathway):
             category_name=FP17Episode.display_name
         ).exclude(
             id=episode.id
+        ).filter(
+            stage=FP17Episode.SUBMITTED
         ).exclude(
             fp17treatmentcategory__treatment_category=models.Fp17TreatmentCategory.URGENT_TREATMENT
         ).filter(
             fp17incompletetreatment__incomplete_treatment=None
+        ).filter(
+            fp17otherdentalservices__further_treatment_within_2_months=False
         ).values(
             "fp17treatmentcategory__treatment_category", "fp17incompletetreatment__date_of_acceptance"
         )
@@ -319,3 +323,4 @@ class SubmitFP17OPathway(OdontoPagePathway):
         episode.stage = 'Submitted'
         episode.save()
         return result
+

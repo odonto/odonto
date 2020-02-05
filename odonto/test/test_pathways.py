@@ -45,6 +45,7 @@ class SubmitFP17OathwayTestCase(OpalTestCase):
         self.patient, self.episode = self.new_patient_and_episode_please()
         self.other_episode = self.patient.create_episode()
         self.other_episode.category_name = episode_categories.FP17Episode.display_name
+        self.other_episode.stage = episode_categories.FP17Episode.SUBMITTED
         self.other_episode.save()
 
         self.date_1 = datetime.date(2019, 10, 4)
