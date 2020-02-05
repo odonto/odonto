@@ -108,12 +108,7 @@ class Fp17Pathway(OdontoPagePathway):
         return patient, episode
 
 
-class CheckPathwayFp17(pathway.Step):
-    def add_patient_dates(self, episode, patient):
-        pass
-
-
-CHECK_STEP_FP17 = CheckPathwayFp17(
+CHECK_STEP_FP17 = pathway.Step(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
     step_controller="CheckFP17Step",
