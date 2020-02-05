@@ -62,6 +62,20 @@ class TreatmentSerializer(object):
         return treatments
 
 
+class Fp17IncompleteTreatmentSerializer(TreatmentSerializer):
+    model = models.Fp17IncompleteTreatment
+
+    def to_messages(self):
+        incomplete_treatment = self.model_instance.incomplete_treatment
+        if not incomplete_treatment:
+            return []
+
+        bands = models.Fp17IncompleteTreatment.TREATMENT_CATEGORIES
+        bands = [i[0] for i in bands]
+        idx = bands.index(incomplete_treatment)
+        return [t.INCOMPLETE_TREATMENT(idx + 1)]
+
+
 class Fp17TreatmentCategorySerializer(TreatmentSerializer):
     model = models.Fp17TreatmentCategory
 
@@ -634,6 +648,7 @@ def translate_to_fp17(bcds1, episode):
     bcds1.treatments = []
 
     translators = [
+        Fp17IncompleteTreatmentSerializer,
         Fp17TreatmentCategorySerializer,
         Fp17ClinicalDataSetSerializer,
         Fp17RecallSerializer,

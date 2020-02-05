@@ -25,11 +25,14 @@
 
 
 {% block pathway_footer %}
-<div class="text-center" ng-show="isFormValid === false">
-  <strong class="help-block">Please fix the above errors</strong>
+<div class="row">
+  <div class="text-center" ng-show="isFormValid === false">
+    <strong class="help-block">Please fix the above errors</strong>
+  </div>
 </div>
 
-<div class="row offset-below content-offset-25">
+
+<div class="row content-offset-below-150">
   <div class="col-md-6">
     <button ng-show="showSummary === false"
       class="btn btn-lg btn-primary btn-save"

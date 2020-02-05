@@ -134,7 +134,7 @@ class SerializerTestCase(OpalTestCase):
     def test_cases(self):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
-        for case_number in range(1, 46):
+        for case_number in range(1, 48):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
@@ -147,6 +147,22 @@ class SerializerTestCase(OpalTestCase):
     def test_clean_non_alphanumeric(self):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(serializers.clean_non_alphanumeric(name), "McWilsonSmithjones")
+
+class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.incomplete_treatment = self.episode.fp17incompletetreatment_set.get()
+
+    def test_with_incomplete_treatment(self):
+        self.incomplete_treatment.incomplete_treatment = "Band 1"
+        self.incomplete_treatment.save()
+        messages = serializers.Fp17IncompleteTreatmentSerializer(self.episode).to_messages()
+        self.assertEqual(messages, [treatments.INCOMPLETE_TREATMENT(1)])
+
+    def test_without_incomplete_treatment(self):
+        messages = serializers.Fp17IncompleteTreatmentSerializer(self.episode).to_messages()
+        self.assertEqual(messages, [])
+
 
 class DemographicsTranslatorTestCase(OpalTestCase):
     def setUp(self):

@@ -11,7 +11,9 @@ angular.module('opal.controllers').controller(
     DateOfBirthRequired,
     AddressRequired,
     Fp17Under18,
+    Fp17FurtherTreatment,
     Fp17TreatmentCategory,
+    Fp17DateOfAcceptance,
     Fp17Aged18InFullTimeEducation
 ){
   "use strict";
@@ -24,12 +26,14 @@ angular.module('opal.controllers').controller(
     DateOfBirthRequired,
     Fp17Under18,
     Fp17TreatmentCategory,
+    Fp17DateOfAcceptance,
+    Fp17FurtherTreatment,
     Fp17Aged18InFullTimeEducation
   ];
 
   var validate = function(){
     if(scope.form.$valid){
-      var errors = FormValidation(scope.editing, validators);
+      var errors = FormValidation(scope.editing, validators, step);
       $rootScope.isFormValid = !_.size(errors);
       $rootScope.errors = errors;
     }
