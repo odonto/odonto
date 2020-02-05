@@ -1,3 +1,4 @@
+import datetime
 from opal.core.test import OpalTestCase
 from odonto.odonto_submissions.management.commands import get_rejections
 from odonto.episode_categories import FP17Episode, FP17OEpisode
@@ -63,4 +64,53 @@ class GetRejectionsTestCase(OpalTestCase):
         self.assertEqual(
             csv_mock.DictWriter.return_value.writerow.call_args_list[0][0][0],
             self.expected
+        )
+
+    def test_get_rows_without_a_performer(self):
+        self.episode.category_name = FP17OEpisode.display_name
+        self.episode.stage = FP17Episode.OPEN
+        self.episode.save()
+        self.episode.fp17dentalcareprovider_set.update(
+            performer=None
+        )
+        result = self.cmd.get_rows_without_a_performer()
+        self.assertEqual(
+            len(result), 1
+        )
+        self.assertEqual(
+            result[0]["rejection_reason"],
+            "No performer recorded"
+        )
+
+    def test_get_old_unsubmitted_fp17s_rows(self):
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.OPEN
+        self.episode.save()
+        self.episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=datetime.date(2019, 6, 7)
+        )
+        result = self.cmd.get_old_unsubmitted_fp17s_rows()
+        self.assertEqual(
+            len(result), 1
+        )
+        self.assertEqual(
+            result[0]["rejection_reason"],
+            "Episode completed on 07/06/2019 but not submitted"
+        )
+
+    def test_get_no_completion_date_rows(self):
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.OPEN
+        self.episode.save()
+        self.episode.fp17incompletetreatment_set.update(
+            date_of_acceptance=datetime.date(2019, 6, 7),
+            completion_or_last_visit=None
+        )
+        result = self.cmd.get_no_completion_date_rows()
+        self.assertEqual(
+            len(result), 1
+        )
+        self.assertEqual(
+            result[0]["rejection_reason"],
+            "Episode has not completion date and is not submitted but episode was accepted on 07/06/2019"
         )
