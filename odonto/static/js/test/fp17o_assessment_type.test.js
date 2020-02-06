@@ -57,10 +57,12 @@ describe('Fp17OAssessmentType', function() {
     it('should error if there is no assessment or completion_type', function(){
       var expected = {
         "orthodontic_assessment": {
-          "assessment": "An assessment type or completion type are required"
+          "assessment": "An assessment type, completion type, repair or reg 11 are required"
         },
         "orthodontic_treatment": {
-          "completion_type": "An assessment type or completion type are required"
+          "completion_type": "An assessment type, completion type, repair or reg 11 are required",
+          "repair": "An assessment type, completion type, repair or reg 11 are required",
+          "replacement": "An assessment type, completion type, repair or reg 11 are required"
         },
       }
       editing.orthodontic_treatment.completion_type = "";
@@ -74,6 +76,18 @@ describe('Fp17OAssessmentType', function() {
     });
 
     it('it should not error if there is a completion type', function(){
+      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+    });
+
+    it('should not error if there is a repair', function(){
+      editing.orthodontic_treatment.completion_type = "";
+      editing.orthodontic_treatment.repair = true;
+      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+    });
+
+    it('should not error if there is a regulation', function(){
+      editing.orthodontic_treatment.completion_type = "";
+      editing.orthodontic_treatment.replacement = true;
       expect(Fp17OAssessmentType(editing)).toBe(undefined);
     });
   });

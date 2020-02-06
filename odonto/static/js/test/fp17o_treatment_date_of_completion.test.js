@@ -26,11 +26,26 @@ describe('Fp17ODateOfCompletion', function() {
       editing.orthodontic_treatment.completion_type = "Treatment completed";
       var result = Fp17ODateOfCompletion(editing, step);
       var error = result.orthodontic_treatment.date_of_completion;
-      expect(error).toBe("Date of completion or last visit is required when there is a completion type");
+      var msg = "Date of completion or last visit is required when there is a completion type, repair or reg 11";
+      expect(error).toBe(msg);
     });
 
     it('should not error if there is an completion type and no date of completion', function(){
       editing.orthodontic_treatment.completion_type = "Treatment completed";
+      editing.orthodontic_treatment.date_of_completion = moment('2019-04-05').toDate();
+      var result = Fp17ODateOfCompletion(editing, step);
+      expect(result).toBeUndefined();
+    });
+
+    it('should not error if there is a reg 11 and no date of completion', function(){
+      editing.orthodontic_treatment.replacement = true;
+      editing.orthodontic_treatment.date_of_completion = moment('2019-04-05').toDate();
+      var result = Fp17ODateOfCompletion(editing, step);
+      expect(result).toBeUndefined();
+    });
+
+    it('should not error if there is a repair and no date of completion', function(){
+      editing.orthodontic_treatment.repair = true;
       editing.orthodontic_treatment.date_of_completion = moment('2019-04-05').toDate();
       var result = Fp17ODateOfCompletion(editing, step);
       expect(result).toBeUndefined();
