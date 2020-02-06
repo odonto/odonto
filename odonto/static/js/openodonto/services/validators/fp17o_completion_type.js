@@ -16,7 +16,7 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(){
   *
   * Which backs this up.
   */
-  return function(editing){
+  return function(editing, step){
     "use strict";
     var assessment = editing.orthodontic_assessment;
     var treatment = editing.orthodontic_treatment;
@@ -29,6 +29,40 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(){
           "orthodontic_treatment": {
             "completion_type": 'There cannot be a completion type and an assessment type of "Assess & refuse treatment"'
           }
+        }
+      }
+    }
+
+    if(!treatment.completion_type){
+      return;
+    }
+    var dateOfCompletion = treatment.date_of_completion;
+    if(!dateOfCompletion){
+      return;
+    }
+
+
+
+    var dateAndCompletionType = []
+    _.each(step.overlapping_dates, function(od){
+      var lastDate = _.last(od.dates);
+      if(lastDate < dateOfCompletion){
+        dateAndCompletionType.push({
+          date: lastDate,
+          completion_type: od.completion_type
+        });
+      }
+    });
+
+    if(!dateAndCompletionType.length){
+      return
+    }
+    dateAndCompletionType = _.sortBy(dateAndCompletionType, function(x){ return x.date });
+    var mostRecent = _.last(dateAndCompletionType);
+    if(mostRecent.completion_type){
+      return {
+        "orthodontic_treatment": {
+          "completion_type": 'The previous claim was also a completion'
         }
       }
     }
