@@ -4,6 +4,7 @@ Odonto views
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from odonto import episode_categories
 
 from opal.models import Episode, Patient
@@ -35,7 +36,7 @@ class OpenFP17s(TemplateView):
         return qs.exclude(id__in=unsubmitted_ids)
 
 
-class UnsubmittedFP17s(TemplateView):
+class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
     template_name = "unsubmitted_list.html"
 
     def get_fp17s(self):
@@ -48,7 +49,7 @@ class UnsubmittedFP17s(TemplateView):
         )
 
 
-class PatientDetailView(DetailView):
+class PatientDetailView(LoginRequiredMixin, DetailView):
     model = Patient
 
     def get_context_data(self, **k):
@@ -70,21 +71,21 @@ class PatientDetailView(DetailView):
         return context
 
 
-class FP17SummaryDetailView(DetailView):
+class FP17SummaryDetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'fp17_summary.html'
 
 
-class ViewFP17DetailView(DetailView):
+class ViewFP17DetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'view_fp17.html'
 
 
-class FP17OSummaryDetailView(DetailView):
+class FP17OSummaryDetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'fp17_o_summary.html'
 
 
-class ViewFP17ODetailView(DetailView):
+class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'view_fp17_o.html'
