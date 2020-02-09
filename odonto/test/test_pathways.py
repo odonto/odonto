@@ -40,7 +40,7 @@ class Fp17PathwayTestCase(OpalTestCase):
         self.assertEqual('Open', fp17.stage)
 
 
-class SubmitFP17OathwayTestCase(OpalTestCase):
+class SubmitFP17PathwayTestCase(OpalTestCase):
     def setUp(self):
         self.patient, self.episode = self.new_patient_and_episode_please()
         self.other_episode = self.patient.create_episode()
@@ -242,7 +242,11 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         result = self.client.get(self.url)
         self.assertEqual(
             result.json()['steps'][-1]["overlapping_dates"],
-            [['04/10/2019']]
+            [{
+                "dates": ['04/10/2019'],
+                "completion_type": None
+
+            }]
         )
 
     def test_with_two_overlapping_dates(self):
@@ -255,7 +259,11 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         result = self.client.get(self.url)
         self.assertEqual(
             result.json()['steps'][-1]["overlapping_dates"],
-            [['04/10/2019', '05/10/2019']]
+            [{
+                "dates": ['04/10/2019', '05/10/2019'],
+                "completion_type": None
+
+            }]
         )
 
     def test_with_three_overlapping_dates(self):
@@ -269,7 +277,11 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         result = self.client.get(self.url)
         self.assertEqual(
             result.json()['steps'][-1]["overlapping_dates"],
-            [['04/10/2019', '06/10/2019']]
+            [{
+                "dates": ['04/10/2019', '06/10/2019'],
+                "completion_type": None
+
+            }]
         )
 
     def test_no_overlapping_dates(self):
@@ -277,6 +289,19 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         self.assertEqual(
             result.json()['steps'][-1]["overlapping_dates"],
             []
+        )
+
+    def test_overlapping_dates_with_treatment(self):
+        self.other_episode.orthodonticassessment_set.update(
+            date_of_assessment=self.date_1
+        )
+        self.other_episode.orthodontictreatment_set.update(
+            completion_type=models.OrthodonticTreatment.TREATMENT_COMPLETED
+        )
+        result = self.client.get(self.url)
+        self.assertEqual(
+            result.json()['steps'][-1]["overlapping_dates"],
+            [{"dates": ['04/10/2019'], "completion_type": models.OrthodonticTreatment.TREATMENT_COMPLETED}]
         )
 
     def test_with_multiple_other_episodes(self):
@@ -290,5 +315,8 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         result = self.client.get(self.url)
         self.assertEqual(
             result.json()['steps'][-1]["overlapping_dates"],
-            [['05/10/2019'], ['04/10/2019']]
+            [
+                {"dates": ['05/10/2019'], "completion_type": None},
+                {"dates": ['04/10/2019'], "completion_type": None}
+            ]
         )

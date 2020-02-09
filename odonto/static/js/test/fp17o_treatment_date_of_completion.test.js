@@ -61,7 +61,7 @@ describe('Fp17ODateOfCompletion', function() {
     it('should error if another episode is between assessment and completion', function(){
       editing.orthodontic_assessment.date_of_assessment = day1;
       editing.orthodontic_treatment.date_of_completion = day3;
-      step.overlapping_dates = [[day2]];
+      step.overlapping_dates = [{dates: [day2]}];
       var result = Fp17ODateOfCompletion(editing, step);
       var error = result.orthodontic_treatment.date_of_completion;
       expect(error).toBe("The FP17O overlaps with another FP17O of this patient");
@@ -70,7 +70,7 @@ describe('Fp17ODateOfCompletion', function() {
     it('should error if another episode is between appliance fitted and completion', function(){
       editing.orthodontic_assessment.date_of_appliance_fitted = day1;
       editing.orthodontic_treatment.date_of_completion = day3;
-      step.overlapping_dates = [[day2]];
+      step.overlapping_dates = [{dates: [day2]}];
       var result = Fp17ODateOfCompletion(editing, step);
       var error = result.orthodontic_treatment.date_of_completion;
       expect(error).toBe("The FP17O overlaps with another FP17O of this patient");
@@ -78,7 +78,7 @@ describe('Fp17ODateOfCompletion', function() {
 
     it('should error if completion is within the date range of another episode', function(){
       editing.orthodontic_treatment.date_of_completion = day2;
-      step.overlapping_dates = [[day1, day3]];
+      step.overlapping_dates = [{dates: [day1, day3]}];
       var result = Fp17ODateOfCompletion(editing, step);
       var error = result.orthodontic_treatment.date_of_completion;
       expect(error).toBe("The FP17O overlaps with another FP17O of this patient");
@@ -87,14 +87,14 @@ describe('Fp17ODateOfCompletion', function() {
     it('should not error if the range is not in another date range', function(){
       editing.orthodontic_assessment.date_of_appliance_fitted = day1
       editing.orthodontic_treatment.date_of_completion = day2;
-      step.overlapping_dates = [[day3, day4]];
+      step.overlapping_dates = [{dates: [day3, day4]}];
       var result = Fp17ODateOfCompletion(editing, step);
       expect(result).toBeUndefined();
     });
 
     it('should not error if the date is not in another date range', function(){
       editing.orthodontic_treatment.date_of_completion = day1;
-      step.overlapping_dates = [[day2, day3]];
+      step.overlapping_dates = [{dates: [day2, day3]}]
       var result = Fp17ODateOfCompletion(editing, step);
       expect(result).toBeUndefined();
     });

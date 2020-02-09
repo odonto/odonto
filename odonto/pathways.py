@@ -287,6 +287,11 @@ class SubmitFP17OPathway(OdontoPagePathway):
 
         Note date of referral does not seem to be relevent based on the
         existing cases submitted errors/responses.
+
+        If the previous episode and the current episode have a
+        completion type then we reject it as an assessment epsode type is
+        expected first. To test for this we serialize episode
+        types with their related dates.
         """
         result = []
         other_episodes = patient.episode_set.exclude(
@@ -301,9 +306,13 @@ class SubmitFP17OPathway(OdontoPagePathway):
             dts = [i for i in [date_of_assessment, date_of_appliance_fitted, date_of_completion] if i]
             if dts:
                 if len(dts) > 2:
-                    result.append([min(dts), max(dts)])
+                    dates = [min(dts), max(dts)]
                 else:
-                    result.append(sorted(dts))
+                    dates = sorted(dts)
+                result.append({
+                    "dates": dates,
+                    "completion_type": completion.completion_type
+                })
         return result
 
     def to_dict(self, *args, **kwargs):
