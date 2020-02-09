@@ -58,7 +58,7 @@
           </div>
           <div class="row">
             <div class="col-md-5">
-              {% charfield field="Demographics.post_code" disabled="editing.demographics.protected" maxlength="8" pattern='/^[A-Z0-9 ]{1,8}$'/' label="Post code" pattern_error="Letters and numbers only" %}
+              {% charfield field="Demographics.post_code" disabled="editing.demographics.protected" maxlength="8" pattern='/^[a-zA-Z\d ]+$/' label="Post code" pattern_error="Letters and numbers only" %}
             </div>
           </div>
           <div class="row">
