@@ -18,14 +18,16 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(){
       }
     }
 
-    if(!assessment.assessment && !treatment.completion_type){
+    if(!assessment.assessment && !treatment.completion_type && !treatment.repair && !treatment.replacement){
       return {
         "orthodontic_assessment": {
-          "assessment": "An assessment type or completion type are required"
+          "assessment": "An assessment type, completion type, repair or reg 11 are required"
         },
         "orthodontic_treatment": {
-          "completion_type": "An assessment type or completion type are required"
-        },
+          "completion_type": "An assessment type, completion type, repair or reg 11 are required",
+          "repair": "An assessment type, completion type, repair or reg 11 are required",
+          "replacement": "An assessment type, completion type, repair or reg 11 are required"
+        }
       }
     }
   }
