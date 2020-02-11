@@ -10,16 +10,14 @@ angular.module('opal.services').factory('Fp17ODateOfCompletion', function(toMome
   return function(editing, step){
     "use strict";
     var completion_type = editing.orthodontic_treatment.completion_type;
-    var repair = editing.orthodontic_treatment.repair;
-    var replacement = editing.orthodontic_treatment.replacement;
     var dateOfCompletion = toMomentFilter(editing.orthodontic_treatment.date_of_completion);
     var assessment = editing.orthodontic_assessment;
 
-    if((completion_type && completion_type.length) || repair || replacement){
+    if(completion_type && completion_type.length){
       if(!dateOfCompletion){
         return {
           orthodontic_treatment: {
-            date_of_completion: "Date of completion or last visit is required when there is a completion type, repair or reg 11"
+            date_of_completion: "Date of completion or last visit is required when there is a completion type"
           }
         }
       }
