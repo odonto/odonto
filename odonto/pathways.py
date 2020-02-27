@@ -5,9 +5,20 @@ import logging
 from django.db import transaction
 from opal.core import menus, pathway
 from odonto import models
+from odonto.odonto_submissions import models as submission_models
 from odonto.episode_categories import FP17Episode, FP17OEpisode
 from odonto.odonto_submissions import serializers
 from plugins.add_patient_step import FindPatientStep
+
+
+def get_submission_state(episode):
+    failed = [
+        submission_models.Submission.FAILED_TO_SEND,
+        submission_models.Submission.REJECTED_BY_COMPASS,
+    ]
+    return episode.submission_set.exclude(
+        state__in=failed
+    ).exists()
 
 
 class OdontoPagePathway(pathway.PagePathway):
@@ -131,7 +142,6 @@ class SubmitFP17Pathway(OdontoPagePathway):
     template = "pathway/templates/check_pathway.html"
     summary_template = "partials/fp17_summary.html"
 
-
     def get_overlapping_dates(self, patient, episode):
         """
         For date of acceptance and date of completion or last_visit
@@ -209,6 +219,7 @@ class SubmitFP17Pathway(OdontoPagePathway):
         )
         check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
         check_steps_dict["further_treatment_information"] = self.get_further_treatment_information(patient, episode)
+        check_steps_dict["episode_submitted"] = get_submission_state(episode)
         return to_dicted
 
     @transaction.atomic
@@ -323,6 +334,7 @@ class SubmitFP17OPathway(OdontoPagePathway):
             i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17_O.get_step_controller()
         )
         check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
+        check_steps_dict["episode_submitted"] = get_submission_state(episode)
         return to_dicted
 
 

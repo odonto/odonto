@@ -7,9 +7,27 @@ from opal.models import Episode
 from opal.core.test import OpalTestCase
 from odonto import models
 from odonto import episode_categories
-
 from odonto import pathways
+from odonto.odonto_submissions import models as submission_models
 
+class GetSubmissionStateTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+
+    def test_get_submission_state_success(self):
+        self.episode.submission_set.create(
+            state=submission_models.Submission.SUCCESS
+        )
+        self.assertTrue(pathways.get_submission_state(self.episode))
+
+    def test_get_submission_state_failed(self):
+        self.episode.submission_set.create(
+            state=submission_models.Submission.FAILED_TO_SEND
+        )
+        self.assertFalse(pathways.get_submission_state(self.episode))
+
+    def test_get_submission_state_none(self):
+        self.assertFalse(pathways.get_submission_state(self.episode))
 
 class AddPatientPathwayTestCase(OpalTestCase):
     def test_save(self):
@@ -205,6 +223,18 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
             }]
         )
 
+    def test_episode_submitted(self):
+        self.episode.submission_set.create(
+            state="SUCCESS"
+        )
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertTrue(result["episode_submitted"])
+
+    def test_episode_not_submitted(self):
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertFalse(result["episode_submitted"])
+
+
 class Fp17_O_PathwayTestCase(OpalTestCase):
 
     def test_save_sets_stage(self):
@@ -320,3 +350,15 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
                 {"dates": ['04/10/2019'], "completion_type": None}
             ]
         )
+
+    def test_episode_submitted(self):
+        self.episode.submission_set.create(
+            state="SUCCESS"
+        )
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertTrue(result["episode_submitted"])
+
+    def test_episode_not_submitted(self):
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertFalse(result["episode_submitted"])
+

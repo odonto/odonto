@@ -57,9 +57,10 @@ angular.module('opal.controllers').controller(
 
   scope.$watch("editing", validate, true);
 
+  $rootScope.episodeSubmitted = step["episode_submitted"]
   $timeout(function(){
     scope.form.$setSubmitted();
     validate();
-    $rootScope.showSummary = $rootScope.isFormValid;
+    $rootScope.showSummary = $rootScope.isFormValid || $rootScope.episodeSubmitted;
   });
 });
