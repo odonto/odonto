@@ -1,4 +1,6 @@
 import decimal
+import datetime
+from unittest import mock
 from django.contrib.auth.models import User
 from opal.core.test import OpalTestCase
 
@@ -150,3 +152,28 @@ class ExtractChartTestCase(OpalTestCase):
             self.assertTrue(self.extraction_chart.has_extractions())
             setattr(self.extraction_chart, field, False)
             self.extraction_chart.save()
+
+
+class DemographicsTestCase(OpalTestCase):
+    def setUp(self):
+        patient, _ = self.new_patient_and_episode_please()
+        self.demographics = patient.demographics()
+
+    @mock.patch("odonto.models.datetime")
+    def test_age(self, dt):
+        dt.date.today.return_value = datetime.date(2019, 12, 1)
+        self.demographics.date_of_birth = datetime.date(1990, 12, 1)
+        self.demographics.save()
+        self.assertEqual(self.demographics.get_age(), 29)
+        self.assertEqual(
+            self.demographics.get_age(datetime.date(2009, 11, 30)),
+            18
+        )
+        self.assertEqual(
+            self.demographics.get_age(datetime.date(2009, 12, 1)),
+            19
+        )
+        self.assertEqual(
+            self.demographics.get_age(datetime.date(2009, 12, 2)),
+            19
+        )

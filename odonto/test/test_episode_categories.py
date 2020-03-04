@@ -207,6 +207,37 @@ translate_episode_to_xml"
         l = f"http://ntghcomdent1/pathway/#/fp17-edit/{episode.patient.id}/{episode.id}"
         self.assertEqual(episode.category.get_edit_link(), l)
 
+    def test_uda(self):
+        episode = self.get_episode()
+        treatment_category = episode.fp17treatmentcategory_set.get()
+        treatment_category.treatment_category = treatment_category.BAND_1
+        treatment_category.save()
+
+        self.assertEqual(episode.category.uda(), 1)
+        treatment_category.treatment_category = treatment_category.BAND_2
+        treatment_category.save()
+
+        self.assertEqual(episode.category.uda(), 3)
+        treatment_category.treatment_category = treatment_category.BAND_3
+        treatment_category.save()
+
+        self.assertEqual(episode.category.uda(), 12)
+        treatment_category.treatment_category = treatment_category.URGENT_TREATMENT
+        treatment_category.save()
+        self.assertEqual(episode.category.uda(), 1.2)
+
+        treatment_category.treatment_category = treatment_category.REGULATION_11_REPLACEMENT_APPLIANCE
+        treatment_category.save()
+        self.assertEqual(episode.category.uda(), 12)
+
+        treatment_category.treatment_category = "something else"
+        treatment_category.save()
+        self.assertIsNone(episode.category.uda())
+
+        treatment_category.treatment_category = None
+        treatment_category.save()
+        self.assertIsNone(episode.category.uda())
+
 
 class FP17OEpisodeTestCase(OpalTestCase):
     def setUp(self):
@@ -265,3 +296,124 @@ class FP17OEpisodeTestCase(OpalTestCase):
         episode = self.open_episode
         l = f"http://ntghcomdent1/pathway/#/fp17-o-edit/{episode.patient.id}/{episode.id}"
         self.assertEqual(episode.category.get_edit_link(), l)
+
+    def test_uoa_assessment_and_review(self):
+        episode = self.open_episode
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.assessment = assessment.ASSESSMENT_AND_REVIEW
+        assessment.save()
+        self.assertEqual(
+            episode.category.uoa(), 1
+        )
+
+    def test_uoa_assess_and_refuse_treatment(self):
+        episode = self.open_episode
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.assessment = assessment.ASSESS_AND_REFUSE_TREATMENT
+        assessment.save()
+        self.assertEqual(
+            episode.category.uoa(), 1
+        )
+
+    def test_uoa_assess_and_appliance_fitted_under_10(self):
+        episode = self.open_episode
+        patient = episode.patient
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.date_of_assessment = datetime.date(2019, 1, 1)
+        assessment.assessment = assessment.ASSESS_AND_APPLIANCE_FITTED
+        assessment.save()
+        demographics = patient.demographics()
+        demographics.date_of_birth = datetime.date(2018, 1, 1)
+        demographics.save()
+        self.assertEqual(
+            episode.category.uoa(), 4
+        )
+
+    def test_uoa_assess_and_appliance_fitted_under_18(self):
+        episode = self.open_episode
+        patient = episode.patient
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.date_of_assessment = datetime.date(2019, 1, 1)
+        assessment.assessment = assessment.ASSESS_AND_APPLIANCE_FITTED
+        assessment.save()
+        demographics = patient.demographics()
+        demographics.date_of_birth = datetime.date(2001, 1, 2)
+        demographics.save()
+        self.assertEqual(
+            episode.category.uoa(), 21
+        )
+
+    def test_uoa_assess_and_appliance_fitted_over_17(self):
+        episode = self.open_episode
+        patient = episode.patient
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.date_of_assessment = datetime.date(2019, 1, 1)
+        assessment.assessment = assessment.ASSESS_AND_APPLIANCE_FITTED
+        assessment.save()
+        demographics = patient.demographics()
+        demographics.date_of_birth = datetime.date(1999, 1, 2)
+        demographics.save()
+        self.assertEqual(
+            episode.category.uoa(), 23
+        )
+
+    def test_uoa_no_assessment_date(self):
+        episode = self.open_episode
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.assessment = assessment.ASSESS_AND_APPLIANCE_FITTED
+        assessment.save()
+        with self.assertRaises(ValueError):
+            episode.category.uoa()
+
+    def test_uoa_with_only_repair(self):
+        episode = self.open_episode
+        treatment = episode.orthodontictreatment_set.all()[0]
+        treatment.repair = True
+        treatment.save()
+        self.assertEqual(
+            episode.category.uoa(), 0.8
+        )
+
+    def test_uoa_with_repair_and_other(self):
+        episode = self.open_episode
+        patient = episode.patient
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.date_of_assessment = datetime.date(2019, 1, 1)
+        assessment.assessment = assessment.ASSESS_AND_APPLIANCE_FITTED
+        assessment.save()
+        demographics = patient.demographics()
+        demographics.date_of_birth = datetime.date(2018, 1, 1)
+        demographics.save()
+        treatment = episode.orthodontictreatment_set.all()[0]
+        treatment.repair = True
+        treatment.save()
+        self.assertEqual(
+            episode.category.uoa(), 4.8
+        )
+
+    def test_uoa_with_only_replacement(self):
+        episode = self.open_episode
+        treatment = episode.orthodontictreatment_set.all()[0]
+        treatment.replacement = True
+        treatment.save()
+        self.assertEqual(
+            episode.category.uoa(), 0
+        )
+
+    def test_uoa_with_replacement_and_other(self):
+        episode = self.open_episode
+        patient = episode.patient
+        assessment = episode.orthodonticassessment_set.all()[0]
+        assessment.date_of_assessment = datetime.date(2019, 1, 1)
+        assessment.assessment = assessment.ASSESS_AND_APPLIANCE_FITTED
+        assessment.save()
+        demographics = patient.demographics()
+        demographics.date_of_birth = datetime.date(2018, 1, 1)
+        demographics.save()
+        treatment = episode.orthodontictreatment_set.all()[0]
+        treatment.replacement = True
+        treatment.save()
+        self.assertEqual(
+            episode.category.uoa(), 4
+        )
+

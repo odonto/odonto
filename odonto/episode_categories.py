@@ -4,6 +4,7 @@ from django.conf import settings
 from opal.core import episodes
 
 
+
 class DentalCareEpisodeCategory(episodes.EpisodeCategory):
     display_name = "Dental Care"
     detail_template = "detail/dental_care.html"
@@ -191,6 +192,22 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
         qs = qs.prefetch_related("fp17incompletetreatment_set")
         return super().get_oldest_unsent(qs)
 
+    def uda(self):
+        # as defined
+        # https://contactcentreservices.nhsbsa.nhs.uk/selfnhsukokb/AskUs_Dental/en-gb/9737/units-of-activity-uda-uoa/41781/how-many-units-of-activity-uda-uoa-does-a-course-of-treatment-cot-receive
+        # urgent treatment is band 4
+        from odonto import models
+        treatment_category = self.episode.fp17treatmentcategory_set.all()[0]
+        treatment_map = {
+            models.Fp17TreatmentCategory.BAND_1: 1,
+            models.Fp17TreatmentCategory.BAND_2: 3,
+            models.Fp17TreatmentCategory.BAND_3: 12,
+            models.Fp17TreatmentCategory.URGENT_TREATMENT: 1.2,
+            models.Fp17TreatmentCategory.REGULATION_11_REPLACEMENT_APPLIANCE: 12,
+        }
+
+        return treatment_map.get(treatment_category.treatment_category)
+
 
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
     display_name = "FP17O"
@@ -272,6 +289,44 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         )
         return super().get_oldest_unsent(qs)
 
+    def uoa(self):
+        from odonto import models
+        # as defined
+        # https://contactcentreservices.nhsbsa.nhs.uk/selfnhsukokb/AskUs_Dental/en-gb/9737/units-of-activity-uda-uoa/41781/how-many-units-of-activity-uda-uoa-does-a-course-of-treatment-cot-receive
+        uoa = None
+        assessment = self.episode.orthodonticassessment_set.all()[0]
+        treatment = self.episode.orthodontictreatment_set.all()[0]
+
+        if assessment.assessment == assessment.ASSESSMENT_AND_REVIEW:
+            uoa = 1
+        elif assessment.assessment == assessment.ASSESS_AND_REFUSE_TREATMENT:
+            uoa = 1
+        elif assessment.assessment == assessment.ASSESS_AND_APPLIANCE_FITTED:
+            uoa = 1
+            assessment_date = assessment.date_of_assessment
+            demographics = models.Demographics.objects.filter(
+                patient__episode=self.episode
+            ).get()
+
+            if not assessment_date:
+                raise ValueError('date_of_assessment is required to calculate uoa')
+            age = demographics.get_age(assessment_date)
+            if age < 10:
+                uoa += 3
+            elif age < 18:
+                uoa += 20
+            else:
+                uoa += 22
+
+        if treatment.repair:
+            if not uoa:
+                uoa = 0
+            uoa += 0.8
+
+        if treatment.replacement and not uoa:
+            uoa = 0
+
+        return uoa
 
 def get_unsubmitted_fp17_and_fp17os(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
