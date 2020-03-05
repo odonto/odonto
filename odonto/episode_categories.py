@@ -229,7 +229,6 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
 
         Return the highest of
         orthodontic_assessment.date_of_assessment
-        orthodontic_assessment.date_of_assessment
         orthodontic_treatment.date_of_completion
         """
         orthodontic_assessment = self.episode.orthodonticassessment_set.all()[0]
@@ -241,18 +240,13 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         if orthodontic_assessment.date_of_assessment:
             date_of_assessment = orthodontic_assessment.date_of_assessment
 
-        date_of_appliance_fitted = min_date
-
-        if orthodontic_assessment.date_of_appliance_fitted:
-            date_of_appliance_fitted = orthodontic_assessment.date_of_appliance_fitted
-
         date_of_completion = min_date
 
         if orthodontic_treatment.date_of_completion:
             date_of_completion = orthodontic_treatment.date_of_completion
 
         largest_date = max(
-            date_of_assessment, date_of_appliance_fitted, date_of_completion
+            date_of_assessment, date_of_completion
         )
 
         if largest_date == min_date:

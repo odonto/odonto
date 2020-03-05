@@ -240,14 +240,6 @@ class FP17OEpisodeTestCase(OpalTestCase):
         episode.orthodonticassessment_set.update(date_of_assessment=self.today)
         self.assertEqual(episode.category.get_sign_off_date(), self.today)
 
-    def test_get_sign_off_date_date_of_appliance_fitted(self):
-        _, episode = self.new_patient_and_episode_please()
-        episode.category_name = FP17OEpisode.display_name
-        episode.stage = FP17OEpisode.OPEN
-        episode.save()
-        episode.orthodonticassessment_set.update(date_of_appliance_fitted=self.today)
-        self.assertEqual(episode.category.get_sign_off_date(), self.today)
-
     def test_get_sign_off_date_date_of_completion(self):
         _, episode = self.new_patient_and_episode_please()
         episode.category_name = FP17OEpisode.display_name
