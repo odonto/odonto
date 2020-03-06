@@ -11,7 +11,7 @@ from odonto.odonto_submissions import serializers
 from plugins.add_patient_step import FindPatientStep
 
 
-def get_submission_state(episode):
+def is_submitted(episode):
     failed = [
         submission_models.Submission.FAILED_TO_SEND,
         submission_models.Submission.REJECTED_BY_COMPASS,
@@ -219,7 +219,7 @@ class SubmitFP17Pathway(OdontoPagePathway):
         )
         check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
         check_steps_dict["further_treatment_information"] = self.get_further_treatment_information(patient, episode)
-        check_steps_dict["episode_submitted"] = get_submission_state(episode)
+        check_steps_dict["episode_submitted"] = is_submitted(episode)
         return to_dicted
 
     @transaction.atomic
@@ -334,7 +334,7 @@ class SubmitFP17OPathway(OdontoPagePathway):
             i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17_O.get_step_controller()
         )
         check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
-        check_steps_dict["episode_submitted"] = get_submission_state(episode)
+        check_steps_dict["episode_submitted"] = is_submitted(episode)
         return to_dicted
 
 

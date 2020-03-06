@@ -14,20 +14,20 @@ class GetSubmissionStateTestCase(OpalTestCase):
     def setUp(self):
         _, self.episode = self.new_patient_and_episode_please()
 
-    def test_get_submission_state_success(self):
+    def test_is_submitted_success(self):
         self.episode.submission_set.create(
             state=submission_models.Submission.SUCCESS
         )
-        self.assertTrue(pathways.get_submission_state(self.episode))
+        self.assertTrue(pathways.is_submitted(self.episode))
 
-    def test_get_submission_state_failed(self):
+    def test_is_submitted_failed(self):
         self.episode.submission_set.create(
             state=submission_models.Submission.FAILED_TO_SEND
         )
-        self.assertFalse(pathways.get_submission_state(self.episode))
+        self.assertFalse(pathways.is_submitted(self.episode))
 
-    def test_get_submission_state_none(self):
-        self.assertFalse(pathways.get_submission_state(self.episode))
+    def test_is_submitted_none(self):
+        self.assertFalse(pathways.is_submitted(self.episode))
 
 class AddPatientPathwayTestCase(OpalTestCase):
     def test_save(self):
