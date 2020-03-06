@@ -214,12 +214,17 @@ class SubmitFP17Pathway(OdontoPagePathway):
         patient = kwargs.get('patient')
         episode = kwargs.get('episode')
         to_dicted = super().to_dict(*args, **kwargs)
-        check_steps_dict = next(
-            i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17.get_step_controller()
-        )
-        check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
-        check_steps_dict["further_treatment_information"] = self.get_further_treatment_information(patient, episode)
-        check_steps_dict["episode_submitted"] = is_submitted(episode)
+
+        check_index = None
+        for index, step_dict in enumerate(to_dicted["steps"]):
+            if step_dict["step_controller"] == CHECK_STEP_FP17.get_step_controller():
+                check_index = index
+
+        overlapping_dates = self.get_overlapping_dates(patient, episode)
+        to_dicted["steps"][check_index]["overlapping_dates"] = overlapping_dates
+        further_treatment_information = self.get_further_treatment_information(patient, episode)
+        to_dicted["steps"][check_index]["further_treatment_information"] = further_treatment_information
+        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
         return to_dicted
 
     @transaction.atomic
@@ -330,11 +335,15 @@ class SubmitFP17OPathway(OdontoPagePathway):
         patient = kwargs.get('patient')
         episode = kwargs.get('episode')
         to_dicted = super().to_dict(*args, **kwargs)
-        check_steps_dict = next(
-            i for i in to_dicted["steps"] if i["step_controller"] == CHECK_STEP_FP17_O.get_step_controller()
-        )
-        check_steps_dict["overlapping_dates"] = self.get_overlapping_dates(patient, episode)
-        check_steps_dict["episode_submitted"] = is_submitted(episode)
+        check_index = None
+        for index, step_dict in enumerate(to_dicted["steps"]):
+            if step_dict["step_controller"] == CHECK_STEP_FP17_O.get_step_controller():
+                check_index = index
+
+        to_dicted["steps"][check_index]
+        overlapping_dates = self.get_overlapping_dates(patient, episode)
+        to_dicted["steps"][check_index]["overlapping_dates"] = overlapping_dates
+        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
         return to_dicted
 
 
