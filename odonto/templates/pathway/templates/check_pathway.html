@@ -5,8 +5,11 @@
   <div class="row">
     <div class="row"> <!-- Start demographics banner -->
       <div class="col-md-8">
-        <p>
+        <p ng-hide="episodeSubmitted">
           Please review the details of this submission before sending to the BSA
+        </p>
+        <p ng-show="episodeSubmitted">
+         Submitted to the BSA
         </p>
       </div>
     </div> <!-- end demographics banner -->
@@ -32,7 +35,7 @@
 </div>
 
 
-<div class="row content-offset-below-150">
+<div ng-hide="episodeSubmitted" class="row content-offset-below-150">
   <div class="col-md-6">
     <button ng-show="showSummary === false"
       class="btn btn-lg btn-primary btn-save"
