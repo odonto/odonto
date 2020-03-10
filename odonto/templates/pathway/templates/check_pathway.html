@@ -8,9 +8,11 @@
         <p ng-hide="episodeSubmitted">
           Please review the details of this submission before sending to the BSA
         </p>
-        <p ng-show="episodeSubmitted">
+        <h2 ng-show="episodeSubmitted">
+          <strong>
          Submitted to the BSA
-        </p>
+          </strong>
+        </h2>
       </div>
     </div> <!-- end demographics banner -->
     {% include pathway.summary_template with pathway=1 %}
