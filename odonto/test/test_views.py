@@ -1,4 +1,5 @@
 import datetime
+import json
 from unittest import mock
 from opal.core.test import OpalTestCase
 from odonto.episode_categories import (
@@ -44,6 +45,8 @@ class GetContextDataStatsTestCase(OpalTestCase):
 
     def expected(self):
         return {
+            'current': '2019-2020',
+            'previous': '2018-2019',
             "state_counts": {
                 "fp17s": {
                     "total": 0,
@@ -106,11 +109,20 @@ class GetContextDataStatsTestCase(OpalTestCase):
         expected["performer_info"] = [{
             "name": "Jane Doe",
             "uda": 1,
-            "Band 1": 1,
-            "Band 2": 0,
-            "Band 3": 0,
+            "band_1": 1,
+            "band_2": 0,
+            "band_3": 0,
             "uoa": 0
         }]
+        expected["month_totals"] = json.dumps(
+            expected["month_totals"]
+        )
+        expected["uda_info"]["by_period"] = json.dumps(
+            expected["uda_info"]["by_period"]
+        )
+        expected["uoa_info"]["by_period"] = json.dumps(
+            expected["uoa_info"]["by_period"]
+        )
         result = Stats().get_context_data()
         self.assertEqual(result, expected)
 
@@ -136,10 +148,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
         episode.submission_set.create(
             state=Submission.SUCCESS
         )
-        result = Stats().get_uda_data()
 
-
-        result = Stats().get_context_data()
         expected = self.expected()
         expected["state_counts"]["fp17os"]["total"] = 1
         expected["state_counts"]["fp17os"]["submitted"] = 1
@@ -149,10 +158,19 @@ class GetContextDataStatsTestCase(OpalTestCase):
         expected["performer_info"] = [{
             "name": "Jane Doe",
             "uda": 0,
-            "Band 1": 0,
-            "Band 2": 0,
-            "Band 3": 0,
+            "band_1": 0,
+            "band_2": 0,
+            "band_3": 0,
             "uoa": 1
         }]
+        expected["month_totals"] = json.dumps(
+            expected["month_totals"]
+        )
+        expected["uda_info"]["by_period"] = json.dumps(
+            expected["uda_info"]["by_period"]
+        )
+        expected["uoa_info"]["by_period"] = json.dumps(
+            expected["uoa_info"]["by_period"]
+        )
         result = Stats().get_context_data()
         self.assertEqual(result, expected)
