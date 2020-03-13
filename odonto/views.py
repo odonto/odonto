@@ -95,7 +95,6 @@ class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'view_fp17_o.html'
 
-
 class Stats(LoginRequiredMixin, TemplateView):
     template_name = "stats.html"
     def get_current_financial_year(self):
@@ -211,10 +210,10 @@ class Stats(LoginRequiredMixin, TemplateView):
         for period_name, period_range in time_periods.items():
             for date_range in self.month_iterator(period_range[0]):
                 fp17os = self.get_successful_fp17os(date_range)
-                fp17os.prefetch_related(
+                fp17os = fp17os.prefetch_related(
                     'orthodonticassessment_set',
                     'orthodontictreatment_set',
-                    'fp17dentalcareprovider_set'
+                    'fp17dentalcareprovider_set',
                 )
                 month_uoa_total = 0
                 for fp17o in fp17os:
@@ -241,7 +240,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         for period_name, period_range in time_periods.items():
             for date_range in self.month_iterator(period_range[0]):
                 fp17s = self.get_successful_fp17s(date_range)
-                fp17s.prefetch_related(
+                fp17s = fp17s.prefetch_related(
                     'fp17treatmentcategory_set',
                     'fp17dentalcareprovider_set'
                 )
