@@ -2,6 +2,7 @@
 Odonto views
 """
 import datetime
+import json
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import redirect
@@ -96,6 +97,7 @@ class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
 
 
 class Stats(LoginRequiredMixin, TemplateView):
+    template_name = "stats.html"
     def get_current_financial_year(self):
         today = datetime.date.today()
         if today.month > 3:
@@ -249,7 +251,7 @@ class Stats(LoginRequiredMixin, TemplateView):
                         performer = fp17.fp17dentalcareprovider_set.all()[0].performer
                         by_performer[performer]["uda"] += uda
                         by_performer[performer][treatment.treatment_category] += 1
-                by_period[period_name].append(month_uda_total)
+                by_period[period_name].append(round(month_uda_total))
         return by_period, by_performer
 
     def aggregate_performer_information(self, uda_by_performer, uoa_by_performer):
@@ -265,14 +267,14 @@ class Stats(LoginRequiredMixin, TemplateView):
         for performer in performers:
             row = {"name": performer}
             fp17_performer = uda_by_performer.get(performer, {})
-            row["uda"] = fp17_performer.get("uda", 0)
-            row["Band 1"] = fp17_performer.get(
+            row["uda"] = round(fp17_performer.get("uda", 0))
+            row["band_1"] = fp17_performer.get(
                 models.Fp17TreatmentCategory.BAND_1, 0
             )
-            row["Band 2"] = fp17_performer.get(
+            row["band_2"] = fp17_performer.get(
                 models.Fp17TreatmentCategory.BAND_2, 0
             )
-            row["Band 3"] = fp17_performer.get(
+            row["band_3"] = fp17_performer.get(
                 models.Fp17TreatmentCategory.BAND_3, 0
             )
             row["uoa"] = uoa_by_performer.get(performer, 0)
@@ -280,21 +282,33 @@ class Stats(LoginRequiredMixin, TemplateView):
         return result
 
     def get_context_data(self):
+        current_financial_year = self.get_current_financial_year()
+        previous_financial_year = self.get_previous_financial_year()
         uda_by_period, uda_by_performer = self.get_uda_data()
         uoa_by_period, uoa_by_performer = self.get_uoa_data()
         performer_info = self.aggregate_performer_information(
             uda_by_performer, uoa_by_performer
         )
+        current = "{}-{}".format(
+            current_financial_year[0].year,
+            current_financial_year[0].year + 1,
+        )
+        previous = "{}-{}".format(
+            previous_financial_year[0].year,
+            previous_financial_year[0].year + 1,
+        )
         return {
+            "current": current,
+            "previous": previous,
             "state_counts": self.get_state_counts(),
-            "month_totals": self.get_month_totals(),
+            "month_totals": json.dumps(self.get_month_totals()),
             "uda_info": {
                 "total":  sum(uda_by_period["current"]),
-                "by_period": uda_by_period
+                "by_period": json.dumps(uda_by_period)
             },
             "uoa_info": {
                 "total":  sum(uoa_by_period["current"]),
-                "by_period": uoa_by_period
+                "by_period": json.dumps(uoa_by_period)
             },
             "performer_info": performer_info
         }

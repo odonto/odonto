@@ -173,6 +173,7 @@ INSTALLED_APPS = (
     'opal.core.pathway',
     'odonto',
     'odonto.odonto_submissions',
+    'django.contrib.humanize',
     'django.contrib.admin',
     'plugins.add_patient_step',
 )

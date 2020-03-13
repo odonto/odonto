@@ -29,8 +29,7 @@ urlpatterns = [
     url('^open-fp17s',
         views.OpenFP17s.as_view(),
         name='odonto-open-fp17s'),
-
-
+    url('^stats', views.Stats.as_view(), name="odonto-stats"),
 ]
 
 urlpatterns += opatterns
