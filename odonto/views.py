@@ -219,6 +219,9 @@ class Stats(LoginRequiredMixin, TemplateView):
                 month_uoa_total = 0
                 for fp17o in fp17os:
                     uoa = fp17o.category.uoa()
+                    if not uoa:
+                        continue
+
                     month_uoa_total += uoa
                     if period_name == "current":
                         performer = fp17o.fp17dentalcareprovider_set.all()[0].performer
@@ -245,6 +248,9 @@ class Stats(LoginRequiredMixin, TemplateView):
                 month_uda_total = 0
                 for fp17 in fp17s:
                     uda = fp17.category.uda()
+                    if not uda:
+                        continue
+
                     month_uda_total += uda
                     if period_name == "current":
                         treatment = fp17.fp17treatmentcategory_set.all()[0]
