@@ -32,6 +32,11 @@
                 </a>
               </li>
             {% endif %}
+            <li {% if request.resolver_match.url_name == "odonto-stats" %}class="active"{% endif %}>
+              <a href="{% url 'odonto-stats' %}">
+                Stats
+              </a>
+            </li>
           </ul>
 
 
