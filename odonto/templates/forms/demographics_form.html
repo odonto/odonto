@@ -38,6 +38,10 @@
     {% charfield field="Demographics.phone_number" style="vertical" element_name="tel" disabled="editing.demographics.patient_declined_phone" %}
     {% btn_checkbox field="Demographics.patient_declined_phone" style="vertical" change="editing.demographics.phone_number=''" %}
   </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% charfield field="Demographics.email" disabled="editing.demographics.patient_declined_email" %}
+    {% btn_checkbox field="Demographics.patient_declined_email" change="editing.demographics.email=''" %}
+  </div>
 </div>
 
 <div class="row content-offset-25" >
