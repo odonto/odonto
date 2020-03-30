@@ -22,7 +22,8 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType,
-    Fp17OPhoneNumberRequired
+    Fp17OPhoneNumberRequired,
+    Fp17OEmailRequired
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -43,7 +44,8 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType,
-    Fp17OPhoneNumberRequired
+    Fp17OPhoneNumberRequired,
+    Fp17OEmailRequired
   ];
 
   var validate = function(){

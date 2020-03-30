@@ -34,6 +34,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17o_assessment_type.js',
         'js/openodonto/services/validators/fp17o_assessment_iotn.js',
         'js/openodonto/services/validators/fp17o_phone_number_required.js',
+        'js/openodonto/services/validators/fp17o_email_required.js',
         'js/openodonto/services/validators/fp17o_assessment_aesthetic_component.js',
         'js/openodonto/services/validators/fp17o_treatment_iotn.js',
         'js/openodonto/services/validators/fp17_treatment_category.js',
