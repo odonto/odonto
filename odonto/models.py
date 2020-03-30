@@ -85,7 +85,10 @@ class Demographics(models.Demographics):
         max_length=255,
         null=True,
         blank=True,
-        verbose_name="Contact phone number"
+        verbose_name="Mobile phone number"
+    )
+    patient_declined_phone = fields.BooleanField(
+        default=False, blank=True, verbose_name="Patient declined"
     )
     city_or_town = fields.CharField(
         max_length=255, null=True, blank=True,
