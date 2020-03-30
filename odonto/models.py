@@ -89,6 +89,7 @@ class Demographics(models.Demographics):
     )
     patient_declined_phone = fields.BooleanField(
         default=False, blank=True, verbose_name="Patient declined"
+<<<<<<< HEAD
     )
     email = fields.CharField(
         max_length=255,
@@ -97,6 +98,8 @@ class Demographics(models.Demographics):
     )
     patient_declined_email = fields.BooleanField(
         default=False, blank=True, verbose_name="Patient declined"
+=======
+>>>>>>> Change contact phone number to mobile phone and add the option for patient declined
     )
     city_or_town = fields.CharField(
         max_length=255, null=True, blank=True,
