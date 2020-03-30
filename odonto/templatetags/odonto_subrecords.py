@@ -9,7 +9,9 @@ register = template.Library()
 
 
 @register.inclusion_tag('templatetags/subrecord_row.html', takes_context=True)
-def subrecord_row(context, model, object_list=None, pathway=None):
+def subrecord_row(context, model, title=None, object_list=None, pathway=None):
+    if title is None:
+        title = model.get_display_name()
     if not object_list:
         if pathway:
             object_list = "editing.{}".format(model.get_api_name())
@@ -19,7 +21,8 @@ def subrecord_row(context, model, object_list=None, pathway=None):
             object_list = "episode.{}".format(model.get_api_name())
     return {
         'model': model,
-        'object_list': object_list
+        'object_list': object_list,
+        'title': title
     }
 
 
