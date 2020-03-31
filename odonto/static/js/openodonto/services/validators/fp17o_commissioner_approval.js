@@ -17,7 +17,7 @@ angular.module('opal.services').factory('Fp17OCommissionerApproval', function(to
       if(diff > 17 && !commissionerApproval){
         return {
           fp17_exemptions: {
-            commissioner_approval: "Commissioner is required for patients 18 and over"
+            commissioner_approval: "Commissioner approval is required for patients 18 and over"
           }
         }
       }

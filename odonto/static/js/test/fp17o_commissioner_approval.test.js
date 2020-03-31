@@ -23,7 +23,7 @@ describe('Fp17OCommissionerApproval', function() {
     editing.demographics.date_of_birth = "01/01/1990";
     editing.orthodontic_assessment.date_of_referral = "02/01/2008";
     expect(Fp17OCommissionerApproval(editing)).toEqual({
-      fp17_exemptions: {commissioner_approval: "Commissioner is required for patients 18 and over"}
+      fp17_exemptions: {commissioner_approval: "Commissioner approval is required for patients 18 and over"}
     });
   });
 
