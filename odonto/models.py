@@ -473,7 +473,14 @@ class Fp17Declaration(models.EpisodeSubrecord):
 class OrthodonticDataSet(models.EpisodeSubrecord):
     _is_singleton = True
 
-    proposed                  = fields.BooleanField(default=False)
+    PROPOSED = "Proposed"
+    COMPLETED = "Completed/Abandoned/Discontinued Treatment"
+
+    TREATMENT_TYPES = enum(PROPOSED, COMPLETED)
+
+    treatment_type            = fields.CharField(
+        choices=TREATMENT_TYPES, max_length=255, blank=True, null=True
+    )
     radiograph                = fields.IntegerField(blank=True, null=True)
     removable_upper_appliance = fields.BooleanField(default=False)
     removable_lower_appliance = fields.BooleanField(default=False)

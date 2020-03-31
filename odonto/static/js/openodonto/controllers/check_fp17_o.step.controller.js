@@ -24,7 +24,7 @@ angular.module('opal.controllers').controller(
     Fp17OCompletionType,
     Fp17OPhoneNumberRequired,
     Fp17OEmailRequired,
-    Fp17OProposedTreatment,
+    Fp17OTreatmentType,
     Fp17OCommissionerApproval
 ){
   "use strict";
@@ -48,7 +48,7 @@ angular.module('opal.controllers').controller(
     Fp17OCompletionType,
     Fp17OPhoneNumberRequired,
     Fp17OEmailRequired,
-    Fp17OProposedTreatment,
+    Fp17OTreatmentType,
     Fp17OCommissionerApproval
   ];
 

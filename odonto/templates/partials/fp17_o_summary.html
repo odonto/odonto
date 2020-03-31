@@ -3,22 +3,7 @@
 
 {% subrecord_row models.Fp17DentalCareProvider pathway=pathway %}
 {% subrecord_row models.Fp17Exemptions pathway=pathway %}
-
-{% if pathway %}
-<div ng-show="editing.orthodontic_data_set.proposed">
-  {% subrecord_row models.OrthodonticDataSet pathway=pathway title="Orthodontic Data Set (Proposed)" %}
-</div>
-<div ng-hide="editing.orthodontic_data_set.proposed">
-  {% subrecord_row models.OrthodonticDataSet pathway=pathway %}
-</div>
-{% else %}
-<div ng-show="episode.orthodontic_data_set[0].proposed">
-  {% subrecord_row models.OrthodonticDataSet pathway=pathway title="Orthodontic Data Set (Proposed)" %}
-</div>
-<div ng-hide="episode.orthodontic_data_set[0].proposed">
-  {% subrecord_row models.OrthodonticDataSet pathway=pathway %}
-</div>
-{% endif %}
+{% subrecord_row models.OrthodonticDataSet pathway=pathway %}
 {% subrecord_row models.ExtractionChart pathway=pathway %}
 {% subrecord_row models.OrthodonticAssessment pathway=pathway %}
 {% subrecord_row models.OrthodonticTreatment pathway=pathway %}

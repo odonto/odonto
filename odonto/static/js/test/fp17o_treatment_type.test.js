@@ -1,4 +1,4 @@
-describe('Fp17OProposedTreatment', function() {
+describe('Fp17OTreatmentType', function() {
   "use strict";
   var Fp17OProposedTreatment;
   var editing, inCorrectError;
@@ -16,7 +16,7 @@ describe('Fp17OProposedTreatment', function() {
 
       inCorrectError = {
         orthodontic_assessment: {
-          assessment: "Proposed treatment is required when assessment is 'Assess & appliance fitted'"
+          assessment: "Treatment type 'Proposed' is required when assessment is 'Assess & appliance fitted'"
         }
       }
   });
@@ -33,7 +33,7 @@ describe('Fp17OProposedTreatment', function() {
 
   it('should not error if the treatment is proposed', function(){
     editing.orthodontic_assessment.assessment = "Assess & appliance fitted";
-    editing.orthodontic_data_set.proposed = true;
+    editing.orthodontic_data_set.treatment_type = "Proposed";
     expect(Fp17OProposedTreatment(editing)).toBe(undefined);
   });
 });
