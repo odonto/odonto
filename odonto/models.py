@@ -186,6 +186,11 @@ class Fp17Exemptions(models.EpisodeSubrecord):
         default=False,
         verbose_name="Patient under 18"
     )
+
+    # only used by fp17Os
+    commissioner_approval = fields.BooleanField(
+        default=False
+    )
     full_remission_hc2_cert = fields.BooleanField(
         default=False,
         verbose_name = "Full remission - HC2 cert."

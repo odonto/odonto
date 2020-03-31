@@ -6,6 +6,14 @@
     {% btn_checkbox field="Fp17Exemptions.patient_under_18" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.aged_18_in_full_time_education" %}
+  </div>
+  <div ng-show="episode.category_name === 'FP17O'" class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.commissioner_approval" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3">
     {% btn_checkbox field="Fp17Exemptions.full_remission_hc2_cert" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
@@ -18,9 +26,6 @@
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="Fp17Exemptions.nursing_mother" %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="Fp17Exemptions.aged_18_in_full_time_education" %}
   </div>
 </div>
 <div class="row">
