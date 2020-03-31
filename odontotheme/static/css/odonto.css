@@ -50,6 +50,18 @@ label {
   font-weight: normal;
 }
 
+.with-decline {
+  margin-bottom: 10px;
+}
+
+.with-decline .form-group {
+  margin-bottom: 5px;
+}
+
+.with-decline .btn-checkbox {
+  float: right;
+}
+
 .help-block {
   color: #DE3C4B;
 }
