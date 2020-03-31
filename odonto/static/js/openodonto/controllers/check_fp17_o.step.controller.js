@@ -23,9 +23,7 @@ angular.module('opal.controllers').controller(
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType,
     Fp17OPhoneNumberRequired,
-    Fp17OEmailRequired,
-    Fp17OProposedTreatment,
-    Fp17OCommissionerApproval
+    Fp17OEmailRequired
 ){
   "use strict";
   $rootScope.isFormValid = null;
