@@ -219,6 +219,13 @@ class OrthodonticDataSetTranslator(TreatmentSerializer):
         "retainer_lower": t.RETAINER_LOWER,
     }
 
+    def to_messages(self):
+        messages = super().to_messages()
+        if self.model_instance.treatment_type == models.OrthodonticDataSet.PROPOSED:
+            messages.append(t.TREATMENT_TYPE(1))
+        elif self.model_instance.treatment_type == models.OrthodonticDataSet.COMPLETED:
+            messages.append(t.TREATMENT_TYPE(2))
+        return messages
 
 class ExtractionChartTranslator(TreatmentSerializer):
     model = models.ExtractionChart

@@ -19,6 +19,7 @@ def annotate(bcds1):
     }
 
     bcds1.treatments = [
+        treatments.TREATMENT_TYPE(2),
         treatments.EMAIL_DECLINED,
         treatments.PHONE_NUMBER_DECLINED,
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
@@ -58,6 +59,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.orthodonticdataset_set.update(
+        treatment_type=models.OrthodonticDataSet.COMPLETED,
         removable_upper_appliance=True,
         fixed_upper_appliance=True,
         fixed_lower_appliance=True,
