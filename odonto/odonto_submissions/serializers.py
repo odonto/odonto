@@ -583,7 +583,7 @@ def get_fp17o_date_of_acceptance(episode):
 
 def translate_to_fp17o(bcds1, episode):
     demographics = episode.patient.demographics()
-    demographics_translator = DemographicsTranslator(demographics)
+    demographics_translator = DemographicsTranslator(episode)
     # surname must be upper case according to the form submitting guidelines
     bcds1.patient.surname = demographics_translator.surname()
     bcds1.patient.forename = demographics_translator.forename()

@@ -173,13 +173,13 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         self.demographics.ethnicity = "Other ethnic group"
         self.demographics.save()
         self.assertEqual(
-            serializers.DemographicsTranslator(self.demographics).ethnicity(),
+            serializers.DemographicsTranslator(self.episode).ethnicity(),
             treatments.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP
         )
 
     def test_without_ethnicity(self):
         with self.assertRaises(serializers.SerializerValidationError) as e:
-            serializers.DemographicsTranslator(self.demographics).ethnicity()
+            serializers.DemographicsTranslator(self.episode).ethnicity()
         self.assertEqual(
             str(e.exception), "Unable to find an ethnicity for patient"
         )
@@ -188,13 +188,13 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         self.demographics.phone_number = "078 8761 9000"
         self.demographics.save()
         self.assertEqual(
-            serializers.DemographicsTranslator(self.demographics).phone_number(),
+            serializers.DemographicsTranslator(self.episode).phone_number(),
             "07887619000"
         )
         self.demographics.phone_number = "078-8761-9000"
         self.demographics.save()
         self.assertEqual(
-            serializers.DemographicsTranslator(self.demographics).phone_number(),
+            serializers.DemographicsTranslator(self.episode).phone_number(),
             "07887619000"
         )
 
