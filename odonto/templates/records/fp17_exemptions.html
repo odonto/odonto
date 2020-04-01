@@ -3,11 +3,21 @@
   <div class="col-md-6">
     <table class="table table-striped">
       {% table_row_field_display "Fp17Exemptions.patient_under_18" %}
+      {% table_row_field_display "Fp17Exemptions.aged_18_in_full_time_education" %}
+      <tr ng-show="episode.category_name === 'FP17O'">
+        <td>
+          Commissioner approval
+        </td>
+        <td>
+          <span ng-show="item.commissioner_approval">
+            X
+          </span>
+        </td>
+      </tr>
       {% table_row_field_display "Fp17Exemptions.full_remission_hc2_cert" %}
       {% table_row_field_display "Fp17Exemptions.partial_remission_hc3_cert" %}
       {% table_row_field_display "Fp17Exemptions.expectant_mother" %}
       {% table_row_field_display "Fp17Exemptions.nursing_mother" %}
-      {% table_row_field_display "Fp17Exemptions.aged_18_in_full_time_education" %}
       {% table_row_field_display "Fp17Exemptions.income_support" %}
       {% table_row_field_display "Fp17Exemptions.nhs_tax_credit_exemption" %}
       {% table_row_field_display "Fp17Exemptions.income_based_jobseekers_allowance" %}

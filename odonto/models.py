@@ -186,6 +186,11 @@ class Fp17Exemptions(models.EpisodeSubrecord):
         default=False,
         verbose_name="Patient under 18"
     )
+
+    # only used by fp17Os
+    commissioner_approval = fields.BooleanField(
+        default=False
+    )
     full_remission_hc2_cert = fields.BooleanField(
         default=False,
         verbose_name = "Full remission - HC2 cert."
@@ -468,6 +473,14 @@ class Fp17Declaration(models.EpisodeSubrecord):
 class OrthodonticDataSet(models.EpisodeSubrecord):
     _is_singleton = True
 
+    PROPOSED = "Proposed"
+    COMPLETED = "Completed / Abandoned / Discontinued Treatment"
+
+    TREATMENT_TYPES = enum(PROPOSED, COMPLETED)
+
+    treatment_type            = fields.CharField(
+        choices=TREATMENT_TYPES, max_length=255, blank=True, null=True
+    )
     radiograph                = fields.IntegerField(blank=True, null=True)
     removable_upper_appliance = fields.BooleanField(default=False)
     removable_lower_appliance = fields.BooleanField(default=False)
