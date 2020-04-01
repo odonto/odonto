@@ -611,17 +611,6 @@ def translate_to_fp17o(bcds1, episode):
         OrthodonticTreatmentTranslator,
     ]
 
-    if demographics.email:
-        bcds1.patient.email = demographics.email
-    elif demographics.patient_declined_email:
-        bcds1.treatments.append(t.EMAIL_DECLINED)
-
-    phone_number = demographics_translator.phone_number()
-    if phone_number:
-        bcds1.patient.phone_number = phone_number
-    elif demographics.patient_declined_phone:
-        bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
-
     for translator in translators:
         bcds1.treatments.extend(translator(episode).to_messages())
 
@@ -629,6 +618,21 @@ def translate_to_fp17o(bcds1, episode):
 
     if ethnicity_treatment:
         bcds1.treatments.append(ethnicity_treatment)
+
+    if settings.ALWAYS_DECLINE_EMAIL_PHONE:
+        bcds1.treatments.append(t.EMAIL_DECLINED)
+        bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
+    else:
+        if demographics.email:
+            bcds1.patient.email = demographics.email
+        elif demographics.patient_declined_email:
+            bcds1.treatments.append(t.EMAIL_DECLINED)
+        phone_number = demographics_translator.phone_number()
+        if phone_number:
+            bcds1.patient.phone_number = phone_number
+        elif demographics.patient_declined_phone:
+            bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
+
 
     fp17_exemption = episode.fp17exemptions_set.get()
     exemption_translator = ExceptionSerializer(fp17_exemption)

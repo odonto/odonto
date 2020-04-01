@@ -36,15 +36,19 @@
 <div class="row">
   <div class="col-md-5 with-decline">
     {% charfield field="Demographics.phone_number" style="vertical" element_name="tel" disabled="editing.demographics.patient_declined_phone" %}
+    {% if not ALWAYS_DECLINE_EMAIL_PHONE %}
     {% btn_checkbox field="Demographics.patient_declined_phone" style="vertical" change="editing.demographics.phone_number=''" %}
+    {% endif %}
   </div>
   <div class="col-md-5 col-md-offset-1 with-decline">
     {% charfield field="Demographics.email" disabled="editing.demographics.patient_declined_email" %}
+    {% if not ALWAYS_DECLINE_EMAIL_PHONE %}
     {% btn_checkbox field="Demographics.patient_declined_email" change="editing.demographics.email=''" %}
+    {% endif %}
   </div>
 </div>
 
-<div class="row content-offset-25" >
+<div class="row {% if not ALWAYS_DECLINE_EMAIL_PHONE %}content-offset-25{% endif %}" >
   <div class="col-md-5">
     {% charfield field="Demographics.house_number_or_name" disabled="editing.demographics.protected" style="vertical" %}
   </div>

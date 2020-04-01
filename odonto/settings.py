@@ -341,6 +341,10 @@ FP17O_CONTRACT_NUMBER = 1946890002
 FAILED_TO_SEND_WARNING_THRESHOLD = 6
 
 
+# always decline the patient email/phone when sending down stream
+ALWAYS_DECLINE_EMAIL_PHONE = True
+
+
 try:
     from odonto.local_settings import *
 except ImportError:
