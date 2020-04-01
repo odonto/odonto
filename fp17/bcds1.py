@@ -69,6 +69,22 @@ class Patient(Message):
                 'required': False,
             },
 
+            # email
+            'email': {
+                'type': 'string',
+                'regex': '^\S+@\S+\.\S+$',
+                'required': False,
+                'maxlength': 100,
+            },
+
+            # phone number
+            'phone_number': {
+                'type': 'string',
+                'regex': '^0[0-9]{10}$',
+                'required': False,
+                'maxlength': 100,
+            },
+
             # NHS number
             #
             # The patient's unique new NHS number.
@@ -523,6 +539,8 @@ class BCDS1(Message):
             'nhsno': 'nhs_number',
             'ptttl': 'title',
             'prvsur': 'previous_surname',
+            'ptemail': 'email',
+            'ptmobile': 'phone_number'
         }.items():
             if v in x['patient']:
                 pat.attrib[k] = x['patient'][v]

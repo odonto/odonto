@@ -137,6 +137,27 @@
                         </xs:restriction>
                      </xs:simpleType>
                   </xs:attribute>
+                  <xs:attribute name="ptemail">
+                     <xs:annotation>
+                        <xs:documentation>Patient email</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:maxLength value="100"/>
+                           <xs:minLength value="2"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
+                  <xs:attribute name="ptmobile">
+                     <xs:annotation>
+                        <xs:documentation>Patient mobile phone number</xs:documentation>
+                     </xs:annotation>
+                     <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                           <xs:length value="11"/>
+                        </xs:restriction>
+                     </xs:simpleType>
+                  </xs:attribute>
                   <xs:attribute name="dob" use="required">
                      <xs:annotation>
                         <xs:documentation>Date of birth</xs:documentation>

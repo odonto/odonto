@@ -166,10 +166,10 @@ class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
 
 class DemographicsTranslatorTestCase(OpalTestCase):
     def setUp(self):
-        patient, episode = self.new_patient_and_episode_please()
+        patient, self.episode = self.new_patient_and_episode_please()
         self.demographics = patient.demographics()
 
-    def test_with_demographics(self):
+    def test_with_ethnicity(self):
         self.demographics.ethnicity = "Other ethnic group"
         self.demographics.save()
         self.assertEqual(
@@ -182,6 +182,20 @@ class DemographicsTranslatorTestCase(OpalTestCase):
             serializers.DemographicsTranslator(self.demographics).ethnicity()
         self.assertEqual(
             str(e.exception), "Unable to find an ethnicity for patient"
+        )
+
+    def test_phone_number(self):
+        self.demographics.phone_number = "078 8761 9000"
+        self.demographics.save()
+        self.assertEqual(
+            serializers.DemographicsTranslator(self.demographics).phone_number(),
+            "07887619000"
+        )
+        self.demographics.phone_number = "078-8761-9000"
+        self.demographics.save()
+        self.assertEqual(
+            serializers.DemographicsTranslator(self.demographics).phone_number(),
+            "07887619000"
         )
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):
