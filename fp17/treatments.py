@@ -345,6 +345,7 @@ SEDATION_SERVICES = Treatment(code=9166)
 
 
 # Orthodontic Data Set
+COMMISSIONER_APPROVAL = Treatment(code=9177)
 REMOVABLE_UPPER_APPLIANCE = Treatment(code=9401)
 REMOVABLE_LOWER_APPLIANCE = Treatment(code=9402)
 FUNCTIONAL_APPLIANCE = Treatment(code=9403)

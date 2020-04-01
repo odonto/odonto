@@ -22,6 +22,7 @@ def annotate(bcds1):
     bcds1.treatments = [
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.ASSESS_AND_REVIEW,
+        treatments.COMMISSIONER_APPROVAL,
         treatments.RADIOGRAPHS(3),
         treatments.ORTHODONTIC_EXTRACTIONS(["45", "54"]),
         treatments.DAY_OF_REFERRAL(11),
@@ -56,7 +57,8 @@ def from_model(bcds1, patient, episode):
 
     episode.fp17exemptions_set.update(
         expectant_mother=True,
-        evidence_of_exception_or_remission_seen=True
+        evidence_of_exception_or_remission_seen=True,
+        commissioner_approval=True
     )
 
     episode.orthodonticdataset_set.update(
