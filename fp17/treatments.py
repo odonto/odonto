@@ -97,6 +97,17 @@ class FISSURE_SEALANTS(Treatment):
     def __init__(self, num_teeth):
         super().__init__(code=9303, instance_count=num_teeth)
 
+class TREATMENT_TYPE(Treatment):
+    """
+    Treatment Type
+    instance count `1` for Proposed
+    incstance count `2` for Completed / Abandoned / Discontinued Treatment
+    """
+    def __init__(self, instance_count):
+        super().__init__(code=9303, instance_count=instance_count)
+
+PROPOSED_TREATMENT = TREATMENT_TYPE(instance_count=1)
+COMPLETED_TREATMENT = TREATMENT_TYPE(instance_count=2)
 
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
