@@ -439,6 +439,13 @@ class DemographicsTranslator(TreatmentSerializer):
             raise SerializerValidationError('Unable to find an ethnicity for patient')
         return patient_ethnicity
 
+    def phone_number(self):
+        # we let people enter spaces and dashes but upstream
+        # are not so forgiving
+        phone_number = self.model_instance.phone_number
+        if phone_number:
+            return phone_number.replace(" ", "").replace("-", "")
+
     def address(self):
         address_list = [
             "{} {}".format(
@@ -603,6 +610,17 @@ def translate_to_fp17o(bcds1, episode):
         OrthodonticAssessmentTranslator,
         OrthodonticTreatmentTranslator,
     ]
+
+    if demographics.email:
+        bcds1.patient.email = demographics.email
+    elif demographics.patient_declined_email:
+        bcds1.treatments.append(t.EMAIL_DECLINED)
+
+    phone_number = demographics_translator.phone_number()
+    if phone_number:
+        bcds1.patient.phone_number = phone_number
+    elif demographics.patient_declined_phone:
+        bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
 
     for translator in translators:
         bcds1.treatments.extend(translator(episode).to_messages())
