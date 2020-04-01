@@ -16,7 +16,8 @@ describe('Fp17OAssessmentType', function() {
         },
         orthodontic_treatment: {
           completion_type: "Treatment completed"
-        }
+        },
+        orthodontic_data_set: {}
       };
   });
 
@@ -88,6 +89,30 @@ describe('Fp17OAssessmentType', function() {
     it('should not error if there is a regulation', function(){
       editing.orthodontic_treatment.completion_type = "";
       editing.orthodontic_treatment.replacement = true;
+      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+    });
+  });
+
+  describe('treatment type is proposed but assessment type is not assess and appliance', function(){
+    it('should error if assessment is not assess and appliance fitted but treatment type is proposed', function(){
+      editing.orthodontic_data_set.treatment_type = "Proposed"
+      editing.orthodontic_assessment.assessment = "Assessment & Review";
+      expect(Fp17OAssessmentType(editing)).toEqual({
+        orthodontic_assessment: {
+          assessment: "Treatment type 'Proposed' requires an assessment of 'Assess & appliance fitted'"
+        }
+      });
+    });
+
+    it('should not error if assessment type is assess and appliance fitted and treatment is proposed', function(){
+      editing.orthodontic_data_set.treatment_type = "Proposed"
+      editing.orthodontic_assessment.assessment = "Assess & appliance fitted";
+      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+    })
+
+    it('should not error if assessment is not proposed', function(){
+      editing.orthodontic_data_set.treatment_type = undefined;
+      editing.orthodontic_assessment.assessment = "Assessment & Review";
       expect(Fp17OAssessmentType(editing)).toBe(undefined);
     });
   });
