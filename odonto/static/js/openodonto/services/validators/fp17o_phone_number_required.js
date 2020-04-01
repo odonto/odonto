@@ -22,7 +22,7 @@ angular.module('opal.services').factory('Fp17OPhoneNumberRequired', function(toM
     var cleanedNumber = number.split("-").join("")
     cleanedNumber = cleanedNumber.split(" ").join("");
 
-    if(cleanedNumber.length !== 11 || isNaN(cleanedNumber)){
+    if(cleanedNumber.length !== 11 || isNaN(cleanedNumber) || cleanedNumber.indexOf("0") !== 0){
       return {
         demographics: {
           phone_number: "Mobile number is incorrect"

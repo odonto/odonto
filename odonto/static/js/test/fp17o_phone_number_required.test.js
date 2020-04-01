@@ -50,6 +50,11 @@ describe('Fp17OPhoneNumberRequired', function() {
     expect(Fp17OPhoneNumberRequired(editing)).toEqual(inCorrectError);
   });
 
+  it("should error if the number doesn't start with 0", function(){
+    editing.demographics.phone_number = "1785 832 19";
+    expect(Fp17OPhoneNumberRequired(editing)).toEqual(inCorrectError);
+  });
+
   it('should not error if the patient has declined', function(){
     editing.demographics.patient_declined_phone = true;
     expect(Fp17OPhoneNumberRequired(editing)).toBe(undefined);
