@@ -74,32 +74,8 @@ class OdontoUserAdmin(UserProfileAdmin):
         return ''
 
 
-class PatientAdmin(VersionAdmin):
-    list_display = ('__str__', 'patient_detail_link')
-
-    search_fields = [
-        'demographics__first_name',
-        'demographics__surname',
-        'demographics__hospital_number'
-    ]
-
-    def patient_detail_url(self, obj):
-        return reverse('odonto-patient-detail', kwargs={"pk": obj.id})
-
-    def patient_detail_link(self, obj):
-        url = self.patient_detail_url(obj)
-        return format_html(
-            "<a href='{url}'>{url}</a>", url=url
-        )
-
-    def view_on_site(self, obj):
-        return self.patient_detail_url(obj)
-
-
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
-admin.site.unregister(Patient)
-admin.site.register(Patient, PatientAdmin)
 admin.site.register(models.PerformerNumber, PerformerNumberAdmin)
 admin.site.unregister(User)
 admin.site.register(User, OdontoUserAdmin)

@@ -42,9 +42,6 @@ class OdontoPagePathway(pathway.PagePathway):
         else:
             return base
 
-    def redirect_url(self, user=None, patient=None, episode=None):
-        return "/patient/{0}/".format(patient.id)
-
 
 class AddPatientPathway(OdontoPagePathway):
     display_name = "Register Patient"
