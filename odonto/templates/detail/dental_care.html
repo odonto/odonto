@@ -25,4 +25,69 @@
 
 
 
+<div class="row content-offset">
+  <a ng-class="{disabled: dentalCare.hasOpenFp17}" class="btn btn-primary btn-lg pull-right open-claim-button"
+    href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17Pk' %}">
+    Open FP17
+  </a>
+  <a ng-class="{disabled: dentalCare.hasOpenFp17o}" class="btn btn-primary btn-lg pull-right open-claim-button"
+    href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17oPk' %}">
+    Open FP17O
+  </a>
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-12">
+    <table class="table table-striped">
+      <tr ng-repeat="episode in dentalCare.openAndSubmittedEpisodes | orderBy:'-id'">
+        <td>[[ episode.category_name ]]</td>
+        <td>[[ episode.fp17_treatment_category[0].treatment_category ]]</td>
+        <td>[[ episode.stage ]]</td>
+        <td>[[ episode.fp17_dental_care_provider[0].provider_location_number ]]</td>
+        <td>[[ episode.fp17_dental_care_provider[0].performer ]]</td>
+        <td>
+          <span ng-show="episode.category_name === 'FP17'">
+            [[ episode.fp17_incomplete_treatment[0].date_of_acceptance  | displayDate ]]
+          </span>
+          <span ng-show="episode.category_name === 'FP17O'">
+            [[ episode.orthodontic_treatment[0].date_of_completion  | displayDate ]]
+          </span>
+        </td>
+        <td>
+          <span ng-show="episode.stage === 'Submitted'">
+            <a class="btn btn-small btn-default" href="/#/summary/[[ episode.category_name.toLowerCase() ]]/[[ patient.id  ]]/[[ episode.id ]]">
+              View
+            </a>
+          </span>
+          <span ng-hide="episode.stage === 'Submitted'">
+            <span ng-show="episode.category_name === 'FP17'">
+              <a class="btn btn-small btn-primary" href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='episode.id' %}">
+                Edit &nbsp;
+              </a>
+            </span>
+            <span ng-show="episode.category_name === 'FP17O'">
+              <a class="btn btn-small btn-primary" href="{% link_url pathways.Fp17OPathway ngpatient='patient.id' ngepisode='episode.id' %}">
+                Edit &nbsp;
+              </a>
+            </span>
+          </span>
+        </td>
+        <td>
+          {% if roles.is_dentist %}
+          <span ng-show="episode.stage === 'Open'">
+            <span ng-show="episode.category_name === 'FP17'">
+              {% button_to 'Submit' pathways.SubmitFP17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-small btn-primary" %}
+            </span>
+            <span ng-show="episode.category_name === 'FP17O'">
+              {% button_to 'Submit' pathways.SubmitFP17OPathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-small btn-primary" %}
+            </span>
+          </span>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+
 
