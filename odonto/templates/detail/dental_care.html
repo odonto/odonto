@@ -1,81 +1,28 @@
 {% load panels %}
 {% load links %}
-<!-- Empty Episode View -->
-<div class="row content-offset" ng-hide="episode.fp17_incomplete_treatment[0].date_of_acceptance || episode.stage == 'Open Orthodontic' ">
-  <p class="lead text-center">
-    This treatment course has not yet started.
-    <br />
-    {% link_to "Open an FP17" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" %}
-    <br />
-    <br />
-    {% link_to "Open an FP17O" pathways.Fp17OPathway ngpatient="patient.id" ngepisode="episode.id" %}
-  <p>
+<div ng-repeat="demographics in patient.demographics">
+  <h1 class="patient-detail-heading">
+    [[ demographics.first_name ]] [[ demographics.surname ]] [[ demographics.date_of_birth | displayDate ]]
+  </h1>
+  <div class="row">
+    <div class="col-md-4">
+      <p>
+        NHS Number: <b>[[ demographics.nhs_number ]]</b>
+      </p>
+    </div>
+    <div class="col-md-3">
+      <p>
+        Sex: <b>[[ demographics.sex ]]</b>
+      </p>
+    </div>
+    <div class="col-md-1 col-md-offset-4">
+      <a ng-click="episode.recordEditor.editItem('demographics', 0)">
+        <i class="fa fa-pencil edit pull-right"></i>
+      </a>
+    </div>
+  </div>
 </div>
 
 
-<!-- mid Treatment View -->
-<div ng-show="episode.fp17_incomplete_treatment[0].date_of_acceptance">
-  <h2>
-    FP17 Summary {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17DentalCareProvider editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17IncompleteTreatment editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17Exemptions editable=False %}
-      {% record_panel models.Fp17TreatmentCategory editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17ClinicalDataSet editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17OtherDentalServices editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17Recall editable=False %}
-    </div>
-  </div>
-  <h2>
-    {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-</div>
 
-<!-- Orthodontic summary -->
-<div ng-show="episode.stage == 'Open Orthodontic'">
-  <h2>
-    FP170 Summary {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17DentalCareProvider editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17Exemptions editable=False %}
-      {% record_panel models.Fp17TreatmentCategory editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.OrthodonticDataSet editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.OrthodonticAssessment editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.OrthodonticTreatment editable=False %}
-    </div>
-  </div>
-  <h2>
-    {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-</div>
+
