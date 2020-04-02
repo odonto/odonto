@@ -1,7 +1,7 @@
 <div class="container-fluid">
   {% for episode_category in episode_categories %}
   {% if episode_category.detail_template %}
-  <div class="row" ng-show="view == null && episode.category_name == '{{ episode_category.display_name }}'">
+  <div class="row" ng-controller="DentalCareCtrl" ng-show="view == null && episode.category_name == '{{ episode_category.display_name }}'">
     {% include episode_category.detail_template %}
   </div>
   {% endif %}
