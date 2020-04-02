@@ -642,6 +642,8 @@ def translate_to_fp17o(bcds1, episode):
 
 
     fp17_exemption = episode.fp17exemptions_set.get()
+    if fp17_exemption.commissioner_approval:
+        bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
     exemption_translator = ExceptionSerializer(fp17_exemption)
     exemptions = exemption_translator.exemptions()
     charge = exemption_translator.charge()
