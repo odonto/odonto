@@ -1,7 +1,7 @@
 describe('Fp17OPhoneNumberRequired', function() {
   "use strict";
   var Fp17OPhoneNumberRequired;
-  var editing, requiredError, inCorrectError;
+  var editing, requiredError, inCorrectError, expected;
 
   beforeEach(module('opal.filters'));
   beforeEach(module('opal.services'));
@@ -26,6 +26,10 @@ describe('Fp17OPhoneNumberRequired', function() {
       }
   });
 
+  var getError = function(errStr){
+    return {demographics: {phone_number: errStr}};
+  }
+
   it('should error if the field is empty', function(){
     expect(Fp17OPhoneNumberRequired(editing)).toEqual(requiredError);
   });
@@ -37,17 +41,26 @@ describe('Fp17OPhoneNumberRequired', function() {
 
   it('should error if the field contains letters', function(){
     editing.demographics.phone_number = "0785 832 197a";
-    expect(Fp17OPhoneNumberRequired(editing)).toEqual(inCorrectError);
+    expected = getError("Mobile number is not a number");
+    expect(Fp17OPhoneNumberRequired(editing)).toEqual(expected);
   });
 
   it('should error if the field is too long', function(){
     editing.demographics.phone_number = "0785 832 1971 12";
-    expect(Fp17OPhoneNumberRequired(editing)).toEqual(inCorrectError);
+    expected = getError("Mobile number is too long");
+    expect(Fp17OPhoneNumberRequired(editing)).toEqual(expected);
   });
 
   it('should error if the field is too short', function(){
     editing.demographics.phone_number = "0785 832 19";
-    expect(Fp17OPhoneNumberRequired(editing)).toEqual(inCorrectError);
+    expected = getError("Mobile number is too short");
+    expect(Fp17OPhoneNumberRequired(editing)).toEqual(expected);
+  });
+
+  it("should error if the number doesn't start with 0", function(){
+    editing.demographics.phone_number = "1785 832 1990";
+    expected = getError("Mobile number must begin with '0'");
+    expect(Fp17OPhoneNumberRequired(editing)).toEqual(expected);
   });
 
   it('should not error if the patient has declined', function(){
