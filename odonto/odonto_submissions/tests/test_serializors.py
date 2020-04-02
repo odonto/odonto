@@ -225,6 +225,33 @@ class Fp17TreatmentCategoryTestCase(OpalTestCase):
         serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
 
+class OrthodonticDataSetTranslatorTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.data_set = self.episode.orthodonticdataset_set.get()
+
+    def test_to_messages_proposed(self):
+        self.data_set.treatment_type = models.OrthodonticDataSet.PROPOSED
+        self.data_set.save()
+        self.assertEqual(
+            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
+            [treatments.TREATMENT_TYPE(1)]
+        )
+
+    def test_to_messages_completed(self):
+        self.data_set.treatment_type = models.OrthodonticDataSet.COMPLETED
+        self.data_set.save()
+        self.assertEqual(
+            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
+            [treatments.TREATMENT_TYPE(2)]
+        )
+
+    def test_to_messages_none(self):
+        self.assertEqual(
+            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
+            []
+        )
+
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):
         field_to_result = {
