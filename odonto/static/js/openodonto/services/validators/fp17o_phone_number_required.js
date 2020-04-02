@@ -21,11 +21,24 @@ angular.module('opal.services').factory('Fp17OPhoneNumberRequired', function(toM
 
     var cleanedNumber = number.split("-").join("")
     cleanedNumber = cleanedNumber.split(" ").join("");
+    var errorStr = null;
+    if(cleanedNumber.length > 11){
+      errorStr = "Mobile number is too long";
+    }
+    else if(cleanedNumber.length < 11){
+      errorStr = "Mobile number is too short";
+    }
+    else if(isNaN(cleanedNumber)){
+      errorStr = "Mobile number is not a number";
+    }
+    else if(cleanedNumber.indexOf("0")){
+      errorStr = "Mobile number must begin with '0'";
+    }
 
-    if(cleanedNumber.length !== 11 || isNaN(cleanedNumber) || cleanedNumber.indexOf("0") !== 0){
+    if(errorStr){
       return {
         demographics: {
-          phone_number: "Mobile number is incorrect"
+          phone_number: errorStr
         }
       }
     }
