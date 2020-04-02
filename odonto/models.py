@@ -20,6 +20,7 @@ class Location(models.Location):
 
 
 class Allergies(models.Allergies):
+    _icon = None
     pass
 
 
@@ -28,10 +29,12 @@ class Diagnosis(models.Diagnosis):
 
 
 class PastMedicalHistory(models.PastMedicalHistory):
+    _icon = None
     pass
 
 
 class Treatment(models.Treatment):
+    _icon = None
     pass
 
 
@@ -40,6 +43,7 @@ class SymptomComplex(models.SymptomComplex):
 
 
 class PatientConsultation(models.PatientConsultation):
+    _icon = None
     pass
 
 
