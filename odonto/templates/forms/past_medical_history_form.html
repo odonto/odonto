@@ -1,14 +1,14 @@
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% charfield field="Allergies.drug" %}
+    {% charfield field="PastMedicalHistory.condition" %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% btn_checkbox field="Allergies.provisional" %}
+    {% btn_checkbox field="PastMedicalHistory.year" %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-11">
-    {% charfield field="Allergies.details" %}
+    {% charfield field="PastMedicalHistory.details" %}
   </div>
 </div
