@@ -1,9 +1,37 @@
 from lxml import etree
+import re
 from opal.core.test import OpalTestCase
 from fp17 import treatments
 from fp17 import bcds1
 from fp17 import message
 
+
+class PatientTestCase(OpalTestCase):
+    def test_email_regex(self):
+        regex = re.compile(bcds1.Patient.Meta.schema["email"]["regex"])
+        self.assertTrue(
+            regex.match("Jane.doe@nhs.net")
+        )
+        self.assertFalse(
+            regex.match("Jane.doe.nhs.net")
+        )
+        self.assertFalse(
+            regex.match("Janedoe@nhsnet")
+        )
+
+    def test_phone_number_regex(self):
+        regex = re.compile(bcds1.Patient.Meta.schema["phone_number"]["regex"])
+        self.assertTrue(
+            regex.match("01111111111")
+        )
+        self.assertFalse(
+            regex.match("11111111111")
+        )
+
+        # too long
+        self.assertFalse(
+            regex.match("011111111111")
+        )
 
 class CreateTreatmentsTestCase(OpalTestCase):
     def setUp(self):

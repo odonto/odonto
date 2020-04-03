@@ -24,21 +24,35 @@
     {% btn_radio field="Demographics.sex" required=True %}
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-5">
-    {% charfield field="Demographics.phone_number" style="vertical" element_name="tel" %}
-  </div>
-  <div class="col-md-5 col-md-offset-1">
     {% odonto_select field="Demographics.ethnicity" required=True style="vertical" %}
   </div>
 </div>
 <div class="row">
+  <h2>Contact Details</h2>
+</div>
+<div class="row">
+  <div class="col-md-5 with-decline">
+    {% charfield field="Demographics.phone_number" style="vertical" element_name="tel" disabled="editing.demographics.patient_declined_phone" %}
+    {% if not ALWAYS_DECLINE_EMAIL_PHONE %}
+    {% btn_checkbox field="Demographics.patient_declined_phone" style="vertical" change="editing.demographics.phone_number=''" %}
+    {% endif %}
+  </div>
+  <div class="col-md-5 col-md-offset-1 with-decline">
+    {% charfield field="Demographics.email" disabled="editing.demographics.patient_declined_email" %}
+    {% if not ALWAYS_DECLINE_EMAIL_PHONE %}
+    {% btn_checkbox field="Demographics.patient_declined_email" change="editing.demographics.email=''" %}
+    {% endif %}
+  </div>
+</div>
+
+<div class="row {% if not ALWAYS_DECLINE_EMAIL_PHONE %}content-offset-25{% endif %}" >
   <div class="col-md-5">
     {% charfield field="Demographics.house_number_or_name" disabled="editing.demographics.protected" style="vertical" %}
   </div>
-</div>
-<div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5 col-md-offset-1">
     {% charfield field="Demographics.street" disabled="editing.demographics.protected" maxlength="32" style="vertical" %}
   </div>
 </div>
@@ -46,9 +60,7 @@
   <div class="col-md-5">
     {% charfield field="Demographics.city_or_town" disabled="editing.demographics.protected" maxlength="32" style="vertical" %}
   </div>
-</div>
-<div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5 col-md-offset-1">
     {% charfield field="Demographics.county" disabled="editing.demographics.protected" maxlength="32" style="vertical" %}
   </div>
 </div>
@@ -56,9 +68,7 @@
   <div class="col-md-5">
     {% charfield field="Demographics.post_code" disabled="editing.demographics.protected" maxlength="8" pattern='/^[a-zA-Z\d ]+$/' label="Post code" pattern_error="Letters and numbers only" %}
   </div>
-</div>
-<div class="row">
-  <div class="col-md-5">
+  <div class="col-md-5 col-md-offset-1">
     {% btn_checkbox field="Demographics.protected" change="editing.demographics.house_number_or_name=''; editing.demographics.street=''; editing.demographics.city_or_town=''; editing.demographics.county=''; editing.demographics.post_code=''" maxlength="32" %}
   </div>
 </div>

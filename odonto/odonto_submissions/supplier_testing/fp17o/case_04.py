@@ -1,4 +1,5 @@
 import datetime
+from django.conf import settings
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 from odonto import models
 from fp17 import treatments, exemptions
@@ -28,6 +29,12 @@ def annotate(bcds1):
         treatments.YEAR_APPLIANCE_FITTED(19),
         treatments.IOTN(4),
     ]
+
+    if settings.ALWAYS_DECLINE_EMAIL_PHONE:
+        bcds1.treatments.extend([
+            treatments.EMAIL_DECLINED,
+            treatments.PHONE_NUMBER_DECLINED
+        ])
 
     return bcds1
 

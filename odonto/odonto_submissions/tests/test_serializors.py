@@ -166,22 +166,36 @@ class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
 
 class DemographicsTranslatorTestCase(OpalTestCase):
     def setUp(self):
-        patient, episode = self.new_patient_and_episode_please()
+        patient, self.episode = self.new_patient_and_episode_please()
         self.demographics = patient.demographics()
 
-    def test_with_demographics(self):
+    def test_with_ethnicity(self):
         self.demographics.ethnicity = "Other ethnic group"
         self.demographics.save()
         self.assertEqual(
-            serializers.DemographicsTranslator(self.demographics).ethnicity(),
+            serializers.DemographicsTranslator(self.episode).ethnicity(),
             treatments.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP
         )
 
     def test_without_ethnicity(self):
         with self.assertRaises(serializers.SerializerValidationError) as e:
-            serializers.DemographicsTranslator(self.demographics).ethnicity()
+            serializers.DemographicsTranslator(self.episode).ethnicity()
         self.assertEqual(
             str(e.exception), "Unable to find an ethnicity for patient"
+        )
+
+    def test_phone_number(self):
+        self.demographics.phone_number = "078 8761 9000"
+        self.demographics.save()
+        self.assertEqual(
+            serializers.DemographicsTranslator(self.episode).phone_number(),
+            "07887619000"
+        )
+        self.demographics.phone_number = "078-8761-9000"
+        self.demographics.save()
+        self.assertEqual(
+            serializers.DemographicsTranslator(self.episode).phone_number(),
+            "07887619000"
         )
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):
@@ -210,6 +224,33 @@ class Fp17TreatmentCategoryTestCase(OpalTestCase):
         self.treatment_category.save()
         serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
+
+class OrthodonticDataSetTranslatorTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.data_set = self.episode.orthodonticdataset_set.get()
+
+    def test_to_messages_proposed(self):
+        self.data_set.treatment_type = models.OrthodonticDataSet.PROPOSED
+        self.data_set.save()
+        self.assertEqual(
+            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
+            [treatments.TREATMENT_TYPE(1)]
+        )
+
+    def test_to_messages_completed(self):
+        self.data_set.treatment_type = models.OrthodonticDataSet.COMPLETED
+        self.data_set.save()
+        self.assertEqual(
+            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
+            [treatments.TREATMENT_TYPE(2)]
+        )
+
+    def test_to_messages_none(self):
+        self.assertEqual(
+            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
+            []
+        )
 
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):

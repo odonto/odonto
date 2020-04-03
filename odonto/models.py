@@ -86,7 +86,18 @@ class Demographics(models.Demographics):
         max_length=255,
         null=True,
         blank=True,
-        verbose_name="Contact phone number"
+        verbose_name="Mobile phone number"
+    )
+    patient_declined_phone = fields.BooleanField(
+        default=False, blank=True, verbose_name="Patient declined"
+    )
+    email = fields.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    patient_declined_email = fields.BooleanField(
+        default=False, blank=True, verbose_name="Patient declined"
     )
     city_or_town = fields.CharField(
         max_length=255, null=True, blank=True,
@@ -186,6 +197,11 @@ class Fp17Exemptions(models.EpisodeSubrecord):
     patient_under_18 = fields.BooleanField(
         default=False,
         verbose_name="Patient under 18"
+    )
+
+    # only used by fp17Os
+    commissioner_approval = fields.BooleanField(
+        default=False
     )
     full_remission_hc2_cert = fields.BooleanField(
         default=False,
@@ -469,6 +485,14 @@ class Fp17Declaration(models.EpisodeSubrecord):
 class OrthodonticDataSet(models.EpisodeSubrecord):
     _is_singleton = True
 
+    PROPOSED = "Proposed"
+    COMPLETED = "Completed / Abandoned / Discontinued Treatment"
+
+    TREATMENT_TYPES = enum(PROPOSED, COMPLETED)
+
+    treatment_type            = fields.CharField(
+        choices=TREATMENT_TYPES, max_length=255, blank=True, null=True
+    )
     radiograph                = fields.IntegerField(blank=True, null=True)
     removable_upper_appliance = fields.BooleanField(default=False)
     removable_lower_appliance = fields.BooleanField(default=False)

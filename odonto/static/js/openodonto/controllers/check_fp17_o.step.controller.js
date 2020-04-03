@@ -21,7 +21,10 @@ angular.module('opal.controllers').controller(
     Fp17OTreatmentAestheticComponent,
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
-    Fp17OCompletionType
+    Fp17OCompletionType,
+    Fp17OPhoneNumberRequired,
+    Fp17OEmailRequired,
+    Fp17OCommissionerApproval
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -41,7 +44,10 @@ angular.module('opal.controllers').controller(
     Fp17OTreatmentAestheticComponent,
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
-    Fp17OCompletionType
+    Fp17OCompletionType,
+    // Fp17OPhoneNumberRequired, # enable when ALWAYS_DECLINE_EMAIL_PHONE
+    // Fp17OEmailRequired, # is turned off.
+    Fp17OCommissionerApproval
   ];
 
   var validate = function(){
@@ -57,9 +63,10 @@ angular.module('opal.controllers').controller(
 
   scope.$watch("editing", validate, true);
 
+  $rootScope.episodeSubmitted = step["episode_submitted"]
   $timeout(function(){
     scope.form.$setSubmitted();
     validate();
-    $rootScope.showSummary = $rootScope.isFormValid;
+    $rootScope.showSummary = $rootScope.isFormValid || $rootScope.episodeSubmitted;
   });
 });

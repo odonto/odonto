@@ -62,6 +62,18 @@ label{
   font-weight: normal;
 }
 
+.with-decline{
+    .form-group{
+        margin-bottom: 5px;
+    }
+
+    .btn-checkbox{
+        float: right;
+    }
+
+    margin-bottom: 10px;
+}
+
 .help-block {
     color: $error_red;
 }

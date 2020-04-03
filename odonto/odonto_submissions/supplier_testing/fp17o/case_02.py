@@ -19,6 +19,9 @@ def annotate(bcds1):
     }
 
     bcds1.treatments = [
+        treatments.COMPLETED_TREATMENT,
+        treatments.EMAIL_DECLINED,
+        treatments.PHONE_NUMBER_DECLINED,
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.REMOVABLE_UPPER_APPLIANCE,
         treatments.FIXED_UPPER_APPLIANCE,
@@ -46,6 +49,8 @@ def from_model(bcds1, patient, episode):
     demographics.sex = "Male"
     demographics.ethnicity = "Patient declined"
     demographics.date_of_birth = datetime.date(2006, 10, 15)
+    demographics.patient_declined_phone = True
+    demographics.patient_declined_email = True
     demographics.save()
 
     episode.fp17exemptions_set.update(
@@ -54,6 +59,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.orthodonticdataset_set.update(
+        treatment_type=models.OrthodonticDataSet.COMPLETED,
         removable_upper_appliance=True,
         fixed_upper_appliance=True,
         fixed_lower_appliance=True,

@@ -97,6 +97,17 @@ class FISSURE_SEALANTS(Treatment):
     def __init__(self, num_teeth):
         super().__init__(code=9303, instance_count=num_teeth)
 
+class TREATMENT_TYPE(Treatment):
+    """
+    Treatment Type
+    instance count `1` for Proposed
+    incstance count `2` for Completed / Abandoned / Discontinued Treatment
+    """
+    def __init__(self, instance_count):
+        super().__init__(code=9303, instance_count=instance_count)
+
+PROPOSED_TREATMENT = TREATMENT_TYPE(instance_count=1)
+COMPLETED_TREATMENT = TREATMENT_TYPE(instance_count=2)
 
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
@@ -333,6 +344,9 @@ ETHNIC_ORIGIN_15_CHINESE = Treatment(code=9025, instance_count=15)
 ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP = Treatment(code=9025, instance_count=16)
 ETHNIC_ORIGIN_PATIENT_DECLINED = Treatment(code=9025, instance_count=99)
 
+EMAIL_DECLINED = Treatment(code=9175)
+PHONE_NUMBER_DECLINED = Treatment(code=9176)
+
 # "Part 6 Other Services"
 DOMICILIARY_SERVICES = Treatment(code=9152)
 SEDATION_SERVICES = Treatment(code=9166)
@@ -342,6 +356,7 @@ SEDATION_SERVICES = Treatment(code=9166)
 
 
 # Orthodontic Data Set
+COMMISSIONER_APPROVAL = Treatment(code=9177)
 REMOVABLE_UPPER_APPLIANCE = Treatment(code=9401)
 REMOVABLE_LOWER_APPLIANCE = Treatment(code=9402)
 FUNCTIONAL_APPLIANCE = Treatment(code=9403)

@@ -310,7 +310,7 @@ DEFAULT_DOMAIN = 'http://openodonto.com/'
 # Begins OPAL Settings you should edit !
 
 OPAL_BRAND_NAME = 'Open Odonto FP17'
-VERSION_NUMBER = '0.29.0'
+VERSION_NUMBER = '0.32.0'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -340,6 +340,10 @@ FP17O_CONTRACT_NUMBER = 1946890002
 
 # above this the email about the daily submissins will say URGENT
 FAILED_TO_SEND_WARNING_THRESHOLD = 6
+
+
+# always decline the patient email/phone when sending down stream
+ALWAYS_DECLINE_EMAIL_PHONE = True
 
 
 try:

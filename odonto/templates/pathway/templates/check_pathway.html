@@ -5,9 +5,14 @@
   <div class="row">
     <div class="row"> <!-- Start demographics banner -->
       <div class="col-md-8">
-        <p>
+        <p ng-hide="episodeSubmitted">
           Please review the details of this submission before sending to the BSA
         </p>
+        <h2 ng-show="episodeSubmitted">
+          <strong>
+         Submitted to the BSA
+          </strong>
+        </h2>
       </div>
     </div> <!-- end demographics banner -->
     {% include pathway.summary_template with pathway=1 %}
@@ -32,7 +37,7 @@
 </div>
 
 
-<div class="row content-offset-below-150">
+<div ng-hide="episodeSubmitted" class="row content-offset-below-150">
   <div class="col-md-6">
     <button ng-show="showSummary === false"
       class="btn btn-lg btn-primary btn-save"
