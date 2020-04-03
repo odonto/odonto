@@ -35,7 +35,8 @@ class PastMedicalHistory(models.PastMedicalHistory):
 
 class Treatment(models.Treatment):
     _icon = None
-    pass
+    class Meta:
+        verbose_name = "Medication"
 
 
 class SymptomComplex(models.SymptomComplex):
@@ -44,7 +45,9 @@ class SymptomComplex(models.SymptomComplex):
 
 class PatientConsultation(models.PatientConsultation):
     _icon = None
-    pass
+
+    class Meta:
+        verbose_name = "Clinical Notes"
 
 
 class PerformerNumber(djangomodels.Model):
