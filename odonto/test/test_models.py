@@ -163,7 +163,6 @@ class DemographicsTestCase(OpalTestCase):
     def test_age(self, dt):
         dt.date.today.return_value = datetime.date(2019, 12, 1)
         self.demographics.date_of_birth = datetime.date(1990, 12, 1)
-        self.demographics.save()
         self.assertEqual(self.demographics.get_age(), 29)
         self.assertEqual(
             self.demographics.get_age(datetime.date(2009, 11, 30)),
@@ -175,5 +174,19 @@ class DemographicsTestCase(OpalTestCase):
         )
         self.assertEqual(
             self.demographics.get_age(datetime.date(2009, 12, 2)),
+            19
+        )
+
+        self.demographics.date_of_birth = datetime.date(1990, 12, 10)
+        self.assertEqual(
+            self.demographics.get_age(datetime.date(2009, 12, 9)),
+            18
+        )
+        self.assertEqual(
+            self.demographics.get_age(datetime.date(2009, 11, 19)),
+            18
+        )
+        self.assertEqual(
+            self.demographics.get_age(datetime.date(2009, 12, 10)),
             19
         )
