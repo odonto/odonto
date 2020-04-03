@@ -12,7 +12,7 @@
       <li class="content-offset-10 content-offset-below-10" ng-repeat="result in results">
         <div>
           <h4 class="inline">
-            <a class="orange-link" href="/patient/[[ result.patientId ]]/">
+            <a class="orange-link"  ng-href="[[ result.link ]]">
               [[ result.first_name ]] [[ result.surname ]] [[ result.hospitalNumber ]]
             </a>
           </h4>
