@@ -199,6 +199,10 @@ LOGGING = {
         }
     },
     'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
         'console': {
             'level': 'INFO',
             'filters': [],
@@ -221,6 +225,10 @@ LOGGING = {
             'handlers': ['console', 'mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
         },
         'odonto.requestLogger': {
             'handlers': ['console'],
