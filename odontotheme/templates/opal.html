@@ -32,11 +32,13 @@
                 </a>
               </li>
             {% endif %}
+            {% if view.request.user.profile.can_extract %}
             <li {% if request.resolver_match.url_name == "odonto-stats" %}class="active"{% endif %}>
               <a href="{% url 'odonto-stats' %}">
                 Stats
               </a>
             </li>
+            {% endif %}
           </ul>
 
 
