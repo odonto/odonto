@@ -1,0 +1,892 @@
+{
+  "condition": [
+    {
+      "name": "Abdominal aortic aneurysm"
+    },
+    {
+      "name": "Acne"
+    },
+    {
+      "name": "Acute cholecystitis"
+    },
+    {
+      "name": "Acute lymphoblastic leukaemia"
+    },
+    {
+      "name": "Acute myeloid leukaemia"
+    },
+    {
+      "name": "Acute pancreatitis"
+    },
+    {
+      "name": "Addison's disease"
+    },
+    {
+      "name": "Alcohol-related liver disease"
+    },
+    {
+      "name": "Allergic rhinitis"
+    },
+    {
+      "name": "Alzheimer's disease"
+    },
+    {
+      "name": "Anal cancer"
+    },
+    {
+      "name": "Anaphylaxis"
+    },
+    {
+      "name": "Angioedema"
+    },
+    {
+      "name": "Ankylosing spondylitis"
+    },
+    {
+      "name": "Anorexia nervosa"
+    },
+    {
+      "name": "Anxiety"
+    },
+    {
+      "name": "Anxiety disorders in children"
+    },
+    {
+      "name": "Appendicitis"
+    },
+    {
+      "name": "Arthritis"
+    },
+    {
+      "name": "Asbestosis"
+    },
+    {
+      "name": "Asthma"
+    },
+    {
+      "name": "Atopic eczema"
+    },
+    {
+      "name": "Attention deficit hyperactivity disorder (ADHD)"
+    },
+    {
+      "name": "Autistic spectrum disorder (ASD)"
+    },
+    {
+      "name": "Bacterial vaginosis"
+    },
+    {
+      "name": "Benign prostate enlargement"
+    },
+    {
+      "name": "Bile duct cancer (cholangiocarcinoma)"
+    },
+    {
+      "name": "Binge eating"
+    },
+    {
+      "name": "Bipolar disorder"
+    },
+    {
+      "name": "Bladder cancer"
+    },
+    {
+      "name": "Blood poisoning (sepsis)"
+    },
+    {
+      "name": "Bone cancer"
+    },
+    {
+      "name": "Bowel cancer"
+    },
+    {
+      "name": "Bowel incontinence"
+    },
+    {
+      "name": "Bowel polyps"
+    },
+    {
+      "name": "Brain stem death"
+    },
+    {
+      "name": "Brain tumours"
+    },
+    {
+      "name": "Breast cancer (female)"
+    },
+    {
+      "name": "Breast cancer (male)"
+    },
+    {
+      "name": "Bronchiectasis"
+    },
+    {
+      "name": "Bronchitis"
+    },
+    {
+      "name": "Bulimia"
+    },
+    {
+      "name": "Bunion"
+    },
+    {
+      "name": "Carcinoid syndrome and carcinoid tumours"
+    },
+    {
+      "name": "Catarrh"
+    },
+    {
+      "name": "Cellulitis"
+    },
+    {
+      "name": "Cervical cancer"
+    },
+    {
+      "name": "Chest infection"
+    },
+    {
+      "name": "Chest pain"
+    },
+    {
+      "name": "Chickenpox"
+    },
+    {
+      "name": "Chilblains"
+    },
+    {
+      "name": "Chronic fatigue syndrome"
+    },
+    {
+      "name": "Chronic kidney disease"
+    },
+    {
+      "name": "Chronic lymphocytic leukaemia"
+    },
+    {
+      "name": "Chronic myeloid leukaemia"
+    },
+    {
+      "name": "Chronic obstructive pulmonary disease"
+    },
+    {
+      "name": "Chronic pancreatitis"
+    },
+    {
+      "name": "Cirrhosis"
+    },
+    {
+      "name": "Clostridium difficile"
+    },
+    {
+      "name": "Coeliac disease"
+    },
+    {
+      "name": "Cold sore"
+    },
+    {
+      "name": "Coma"
+    },
+    {
+      "name": "Common cold"
+    },
+    {
+      "name": "Common heart conditions"
+    },
+    {
+      "name": "Congenital heart disease"
+    },
+    {
+      "name": "Conjunctivitis"
+    },
+    {
+      "name": "Constipation"
+    },
+    {
+      "name": "Coronavirus (COVID-19)"
+    },
+    {
+      "name": "Cough"
+    },
+    {
+      "name": "Crohn's disease"
+    },
+    {
+      "name": "Croup"
+    },
+    {
+      "name": "Cystic fibrosis"
+    },
+    {
+      "name": "Cystitis"
+    },
+    {
+      "name": "Deafblindness"
+    },
+    {
+      "name": "Deep vein thrombosis"
+    },
+    {
+      "name": "Dehydration"
+    },
+    {
+      "name": "Dementia"
+    },
+    {
+      "name": "Dementia with Lewy bodies"
+    },
+    {
+      "name": "Depression"
+    },
+    {
+      "name": "Dermatitis herpetiformis"
+    },
+    {
+      "name": "Diabetes"
+    },
+    {
+      "name": "Diarrhoea"
+    },
+    {
+      "name": "Discoid eczema"
+    },
+    {
+      "name": "Diverticular disease and diverticulitis"
+    },
+    {
+      "name": "Dizziness (Lightheadedness)"
+    },
+    {
+      "name": "Down's syndrome"
+    },
+    {
+      "name": "Dry mouth"
+    },
+    {
+      "name": "Dysphagia (swallowing problems)"
+    },
+    {
+      "name": "Dystonia"
+    },
+    {
+      "name": "Earache"
+    },
+    {
+      "name": "Earwax build-up"
+    },
+    {
+      "name": "Ebola virus disease"
+    },
+    {
+      "name": "Ectopic pregnancy"
+    },
+    {
+      "name": "Endometriosis"
+    },
+    {
+      "name": "Epilepsy"
+    },
+    {
+      "name": "Erectile dysfunction (impotence)"
+    },
+    {
+      "name": "Escherichia coli (E. coli) O157"
+    },
+    {
+      "name": "Ewing sarcoma"
+    },
+    {
+      "name": "Eye cancer"
+    },
+    {
+      "name": "Febrile seizures"
+    },
+    {
+      "name": "Fever in children"
+    },
+    {
+      "name": "Fibroids"
+    },
+    {
+      "name": "Fibromyalgia"
+    },
+    {
+      "name": "Flatulence"
+    },
+    {
+      "name": "Flu"
+    },
+    {
+      "name": "Foetal alcohol syndrome"
+    },
+    {
+      "name": "Food poisoning"
+    },
+    {
+      "name": "Fungal nail infection"
+    },
+    {
+      "name": "Gallbladder cancer"
+    },
+    {
+      "name": "Gallstones"
+    },
+    {
+      "name": "Ganglion cyst"
+    },
+    {
+      "name": "Gastroenteritis"
+    },
+    {
+      "name": "Gastro-oesophageal reflux disease (GORD)"
+    },
+    {
+      "name": "Genital herpes"
+    },
+    {
+      "name": "Genital warts"
+    },
+    {
+      "name": "Germ cell tumours"
+    },
+    {
+      "name": "Glandular fever"
+    },
+    {
+      "name": "Gout"
+    },
+    {
+      "name": "Gum disease"
+    },
+    {
+      "name": "Haemorrhoids (piles)"
+    },
+    {
+      "name": "Hairy cell leukaemia"
+    },
+    {
+      "name": "Hand, foot and mouth disease"
+    },
+    {
+      "name": "Hay fever"
+    },
+    {
+      "name": "Head and neck cancer"
+    },
+    {
+      "name": "Head lice and nits"
+    },
+    {
+      "name": "Headaches"
+    },
+    {
+      "name": "Hearing loss"
+    },
+    {
+      "name": "Heart failure"
+    },
+    {
+      "name": "Hepatitis A"
+    },
+    {
+      "name": "Hepatitis B"
+    },
+    {
+      "name": "Hepatitis C"
+    },
+    {
+      "name": "Hiatus hernia"
+    },
+    {
+      "name": "High cholesterol"
+    },
+    {
+      "name": "HIV"
+    },
+    {
+      "name": "Hodgkin lymphoma"
+    },
+    {
+      "name": "Huntington's disease"
+    },
+    {
+      "name": "Hyperglycaemia (high blood sugar)"
+    },
+    {
+      "name": "Hyperhidrosis"
+    },
+    {
+      "name": "Hypoglycaemia (low blood sugar)"
+    },
+    {
+      "name": "Idiopathic pulmonary fibrosis"
+    },
+    {
+      "name": "Impetigo"
+    },
+    {
+      "name": "Indigestion"
+    },
+    {
+      "name": "Ingrown toenail"
+    },
+    {
+      "name": "Inherited heart conditions"
+    },
+    {
+      "name": "Insomnia"
+    },
+    {
+      "name": "Iron deficiency anaemia"
+    },
+    {
+      "name": "Irritable bowel syndrome (IBS)"
+    },
+    {
+      "name": "Irritable hip"
+    },
+    {
+      "name": "Itching"
+    },
+    {
+      "name": "Itchy bottom"
+    },
+    {
+      "name": "Kaposi's sarcoma"
+    },
+    {
+      "name": "Kidney cancer"
+    },
+    {
+      "name": "Kidney infection"
+    },
+    {
+      "name": "Kidney stones"
+    },
+    {
+      "name": "Labyrinthitis"
+    },
+    {
+      "name": "Lactose intolerance"
+    },
+    {
+      "name": "Langerhans cell histiocytosis"
+    },
+    {
+      "name": "Laryngeal (larynx) cancer"
+    },
+    {
+      "name": "Laryngitis"
+    },
+    {
+      "name": "Leg cramps"
+    },
+    {
+      "name": "Lichen planus"
+    },
+    {
+      "name": "Liver cancer"
+    },
+    {
+      "name": "Liver disease"
+    },
+    {
+      "name": "Liver tumours"
+    },
+    {
+      "name": "Loss of libido"
+    },
+    {
+      "name": "Lung cancer"
+    },
+    {
+      "name": "Lupus"
+    },
+    {
+      "name": "Lyme disease"
+    },
+    {
+      "name": "Lymphoedema"
+    },
+    {
+      "name": "Malaria"
+    },
+    {
+      "name": "Malignant brain tumour (cancerous)"
+    },
+    {
+      "name": "Malnutrition"
+    },
+    {
+      "name": "Measles"
+    },
+    {
+      "name": "Meningitis"
+    },
+    {
+      "name": "Menopause"
+    },
+    {
+      "name": "Mesothelioma"
+    },
+    {
+      "name": "Middle ear infection (otitis media)"
+    },
+    {
+      "name": "Migraine"
+    },
+    {
+      "name": "Miscarriage"
+    },
+    {
+      "name": "Motor neurone disease (MND)"
+    },
+    {
+      "name": "Mouth cancer"
+    },
+    {
+      "name": "Mouth ulcer"
+    },
+    {
+      "name": "Multiple myeloma"
+    },
+    {
+      "name": "Multiple sclerosis (MS)"
+    },
+    {
+      "name": "Mumps"
+    },
+    {
+      "name": "Meniere's disease"
+    },
+    {
+      "name": "Nasal and sinus cancer"
+    },
+    {
+      "name": "Nasopharyngeal cancer"
+    },
+    {
+      "name": "Neuroblastoma"
+    },
+    {
+      "name": "Neuroendocrine tumours"
+    },
+    {
+      "name": "Non-alcoholic fatty liver disease (NAFLD)"
+    },
+    {
+      "name": "Non-Hodgkin lymphoma"
+    },
+    {
+      "name": "Norovirus"
+    },
+    {
+      "name": "Nosebleed"
+    },
+    {
+      "name": "Obesity"
+    },
+    {
+      "name": "Obsessive compulsive disorder (OCD)"
+    },
+    {
+      "name": "Obstructive sleep apnoea"
+    },
+    {
+      "name": "Oesophageal cancer"
+    },
+    {
+      "name": "Oral thrush in adults"
+    },
+    {
+      "name": "Osteoarthritis"
+    },
+    {
+      "name": "Osteoporosis"
+    },
+    {
+      "name": "Osteosarcoma"
+    },
+    {
+      "name": "Otitis externa"
+    },
+    {
+      "name": "Ovarian cancer"
+    },
+    {
+      "name": "Ovarian cyst"
+    },
+    {
+      "name": "Overactive thyroid"
+    },
+    {
+      "name": "Paget's disease of the nipple"
+    },
+    {
+      "name": "Pancreatic cancer"
+    },
+    {
+      "name": "Panic disorder"
+    },
+    {
+      "name": "Parkinson's disease"
+    },
+    {
+      "name": "Pelvic organ prolapse"
+    },
+    {
+      "name": "Penile cancer"
+    },
+    {
+      "name": "Peripheral neuropathy"
+    },
+    {
+      "name": "Personality disorder"
+    },
+    {
+      "name": "Pleurisy"
+    },
+    {
+      "name": "Pneumonia"
+    },
+    {
+      "name": "Polymyalgia rheumatica"
+    },
+    {
+      "name": "Post-traumatic stress disorder (PTSD)"
+    },
+    {
+      "name": "Postnatal depression"
+    },
+    {
+      "name": "Pregnancy and baby"
+    },
+    {
+      "name": "Pressure ulcers"
+    },
+    {
+      "name": "Prostate cancer"
+    },
+    {
+      "name": "Psoriasis"
+    },
+    {
+      "name": "Psoriatic arthritis"
+    },
+    {
+      "name": "Psychosis"
+    },
+    {
+      "name": "Rare tumours"
+    },
+    {
+      "name": "Raynaud's phenomenon"
+    },
+    {
+      "name": "Reactive arthritis"
+    },
+    {
+      "name": "Restless legs syndrome"
+    },
+    {
+      "name": "Retinoblastoma"
+    },
+    {
+      "name": "Rhabdomyosarcoma"
+    },
+    {
+      "name": "Rheumatoid arthritis"
+    },
+    {
+      "name": "Ringworm and other fungal infections"
+    },
+    {
+      "name": "Rosacea"
+    },
+    {
+      "name": "Scabies"
+    },
+    {
+      "name": "Scarlet fever"
+    },
+    {
+      "name": "Schizophrenia"
+    },
+    {
+      "name": "Scoliosis"
+    },
+    {
+      "name": "Septic shock"
+    },
+    {
+      "name": "Sexually transmitted infections (STIs)"
+    },
+    {
+      "name": "Shingles"
+    },
+    {
+      "name": "Shortness of breath"
+    },
+    {
+      "name": "Sickle cell disease"
+    },
+    {
+      "name": "Sinusitis"
+    },
+    {
+      "name": "Sjogren's syndrome"
+    },
+    {
+      "name": "Skin cancer (melanoma)"
+    },
+    {
+      "name": "Skin cancer (non-melanoma)"
+    },
+    {
+      "name": "Slapped cheek syndrome"
+    },
+    {
+      "name": "Soft tissue sarcomas"
+    },
+    {
+      "name": "Sore throat"
+    },
+    {
+      "name": "Spleen problems and spleen removal"
+    },
+    {
+      "name": "Stillbirth"
+    },
+    {
+      "name": "Stomach ache and abdominal pain"
+    },
+    {
+      "name": "Stomach cancer"
+    },
+    {
+      "name": "Stomach ulcer"
+    },
+    {
+      "name": "Stress, anxiety and low mood"
+    },
+    {
+      "name": "Stroke"
+    },
+    {
+      "name": "Sudden infant death syndrome (SIDS)"
+    },
+    {
+      "name": "Suicide"
+    },
+    {
+      "name": "Sunburn"
+    },
+    {
+      "name": "Swollen glands"
+    },
+    {
+      "name": "Testicular cancer"
+    },
+    {
+      "name": "Testicular lumps and swellings"
+    },
+    {
+      "name": "Thirst"
+    },
+    {
+      "name": "Threadworms"
+    },
+    {
+      "name": "Thrush in men"
+    },
+    {
+      "name": "Thyroid cancer"
+    },
+    {
+      "name": "Tinnitus"
+    },
+    {
+      "name": "Tonsillitis"
+    },
+    {
+      "name": "Tooth decay"
+    },
+    {
+      "name": "Toothache"
+    },
+    {
+      "name": "Transient ischaemic attack (TIA)"
+    },
+    {
+      "name": "Trigeminal neuralgia"
+    },
+    {
+      "name": "Tuberculosis (TB)"
+    },
+    {
+      "name": "Type 1 diabetes"
+    },
+    {
+      "name": "Type 2 diabetes"
+    },
+    {
+      "name": "Ulcerative colitis"
+    },
+    {
+      "name": "Underactive thyroid"
+    },
+    {
+      "name": "Urinary incontinence"
+    },
+    {
+      "name": "Urinary tract infection (UTI)"
+    },
+    {
+      "name": "Urinary tract infection (UTI) in children"
+    },
+    {
+      "name": "Urticaria (hives)"
+    },
+    {
+      "name": "Vaginal cancer"
+    },
+    {
+      "name": "Vaginal thrush"
+    },
+    {
+      "name": "Varicose eczema"
+    },
+    {
+      "name": "Varicose veins"
+    },
+    {
+      "name": "Venous leg ulcer"
+    },
+    {
+      "name": "Vertigo"
+    },
+    {
+      "name": "Vitamin B12 or folate deficiency anaemia"
+    },
+    {
+      "name": "Vomiting in adults"
+    },
+    {
+      "name": "Vulval cancer"
+    },
+    {
+      "name": "Warts and verrucas"
+    },
+    {
+      "name": "Whooping cough"
+    },
+    {
+      "name": "Wilms tumour"
+    },
+    {
+      "name": "Womb (uterus) cancer"
+    },
+    {
+      "name": "Yellow fever"
+    }
+  ]
+}

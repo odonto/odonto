@@ -42,6 +42,10 @@ a:hover {
   border-radius: 0px;
 }
 
+.form-horizontal {
+  padding-left: 20px;
+}
+
 .form-horizontal .control-label,
 label {
   text-align: left;
@@ -382,6 +386,11 @@ label {
 
 .modal-header {
   background-color: #487cbc;
+}
+
+.modal-header h3 {
+  font-size: 24px;
+  padding-left: 20px;
 }
 
 .panel.panel-primary .panel-heading {

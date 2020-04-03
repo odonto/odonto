@@ -54,28 +54,6 @@ class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
         )
 
 
-class PatientDetailView(LoginRequiredMixin, DetailView):
-    model = Patient
-
-    def get_context_data(self, **k):
-        """
-        Add additional context variables to the patient
-        detail view.
-        """
-        context = super().get_context_data(**k)
-        patient = self.get_object()
-        episodes = patient.episode_set.filter(category_name__in=['FP17', 'FP17O'])
-
-        context['episodes']   = episodes
-        context['open_fp17']  = has_open_fp17(patient)
-        context['open_fp17o'] = has_open_fp17o(patient)
-
-        context['new_fp17_pk']  = patient.episode_set.get(category_name='FP17', stage='New').pk
-        context['new_fp17o_pk'] = patient.episode_set.get(category_name='FP17O', stage='New').pk
-
-        return context
-
-
 class FP17SummaryDetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'fp17_summary.html'

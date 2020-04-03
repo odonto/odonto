@@ -11,6 +11,7 @@ class DentalCareEpisodeCategory(episodes.EpisodeCategory):
 
 
 class AbstractOdontoCategory(object):
+    detail_template = None
     SUBMITTED = "Submitted"
     OPEN = "Open"
 
@@ -151,7 +152,6 @@ class AbstractOdontoCategory(object):
 
 class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
     display_name = "FP17"
-    detail_template = "n/a"
 
     def get_submit_link(self):
         patient_id = self.episode.patient_id
@@ -211,7 +211,6 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
 
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
     display_name = "FP17O"
-    detail_template = "n/a"
 
     def get_submit_link(self):
         patient_id = self.episode.patient_id

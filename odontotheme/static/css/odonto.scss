@@ -54,6 +54,10 @@ a:hover {
     border-radius: 0px;
 }
 
+.form-horizontal{
+    padding-left: 20px;
+}
+
 .form-horizontal .control-label,
 label{
   text-align: left;
@@ -61,6 +65,8 @@ label{
   color: $black_coral;
   font-weight: normal;
 }
+
+
 
 .with-decline{
     .form-group{
@@ -380,6 +386,10 @@ label{
 }
 .modal-header{
     background-color: rgb(72, 124, 188);
+    h3{
+        font-size: 24px;
+        padding-left: 20px;
+    }
 }
 
 
