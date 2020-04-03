@@ -27,11 +27,11 @@
 
 <div class="row content-offset">
   <a ng-class="{disabled: dentalCare.hasOpenFp17}" class="btn btn-primary btn-lg pull-right open-claim-button"
-    href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17Pk' %}">
+    href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17.id' %}">
     Open FP17
   </a>
   <a ng-class="{disabled: dentalCare.hasOpenFp17o}" class="btn btn-primary btn-lg pull-right open-claim-button"
-    href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17oPk' %}">
+    href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17o.id' %}">
     Open FP17O
   </a>
 </div>

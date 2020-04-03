@@ -12,10 +12,10 @@ angular.module('opal.controllers').controller(
   var fp17Andfp17os = _.reject($scope.patient.episodes, {category_name: 'Dental Care'});
 
   $scope.dentalCare = {
-    newFp17Pk: _.findWhere(fp17Andfp17os, {
+    newFp17: _.findWhere(fp17Andfp17os, {
       category_name: FP17, stage: NEW
     }),
-    newFp17oPk: _.findWhere(fp17Andfp17os, {
+    newFp17o: _.findWhere(fp17Andfp17os, {
       category_name: FP17O, stage: NEW
     }),
     hasOpenFp17: _.filter(fp17Andfp17os, {
