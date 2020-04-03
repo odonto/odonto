@@ -106,6 +106,8 @@ def odonto_datepicker(*args, **kwargs):
     api_name, field_name = get_field_name_and_api_name(kwargs["field"])
     context["model_api_name"] = api_name
     context["field_name"] = field_name
+    if "style" not in kwargs:
+        context["style"] = "vertical"
     if 'mindate' in kwargs:
         context['mindate'] = kwargs['mindate']
     context["user_options"] = kwargs.pop("user_options", False)
