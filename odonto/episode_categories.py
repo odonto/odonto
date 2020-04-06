@@ -125,6 +125,8 @@ class AbstractOdontoCategory(object):
             qs = Episode.objects.all()
         qs = qs.filter(category_name=cls.display_name)
         result = defaultdict(int)
+        start_of_today = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+        result["Sent today"] = qs.filter(submission__created__gte=start_of_today).count()
         result["Open"] = qs.filter(stage=cls.OPEN).count()
         result["Oldest unsent"] = None
         oldest_unsent = cls.get_oldest_unsent(qs)
