@@ -2,6 +2,15 @@
   <div class="col-sm-3">
     <span ng-show="item.when">[[ item.when | displayDate ]] <br /></span>
     <span ng-show="item.initials">[[ item.initials ]] <br /></span>
+    <span ng-show="item.provider_location_number">[[ item.provider_location_number ]] <br /></span>
   </div>
-  <div markdown="discussion" class="col-sm-9"></div>
+  <div class="col-sm-6">
+    <div markdown="discussion"></div>
+    <div class="row">
+      <div class="col-sm-12">
+        <b>Agreed Plan</b>
+      </div>
+    </div>
+    <div markdown="agreed_plan"></div>
+  </div>
 </div>

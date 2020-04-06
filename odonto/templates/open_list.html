@@ -26,7 +26,11 @@
               {{ episode.orthodontictreatment_set.get.date_of_completion }}
             {% endif %}
           </td>
-
+          <td>
+            <a class="btn btn-small btn-default" href="{{ episode.patient.get_absolute_url }}">
+              Patient
+            </a>
+          </td>
           <td>
             <a
               {% if episode.category_name == "FP17" %}

@@ -14,6 +14,19 @@ Core Opal models - these inherit from the abstract data models in
 opal.models but can be customised here with extra / altered fields.
 """
 
+LOCATION_NUMBERS = (
+    ('010108', 'Albion Road'),
+    ('010112', 'Amble'),
+    ('010113', 'Blyth'),
+    ('016027', 'Hexham'),
+    ('010109', 'Longbenton'),
+    ('24946', 'Morpeth NHS Centre'),
+    ('010117', 'Northgate'),
+    ('010116', 'Seaton Hirst'),
+    ('010111', 'Wallsend'),
+    ('010054', 'Ward 15, WGH'),
+)
+
 
 class Location(models.Location):
     _exclude_from_extract = True
@@ -37,7 +50,7 @@ class PastMedicalHistory(models.PastMedicalHistory):
 class Treatment(models.Treatment):
     _icon = None
     class Meta:
-        verbose_name = "Medication"
+        verbose_name = "Current Medication"
 
 
 class SymptomComplex(models.SymptomComplex):
@@ -49,6 +62,13 @@ class PatientConsultation(models.PatientConsultation):
 
     class Meta:
         verbose_name = "Clinical Notes"
+
+    agreed_plan = fields.TextField(blank=True, default="")
+    provider_location_number = fields.CharField(
+        max_length=255, blank=True, null=True,
+        verbose_name="Provider location",
+        choices=LOCATION_NUMBERS
+    )
 
 
 class PerformerNumber(djangomodels.Model):

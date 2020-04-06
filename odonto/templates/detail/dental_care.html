@@ -9,10 +9,16 @@
       <p>
         NHS Number: <b>[[ demographics.nhs_number ]]</b>
       </p>
+      <p>
+        Mobile Number: <b>[[ demographics.phone_number ]]</b>
+      </p>
     </div>
     <div class="col-md-3">
       <p>
         Sex: <b>[[ demographics.sex ]]</b>
+      </p>
+      <p>
+        Email: <b><a ng-show="demographics.email" href="mailto:[[ demographics.email ]]">[[ demographics.email ]] <i class="fa fa-envelope"></i></a></b>
       </p>
     </div>
     <div class="col-md-1 col-md-offset-4">
