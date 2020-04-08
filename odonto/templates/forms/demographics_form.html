@@ -1,6 +1,9 @@
 {% load forms %}
 {% load odonto_forms %}
 <div class="row">
+  <h2>Demographics</h2>
+</div>
+<div class="row">
   <div class="col-md-5">
     {% charfield field="Demographics.nhs_number" label="NHS number" maxlength="10" style="vertical" required=True %}
   </div>

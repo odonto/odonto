@@ -89,7 +89,8 @@ FP17_STEPS = (
         step_controller="CareProviderStepCtrl",
     ),
     pathway.Step(
-        model=models.Demographics
+        model=models.Demographics,
+        base_template="pathway/steps/step_base_without_display_name.html"
     ),
     pathway.Step(
         model=models.Fp17IncompleteTreatment,
@@ -247,7 +248,8 @@ FP17_O_STEPS = (
         step_controller="CareProviderStepCtrl",
     ),
     pathway.Step(
-        model=models.Demographics
+        model=models.Demographics,
+        base_template="pathway/steps/step_base_without_display_name.html"
     ),
     pathway.Step(model=models.Fp17Exemptions),
     pathway.Step(
