@@ -138,7 +138,12 @@ class AbstractOdontoCategory(object):
             submission = i.category.submission()
 
             if not submission:
-                result["Submitted but not sent"] += 1
+                # We should not have submissions sitting and waiting to send.
+                # They should have been submitted by the send_submissions cron job
+                # Therefore the most likely reason for no submission being sent down
+                # is that the submission failed due to a flaw in the form
+                # or that the patient has a protected address
+                result["Not sent! Because they are recently submitted, failed to send, or because they have a protected address"] += 1
             else:
                 if submission.state == submission.SENT:
                     result["Sent (result pending)"] += 1
