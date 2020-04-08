@@ -176,6 +176,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.admin',
     'plugins.add_patient_step',
+    'passwordreset',
 )
 
 # A sample logging configuration. The only tangible logging
