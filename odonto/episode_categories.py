@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone
 from collections import defaultdict
 from django.conf import settings
 from opal.core import episodes
@@ -125,7 +126,9 @@ class AbstractOdontoCategory(object):
             qs = Episode.objects.all()
         qs = qs.filter(category_name=cls.display_name)
         result = defaultdict(int)
-        start_of_today = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+        start_of_today = timezone.make_aware(
+            datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+        )
         result["Sent today"] = qs.filter(submission__created__gte=start_of_today).count()
         result["Open"] = qs.filter(stage=cls.OPEN).count()
         result["Oldest unsent"] = None
