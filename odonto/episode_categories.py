@@ -146,7 +146,7 @@ class AbstractOdontoCategory(object):
                 # Therefore the most likely reason for no submission being sent down
                 # is that the submission failed due to a flaw in the form
                 # or that the patient has a protected address
-                result["Not sent! Because they are recently submitted, failed to send, or because they have a protected address"] += 1
+                result["Very recent, threw exception or protected address"] += 1
             else:
                 if submission.state == submission.SENT:
                     result["Sent (result pending)"] += 1
