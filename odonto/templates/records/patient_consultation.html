@@ -5,12 +5,21 @@
     <span ng-show="item.provider_location_number">[[ item.provider_location_number ]] <br /></span>
   </div>
   <div class="col-sm-6">
-    <div markdown="discussion"></div>
-    <div class="row">
-      <div class="col-sm-12">
-        <b>Agreed Plan</b>
+    <span ng-show="item.discussion">
+      <div class="row">
+        <div class="col-sm-12">
+          <b>Discussion</b>
+        </div>
       </div>
-    </div>
-    <div markdown="agreed_plan"></div>
+      <div markdown="discussion"></div>
+    </span>
+    <span ng-show="item.agreed_plan">
+      <div class="row">
+        <div class="col-sm-12">
+          <b>Agreed plan</b>
+        </div>
+      </div>
+      <div markdown="agreed_plan"></div>
+    </span>
   </div>
 </div>
