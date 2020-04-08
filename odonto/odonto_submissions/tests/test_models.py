@@ -173,7 +173,7 @@ to compass for submission {} not sending"
 
         translate_episode_to_xml.return_value = "some_xml"
         first_submission = models.Submission.create(self.episode)
-        first_submission.created = datetime.date(2018, 1, 1)
+        first_submission.created = timezone.make_aware(datetime.datetime(2018, 1, 1))
         first_submission.save()
         models.Submission.create(self.episode)
         models.Submission.create(self.episode)
@@ -258,7 +258,7 @@ responses waiting for site 89651"/>
         A successful message, returns the submission and th
         """
         _, episode = self.new_patient_and_episode_please()
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         transmission = models.Transmission.objects.create(transmission_id=3)
         successful_submission = models.Submission.objects.create(
             state=models.Submission.SENT,
@@ -290,7 +290,7 @@ responses waiting for site 89651"/>
     def get_multiple_success_messages(self):
         _, episode_1 = self.new_patient_and_episode_please()
         _, episode_2 = self.new_patient_and_episode_please()
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         transmission_1 = models.Transmission.objects.create(transmission_id=1)
         successful_submission_1 = models.Submission.objects.create(
             state=models.Submission.SENT,
@@ -333,7 +333,7 @@ responses waiting for site 89651"/>
 
     def get_rejection_messages(self):
         _, episode = self.new_patient_and_episode_please()
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         transmission = models.Transmission.objects.create(transmission_id=1)
         submission = models.Submission.objects.create(
             state=models.Submission.SENT,
@@ -376,7 +376,7 @@ responses waiting for site 89651"/>
 
     def get_messages_with_multiple_rejections(self):
         _, episode = self.new_patient_and_episode_please()
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         transmission = models.Transmission.objects.create(transmission_id=3)
         submission = models.Submission.objects.create(
             state=models.Submission.SENT,
@@ -423,7 +423,7 @@ responses waiting for site 89651"/>
     def get_multiple_rejection_messages(self):
         _, episode_1 = self.new_patient_and_episode_please()
         _, episode_2 = self.new_patient_and_episode_please()
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         transmission_1 = models.Transmission.objects.create(transmission_id=1)
         submission_1 = models.Submission.objects.create(
             state=models.Submission.SENT,
@@ -472,7 +472,7 @@ responses waiting for site 89651"/>
     def get_combination_message(self):
         _, episode_1 = self.new_patient_and_episode_please()
         _, episode_2 = self.new_patient_and_episode_please()
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         transmission_1 = models.Transmission.objects.create(transmission_id=1)
         submission_1 = models.Submission.objects.create(
             state=models.Submission.SENT,
@@ -502,7 +502,7 @@ responses waiting for site 89651"/>
 
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
-        created_dt = datetime.datetime(2019, 12, 1)
+        created_dt = timezone.make_aware(datetime.datetime(2019, 12, 1))
         self.empty_response = models.Response.objects.create(
             state=models.Response.SUCCESS,
             content=self.EMPTY_MESSAGE,
