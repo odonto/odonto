@@ -570,4 +570,12 @@ table.patient-list {
 .errored-state select {
   background-color: #fcc;
 }
+
+.record-panel h3 {
+  font-size: 30px;
+}
+
+.record-panel h3 i {
+  margin-top: 5px;
+}
 /*# sourceMappingURL=odonto.css.map */
