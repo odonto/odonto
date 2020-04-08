@@ -77,12 +77,6 @@ same name and DOB"
         return patient, episode
 
 
-class EditDemographicsPathway(OdontoPagePathway):
-    display_name = 'Edit Demographics'
-    slug         = 'demographics'
-    steps = [models.Demographics]
-
-
 FP17_STEPS = (
     pathway.Step(
         model=models.Fp17DentalCareProvider,
