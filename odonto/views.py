@@ -11,7 +11,6 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from odonto import episode_categories
 from odonto import models
-
 from opal.models import Episode, Patient
 
 
@@ -30,7 +29,7 @@ def has_open_fp17o(patient):
 class OpenFP17s(TemplateView):
     template_name = "open_list.html"
 
-    def get_fp17_qs(self):
+    def get_fp17s(self):
         qs = Episode.objects.filter(stage="Open")
         qs = episode_categories.get_episodes_for_user(
             qs, self.request.user
@@ -44,7 +43,7 @@ class OpenFP17s(TemplateView):
 class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
     template_name = "unsubmitted_list.html"
 
-    def get_fp17_qs(self):
+    def get_fp17s(self):
         qs = Episode.objects.all()
         qs = episode_categories.get_episodes_for_user(
             qs, self.request.user
@@ -72,6 +71,7 @@ class FP17OSummaryDetailView(LoginRequiredMixin, DetailView):
 class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'view_fp17_o.html'
+
 
 class Stats(LoginRequiredMixin, TemplateView):
     template_name = "stats.html"
