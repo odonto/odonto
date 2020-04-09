@@ -61,9 +61,9 @@ class PatientConsultation(models.PatientConsultation):
     _icon = None
 
     class Meta:
-        verbose_name = "Clinical Notes"
+        verbose_name = "Clinical notes"
 
-    agreed_plan = fields.TextField(blank=True, default="")
+    agreed_plan = fields.TextField(blank=True, default="", verbose_name="Agreed plan")
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",

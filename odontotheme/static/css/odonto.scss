@@ -38,7 +38,7 @@ h3 {
 }
 
 table {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 p a, a {
@@ -565,30 +565,10 @@ table.patient-list {
     background-color: #fcc;
 }
 
-.stats-page{
-    @mixin number-block {
-        background-color: lighten($black_coral, 10%);
-        padding: 20px;
-        color: white;
-        h1{
-            color: white;
-            font-size: 54px;
-        }
-    }
-    .left-block{
-        @include number-block;
-        margin-right: 40px;
-    }
+.record-panel h3{
+    font-size: 30px;
 
-    .centre-block{
-        @include number-block;
-        margin-right: 20px;
-        margin-left: 20px;
+    i{
+        margin-top: 5px;
     }
-
-    .right-block{
-        @include number-block;
-        margin-left: 40px;
-    }
-
 }
