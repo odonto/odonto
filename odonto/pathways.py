@@ -51,6 +51,7 @@ class AddPatientPathway(OdontoPagePathway):
     slug = "add_patient"
     icon = "fa fa-user"
     template = "pathway/templates/add_patient_base.html"
+    finish_button_text = "Register Patient"
 
     steps = (
         FindPatientStep(
