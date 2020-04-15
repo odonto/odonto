@@ -106,7 +106,25 @@
 </div>
 <div class="row content-offset-20">
   <div class="col-md-12">
-    {% record_panel models.PatientConsultation %}
+    <div class="panel panel-default record-panel">
+      <div class="panel-heading">
+        <h3>
+          {{ models.PatientConsultation.get_display_name }}
+        </h3>
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="item in episode.patient_consultation">
+          <div class="row">
+            <div class="col-sm-10 col-md-11">
+              {% include models.PatientConsultation.get_detail_template %}
+            </div>
+            <div class="col-sm-2 col-md-1">
+              <i class="fa fa-pencil edit pull-right pointer" ng-click="episode.recordEditor.editItem('patient_consultation', item)"></i>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 

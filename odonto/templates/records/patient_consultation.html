@@ -1,13 +1,13 @@
 <div class="row">
-  <div class="col-sm-3">
-    <span ng-show="item.when">[[ item.when | displayDate ]] <br /></span>
+  <div class="col-sm-2">
+    <span ng-show="item.when"><b>[[ item.when | displayDate ]]</b> <br /></span>
     <span ng-show="item.initials">[[ item.initials ]] <br /></span>
     <span ng-show="item.provider_location_number">[[ item.provider_location_number ]] <br /></span>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-10">
     <span ng-show="item.discussion">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 patient-consultation-long-form">
           <b>Discussion</b>
         </div>
       </div>
@@ -15,7 +15,7 @@
     </span>
     <span ng-show="item.agreed_plan">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 patient-consultation-long-form">
           <b>Agreed plan</b>
         </div>
       </div>
