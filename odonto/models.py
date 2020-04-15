@@ -49,7 +49,7 @@ class PastMedicalHistory(models.PastMedicalHistory):
 class Treatment(models.Treatment):
     _icon = None
     class Meta:
-        verbose_name = "Current Medication"
+        verbose_name = "Current medication"
 
 
 class SymptomComplex(models.SymptomComplex):
