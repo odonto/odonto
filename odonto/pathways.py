@@ -47,11 +47,11 @@ class OdontoPagePathway(pathway.PagePathway):
 
 
 class AddPatientPathway(OdontoPagePathway):
-    display_name = "Register Patient"
+    display_name = "Register patient"
     slug = "add_patient"
     icon = "fa fa-user"
     template = "pathway/templates/add_patient_base.html"
-    finish_button_text = "Register Patient"
+    finish_button_text = "Register patient"
 
     steps = (
         FindPatientStep(
