@@ -174,14 +174,8 @@ translate_episode_to_xml"
             completion_or_last_visit=self.yesterday
         )
         self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
-        expected = {
-            "Open": 0,
-            "Oldest unsent": self.yesterday,
-            Submission.REJECTED_BY_COMPASS: 1
-        }
-        self.assertEqual(
-            expected, FP17Episode.summary()
-        )
+        summary = FP17Episode.summary()
+        self.assertEqual(summary[Submission.REJECTED_BY_COMPASS], 1)
 
     def test_summary_open(self):
         episode = self.get_episode()
@@ -189,13 +183,24 @@ translate_episode_to_xml"
         episode.save()
 
         self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
-        expected = {
-            "Open": 1,
-            "Oldest unsent": None,
-        }
-        self.assertEqual(
-            expected, FP17Episode.summary()
+        summary = FP17Episode.summary()
+        self.assertEqual(summary["Open"], 1)
+
+    def test_summary_sent_today(self):
+        episode = self.get_episode()
+        episode.stage = FP17Episode.OPEN
+        episode.save()
+
+        summary = FP17Episode.summary()
+        self.assertEqual(summary["Sent today"], 0)
+
+
+        Submission.objects.create(
+            episode=episode,
+            state=Submission.SENT
         )
+        summary = FP17Episode.summary()
+        self.assertEqual(summary["Sent today"], 1)
 
     def test_get_submit_link(self):
         episode = self.get_episode()

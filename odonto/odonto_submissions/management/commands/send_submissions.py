@@ -30,78 +30,17 @@ class Command(BaseCommand):
         except Exception as e:
             logger.info(f"Sending failed for Episode {episode.id} with {e}")
             logger.info(traceback.format_exc())
-            return False
-        return True
-
-    def send_email(
-        self,
-        fp17_success_count,
-        fp17_failure_count,
-        fp17o_success_count,
-        fp17o_failure_count,
-    ):
-        successes = fp17_success_count + fp17o_success_count
-        failures = fp17_failure_count + fp17o_failure_count
-        today = date.today()
-        threshold_breached = False
-        title = f"Submissions {today}"
-
-        if failures > settings.FAILED_TO_SEND_WARNING_THRESHOLD:
-            title = f"URGENT: {failures} submissions failed to send on {today}"
-            threshold_breached = True
-
-        context = {
-            "title": title,
-            "threshold_breached": threshold_breached,
-            "total_success": successes,
-            "total_failure": failures,
-            "fp17_success_count": fp17_success_count,
-            "fp17_failure_count": fp17_failure_count,
-            "fp17o_success_count": fp17o_success_count,
-            "fp17o_failure_count": fp17o_failure_count,
-        }
-        html_message = render_to_string("emails/submission_sent.html", context)
-        plain_message = strip_tags(html_message)
-        admin_emails = ", ".join([i[1] for i in settings.ADMINS])
-        logger.info(f"sending email to {admin_emails}")
-        logger.info(json.dumps(context, indent=4))
-        send_mail(
-            title,
-            plain_message,
-            settings.DEFAULT_FROM_EMAIL,
-            settings.ADMINS,
-            html_message=html_message,
-        )
 
     def handle(self, *args, **options):
-        fp17_success_count = 0
-        fp17_failure_count = 0
-
-        fp17o_success_count = 0
-        fp17o_failure_count = 0
         fp17s = self.get_fp17_qs()
         fp17os = self.get_fp17os()
         for episode in fp17s:
-            successful = self.send_submission(
+            self.send_submission(
                 episode
             )
-            if successful:
-                fp17_success_count += 1
-            else:
-                fp17_failure_count += 1
 
         for episode in fp17os:
-            successful = self.send_submission(
+            self.send_submission(
                 episode
             )
-            if successful:
-                fp17o_success_count += 1
-            else:
-                fp17o_failure_count += 1
 
-        self.send_email(
-            fp17_success_count,
-            fp17_failure_count,
-            fp17o_success_count,
-            fp17o_failure_count,
-        )

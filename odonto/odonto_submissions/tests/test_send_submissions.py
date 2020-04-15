@@ -29,28 +29,17 @@ class SendSubmissionEmailTestCase(OpalTestCase):
     def test_success_fp17(self, logger, render_to_string, send_submission, send_email):
         Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        self.assertFalse(ctx["threshold_breached"])
-        self.assertEqual(ctx["total_success"], 1)
-        self.assertEqual(ctx["total_failure"], 0)
-        self.assertEqual(ctx["fp17_success_count"], 1)
-        self.assertEqual(ctx["fp17_failure_count"], 0)
-        self.assertEqual(ctx["fp17o_success_count"], 0)
-        self.assertEqual(ctx["fp17o_failure_count"], 0)
-        self.assertFalse(ctx["title"].startswith("Urgent"))
+        send_submission.assert_called_once_with(self.episode)
 
     def test_fail_fp17(self, logger, render_to_string, send_submission, send_email):
         send_submission.side_effect = ValueError("boom")
         Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        self.assertFalse(ctx["threshold_breached"])
-        self.assertEqual(ctx["total_success"], 0)
-        self.assertEqual(ctx["total_failure"], 1)
-        self.assertEqual(ctx["fp17_success_count"], 0)
-        self.assertEqual(ctx["fp17_failure_count"], 1)
-        self.assertEqual(ctx["fp17o_success_count"], 0)
-        self.assertEqual(ctx["fp17o_failure_count"], 0)
+        send_submission.assert_called_once_with(self.episode)
+        self.assertEqual(
+            logger.info.call_args_list[1][0][0],
+            f"Sending failed for Episode {self.episode.id} with boom"
+        )
 
     def test_success_fp17o(self, logger, render_to_string, send_submission, send_email):
         self.episode.category_name = FP17OEpisode.display_name
@@ -61,14 +50,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         )
         Episode.objects.update(category_name=FP17OEpisode.display_name)
         self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        self.assertFalse(ctx["threshold_breached"])
-        self.assertEqual(ctx["total_success"], 1)
-        self.assertEqual(ctx["total_failure"], 0)
-        self.assertEqual(ctx["fp17_success_count"], 0)
-        self.assertEqual(ctx["fp17_failure_count"], 0)
-        self.assertEqual(ctx["fp17o_success_count"], 1)
-        self.assertEqual(ctx["fp17o_failure_count"], 0)
+        send_submission.assert_called_once_with(self.episode)
 
     def test_fail_fp17o(self, logger, render_to_string, send_submission, send_email):
         send_submission.side_effect = ValueError("boom")
@@ -80,35 +62,14 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         )
         Episode.objects.update(category_name=FP17OEpisode.display_name)
         self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        self.assertFalse(ctx["threshold_breached"])
-        self.assertEqual(ctx["total_success"], 0)
-        self.assertEqual(ctx["total_failure"], 1)
-        self.assertEqual(ctx["fp17_success_count"], 0)
-        self.assertEqual(ctx["fp17_failure_count"], 0)
-        self.assertEqual(ctx["fp17o_success_count"], 0)
-        self.assertEqual(ctx["fp17o_failure_count"], 1)
-
-    @override_settings(FAILED_TO_SEND_WARNING_THRESHOLD=0)
-    def test_threshold_breached(
-        self, logger, render_to_string, send_submission, send_email
-    ):
-        send_submission.side_effect = ValueError("boom")
-        Episode.objects.update(category_name=FP17Episode.display_name)
-        self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        self.assertTrue(ctx["threshold_breached"])
-        self.assertEqual(ctx["total_success"], 0)
-        self.assertEqual(ctx["total_failure"], 1)
-        self.assertEqual(ctx["fp17_success_count"], 0)
-        self.assertEqual(ctx["fp17_failure_count"], 1)
-        self.assertEqual(ctx["fp17o_success_count"], 0)
-        self.assertEqual(ctx["fp17o_failure_count"], 0)
-        self.assertTrue(ctx["title"].startswith("URGENT"))
+        self.assertEqual(
+            logger.info.call_args_list[1][0][0],
+            f"Sending failed for Episode {self.episode.id} with boom"
+        )
 
     def test_none(self, logger, render_to_string, send_submission, send_email):
         Episode.objects.all().delete()
-        self.assertIsNone(render_to_string.call_args)
+        self.assertFalse(send_submission.called)
 
 
 class SendSubmissionGetQSTestCase(OpalTestCase):
