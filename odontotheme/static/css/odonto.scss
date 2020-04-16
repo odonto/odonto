@@ -265,16 +265,6 @@ h5{
   color: #DDD;
 }
 
-.navbar .container-fluid .navbar-brand {
-    margin-left: -32px;
-}
-
-.navbar-default a.navbar-brand {
-    color: white;
-}
-.navbar-default a.navbar-brand:hover {
-    color: #eee;
-}
 
 .main-view{
     overflow-x: auto;
@@ -299,10 +289,6 @@ h5{
 }
 .navbar-default .navbar-nav > li > a {
     color: white;
-}
-.navbar-brand img {
-    height: 80px;
-    margin-top: -15px;
 }
 #main-navbar {
     margin-top: 20px;
@@ -419,8 +405,21 @@ h5{
     border-bottom: 3px solid rgb(72, 124, 188);
 }
 
-.navbar-brand {
-    padding-left: 50px;
+.navbar-default .container-fluid a.navbar-brand {
+    color: white;
+    margin-left: 15px;
+
+    &:hover{
+        color: white;
+    }
+
+    img{
+        height: 80px;
+        margin-top: -12px;
+        display: block;
+        margin-bottom: 6px;
+        padding-left: 15px;
+    }
 }
 
 #side-nav {
