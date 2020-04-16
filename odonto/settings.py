@@ -173,6 +173,7 @@ INSTALLED_APPS = (
     'opal.core.pathway',
     'odonto',
     'odonto.odonto_submissions',
+    'django.contrib.humanize',
     'django.contrib.admin',
     'plugins.add_patient_step',
 )
@@ -199,6 +200,10 @@ LOGGING = {
         }
     },
     'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
         'console': {
             'level': 'INFO',
             'filters': [],
@@ -221,6 +226,10 @@ LOGGING = {
             'handlers': ['console', 'mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
         },
         'odonto.requestLogger': {
             'handlers': ['console'],
@@ -308,8 +317,8 @@ DEFAULT_DOMAIN = 'http://openodonto.com/'
 
 # Begins OPAL Settings you should edit !
 
-OPAL_BRAND_NAME = 'Open Odonto FP17'
-VERSION_NUMBER = '0.31.0'
+OPAL_BRAND_NAME = 'Open Odonto'
+VERSION_NUMBER = '0.32.0'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

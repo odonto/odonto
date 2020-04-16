@@ -1,0 +1,177 @@
+{% extends "opal.html" %}
+{% load humanize %}
+
+{% block odonto_viewport %}
+<div class="content-offset stats-page">
+
+
+  {# Activity #}
+  <h2>
+    Activity {{ current }}
+  </h2>
+  <div class="row">
+    <div class="col-md-4 text-center">
+      <div class="left-block">
+        <h1>{{ uda_info.total | intcomma }}</h1>
+        <h3>UDA</h3>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="uda-activity"></div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-4 text-center">
+      <div class="left-block">
+        <h1>{{ uoa_info.total | intcomma }}</h1>
+        <h3>UOA</h3>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="uoa-activity"></div>
+    </div>
+  </div>
+  {# End Activity #}
+
+ {# Performer table #}
+ <table class="table">
+  <tr>
+    <th>Name</th>
+    <th>UDA</th>
+    <th>UOA</th>
+    <th>Band 1</th>
+    <th>Band 2</th>
+    <th>Band 3</th>
+  </tr>
+  {% for performer in performer_info %}
+  <tr>
+    <td>{{ performer.name }}</td>
+    <td>{{ performer.uda }}</td>
+    <td>{{ performer.uoa }}</td>
+    <td>{{ performer.band_1 }}</td>
+    <td>{{ performer.band_2 }}</td>
+    <td>{{ performer.band_3 }}</td>
+  </tr>
+  {% endfor %}
+ </table>
+ {# end performer table #}
+
+
+  <h2 class="content-offset">
+    Compass Integration {{ current }}
+  </h2>
+  {# Summary rectangles #}
+  <div class="row">
+    <div class="col-md-4 text-center">
+      <div class="left-block">
+        <h1>{{ state_counts.fp17s.total | intcomma }}</h1>
+        <h3>FP17s</h3>
+      </div>
+    </div>
+    <div class="col-md-4  text-center">
+      <div class="centre-block">
+        <h1>{{ state_counts.fp17s.submitted | intcomma }}</h1>
+        <h3>Submitted</h3>
+      </div>
+    </div>
+    <div class="col-md-4  text-center">
+      <div class="right-block">
+        <h1>{{ state_counts.fp17s.open | intcomma }}</h1>
+        <h3>Open</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row content-offset-25">
+    <div class="col-md-4 text-center">
+      <div class="left-block">
+        <h1>{{ state_counts.fp17os.total | intcomma }}</h1>
+        <h3>FP17Os</h3>
+      </div>
+    </div>
+    <div class="col-md-4  text-center">
+      <div class="centre-block">
+        <h1>{{ state_counts.fp17os.submitted | intcomma }}</h1>
+        <h3>Submitted</h3>
+      </div>
+    </div>
+    <div class="col-md-4  text-center">
+      <div class="right-block">
+        <h1>{{ state_counts.fp17os.open | intcomma }}</h1>
+        <h3>Open</h3>
+      </div>
+    </div>
+  </div>
+  {# End summary rectangles #}
+
+  {# monthly claims graph #}
+  <h2>Monthly Claims<h2>
+  <div id="monthly-claims-graph">
+  </div>
+  {# End monthly claims graph #}
+
+
+
+</div>
+
+<script>
+
+  var createGraph = function(elementId, graphData, current, previous){
+    var result = [];
+    _.each(graphData, function(value, key){
+      var row = value;
+      if(key === "current"){
+        row.unshift(current);
+      }
+      else{
+        row.unshift(previous);
+      }
+      result.push(row);
+    })
+
+    var graphConfig = {
+      bindto: document.getElementById(elementId),
+      data: {
+        columns: result,
+        colors: {},
+        type: "bar"
+      },
+      legend: {
+        hide: true
+      },
+      axis: {
+        x: {
+          type: 'category',
+          categories: [
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+            "January",
+            "February",
+            "March"
+          ]
+        }
+      },
+      point: {
+        show: false
+      },
+    }
+
+    graphConfig.data.colors[result[0][0]] = '#333333';
+    graphConfig.data.colors[result[1][0]] = '#CCCCCC';
+
+    c3.generate(graphConfig)
+  };
+
+  createGraph("monthly-claims-graph", {{ month_totals | safe }}, "{{ current }}", "{{ previous }}");
+  createGraph("uda-activity", {{ uda_info.by_period | safe }}, "{{ current }}", "{{ previous }}");
+  createGraph("uoa-activity", {{ uoa_info.by_period | safe }}, "{{ current }}", "{{ previous }}");
+</script>
+{% endblock %}

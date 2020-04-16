@@ -1,7 +1,9 @@
 import datetime
+from django.utils import timezone
 from collections import defaultdict
 from django.conf import settings
 from opal.core import episodes
+
 
 
 class DentalCareEpisodeCategory(episodes.EpisodeCategory):
@@ -126,6 +128,10 @@ class AbstractOdontoCategory(object):
             qs = Episode.objects.all()
         qs = qs.filter(category_name=cls.display_name)
         result = defaultdict(int)
+        start_of_today = timezone.make_aware(
+            datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+        )
+        result["Sent today"] = qs.filter(submission__created__gte=start_of_today).count()
         result["Open"] = qs.filter(stage=cls.OPEN).count()
         result["Oldest unsent"] = None
         oldest_unsent = cls.get_oldest_unsent(qs)
@@ -137,7 +143,12 @@ class AbstractOdontoCategory(object):
             submission = i.category.submission()
 
             if not submission:
-                result["Submitted but not sent"] += 1
+                # We should not have submissions sitting and waiting to send.
+                # They should have been submitted by the send_submissions cron job
+                # Therefore the most likely reason for no submission being sent down
+                # is that the submission failed due to a flaw in the form
+                # or that the patient has a protected address
+                result["Very recent, threw exception or protected address"] += 1
             else:
                 if submission.state == submission.SENT:
                     result["Sent (result pending)"] += 1
@@ -190,6 +201,22 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
         qs = qs.filter(category_name=cls.display_name)
         qs = qs.prefetch_related("fp17incompletetreatment_set")
         return super().get_oldest_unsent(qs)
+
+    def uda(self):
+        # as defined
+        # https://contactcentreservices.nhsbsa.nhs.uk/selfnhsukokb/AskUs_Dental/en-gb/9737/units-of-activity-uda-uoa/41781/how-many-units-of-activity-uda-uoa-does-a-course-of-treatment-cot-receive
+        # urgent treatment is band 4
+        from odonto import models
+        treatment_category = self.episode.fp17treatmentcategory_set.all()[0]
+        treatment_map = {
+            models.Fp17TreatmentCategory.BAND_1: 1,
+            models.Fp17TreatmentCategory.BAND_2: 3,
+            models.Fp17TreatmentCategory.BAND_3: 12,
+            models.Fp17TreatmentCategory.URGENT_TREATMENT: 1.2,
+            models.Fp17TreatmentCategory.REGULATION_11_REPLACEMENT_APPLIANCE: 12,
+        }
+
+        return treatment_map.get(treatment_category.treatment_category)
 
 
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
@@ -271,6 +298,44 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         )
         return super().get_oldest_unsent(qs)
 
+    def uoa(self):
+        from odonto import models
+        # as defined
+        # https://contactcentreservices.nhsbsa.nhs.uk/selfnhsukokb/AskUs_Dental/en-gb/9737/units-of-activity-uda-uoa/41781/how-many-units-of-activity-uda-uoa-does-a-course-of-treatment-cot-receive
+        uoa = None
+        assessment = self.episode.orthodonticassessment_set.all()[0]
+        treatment = self.episode.orthodontictreatment_set.all()[0]
+
+        if assessment.assessment == assessment.ASSESSMENT_AND_REVIEW:
+            uoa = 1
+        elif assessment.assessment == assessment.ASSESS_AND_REFUSE_TREATMENT:
+            uoa = 1
+        elif assessment.assessment == assessment.ASSESS_AND_APPLIANCE_FITTED:
+            uoa = 1
+            assessment_date = assessment.date_of_assessment
+            demographics = models.Demographics.objects.filter(
+                patient__episode=self.episode
+            ).get()
+
+            if not assessment_date:
+                raise ValueError('date_of_assessment is required to calculate uoa')
+            age = demographics.get_age(assessment_date)
+            if age < 10:
+                uoa += 3
+            elif age < 18:
+                uoa += 20
+            else:
+                uoa += 22
+
+        if treatment.repair:
+            if not uoa:
+                uoa = 0
+            uoa += 0.8
+
+        if treatment.replacement and not uoa:
+            uoa = 0
+
+        return uoa
 
 def get_unsubmitted_fp17_and_fp17os(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)

@@ -1,6 +1,7 @@
 """
 Odonto models.
 """
+import datetime
 from django.db.models import fields
 from django.contrib.auth.models import User
 from django.db import models as djangomodels
@@ -131,6 +132,17 @@ class Demographics(models.Demographics):
     )
     county = fields.CharField(max_length=255, null=True, blank=True)
     protected = fields.BooleanField(default=False)
+
+    def get_age(self, date=None):
+        if date is None:
+            date = datetime.date.today()
+
+        if self.date_of_birth:
+            born = self.date_of_birth
+            return date.year - born.year - (
+                (date.month, date.day) < (born.month, born.day)
+            )
+
 
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:
