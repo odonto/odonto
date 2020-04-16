@@ -96,6 +96,8 @@
   </div>
 </div>
 
+{% if SHOW_RECORD_PANELS %}
+
 <div class="row content-offset-20">
   <div class="col-md-6">
     {% record_panel models.Treatment %}
@@ -131,6 +133,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 
 
