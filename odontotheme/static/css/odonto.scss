@@ -198,9 +198,15 @@ label{
     margin-bottom: 64px;
 }
 
-.odonto-checkbox label.col-md-9 {
-    padding-left: 0px;
+.odonto-checkbox{
+    .btn-checkbox{
+        float: right;
+    }
+    label.col-md-9 {
+        padding-left: 0px;
+    }
 }
+
 
 #episode-history {
   position: fixed;

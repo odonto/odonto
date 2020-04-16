@@ -181,6 +181,10 @@ label {
   margin-bottom: 64px;
 }
 
+.odonto-checkbox .btn-checkbox {
+  float: right;
+}
+
 .odonto-checkbox label.col-md-9 {
   padding-left: 0px;
 }
