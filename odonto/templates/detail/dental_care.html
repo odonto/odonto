@@ -111,6 +111,9 @@
       <div class="panel-heading">
         <h3>
           {{ models.PatientConsultation.get_display_name }}
+          <i class="fa fa-plus-circle edit pull-right pointer"
+              ng-click="episode.recordEditor.newItem('patient_consultation')"></i>
+       </span>
         </h3>
       </div>
       <ul class="list-group">
