@@ -215,6 +215,13 @@ label {
   margin-right: 12px;
 }
 
+.top-header {
+  position: fixed;
+  color: white;
+  z-index: 1040;
+  top: 0;
+}
+
 .form-control {
   font-size: 18px;
   height: 48px;

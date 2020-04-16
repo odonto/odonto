@@ -228,6 +228,15 @@ label{
     margin-right: 12px;
 }
 
+.top-header{
+    position: fixed;
+    color: white;
+
+    // modal z index 1050, nav bar is 1030
+    z-index: 1040;
+    top: 0;
+}
+
 // Unconverted
 .form-control {
     font-size: 18px;

@@ -1,10 +1,11 @@
 {% load panels %}
 {% load links %}
 <div ng-repeat="demographics in patient.demographics">
-  <h1 class="patient-detail-heading">
-    [[ demographics.first_name ]] [[ demographics.surname ]] [[ demographics.date_of_birth | displayDate ]]
+  <h1 class="top-header">
+    [[ demographics.first_name ]] [[ demographics.surname ]]
+    <small>[[ demographics.date_of_birth | displayDate ]]</small>
   </h1>
-  <div class="row">
+  <div class="row patient-detail-heading">
     <div class="col-md-4">
       <p>
         NHS number: <b>[[ demographics.nhs_number ]]</b>
