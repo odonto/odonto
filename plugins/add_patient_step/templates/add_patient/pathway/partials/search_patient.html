@@ -1,9 +1,11 @@
-<div class="col-sm-8">
-  <h4>NHS Number</h4>
-  <input required autofocus class="form-control" type="text" ng-model="editing.demographics.nhs_number" ng-keypress="$event.keyCode == 13 && lookup_nhs_number()" />
-  <br />
-  <a class="btn btn-lg btn-primary" ng-click="lookup_nhs_number()">
-      <i class="fa fa-search"></i>
-      Search
-  </a>
+<div class="row">
+  <div class="col-sm-8">
+    <h4>NHS Number</h4>
+    <input required autofocus class="form-control" type="text" ng-model="editing.demographics.nhs_number" ng-keypress="$event.keyCode == 13 && lookup_nhs_number()" />
+    <br />
+    <a class="btn btn-lg btn-primary" ng-click="lookup_nhs_number()">
+        <i class="fa fa-search"></i>
+        Search
+    </a>
+  </div>
 </div>
