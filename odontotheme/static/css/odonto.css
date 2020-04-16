@@ -561,4 +561,41 @@ table.patient-list {
 .errored-state select {
   background-color: #fcc;
 }
+
+.stats-page .left-block {
+  background-color: #6f778f;
+  padding: 20px;
+  color: white;
+  margin-right: 40px;
+}
+
+.stats-page .left-block h1 {
+  color: white;
+  font-size: 54px;
+}
+
+.stats-page .centre-block {
+  background-color: #6f778f;
+  padding: 20px;
+  color: white;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.stats-page .centre-block h1 {
+  color: white;
+  font-size: 54px;
+}
+
+.stats-page .right-block {
+  background-color: #6f778f;
+  padding: 20px;
+  color: white;
+  margin-left: 40px;
+}
+
+.stats-page .right-block h1 {
+  color: white;
+  font-size: 54px;
+}
 /*# sourceMappingURL=odonto.css.map */

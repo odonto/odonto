@@ -554,3 +554,31 @@ table.patient-list {
 .errored-state select{
     background-color: #fcc;
 }
+
+.stats-page{
+    @mixin number-block {
+        background-color: lighten($black_coral, 10%);
+        padding: 20px;
+        color: white;
+        h1{
+            color: white;
+            font-size: 54px;
+        }
+    }
+    .left-block{
+        @include number-block;
+        margin-right: 40px;
+    }
+
+    .centre-block{
+        @include number-block;
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .right-block{
+        @include number-block;
+        margin-left: 40px;
+    }
+
+}
