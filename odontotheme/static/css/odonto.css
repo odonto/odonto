@@ -198,6 +198,12 @@ label {
   }
 }
 
+h5 {
+  font-size: inherit;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
 #episode-history a {
   padding: 5px;
 }

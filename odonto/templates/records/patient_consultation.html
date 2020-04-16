@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-2">
-    <span ng-show="item.when"><b>[[ item.when | displayDate ]]</b> <br /></span>
+    <span ng-show="item.when"><h5>[[ item.when | displayDate ]]</h5> <br /></span>
     <span ng-show="item.initials">[[ item.initials ]] <br /></span>
     <span ng-show="item.provider_location_number">[[ item.provider_location_number ]] <br /></span>
   </div>
@@ -8,7 +8,7 @@
     <span ng-show="item.discussion">
       <div class="row">
         <div class="col-sm-12 patient-consultation-long-form">
-          <b>Discussion</b>
+          <h5>Discussion</h5>
         </div>
       </div>
       <div markdown="discussion"></div>
@@ -16,7 +16,7 @@
     <span ng-show="item.agreed_plan">
       <div class="row">
         <div class="col-sm-12 patient-consultation-long-form">
-          <b>Agreed plan</b>
+          <h5>Agreed plan</h5>
         </div>
       </div>
       <div markdown="agreed_plan"></div>
