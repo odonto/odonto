@@ -68,12 +68,12 @@
           </span>
           <span ng-hide="episode.stage === 'Submitted'">
             <span ng-show="episode.category_name === 'FP17'">
-              <a class="btn btn-small btn-primary" href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='episode.id' %}">
+              <a class="btn btn-small btn-primary" href="{% link_url pathways.EditFP17Pathway ngpatient='patient.id' ngepisode='episode.id' %}">
                 Edit &nbsp;
               </a>
             </span>
             <span ng-show="episode.category_name === 'FP17O'">
-              <a class="btn btn-small btn-primary" href="{% link_url pathways.Fp17OPathway ngpatient='patient.id' ngepisode='episode.id' %}">
+              <a class="btn btn-small btn-primary" href="{% link_url pathways.EditFP17OPathway ngpatient='patient.id' ngepisode='episode.id' %}">
                 Edit &nbsp;
               </a>
             </span>
