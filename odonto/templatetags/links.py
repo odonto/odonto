@@ -8,6 +8,16 @@ import six
 register = template.Library()
 
 
+def _link_url(target, **kwargs):
+    if isinstance(target, six.string_types):
+        if 'ngpk' in kwargs:
+            ngpk = kwargs.pop('ngpk')
+            base = reverse(target, kwargs=kwargs)
+            return '{0}{1}/'.format(base, ngpk)
+        else:
+            return reverse(target, kwargs=kwargs)
+    return target.get_absolute_url(**kwargs)
+
 def build_link_context(link_text, target, **kwargs):
     """
     Return a dict of common link template context.
@@ -22,19 +32,14 @@ def build_link_context(link_text, target, **kwargs):
     else:
         context['classes'] = ''
 
-    if isinstance(target, six.string_types):
-        if 'ngpk' in kwargs:
-            ngpk = kwargs.pop('ngpk')
-            base = reverse(target, kwargs=kwargs)
-            context['href'] = '{0}{1}/'.format(base, ngpk)
-        else:
-            context['href'] = reverse(target, kwargs=kwargs)
-    else:
-        context['href'] = target.get_absolute_url(**kwargs)
+    context['href'] = _link_url(target, **kwargs)
     context['link_text'] = link_text
 
     return context
 
+@register.simple_tag
+def link_url(target, **kwargs):
+    return _link_url(target, **kwargs)
 
 @register.inclusion_tag('templatetags/links/link_to.html')
 def link_to(link_text, target, **kwargs):

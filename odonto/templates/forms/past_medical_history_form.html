@@ -1,0 +1,14 @@
+{% load odonto_forms %}
+<div class="row">
+  <div class="col-md-5">
+    {% charfield field="PastMedicalHistory.condition" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% charfield field="PastMedicalHistory.year" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-11">
+    {% charfield field="PastMedicalHistory.details" %}
+  </div>
+</div

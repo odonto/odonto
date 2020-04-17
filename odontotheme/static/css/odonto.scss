@@ -38,10 +38,10 @@ h3 {
 }
 
 table {
-    font-size: 16px;
+    font-size: 18px;
 }
 
-a {
+p a, a {
     color: $black_coral;
 }
 
@@ -54,6 +54,10 @@ a:hover {
     border-radius: 0px;
 }
 
+.form-horizontal{
+    padding-left: 20px;
+}
+
 .form-horizontal .control-label,
 label{
   text-align: left;
@@ -61,6 +65,8 @@ label{
   color: $black_coral;
   font-weight: normal;
 }
+
+
 
 .with-decline{
     .form-group{
@@ -192,9 +198,15 @@ label{
     margin-bottom: 64px;
 }
 
-.odonto-checkbox label.col-md-9 {
-    padding-left: 0px;
+.odonto-checkbox{
+    .btn-checkbox{
+        float: right;
+    }
+    label.col-md-9 {
+        padding-left: 0px;
+    }
 }
+
 
 #episode-history {
   position: fixed;
@@ -204,6 +216,12 @@ label{
   @media(max-width: 991px){
     display: none;
   }
+}
+
+h5{
+   font-size: inherit;
+   font-weight: bold;
+   margin-bottom: 8px;
 }
 
 #episode-history a{
@@ -222,6 +240,19 @@ label{
     margin-right: 12px;
 }
 
+.top-header{
+    position: fixed;
+    color: white;
+
+    a{
+        color: white;
+    }
+
+    // modal z index 1050, nav bar is 1030
+    z-index: 1040;
+    top: 0;
+}
+
 // Unconverted
 .form-control {
     font-size: 18px;
@@ -238,16 +269,6 @@ label{
   color: #DDD;
 }
 
-.navbar .container-fluid .navbar-brand {
-    margin-left: -32px;
-}
-
-.navbar-default a.navbar-brand {
-    color: white;
-}
-.navbar-default a.navbar-brand:hover {
-    color: #eee;
-}
 
 .main-view{
     overflow-x: auto;
@@ -272,10 +293,6 @@ label{
 }
 .navbar-default .navbar-nav > li > a {
     color: white;
-}
-.navbar-brand img {
-    height: 80px;
-    margin-top: -15px;
 }
 #main-navbar {
     margin-top: 20px;
@@ -380,6 +397,10 @@ label{
 }
 .modal-header{
     background-color: rgb(72, 124, 188);
+    h3{
+        font-size: 24px;
+        padding-left: 20px;
+    }
 }
 
 
@@ -388,8 +409,21 @@ label{
     border-bottom: 3px solid rgb(72, 124, 188);
 }
 
-.navbar-brand {
-    padding-left: 50px;
+.navbar-default .container-fluid a.navbar-brand {
+    color: white;
+    margin-left: 15px;
+
+    &:hover{
+        color: white;
+    }
+
+    img{
+        height: 80px;
+        margin-top: -12px;
+        display: block;
+        margin-bottom: 6px;
+        padding-left: 15px;
+    }
 }
 
 #side-nav {
@@ -553,6 +587,21 @@ table.patient-list {
 
 .errored-state select{
     background-color: #fcc;
+}
+
+.record-panel h3{
+    font-size: 30px;
+
+    i{
+        margin-top: 5px;
+    }
+}
+
+.patient-consultation-long-form{
+    line-height: 26px;
+    letter-spacing: 0.04em;
+    word-spacing: 0.1em;
+    text-align: justify;
 }
 
 .stats-page{

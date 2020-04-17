@@ -8,9 +8,6 @@ from opal.urls import urlpatterns as opatterns
 from odonto import views
 
 urlpatterns = [
-    path('patient/<int:pk>/', views.PatientDetailView.as_view(),
-         name='odonto-patient-detail'),
-
     path('summary-fp17/<int:pk>/', views.FP17SummaryDetailView.as_view(),
          name='odonto-summary-fp17'),
     path('view-fp17/<int:pk>/', views.ViewFP17DetailView.as_view(),
