@@ -232,6 +232,10 @@ h5 {
   top: 0;
 }
 
+.top-header a {
+  color: white;
+}
+
 .form-control {
   font-size: 18px;
   height: 48px;

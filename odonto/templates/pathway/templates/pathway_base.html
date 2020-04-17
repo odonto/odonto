@@ -4,10 +4,12 @@
   <div class="col-md-12">
     <form name="form" class="form-horizontal" novalidate>
       <div class="row">
-        <h1>
+        <h1 class="top-header">
           {{ pathway.display_name }}
           <span ng-show="episode">
-            (<a href="/#/patient/[[ episode.demographics[0].patient_id ]]">[[ episode.demographics[0].first_name ]] [[ episode.demographics[0].surname ]]</a>)
+
+              (<a href="/#/patient/[[ episode.demographics[0].patient_id ]]">[[ episode.demographics[0].first_name ]] [[ episode.demographics[0].surname ]]
+                <small>[[ episode.demographics[0].date_of_birth | displayDate ]]</small></a>)
           </span>
         </h1>
       </div>
