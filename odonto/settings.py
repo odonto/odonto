@@ -353,6 +353,7 @@ FAILED_TO_SEND_WARNING_THRESHOLD = 6
 # always decline the patient email/phone when sending down stream
 ALWAYS_DECLINE_EMAIL_PHONE = True
 
+SHOW_RECORD_PANELS = False
 
 try:
     from odonto.local_settings import *

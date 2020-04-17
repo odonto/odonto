@@ -26,10 +26,10 @@ h3 {
 }
 
 table {
-  font-size: 16px;
+  font-size: 18px;
 }
 
-a {
+p a, a {
   color: #595F72;
 }
 
@@ -40,6 +40,10 @@ a:hover {
 .form-control {
   color: #595F72;
   border-radius: 0px;
+}
+
+.form-horizontal {
+  padding-left: 20px;
 }
 
 .form-horizontal .control-label,
@@ -177,6 +181,10 @@ label {
   margin-bottom: 64px;
 }
 
+.odonto-checkbox .btn-checkbox {
+  float: right;
+}
+
 .odonto-checkbox label.col-md-9 {
   padding-left: 0px;
 }
@@ -192,6 +200,12 @@ label {
   #episode-history {
     display: none;
   }
+}
+
+h5 {
+  font-size: inherit;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 #episode-history a {
@@ -211,6 +225,17 @@ label {
   margin-right: 12px;
 }
 
+.top-header {
+  position: fixed;
+  color: white;
+  z-index: 1040;
+  top: 0;
+}
+
+.top-header a {
+  color: white;
+}
+
 .form-control {
   font-size: 18px;
   height: 48px;
@@ -225,18 +250,6 @@ label {
 
 .btn-default small {
   color: #DDD;
-}
-
-.navbar .container-fluid .navbar-brand {
-  margin-left: -32px;
-}
-
-.navbar-default a.navbar-brand {
-  color: white;
-}
-
-.navbar-default a.navbar-brand:hover {
-  color: #eee;
 }
 
 .main-view {
@@ -264,11 +277,6 @@ label {
 
 .navbar-default .navbar-nav > li > a {
   color: white;
-}
-
-.navbar-brand img {
-  height: 80px;
-  margin-top: -15px;
 }
 
 #main-navbar {
@@ -384,13 +392,31 @@ label {
   background-color: #487cbc;
 }
 
+.modal-header h3 {
+  font-size: 24px;
+  padding-left: 20px;
+}
+
 .panel.panel-primary .panel-heading {
   background-color: transparent;
   border-bottom: 3px solid #487cbc;
 }
 
-.navbar-brand {
-  padding-left: 50px;
+.navbar-default .container-fluid a.navbar-brand {
+  color: white;
+  margin-left: 15px;
+}
+
+.navbar-default .container-fluid a.navbar-brand:hover {
+  color: white;
+}
+
+.navbar-default .container-fluid a.navbar-brand img {
+  height: 80px;
+  margin-top: -12px;
+  display: block;
+  margin-bottom: 6px;
+  padding-left: 15px;
 }
 
 #side-nav {
@@ -405,7 +431,7 @@ label {
 }
 
 #side-nav ul.app-info {
-  padding-top: 120px;
+  padding-top: 150px;
   padding-bottom: 30px;
 }
 
@@ -560,6 +586,21 @@ table.patient-list {
 
 .errored-state select {
   background-color: #fcc;
+}
+
+.record-panel h3 {
+  font-size: 30px;
+}
+
+.record-panel h3 i {
+  margin-top: 5px;
+}
+
+.patient-consultation-long-form {
+  line-height: 26px;
+  letter-spacing: 0.04em;
+  word-spacing: 0.1em;
+  text-align: justify;
 }
 
 .stats-page .left-block {

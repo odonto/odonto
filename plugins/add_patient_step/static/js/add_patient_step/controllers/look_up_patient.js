@@ -42,7 +42,7 @@ angular
     };
 
     scope.new_for_patient = function(patient) {
-      $window.location.href = "/patient/" + patient.id + "/";
+      $window.location.href = "/#/patient/" + patient.id + "/";
     };
 
     scope.preSave = function(editing) {
