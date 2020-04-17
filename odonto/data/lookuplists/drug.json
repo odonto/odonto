@@ -1,0 +1,589 @@
+{
+  "drug": [
+    {
+      "name": "Aciclovir (including Zovirax)"
+    },
+    {
+      "name": "Acrivastine"
+    },
+    {
+      "name": "Adalimumab"
+    },
+    {
+      "name": "Alendronic acid"
+    },
+    {
+      "name": "Allopurinol"
+    },
+    {
+      "name": "Alogliptin"
+    },
+    {
+      "name": "Amitriptyline for depression"
+    },
+    {
+      "name": "Amitriptyline for pain"
+    },
+    {
+      "name": "Amlodipine"
+    },
+    {
+      "name": "Amoxicillin"
+    },
+    {
+      "name": "Apixaban"
+    },
+    {
+      "name": "Aspirin - low dose"
+    },
+    {
+      "name": "Aspirin for pain relief"
+    },
+    {
+      "name": "Atenolol"
+    },
+    {
+      "name": "Atorvastatin"
+    },
+    {
+      "name": "Azathioprine"
+    },
+    {
+      "name": "Azithromycin"
+    },
+    {
+      "name": "Beclometasone inhalers"
+    },
+    {
+      "name": "Beclometasone nasal spray"
+    },
+    {
+      "name": "Bendroflumethiazide"
+    },
+    {
+      "name": "Benzoyl peroxide"
+    },
+    {
+      "name": "Betahistine"
+    },
+    {
+      "name": "Bisacodyl"
+    },
+    {
+      "name": "Bisoprolol"
+    },
+    {
+      "name": "Bumetanide"
+    },
+    {
+      "name": "Buscopan (hyoscine butylbromide)"
+    },
+    {
+      "name": "Candesartan"
+    },
+    {
+      "name": "Carbamazepine"
+    },
+    {
+      "name": "Carbocisteine"
+    },
+    {
+      "name": "Cefalexin"
+    },
+    {
+      "name": "Cetirizine"
+    },
+    {
+      "name": "Chloramphenicol"
+    },
+    {
+      "name": "Chlorphenamine (including Piriton)"
+    },
+    {
+      "name": "Cinnarizine"
+    },
+    {
+      "name": "Ciprofloxacin"
+    },
+    {
+      "name": "Citalopram"
+    },
+    {
+      "name": "Clarithromycin"
+    },
+    {
+      "name": "Clobetasol"
+    },
+    {
+      "name": "Clobetasone"
+    },
+    {
+      "name": "Clonazepam"
+    },
+    {
+      "name": "Clopidogrel"
+    },
+    {
+      "name": "Clotrimazole"
+    },
+    {
+      "name": "Clotrimazole for thrush (Canesten)"
+    },
+    {
+      "name": "Co-amoxiclav"
+    },
+    {
+      "name": "Co-codamol for adults"
+    },
+    {
+      "name": "Co-codamol for children"
+    },
+    {
+      "name": "Co-codaprin (aspirin and codeine)"
+    },
+    {
+      "name": "Co-dydramol"
+    },
+    {
+      "name": "Codeine"
+    },
+    {
+      "name": "Colchicine"
+    },
+    {
+      "name": "Cyclizine"
+    },
+    {
+      "name": "Dabigatran"
+    },
+    {
+      "name": "Dapagliflozin"
+    },
+    {
+      "name": "Diazepam"
+    },
+    {
+      "name": "Diclofenac"
+    },
+    {
+      "name": "Digoxin"
+    },
+    {
+      "name": "Dihydrocodeine"
+    },
+    {
+      "name": "Diltiazem"
+    },
+    {
+      "name": "Diphenhydramine"
+    },
+    {
+      "name": "Dipyridamole"
+    },
+    {
+      "name": "Docusate"
+    },
+    {
+      "name": "Domperidone"
+    },
+    {
+      "name": "Donepezil"
+    },
+    {
+      "name": "Dosulepin"
+    },
+    {
+      "name": "Doxazosin"
+    },
+    {
+      "name": "Doxycycline"
+    },
+    {
+      "name": "Duloxetine"
+    },
+    {
+      "name": "Edoxaban"
+    },
+    {
+      "name": "Empagliflozin"
+    },
+    {
+      "name": "Enalapril"
+    },
+    {
+      "name": "Erythromycin"
+    },
+    {
+      "name": "Escitalopram"
+    },
+    {
+      "name": "Esomeprazole"
+    },
+    {
+      "name": "Ezetimibe"
+    },
+    {
+      "name": "Felodipine"
+    },
+    {
+      "name": "Ferrous fumarate"
+    },
+    {
+      "name": "Ferrous sulfate"
+    },
+    {
+      "name": "Fexofenadine"
+    },
+    {
+      "name": "Flucloxacillin"
+    },
+    {
+      "name": "Fluconazole"
+    },
+    {
+      "name": "Fluoxetine (including Prozac)"
+    },
+    {
+      "name": "Fluticasone inhalers"
+    },
+    {
+      "name": "Fluticasone nasal spray and drops"
+    },
+    {
+      "name": "Folic acid"
+    },
+    {
+      "name": "Furosemide"
+    },
+    {
+      "name": "Fusidic acid"
+    },
+    {
+      "name": "Fybogel (ispaghula husk)"
+    },
+    {
+      "name": "Gabapentin"
+    },
+    {
+      "name": "Gaviscon (alginic acid)"
+    },
+    {
+      "name": "Gliclazide"
+    },
+    {
+      "name": "Glimepiride"
+    },
+    {
+      "name": "Glyceryl trinitrate (GTN)"
+    },
+    {
+      "name": "Heparinoid"
+    },
+    {
+      "name": "Hydrocortisone"
+    },
+    {
+      "name": "Hydrocortisone buccal tablets"
+    },
+    {
+      "name": "Hydrocortisone for piles and itchy bottom"
+    },
+    {
+      "name": "Hydrocortisone injections"
+    },
+    {
+      "name": "Hydrocortisone rectal foam"
+    },
+    {
+      "name": "Hydrocortisone skin creams"
+    },
+    {
+      "name": "Hydrocortisone tablets"
+    },
+    {
+      "name": "Hydroxocobalamin"
+    },
+    {
+      "name": "Hyoscine hydrobromide (Kwells and Joy-Rides)"
+    },
+    {
+      "name": "Ibuprofen and codeine (including Nurofen Plus)"
+    },
+    {
+      "name": "Ibuprofen for adults  (including Nurofen)"
+    },
+    {
+      "name": "Ibuprofen for children"
+    },
+    {
+      "name": "Indapamide"
+    },
+    {
+      "name": "Irbesartan"
+    },
+    {
+      "name": "Isotretinoin capsules (Roaccutane)"
+    },
+    {
+      "name": "Isotretinoin gel (Isotrex)"
+    },
+    {
+      "name": "Labetalol"
+    },
+    {
+      "name": "Lactulose"
+    },
+    {
+      "name": "Lamotrigine"
+    },
+    {
+      "name": "Lansoprazole"
+    },
+    {
+      "name": "Lercanidipine"
+    },
+    {
+      "name": "Levetiracetam"
+    },
+    {
+      "name": "Levothyroxine"
+    },
+    {
+      "name": "Lidocaine for mouth and throat"
+    },
+    {
+      "name": "Lidocaine for piles and itchy bottom"
+    },
+    {
+      "name": "Lidocaine skin cream"
+    },
+    {
+      "name": "Linagliptin"
+    },
+    {
+      "name": "Lisinopril"
+    },
+    {
+      "name": "Loperamide (including Imodium)"
+    },
+    {
+      "name": "Loratadine (including Clarityn)"
+    },
+    {
+      "name": "Lorazepam"
+    },
+    {
+      "name": "Losartan"
+    },
+    {
+      "name": "Low-dose aspirin"
+    },
+    {
+      "name": "Lymecycline"
+    },
+    {
+      "name": "Macrogol"
+    },
+    {
+      "name": "Mebendazole"
+    },
+    {
+      "name": "Mebeverine"
+    },
+    {
+      "name": "Melatonin"
+    },
+    {
+      "name": "Metformin"
+    },
+    {
+      "name": "Methotrexate"
+    },
+    {
+      "name": "Metoclopramide"
+    },
+    {
+      "name": "Metoprolol"
+    },
+    {
+      "name": "Metronidazole"
+    },
+    {
+      "name": "Mirtazapine"
+    },
+    {
+      "name": "Montelukast"
+    },
+    {
+      "name": "Morphine"
+    },
+    {
+      "name": "Naproxen"
+    },
+    {
+      "name": "Nefopam"
+    },
+    {
+      "name": "Nicorandil"
+    },
+    {
+      "name": "Nifedipine"
+    },
+    {
+      "name": "Nitrofurantoin"
+    },
+    {
+      "name": "Olmesartan"
+    },
+    {
+      "name": "Omeprazole"
+    },
+    {
+      "name": "Oxycodone"
+    },
+    {
+      "name": "Pantoprazole"
+    },
+    {
+      "name": "Paracetamol for adults"
+    },
+    {
+      "name": "Paracetamol for children (including Calpol)"
+    },
+    {
+      "name": "Paroxetine"
+    },
+    {
+      "name": "Pepto-Bismol"
+    },
+    {
+      "name": "Perindopril"
+    },
+    {
+      "name": "Phenoxymethylpenicillin"
+    },
+    {
+      "name": "Phenytoin"
+    },
+    {
+      "name": "Pioglitazone"
+    },
+    {
+      "name": "Pravastatin"
+    },
+    {
+      "name": "Prednisolone"
+    },
+    {
+      "name": "Pregabalin"
+    },
+    {
+      "name": "Promethazine (including Phenergan)"
+    },
+    {
+      "name": "Propranolol"
+    },
+    {
+      "name": "Pseudoephedrine (including Sudafed)"
+    },
+    {
+      "name": "Rabeprazole"
+    },
+    {
+      "name": "Ramipril"
+    },
+    {
+      "name": "Ranitidine"
+    },
+    {
+      "name": "Risedronate"
+    },
+    {
+      "name": "Rivaroxaban"
+    },
+    {
+      "name": "Rosuvastatin"
+    },
+    {
+      "name": "Salbutamol inhaler"
+    },
+    {
+      "name": "Saxagliptin"
+    },
+    {
+      "name": "Senna (including Senokot)"
+    },
+    {
+      "name": "Sertraline"
+    },
+    {
+      "name": "Sildenafil (including Viagra)"
+    },
+    {
+      "name": "Simeticone"
+    },
+    {
+      "name": "Simvastatin"
+    },
+    {
+      "name": "Sitagliptin"
+    },
+    {
+      "name": "Sodium valproate"
+    },
+    {
+      "name": "Sotalol"
+    },
+    {
+      "name": "Sumatriptan"
+    },
+    {
+      "name": "Tadalafil"
+    },
+    {
+      "name": "Tamsulosin"
+    },
+    {
+      "name": "Temazepam"
+    },
+    {
+      "name": "Thiamine (vitamin B1)"
+    },
+    {
+      "name": "Ticagrelor"
+    },
+    {
+      "name": "Topiramate"
+    },
+    {
+      "name": "Tramadol"
+    },
+    {
+      "name": "Tranexamic acid"
+    },
+    {
+      "name": "Trazodone"
+    },
+    {
+      "name": "Trimethoprim"
+    },
+    {
+      "name": "Valproic acid"
+    },
+    {
+      "name": "Valsartan"
+    },
+    {
+      "name": "Venlafaxine"
+    },
+    {
+      "name": "Warfarin"
+    },
+    {
+      "name": "Zolpidem"
+    },
+    {
+      "name": "Zopiclone"
+    }
+  ]
+}

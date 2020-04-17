@@ -43,7 +43,7 @@ class OdontoPagePathway(pathway.PagePathway):
             return base
 
     def redirect_url(self, user=None, patient=None, episode=None):
-        return "/patient/{0}/".format(patient.id)
+        return patient.get_absolute_url()
 
 
 class AddPatientPathway(OdontoPagePathway):
@@ -78,19 +78,14 @@ same name and DOB"
         return patient, episode
 
 
-class EditDemographicsPathway(OdontoPagePathway):
-    display_name = 'Edit Demographics'
-    slug         = 'demographics'
-    steps = [models.Demographics]
-
-
 FP17_STEPS = (
     pathway.Step(
         model=models.Fp17DentalCareProvider,
         step_controller="CareProviderStepCtrl",
     ),
     pathway.Step(
-        model=models.Demographics
+        model=models.Demographics,
+        base_template="pathway/steps/step_base_without_display_name.html"
     ),
     pathway.Step(
         model=models.Fp17IncompleteTreatment,
@@ -248,7 +243,8 @@ FP17_O_STEPS = (
         step_controller="CareProviderStepCtrl",
     ),
     pathway.Step(
-        model=models.Demographics
+        model=models.Demographics,
+        base_template="pathway/steps/step_base_without_display_name.html"
     ),
     pathway.Step(model=models.Fp17Exemptions),
     pathway.Step(

@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-sm-2">
+    <span ng-show="item.when"><h5>[[ item.when | displayDate ]]</h5> <br /></span>
+    <span ng-show="item.initials">[[ item.initials ]] <br /></span>
+    <span ng-show="item.provider_location_number">[[ item.provider_location_number ]] <br /></span>
+  </div>
+  <div class="col-sm-10">
+    <span ng-show="item.discussion">
+      <div class="row">
+        <div class="col-sm-12 patient-consultation-long-form">
+          <h5>Discussion</h5>
+        </div>
+      </div>
+      <div markdown="discussion"></div>
+    </span>
+    <span ng-show="item.agreed_plan">
+      <div class="row">
+        <div class="col-sm-12 patient-consultation-long-form">
+          <h5>Agreed plan</h5>
+        </div>
+      </div>
+      <div markdown="agreed_plan"></div>
+    </span>
+  </div>
+</div>

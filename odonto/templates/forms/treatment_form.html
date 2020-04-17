@@ -1,0 +1,27 @@
+{% load forms %}
+{% load odonto_forms %}
+<div class="row">
+  <div class="col-md-5">
+    {% charfield field="Treatment.drug" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% charfield field="Treatment.dose" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% charfield field="Treatment.route" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% charfield field="Treatment.frequency" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% odonto_datepicker field="Treatment.start_date" label="Start date" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% odonto_datepicker field="Treatment.end_date" label="End date" %}
+  </div>
+</div>
+

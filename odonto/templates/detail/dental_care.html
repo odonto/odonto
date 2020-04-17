@@ -1,81 +1,143 @@
 {% load panels %}
 {% load links %}
-<!-- Empty Episode View -->
-<div class="row content-offset" ng-hide="episode.fp17_incomplete_treatment[0].date_of_acceptance || episode.stage == 'Open Orthodontic' ">
-  <p class="lead text-center">
-    This treatment course has not yet started.
-    <br />
-    {% link_to "Open an FP17" pathways.Fp17Pathway ngpatient="patient.id" ngepisode="episode.id" %}
-    <br />
-    <br />
-    {% link_to "Open an FP17O" pathways.Fp17OPathway ngpatient="patient.id" ngepisode="episode.id" %}
-  <p>
+<div class="col-md-12">
+  <div class="col-md-12">
+    <div ng-repeat="demographics in patient.demographics">
+      <h1 class="top-header">
+        [[ demographics.first_name ]] [[ demographics.surname ]]
+        <small>[[ demographics.date_of_birth | displayDate ]]</small>
+      </h1>
+      <div class="row patient-detail-heading">
+        <div class="col-md-4">
+          <p>
+            NHS number: <b>[[ demographics.nhs_number ]]</b>
+          </p>
+          <p>
+            Mobile number: <b>[[ demographics.phone_number ]]</b>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <p>
+            Sex: <b>[[ demographics.sex ]]</b>
+          </p>
+          <p>
+            Email: <b><a ng-show="demographics.email" href="mailto:[[ demographics.email ]]">[[ demographics.email ]] <i class="fa fa-envelope"></i></a></b>
+          </p>
+        </div>
+        <div class="col-md-1 col-md-offset-4">
+          <a ng-click="episode.recordEditor.editItem('demographics', 0)">
+            <i class="fa fa-pencil edit pull-right pointer"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row content-offset">
+      <a ng-class="{disabled: dentalCare.hasOpenFp17}" class="btn btn-primary btn-lg pull-right open-claim-button"
+        href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17.id' %}">
+        Open FP17
+      </a>
+      <a ng-class="{disabled: dentalCare.hasOpenFp17o}" class="btn btn-primary btn-lg pull-right open-claim-button"
+        href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17o.id' %}">
+        Open FP17O
+      </a>
+    </div>
+
+    <div class="row content-offset-20">
+      <div class="col-md-12">
+        <table class="table table-striped">
+          <tr ng-repeat="episode in dentalCare.openAndSubmittedEpisodes | orderBy:'-id'">
+            <td>[[ episode.category_name ]]</td>
+            <td>[[ episode.fp17_treatment_category[0].treatment_category ]]</td>
+            <td>[[ episode.stage ]]</td>
+            <td>[[ episode.fp17_dental_care_provider[0].provider_location_number ]]</td>
+            <td>[[ episode.fp17_dental_care_provider[0].performer ]]</td>
+            <td>
+              <span ng-show="episode.category_name === 'FP17'">
+                [[ episode.fp17_incomplete_treatment[0].date_of_acceptance  | displayDate ]]
+              </span>
+              <span ng-show="episode.category_name === 'FP17O'">
+                [[ episode.orthodontic_treatment[0].date_of_completion  | displayDate ]]
+              </span>
+            </td>
+            <td>
+              <span ng-show="episode.stage === 'Submitted'">
+                <a class="btn btn-small btn-default" href="/#/summary/[[ episode.category_name.toLowerCase() ]]/[[ patient.id  ]]/[[ episode.id ]]">
+                  View
+                </a>
+              </span>
+              <span ng-hide="episode.stage === 'Submitted'">
+                <span ng-show="episode.category_name === 'FP17'">
+                  <a class="btn btn-small btn-primary" href="{% link_url pathways.EditFP17Pathway ngpatient='patient.id' ngepisode='episode.id' %}">
+                    Edit &nbsp;
+                  </a>
+                </span>
+                <span ng-show="episode.category_name === 'FP17O'">
+                  <a class="btn btn-small btn-primary" href="{% link_url pathways.EditFP17OPathway ngpatient='patient.id' ngepisode='episode.id' %}">
+                    Edit &nbsp;
+                  </a>
+                </span>
+              </span>
+            </td>
+            <td>
+              {% if roles.is_dentist %}
+              <span ng-show="episode.stage === 'Open'">
+                <span ng-show="episode.category_name === 'FP17'">
+                  {% button_to 'Submit' pathways.SubmitFP17Pathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-small btn-primary" %}
+                </span>
+                <span ng-show="episode.category_name === 'FP17O'">
+                  {% button_to 'Submit' pathways.SubmitFP17OPathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-small btn-primary" %}
+                </span>
+              </span>
+              {% endif %}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    {% if SHOW_RECORD_PANELS %}
+
+    <div class="row content-offset-20">
+      <div class="col-md-6">
+        {% record_panel models.Treatment %}
+        {% record_panel models.Allergies %}
+      </div>
+      <div class="col-md-6">
+        {% record_panel models.PastMedicalHistory %}
+      </div>
+    </div>
+    <div class="row content-offset-20">
+      <div class="col-md-12">
+        <div class="panel panel-default record-panel">
+          <div class="panel-heading">
+            <h3>
+              {{ models.PatientConsultation.get_display_name }}
+              <i class="fa fa-plus-circle edit pull-right pointer"
+                  ng-click="episode.recordEditor.newItem('patient_consultation')"></i>
+          </span>
+            </h3>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" ng-repeat="item in episode.patient_consultation">
+              <div class="row">
+                <div class="col-sm-10 col-md-11">
+                  {% include models.PatientConsultation.get_detail_template %}
+                </div>
+                <div class="col-sm-2 col-md-1">
+                  <i class="fa fa-pencil edit pull-right pointer" ng-click="episode.recordEditor.editItem('patient_consultation', item)"></i>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
 </div>
 
 
-<!-- mid Treatment View -->
-<div ng-show="episode.fp17_incomplete_treatment[0].date_of_acceptance">
-  <h2>
-    FP17 Summary {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17DentalCareProvider editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17IncompleteTreatment editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17Exemptions editable=False %}
-      {% record_panel models.Fp17TreatmentCategory editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17ClinicalDataSet editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17OtherDentalServices editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.Fp17Recall editable=False %}
-    </div>
-  </div>
-  <h2>
-    {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-</div>
 
-<!-- Orthodontic summary -->
-<div ng-show="episode.stage == 'Open Orthodontic'">
-  <h2>
-    FP170 Summary {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17DentalCareProvider editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.Fp17Exemptions editable=False %}
-      {% record_panel models.Fp17TreatmentCategory editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.OrthodonticDataSet editable=False %}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      {% record_panel models.OrthodonticAssessment editable=False %}
-    </div>
-    <div class="col-md-6">
-      {% record_panel models.OrthodonticTreatment editable=False %}
-    </div>
-  </div>
-  <h2>
-    {% include "partials/edit_open_or_complete_fp17_button.html" %}
-  </h2>
-</div>
