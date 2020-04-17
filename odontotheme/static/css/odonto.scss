@@ -246,6 +246,14 @@ h5{
 
     a{
         color: white;
+        &:hover{
+            text-decoration: none;
+            color: $bone;
+
+            small{
+                color: $bone;
+            }
+        }
     }
 
     // modal z index 1050, nav bar is 1030
