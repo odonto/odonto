@@ -174,6 +174,7 @@ INSTALLED_APPS = (
     'odonto',
     'odonto.odonto_submissions',
     'django.contrib.humanize',
+    'passwordreset',
     'django.contrib.admin',
     'plugins.add_patient_step',
 )
