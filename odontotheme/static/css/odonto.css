@@ -236,6 +236,15 @@ h5 {
   color: white;
 }
 
+.top-header a:hover {
+  text-decoration: none;
+  color: #DDD8C4;
+}
+
+.top-header a:hover small {
+  color: #DDD8C4;
+}
+
 .form-control {
   font-size: 18px;
   height: 48px;
@@ -431,7 +440,7 @@ h5 {
 }
 
 #side-nav ul.app-info {
-  padding-top: 150px;
+  padding-top: 160px;
   padding-bottom: 30px;
 }
 
