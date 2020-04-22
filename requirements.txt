@@ -24,4 +24,4 @@ click==6.7
 # Open Health Care repositories
 opal==0.18.0
 
--e git+https://github.com/openhealthcare/opal-passwordreset#egg=opal_passwordreset
+-e git+https://github.com/openhealthcare/opal-passwordreset@v0.1#egg=opal_passwordreset
