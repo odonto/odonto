@@ -186,22 +186,6 @@ translate_episode_to_xml"
         summary = FP17Episode.summary()
         self.assertEqual(summary["Open"], 1)
 
-    def test_summary_sent_today(self):
-        episode = self.get_episode()
-        episode.stage = FP17Episode.OPEN
-        episode.save()
-
-        summary = FP17Episode.summary()
-        self.assertEqual(summary["Sent today"], 0)
-
-
-        Submission.objects.create(
-            episode=episode,
-            state=Submission.SENT
-        )
-        summary = FP17Episode.summary()
-        self.assertEqual(summary["Sent today"], 1)
-
     def test_get_submit_link(self):
         episode = self.get_episode()
         l = f"http://ntghcomdent1/pathway/#/fp17-submit/{episode.patient.id}/{episode.id}"
