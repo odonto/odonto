@@ -44,7 +44,6 @@ class Command(BaseCommand):
         episodes = Episode.objects.filter(
             category_name=episode_category.display_name
         )
-        current_tax_year = get_current_financial_year()[0]
         start_of_tax_year = get_current_financial_year()[0]
         episode_ids = set()
         for episode in episodes:
