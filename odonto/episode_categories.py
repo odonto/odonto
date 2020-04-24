@@ -15,6 +15,7 @@ class AbstractOdontoCategory(object):
     detail_template = None
     SUBMITTED = "Submitted"
     OPEN = "Open"
+    NEEDS_INVESTIGATION = "Not sent, needs investigation"
 
     def submission(self):
         """
@@ -147,7 +148,7 @@ class AbstractOdontoCategory(object):
                 # Therefore the most likely reason for no submission being sent down
                 # is that the submission failed due to a flaw in the form
                 # or that the patient has a protected address
-                result["Not sent, needs investigation"] += 1
+                result[cls.NEEDS_INVESTIGATION] += 1
             else:
                 if submission.state == submission.SENT:
                     result["Sent (result pending)"] += 1

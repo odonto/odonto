@@ -1,3 +1,4 @@
+import datetime
 from opal.core.test import OpalTestCase
 from unittest.mock import patch
 from opal.models import Episode
@@ -21,6 +22,9 @@ class GetResponsesTestCase(OpalTestCase):
         episode.category_name = FP17Episode.display_name
         episode.stage = FP17Episode.SUBMITTED
         episode.save()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=datetime.date.today()
+        )
         return episode
 
     def get_submission(self, episode, state):
@@ -68,7 +72,38 @@ translate_episode_to_xml"
             "FP17O Rejected": 0,
         }
         self.assertEqual(ctx["summary"]["Latest response"], expected_summary)
+
+        expected_fp17 = {
+            'Oldest unsent': None,
+            'Open': 0,
+            'Success': 1
+        }
+        self.assertEqual(
+            ctx["summary"]["FP17 current tax year"],
+            expected_fp17
+        )
+
+        expected_fp17o = {
+            'Open': 0,
+            'Oldest unsent': None
+        }
+        self.assertEqual(
+            ctx["summary"]["FP17O current tax year"],
+            expected_fp17o
+        )
+
+        self.assertEqual(
+            ctx["summary"]["FP17 all time"],
+            expected_fp17
+        )
+
+        self.assertEqual(
+            ctx["summary"]["FP17O all time"],
+            expected_fp17o
+        )
+
         self.assertTrue(ctx["title"].startswith("Odonto response information for"))
+        self.assertFalse(ctx["title"].endswith("NEEDS INVESTIGATION"))
 
     def test_with_rejection(self, logger, render_to_string, response_get, send_mail):
         episode = self.get_episode()
@@ -87,4 +122,39 @@ translate_episode_to_xml"
             "FP17O Rejected": 0,
         }
         self.assertEqual(ctx["summary"]["Latest response"], expected_summary)
+
+        expected_current_fp17 = {
+            'Oldest unsent': datetime.date.today(),
+            'Open': 0,
+            'Rejected by compass': get_responses.WarningField(1)
+        }
+        self.assertEqual(
+            ctx["summary"]["FP17 current tax year"],
+            expected_current_fp17
+        )
+
+        expected_fp17o = {
+            'Open': 0,
+            'Oldest unsent': None
+        }
+        self.assertEqual(
+            ctx["summary"]["FP17O current tax year"],
+            expected_fp17o
+        )
+        expected_all_time_fp17 = {
+            'Oldest unsent': datetime.date.today(),
+            'Open': 0,
+            'Rejected by compass': 1
+        }
+        self.assertEqual(
+            ctx["summary"]["FP17 all time"],
+            expected_all_time_fp17
+        )
+
+        self.assertEqual(
+            ctx["summary"]["FP17O all time"],
+            expected_fp17o
+        )
+
         self.assertTrue(ctx["title"].startswith("Odonto response information for"))
+        self.assertTrue(ctx["title"].endswith("NEEDS INVESTIGATION"))
