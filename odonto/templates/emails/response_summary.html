@@ -6,8 +6,8 @@
   <table table width="280" cellpadding="0" cellspacing="0" border="0">
     {% for field, value in section.items %}
     <tr>
-      <td align="left">{{ field }}</td>
-      <td align="right">{{ value }}</td>
+      <td {% if value.warning %}style="color: red"{% endif %} align="left">{{ field }}</td>
+      <td {% if value.warning %}style="color: red"{% endif %} align="right">{{ value }}</td>
     </tr>
     {% endfor %}
   </table>
