@@ -80,7 +80,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
             "performer_info": {}
         }
 
-    @mock.patch('odonto.views.Stats.get_current_financial_year')
+    @mock.patch('odonto.views.get_current_financial_year')
     def test_single_current_fp17_episode(self, current_financial_year):
         current_financial_year.return_value = self.current_financial_year
         episode = self.new_fp17_episode()
@@ -126,7 +126,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
         result = Stats().get_context_data()
         self.assertEqual(result, expected)
 
-    @mock.patch('odonto.views.Stats.get_current_financial_year')
+    @mock.patch('odonto.views.get_current_financial_year')
     def test_single_current_fp17o_episode(self, current_financial_year):
         current_financial_year.return_value = self.current_financial_year
         episode = self.new_fp17o_episode()

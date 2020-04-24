@@ -11,6 +11,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from odonto import episode_categories
 from odonto import models
+from odonto.utils import get_current_financial_year
 from opal.models import Episode, Patient
 
 
@@ -75,20 +76,9 @@ class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
 
 class Stats(LoginRequiredMixin, TemplateView):
     template_name = "stats.html"
-    def get_current_financial_year(self):
-        today = datetime.date.today()
-        if today.month > 3:
-            return (
-                datetime.date(today.year, 4, 1),
-                today
-            )
-        return (
-            datetime.date(today.year-1, 4, 1),
-            today
-        )
 
     def get_previous_financial_year(self):
-        current_start = self.get_current_financial_year()[0]
+        current_start = get_current_financial_year()[0]
         return (
             datetime.date(
                 current_start.year-1, current_start.month, current_start.day
@@ -143,7 +133,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         result = {}
         monthly_claims = []
         time_periods = {
-            "current": self.get_current_financial_year(),
+            "current": get_current_financial_year(),
             "previous": self.get_previous_financial_year()
         }
         for period_name, period_range in time_periods.items():
@@ -158,7 +148,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         return result
 
     def get_state_counts(self):
-        current_financial_year = self.get_current_financial_year()
+        current_financial_year = get_current_financial_year()
         return {
             "fp17s": {
                 "total": self.get_fp17_qs(current_financial_year).count(),
@@ -177,9 +167,9 @@ class Stats(LoginRequiredMixin, TemplateView):
         }
 
     def get_uoa_data(self):
-        current_financial_year = self.get_current_financial_year()
+        current_financial_year = get_current_financial_year()
         time_periods = {
-            "current": self.get_current_financial_year(),
+            "current": get_current_financial_year(),
             "previous": self.get_previous_financial_year()
         }
         by_period = defaultdict(list)
@@ -207,9 +197,9 @@ class Stats(LoginRequiredMixin, TemplateView):
         return by_period, by_performer
 
     def get_uda_data(self):
-        current_financial_year = self.get_current_financial_year()
+        current_financial_year = get_current_financial_year()
         time_periods = {
-            "current": self.get_current_financial_year(),
+            "current": get_current_financial_year(),
             "previous": self.get_previous_financial_year()
         }
         by_period = defaultdict(list)
@@ -244,7 +234,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         performers = list(set(uda_performers + uoa_performers))
         performers = sorted(performers)
         fp17s = self.get_successful_fp17s(
-            self.get_current_financial_year()
+            get_current_financial_year()
         )
 
         for performer in performers:
@@ -265,7 +255,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         return result
 
     def get_context_data(self):
-        current_financial_year = self.get_current_financial_year()
+        current_financial_year = get_current_financial_year()
         previous_financial_year = self.get_previous_financial_year()
         uda_by_period, uda_by_performer = self.get_uda_data()
         uoa_by_period, uoa_by_performer = self.get_uoa_data()
