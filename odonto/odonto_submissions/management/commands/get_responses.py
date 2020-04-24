@@ -7,7 +7,6 @@ Then send an email with the current summary of the status quo so far.
 import json
 import traceback
 import datetime
-from collections import defaultdict
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -61,9 +60,7 @@ class Command(BaseCommand):
         summary = a dictionary of dictionaries that will be put on the page. If
         it should be highlighted as a warning the result is cast to a WarningField
         """
-
-
-        context = {"summary": {}, "warnings": defaultdict(dict)}
+        context = {"summary": {}}
         successful = response.get_successfull_submissions()
         rejected = Submission.objects.filter(
             id__in=[i.id for i in response.get_rejected_submissions().keys()]
