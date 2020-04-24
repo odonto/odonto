@@ -31,7 +31,7 @@ class WarningField:
         self.warning = True
 
     def __str__(self):
-        self.value
+        return str(self.value)
 
     def __eq__(self, k):
         if not isinstance(k, WarningField):
