@@ -15,6 +15,7 @@ class AbstractOdontoCategory(object):
     detail_template = None
     SUBMITTED = "Submitted"
     OPEN = "Open"
+    NEEDS_INVESTIGATION = "Not sent, needs investigation"
 
     def submission(self):
         """
@@ -131,7 +132,6 @@ class AbstractOdontoCategory(object):
         start_of_today = timezone.make_aware(
             datetime.datetime.combine(datetime.date.today(), datetime.time.min)
         )
-        result["Sent today"] = qs.filter(submission__created__gte=start_of_today).count()
         result["Open"] = qs.filter(stage=cls.OPEN).count()
         result["Oldest unsent"] = None
         oldest_unsent = cls.get_oldest_unsent(qs)
@@ -148,7 +148,7 @@ class AbstractOdontoCategory(object):
                 # Therefore the most likely reason for no submission being sent down
                 # is that the submission failed due to a flaw in the form
                 # or that the patient has a protected address
-                result["Very recent, threw exception or protected address"] += 1
+                result[cls.NEEDS_INVESTIGATION] += 1
             else:
                 if submission.state == submission.SENT:
                     result["Sent (result pending)"] += 1

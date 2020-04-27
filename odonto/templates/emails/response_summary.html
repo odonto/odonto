@@ -1,3 +1,4 @@
+{% load humanize %}
 <html>
 <body>
   <h1>{{ title }}</h1>
@@ -6,8 +7,11 @@
   <table table width="280" cellpadding="0" cellspacing="0" border="0">
     {% for field, value in section.items %}
     <tr>
-      <td align="left">{{ field }}</td>
-      <td align="right">{{ value }}</td>
+      <td {% if value.warning %}style="color: red"{% endif %} align="left">{{ field }}</td>
+      <td {% if value.warning %}style="color: red"{% endif %} align="right">
+        {# if a value is a date, don't int comma it #}
+        {% if value.day %}{{ value }}{% else %}{{ value|intcomma }}{% endif %}
+      </td>
     </tr>
     {% endfor %}
   </table>
