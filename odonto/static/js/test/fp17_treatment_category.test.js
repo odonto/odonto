@@ -112,7 +112,7 @@ describe('Fp17TreatmentCategory', function() {
     beforeEach(function(){
       expected = {
         fp17_treatment_category: {
-          treatment_category: "The incomplete treatment band cannot be greater than the treatment category"
+          treatment_category: "The incomplete treatment band cannot be greater than the treatment category band"
         },
       };
     });
@@ -135,6 +135,14 @@ describe('Fp17TreatmentCategory', function() {
       expect(Fp17TreatmentCategory(editing)).toBe(undefined);
     });
 
+    it('should not error if the band is urgent treatment and the incomplete treatment is band 2', function(){
+      var err = "The incomplete treatment band cannot be greater than the treatment category band"
+      expected.fp17_treatment_category.treatment_category = err;
+      editing.fp17_treatment_category.treatment_category = "Band 1";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 2";
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+
     it('should error if the band is higher than the incomplete treatment for band 1', function(){
       editing.fp17_treatment_category.treatment_category = "Band 1";
       editing.fp17_incomplete_treatment.incomplete_treatment = "Band 3";
@@ -150,6 +158,22 @@ describe('Fp17TreatmentCategory', function() {
       editing.fp17_incomplete_treatment.incomplete_treatment = "Band 3";
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
+
+    it('should error if the band is urgent treatment and the incomplete treatment is band 2', function(){
+      var err = "Urgent treatment cannot have an incomplete treatment band of band 2 or greater";
+      expected.fp17_treatment_category.treatment_category = err;
+      editing.fp17_treatment_category.treatment_category = "Urgent treatment";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 2";
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+
+    it('should error if the band is urgent treatment and the incomplete treatment is band 3', function(){
+      var err = "Urgent treatment cannot have an incomplete treatment band of band 2 or greater";
+      expected.fp17_treatment_category.treatment_category = err;
+      editing.fp17_treatment_category.treatment_category = "Urgent treatment";
+      editing.fp17_incomplete_treatment.incomplete_treatment = "Band 3";
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    })
   })
 
   describe('regulation 11', function(){
