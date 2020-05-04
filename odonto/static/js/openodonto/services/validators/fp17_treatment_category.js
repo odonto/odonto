@@ -45,13 +45,25 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(){
 
     var incompleteTreatment = editing.fp17_incomplete_treatment.incomplete_treatment
     if(incompleteTreatment){
-      if(incompleteTreatment == BAND_2 && treatmentCategory == BAND_1){
-        return getErr("The incomplete treatment band cannot be greater than the treatment category");
+      if(incompleteTreatment == BAND_2){
+        if(treatmentCategory == BAND_1){
+          return getErr("The incomplete treatment band cannot be greater than the treatment category band");
+        }
+        if(treatmentCategory == URGENT_TREATMENT){
+          return getErr("Urgent treatment cannot have an incomplete treatment band of band 2 or greater");
+        }
       }
-      if(incompleteTreatment == BAND_3 && (treatmentCategory == BAND_1 || treatmentCategory == BAND_2)){
-        return getErr("The incomplete treatment band cannot be greater than the treatment category");
+
+      if(incompleteTreatment == BAND_3){
+        if(treatmentCategory == BAND_1 || treatmentCategory == BAND_2){
+          return getErr("The incomplete treatment band cannot be greater than the treatment category band");
+        }
+        if(treatmentCategory == URGENT_TREATMENT){
+          return getErr("Urgent treatment cannot have an incomplete treatment band of band 2 or greater");
+        }
       }
     }
+
 
     if(treatmentCategory === REGULATION_11_REPLACEMENT_APPLIANCE){
       if(!editing.fp17_exemptions.patient_charge_collected){
