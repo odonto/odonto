@@ -11,17 +11,34 @@ from odonto.episode_categories import FP17Episode, FP17OEpisode
 from opal.models import Episode
 from odonto.odonto_submissions import logger
 
+SEND_ALL_AFTER_DATE = date(2020, 4, 1)
+
 
 class Command(BaseCommand):
     def get_fp17os(self):
-        return FP17OEpisode.get_submitted_episodes().filter(submission=None).filter(
+        return FP17OEpisode.get_submitted_episodes().filter(
             patient__demographics__protected=False
         )
 
     def get_fp17_qs(self):
-        return FP17Episode.get_submitted_episodes().filter(submission=None).filter(
+        return FP17Episode.get_submitted_episodes().filter(
             patient__demographics__protected=False
         )
+
+    def filter_for_new_or_failed_since(self, qs):
+        to_send = []
+        failed_states = set([
+            models.Submission.FAILED_TO_SEND, models.Submission.REJECTED_BY_COMPASS
+        ])
+        for episode in qs:
+            submission = episode.category.submission()
+            if not submission:
+                to_send.append(episode)
+            elif submission.state in failed_states:
+                if episode.category.get_sign_off_date() >= SEND_ALL_AFTER_DATE:
+                    to_send.append(episode)
+        return to_send
+
 
     def send_submission(self, episode):
         logger.info(f"Sending {episode.id}")
@@ -32,8 +49,8 @@ class Command(BaseCommand):
             logger.info(traceback.format_exc())
 
     def handle(self, *args, **options):
-        fp17s = self.get_fp17_qs()
-        fp17os = self.get_fp17os()
+        fp17s = self.filter_for_new_or_failed_since(self.get_fp17_qs())
+        fp17os = self.filter_for_new_or_failed_since(self.get_fp17os())
         for episode in fp17s:
             self.send_submission(
                 episode
