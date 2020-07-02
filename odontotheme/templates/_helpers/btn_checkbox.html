@@ -1,9 +1,9 @@
 <div class="row odonto-checkbox">
-  <label class="col-md-9 control-label">{{ label }}</label>
+  <label class="col-md-{{ label_size }} control-label">{{ label }}</label>
   <label uib-btn-checkbox
          ng-model="{{ model }}"
          {% if change %}ng-change="{{ change }}"{% endif %}
-         class="btn btn-lg btn-default btn-checkbox col-md-3"
+         class="btn btn-lg btn-default btn-checkbox col-md-{{ field_size }}"
          >
     <span ng-show="{{ model }} == 1">X</span>
   </label>

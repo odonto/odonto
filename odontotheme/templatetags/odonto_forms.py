@@ -41,6 +41,8 @@ def btn_checkbox(*args, **kwargs):
     - required: label to show when we're required!
     """
     result = get_odonto_common_args(kwargs)
+    result["label_size"] = kwargs.get("field_size", 9)
+    result["field_size"] = kwargs.get("field_size", 12-result["label_size"])
     return result
 
 
