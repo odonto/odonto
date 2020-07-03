@@ -84,7 +84,10 @@ class RECALL_INTERVAL(Treatment):
     def __init__(self, num_months):
         super().__init__(code=9172, instance_count=num_months)
 
-
+# Delivering Better Oral Health (DBOH),
+# clarification that DBOH should only be entered by the dental practice
+# when this has been provided to the patient, and that this must be a
+# manual entry and must not be pre-populated.
 BEST_PRACTICE_PREVENTION = Treatment(code=9173)
 
 
@@ -494,12 +497,15 @@ REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST = Treatment(code=9159)
 REGULATION_11_REPLACEMENT_APPLIANCE = Treatment(code=9167)
 
 
-
-
-
-
-
-
-
-
+# With effect from 1 July 2020, NHSE&I are introducing a change to include an
+# additional CDS data item provided as an additional number box
+# (new CDS data item code 9340 plus number).
+# The new AGP field is to record the number of AGP appointments provided as part
+# of the course of treatment.
+#
+# For example, a patient has 3 fillings and a crown and AGP is used at two of the
+# appointments so the value submitted will be <reptrtty trtcd="9340" noins="02" />
+class AEROSOL_GENERATING_PROCEDURE(Treatment):
+    def __init__(self, day_num):
+        super().__init__(code=9340, instance_count=day_num)
 

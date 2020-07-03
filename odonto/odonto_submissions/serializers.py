@@ -120,6 +120,7 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                 t.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS,
             ),
             ("extractions", t.EXTRACTION),
+            ("aerosol_generating_procedures", t.AEROSOL_GENERATING_PROCEDURE),
             ("crowns_provided", t.CROWN),
             ("upper_denture_acrylic", t.UPPER_DENTURE_ACRYLIC),
             ("lower_denture_acrylic", t.LOWER_DENTURE_ACRYLIC),
@@ -217,6 +218,7 @@ class OrthodonticDataSetTranslator(TreatmentSerializer):
         "function_appliance": t.FUNCTIONAL_APPLIANCE,
         "retainer_upper": t.RETAINER_UPPER,
         "retainer_lower": t.RETAINER_LOWER,
+        "aerosol_generating_procedures": t.AEROSOL_GENERATING_PROCEDURE,
     }
 
     def to_messages(self):
