@@ -23,13 +23,13 @@
       </div>
 
       <div class="pathway-save-button content-offset-below-150">
-          <button
+          <a
           class="btn btn-lg btn-primary btn-save"
           ng-click="(!pathway.errors && form.$valid) && pathway.finish(editing)"
           ng-disabled="form.$submitted && (!form.$valid || pathway.errors)"
         >
           [[ pathway.finish_button_text ]]
-        </button>
+        </a>
       </div>
       {% endblock %}
     </form>
