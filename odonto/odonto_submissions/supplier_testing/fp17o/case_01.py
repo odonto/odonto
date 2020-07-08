@@ -30,6 +30,7 @@ def annotate(bcds1):
         treatments.MONTH_OF_REFERRAL(10),
         treatments.YEAR_OF_REFERRAL(19),
         treatments.IOTN(0),
+        treatments.AEROSOL_GENERATING_PROCEDURE(2)
     ]
 
     if settings.ALWAYS_DECLINE_EMAIL_PHONE:
@@ -64,6 +65,7 @@ def from_model(bcds1, patient, episode):
 
     episode.orthodonticdataset_set.update(
         radiograph=3,
+        aerosol_generating_procedures=2,
         treatment_type=models.OrthodonticDataSet.PROPOSED
     )
 

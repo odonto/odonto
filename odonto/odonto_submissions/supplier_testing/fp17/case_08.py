@@ -19,6 +19,7 @@ def annotate(bcds1):
         treatments.BRIDGE_REPAIRS,
         treatments.MISSING_PERMANENT(0),
         treatments.ETHNIC_ORIGIN_8_ASIAN_OR_ASIAN_BRITISH_INDIAN,
+        treatments.AEROSOL_GENERATING_PROCEDURE(2)
     ]
 
     return bcds1
@@ -40,7 +41,8 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17clinicaldataset_set.update(
-        missing_teeth_permanent=0
+        missing_teeth_permanent=0,
+        aerosol_generating_procedures=2
     )
 
     episode.fp17incompletetreatment_set.update(

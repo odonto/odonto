@@ -439,6 +439,9 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         blank=True, null=True,
         verbose_name="Filled teeth deciduous"
     )
+    aerosol_generating_procedures = fields.IntegerField(
+        blank=True, null=True
+    )
 
     class Meta:
         verbose_name="Clinical data set"
@@ -520,14 +523,15 @@ class OrthodonticDataSet(models.EpisodeSubrecord):
     treatment_type            = fields.CharField(
         choices=TREATMENT_TYPES, max_length=255, blank=True, null=True
     )
-    radiograph                = fields.IntegerField(blank=True, null=True)
-    removable_upper_appliance = fields.BooleanField(default=False)
-    removable_lower_appliance = fields.BooleanField(default=False)
-    fixed_upper_appliance     = fields.BooleanField(default=False)
-    fixed_lower_appliance     = fields.BooleanField(default=False)
-    function_appliance        = fields.BooleanField(default=False)
-    retainer_upper            = fields.BooleanField(default=False)
-    retainer_lower            = fields.BooleanField(default=False)
+    radiograph                      = fields.IntegerField(blank=True, null=True)
+    removable_upper_appliance       = fields.BooleanField(default=False)
+    removable_lower_appliance       = fields.BooleanField(default=False)
+    fixed_upper_appliance           = fields.BooleanField(default=False)
+    fixed_lower_appliance           = fields.BooleanField(default=False)
+    function_appliance              = fields.BooleanField(default=False)
+    retainer_upper                  = fields.BooleanField(default=False)
+    retainer_lower                  = fields.BooleanField(default=False)
+    aerosol_generating_procedures   = fields.IntegerField(blank=True, null=True)
 
 
 class ExtractionChart(models.EpisodeSubrecord):
