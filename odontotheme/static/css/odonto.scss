@@ -202,8 +202,10 @@ label{
     .btn-checkbox{
         float: right;
     }
-    label.col-md-9 {
-        padding-left: 0px;
+    @for $i from 1 through 50 {
+        label.col-md-#{$i}{
+            padding-left: 0px;
+        }
     }
 }
 
