@@ -5,6 +5,7 @@ from opal.core.test import OpalTestCase
 from opal.models import Episode
 from odonto.odonto_submissions.models import Submission
 from odonto.episode_categories import FP17Episode, FP17OEpisode
+from odonto.odonto_submissions.models import EpisodesBeingInvestigated
 
 
 class FP17EpisodeTestCase(OpalTestCase):
@@ -176,6 +177,19 @@ translate_episode_to_xml"
         self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
         summary = FP17Episode.summary()
         self.assertEqual(summary[Submission.REJECTED_BY_COMPASS], 1)
+
+    def test_rejection_ignored(self):
+        episode = self.get_episode()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.yesterday
+        )
+        self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
+        EpisodesBeingInvestigated.objects.create(
+            episode=episode
+        )
+        summary = FP17Episode.summary()
+        self.assertEqual(summary["Rejected but ignored"], 1)
+        self.assertFalse(Submission.REJECTED_BY_COMPASS in summary)
 
     def test_summary_open(self):
         episode = self.get_episode()

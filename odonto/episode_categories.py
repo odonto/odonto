@@ -5,7 +5,6 @@ from django.conf import settings
 from opal.core import episodes
 
 
-
 class DentalCareEpisodeCategory(episodes.EpisodeCategory):
     display_name = "Dental Care"
     detail_template = "detail/dental_care.html"
@@ -124,6 +123,7 @@ class AbstractOdontoCategory(object):
     @classmethod
     def summary(cls, qs=None):
         from opal.models import Episode
+        from odonto.odonto_submissions.models import EpisodesBeingInvestigated
 
         if qs is None:
             qs = Episode.objects.all()
@@ -139,6 +139,10 @@ class AbstractOdontoCategory(object):
             result["Oldest unsent"] = oldest_unsent.category.get_sign_off_date()
         submitted_qs = cls._get_submitted(qs).prefetch_related("submission_set")
 
+        rejection_ignored = set(
+            EpisodesBeingInvestigated.objects.all().values_list('episode_id', flat=True)
+        )
+
         for i in submitted_qs:
             submission = i.category.submission()
 
@@ -150,7 +154,10 @@ class AbstractOdontoCategory(object):
                 # or that the patient has a protected address
                 result[cls.NEEDS_INVESTIGATION] += 1
             else:
-                if submission.state == submission.SENT:
+                if i.id in rejection_ignored:
+                    if submission.state == submission.REJECTED_BY_COMPASS:
+                        result["Rejected but ignored"] += 1
+                elif submission.state == submission.SENT:
                     result["Sent (result pending)"] += 1
                 else:
                     result[submission.state] += 1
