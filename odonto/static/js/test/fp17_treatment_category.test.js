@@ -162,8 +162,11 @@ describe('Fp17TreatmentCategory', function() {
     });
 
     it('should error if the band is urgent treatment and the incomplete treatment is band 1', function(){
-      var err = "Urgent treatment cannot have an incomplete treatment";
-      expected.fp17_treatment_category.treatment_category = err;
+      expected = {
+        fp17_treatment_category: {
+          treatment_category: "Urgent treatment cannot have an incomplete treatment"
+        }
+      };
       editing.fp17_treatment_category.treatment_category = "Urgent treatment";
       editing.fp17_incomplete_treatment.incomplete_treatment = "Band 1";
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
