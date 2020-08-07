@@ -37,7 +37,7 @@
 
           <div id="logout">
             <ul class="app-info">
-              {% if view.request.user.profile.can_extract %}
+              {% if request.user.profile.can_extract %}
               <li {% if request.resolver_match.url_name == "odonto-stats" %}class="active"{% endif %}>
                 <a href="{% url 'odonto-stats' %}">
                   <i class="fa fa-bar-chart"></i>
@@ -45,7 +45,7 @@
                 </a>
               </li>
               {% endif %}
-              {% if view.request.user.profile.can_extract %}
+              {% if request.user.profile.can_extract %}
                 <li>
                   <a href="/search/#/extract" title="Query">
                     <i class="fa fa-download"></i>
@@ -53,7 +53,7 @@
                   </a>
                 </li>
               {% endif %}
-              {% if view.request.user.is_superuser %}
+              {% if request.user.is_superuser %}
                 <li>
                   <a href="/admin/" title="Admin">
                     <i class="fa fa-cogs"></i>
