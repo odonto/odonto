@@ -165,6 +165,19 @@ class Response(models.Model):
         self.submission_set.add(*rejected_submissions)
 
 
+class EpisodesBeingInvestigated(models.Model):
+    """
+    If an episode is being investigated.
+
+    Do not flag it as a warning in the error email
+    """
+    episode = models.ForeignKey(
+        Episode,
+        on_delete=models.CASCADE
+    )
+    created = models.DateTimeField(default=timezone.now)
+
+
 class Submission(models.Model):
     # Message is sent but we are waiting on a response message
     SENT = "Sent"

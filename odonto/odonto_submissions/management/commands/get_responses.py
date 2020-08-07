@@ -14,7 +14,9 @@ from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from opal.models import Episode
 from opal.core.serialization import OpalSerializer
-from odonto.odonto_submissions.models import Response, Submission
+from odonto.odonto_submissions.models import (
+    Response, Submission, EpisodesBeingInvestigated
+)
 from odonto.episode_categories import FP17Episode, FP17OEpisode, AbstractOdontoCategory
 from odonto.odonto_submissions import logger
 from odonto.utils import get_current_financial_year
@@ -36,6 +38,20 @@ class WarningField:
         if not isinstance(k, WarningField):
             return False
         return self.value == k.value
+
+
+def clean_episodes_being_investigated():
+    """
+    If an episode has been marked as in investigation
+    and that episode has now succeeded
+    """
+    for instance in EpisodesBeingInvestigated.objects.all():
+        episode = instance.episode
+        if episode.category.submission().state == Submission.SUCCESS:
+            logger.info(
+                f"Investigated episode {episode.id} has successfully been sent"
+            )
+            instance.delete()
 
 
 class Command(BaseCommand):
@@ -117,6 +133,7 @@ class Command(BaseCommand):
             settings.ADMINS,
             html_message=html_message,
         )
+        clean_episodes_being_investigated()
 
     def handle(self, *args, **options):
         try:

@@ -2,7 +2,7 @@ import datetime
 from opal.core.test import OpalTestCase
 from unittest.mock import patch
 from opal.models import Episode
-from odonto.odonto_submissions.models import Submission
+from odonto.odonto_submissions.models import Submission, EpisodesBeingInvestigated
 from odonto.episode_categories import FP17Episode
 from odonto.odonto_submissions.management.commands import get_responses
 
@@ -158,3 +158,21 @@ translate_episode_to_xml"
 
         self.assertTrue(ctx["title"].startswith("Odonto response information for"))
         self.assertTrue(ctx["title"].endswith("NEEDS INVESTIGATION"))
+
+    def test_clean_episodes_episode_succeeded(self, logger, render_to_string, response_get, send_mail):
+        episode = self.get_episode()
+        self.get_submission(episode, Submission.SUCCESS)
+        episode.episodesbeinginvestigated_set.create()
+        get_responses.clean_episodes_being_investigated()
+        self.assertEqual(Episode.objects.get().id, episode.id)
+        self.assertFalse(EpisodesBeingInvestigated.objects.exists())
+
+    def test_clean_episodes_episode_failed(self, logger, render_to_string, response_get, send_mail):
+        episode = self.get_episode()
+        self.get_submission(episode, Submission.REJECTED_BY_COMPASS)
+        episode.episodesbeinginvestigated_set.create()
+        get_responses.clean_episodes_being_investigated()
+        self.assertEqual(Episode.objects.get().id, episode.id)
+        self.assertEqual(
+            EpisodesBeingInvestigated.objects.get().episode_id, episode.id
+        )
