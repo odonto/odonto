@@ -9,9 +9,11 @@
 
   <div class="col-md-4 col-md-offset-4">
 
-    <center>
-      <img src="{% static 'img/odonto_logo.png' %}" />
-    </center>
+    <div class="row">
+      <div class="col-sm-12 text-center">
+        <img src="{% static 'img/odonto_logo.png' %}" />
+      </div>
+    </div>
     <h2 class="text-center">
       {{ OPAL_BRAND_NAME }} <small>{{ VERSION_NUMBER }}</small>
     </h2>
@@ -35,23 +37,23 @@
           />
         </div>
       </div>
-
       <div class="form-group">
         <div class="col-sm-12">
           <input type="password" name="password" id="password" placeholder="password" class="form-control">
         </div>
       </div>
-
       <div class="form-group">
-        <div class="col-sm-12">
-          <center>
-            <button type="submit" class="btn btn-lg btn-default active" id="login">
-              log in
-            </button>
-          </center>
+        <div class="col-sm-12 text-center">
+          <button type="submit" class="btn btn-lg btn-default active" id="login">
+            log in
+          </button>
         </div>
       </div>
-
+      <div class="form-group">
+        <div class="col-sm-12 text-center">
+          <a href="{% url 'password_reset' %}">Forgotten your password</a>
+        </div>
+      </div>
       <input type="hidden" name="next" value="{{ next }}" />
     </form>
   </div>
