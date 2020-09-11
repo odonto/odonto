@@ -110,7 +110,7 @@ class EpisodeAdmin(VersionAdmin):
             ]:
                 continue
             submission = episode.category.submission()
-            if submission and submission.state == submission.REJECTED:
+            if submission and submission.state == submission.REJECTED_BY_COMPASS:
                 episode.episodesbeinginvestigated_set.create()
 
     ignore_episode.short_description = "Ignore this episode's rejection"
@@ -135,7 +135,7 @@ class EpisodeAdmin(VersionAdmin):
         submission = obj.category.submission()
         if not submission:
             return obj.stage
-        if submission.state == submission.REJECTED:
+        if submission.state == submission.REJECTED_BY_COMPASS:
             if obj.episodesbeinginvestigated_set.exists():
                 return "Rejected but ignored"
         else:
