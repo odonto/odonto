@@ -135,7 +135,7 @@ class EpisodeAdmin(VersionAdmin):
         submission = obj.category.submission()
         if not submission:
             return obj.stage
-        if submission.state == FP17Episode.REJECTED:
+        if submission.state == submission.REJECTED:
             if obj.episodesbeinginvestigated_set.exists():
                 return "Rejected but ignored"
         else:
