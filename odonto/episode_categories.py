@@ -73,7 +73,7 @@ class AbstractOdontoCategory(object):
         return (
             qs.exclude(id__in=successful_ids)
             .filter(submission__state=models.Submission.REJECTED_BY_COMPASS)
-            .prefetch_related("submission_set")
+            .prefetch_related("submission_set").distinct()
         )
 
     @classmethod
