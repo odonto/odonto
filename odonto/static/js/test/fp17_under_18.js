@@ -45,6 +45,25 @@ describe('Fp17Under18', function() {
       expect(Fp17Under18(editing)).toBe(undefined);
     });
 
+    it('should error if the patient is just 18', function(){
+      editing.demographics.date_of_birth = new Date(2002, 10, 1);
+      editing.fp17_incomplete_treatment.completion_or_last_visit = new Date(2020, 10, 1);
+      editing.fp17_exemptions.patient_under_18 = true;
+      var expected = {
+        fp17_exemptions: {
+          patient_under_18: "The patient's DOB was over 18 years ago"
+        }
+      }
+      expect(Fp17Under18(editing)).toEqual(expected);
+    })
+
+    it('should not error if the patient is nearly 18', function(){
+      editing.demographics.date_of_birth = new Date(2002, 10, 10);
+      editing.fp17_incomplete_treatment.completion_or_last_visit = new Date(2020, 10, 9);
+      editing.fp17_exemptions.patient_under_18 = true;
+      expect(Fp17Under18(editing)).toBe(undefined);
+    })
+
     it('should prioritise the date of assessment', function(){
       editing.demographics.date_of_birth = new Date(2003, 1, 1);
       editing.fp17_incomplete_treatment.date_of_acceptance = new Date(2018, 1, 1);
