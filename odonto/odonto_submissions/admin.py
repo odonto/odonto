@@ -128,7 +128,7 @@ class EpisodeAdmin(VersionAdmin):
             return ""
 
         url = url.format(obj.patient_id, obj.id)
-        return '<a href="{}">{}</a>'.format(url, url)
+        return format_html('<a href="{}">{}</a>', url, url)
 
     def edit_form(self, obj):
         if obj.category_name not in [
@@ -143,7 +143,7 @@ class EpisodeAdmin(VersionAdmin):
             return ""
 
         url = url.format(obj.patient_id, obj.id)
-        return '<a href="{}">{}</a>'.format(url, url)
+        return format_html('<a href="{}">{}</a>', url, url)
 
     def state(self, obj):
         if obj.category_name not in [
