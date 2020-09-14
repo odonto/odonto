@@ -25,7 +25,7 @@ FURTHER_TREATMENT_WITHIN_TWO_MONTHS = Treatment(code=9163)
 DENTURE_REPAIRS = Treatment(code=9154)
 BRIDGE_REPAIRS = Treatment(code=9157)
 ARREST_OF_BLEEDING = Treatment(code=9155)
-REMOVAL_OF_SUTURES = Treatment(code=9155)
+REMOVAL_OF_SUTURES = Treatment(code=9156)
 
 EXAMINATION = Treatment(code=9317)
 
@@ -68,7 +68,7 @@ class INLAYS(Treatment):
     """
 
     def __init__(self, num_teeth):
-        super().__init__(code=9313, instance_count=num_teeth)
+        super().__init__(code=9314, instance_count=num_teeth)
 
 
 class RECALL_INTERVAL(Treatment):
