@@ -156,8 +156,7 @@ class EpisodeAdmin(VersionAdmin):
         if submission.state == submission.REJECTED_BY_COMPASS:
             if obj.episodesbeinginvestigated_set.exists():
                 return "Rejected but ignored"
-        else:
-            return submission.state
+        return submission.state
 
     def rejection(self, obj):
         submission = obj.category.submission()
