@@ -25,7 +25,7 @@ describe('Fp17Under18', function() {
       editing.fp17_exemptions.patient_under_18 = true;
       var expected = {
         fp17_exemptions: {
-          patient_under_18: "The patient's DOB was over 18 years ago"
+          patient_under_18: "This patient is not under 18"
         }
       }
       expect(Fp17Under18(editing)).toEqual(expected);
@@ -51,7 +51,7 @@ describe('Fp17Under18', function() {
       editing.fp17_exemptions.patient_under_18 = true;
       var expected = {
         fp17_exemptions: {
-          patient_under_18: "The patient's DOB was over 18 years ago"
+          patient_under_18: "This patient is not under 18"
         }
       }
       expect(Fp17Under18(editing)).toEqual(expected);

@@ -22,7 +22,7 @@ angular.module('opal.services').factory('Fp17Under18', function(toMomentFilter){
         if(otherMoment.diff(eighteenBirthday, "days") >= 0){
           return {
             fp17_exemptions: {
-              patient_under_18: "The patient's DOB was over 18 years ago"
+              patient_under_18: "This patient is not under 18"
             }
           }
         }
