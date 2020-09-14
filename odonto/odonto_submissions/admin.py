@@ -78,8 +78,8 @@ class SubmissionTimeFilter(admin.SimpleListFilter):
         queryset = queryset.filter(category_name__in=fp17_and_fp17os)
         if self.value() == 'recent':
             queryset = queryset.prefetch_related('fp17incompletetreatment_set')
-            queryset = queryset.prefetch_related('orthodontic_assessment_set')
-            queryset = queryset.prefetch_related('orthodontic_treatment_set')
+            queryset = queryset.prefetch_related('orthodonticassessment_set')
+            queryset = queryset.prefetch_related('orthodontictreatment_set')
             ids = []
             for i in queryset:
                 sign_off = i.category.get_sign_off_date()
