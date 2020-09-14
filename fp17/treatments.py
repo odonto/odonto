@@ -107,7 +107,7 @@ class TREATMENT_TYPE(Treatment):
     incstance count `2` for Completed / Abandoned / Discontinued Treatment
     """
     def __init__(self, instance_count):
-        super().__init__(code=9303, instance_count=instance_count)
+        super().__init__(code=9415, instance_count=instance_count)
 
 PROPOSED_TREATMENT = TREATMENT_TYPE(instance_count=1)
 COMPLETED_TREATMENT = TREATMENT_TYPE(instance_count=2)
