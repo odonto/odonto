@@ -77,9 +77,9 @@ class SubmissionTimeFilter(admin.SimpleListFilter):
         fp17_and_fp17os = [FP17Episode.display_name, FP17OEpisode.display_name]
         queryset = queryset.filter(category_name__in=fp17_and_fp17os)
         if self.value() == 'recent':
-            queryset.prefetch_related('fp17incompletetreatment_set')
-            queryset.prefetch_related('orthodontic_assessment_set')
-            queryset.prefetch_related('orthodontic_treatment_set')
+            queryset = queryset.prefetch_related('fp17incompletetreatment_set')
+            queryset = queryset.prefetch_related('orthodontic_assessment_set')
+            queryset = queryset.prefetch_related('orthodontic_treatment_set')
             ids = []
             for i in queryset:
                 sign_off = i.category.get_sign_off_date()
@@ -91,7 +91,7 @@ class SubmissionTimeFilter(admin.SimpleListFilter):
 
 class EpisodeAdmin(VersionAdmin):
     list_display = (
-        'id', 'category_name', 'submission_form', 'state', 'rejection',
+        'id', 'category_name', 'edit_form', 'submission_form', 'state', 'rejection',
     )
     list_filter = (SubmissionTimeFilter, SubmissionStateFilter,)
 
@@ -116,16 +116,34 @@ class EpisodeAdmin(VersionAdmin):
     ignore_episode.short_description = "Ignore this episode's rejection"
 
     def submission_form(self, obj):
+        if obj.category_name not in [
+            FP17Episode.display_name, FP17OEpisode.display_name
+        ]:
+            return ""
         if obj.category_name == FP17Episode.display_name:
-            url = '<a href="/pathway/#/fp17-submit/{}/{}">submition pathway</a>'
+            url = "/pathway/#/fp17-submit/{}/{}"
         elif obj.category_name == FP17OEpisode.display_name:
-            url = '<a href="/pathway/#/fp17-o-submit/{}/{}">submition pathway</a>'
+            url = "/pathway/#/fp17-o-submit/{}/{}"
         else:
             return ""
 
-        return format_html(
-            url, obj.patient_id, obj.id
-        )
+        url = url.format(obj.patient_id, obj.id)
+        return '<a href="{}">{}</a>'.format(url, url)
+
+    def edit_form(self, obj):
+        if obj.category_name not in [
+            FP17Episode.display_name, FP17OEpisode.display_name
+        ]:
+            return ""
+        if obj.category_name == FP17Episode.display_name:
+            url = "/pathway/#/fp17-edit/{}/{}"
+        elif obj.category_name == FP17OEpisode.display_name:
+            url = "/pathway/#/fp17-o-edit/{}/{}"
+        else:
+            return ""
+
+        url = url.format(obj.patient_id, obj.id)
+        return '<a href="{}">{}</a>'.format(url, url)
 
     def state(self, obj):
         if obj.category_name not in [
