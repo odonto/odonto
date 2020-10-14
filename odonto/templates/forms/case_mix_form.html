@@ -1,0 +1,15 @@
+{% load odonto_forms %}
+<div class="row">
+    <div class="col-md-4">
+      {% btn_radio field="CaseMix.ability_to_communicate" requierd=True %}
+      {% btn_radio field="CaseMix.oral_risk_factors" required=True %}
+    </div>
+    <div class="col-md-4">
+      {% btn_radio field="CaseMix.ability_to_cooperate" required=True %}
+      {% btn_radio field="CaseMix.access_to_oral_care" required=True %}
+    </div>
+    <div class="col-md-4">
+      {% btn_radio field="CaseMix.medical_status" required=True %}
+      {% btn_radio field="CaseMix.legal_and_ethical_barriers_to_care" required=True %}
+    </div>
+</div>
