@@ -1,24 +1,25 @@
-<span ng-show="item.ability_to_communicate">
-    [[ item.ability_to_communicate ]]
-   <br />
-</span>
-<span ng-show="item.ability_to_cooperate">
-    [[ item.ability_to_cooperate ]]
-   <br />
-</span>
-<span ng-show="item.medical_status">
-    [[ item.medical_status ]]
-   <br />
-</span>
-<span ng-show="item.oral_risk_factors">
-    [[ item.oral_risk_factors ]]
-   <br />
-</span>
-<span ng-show="item.access_to_oral_care">
-    [[ item.access_to_oral_care ]]
-   <br />
-</span>
-<span ng-show="item.legal_and_ethical_barriers_to_care">
-    [[ item.legal_and_ethical_barriers_to_care ]]
-   <br />
-</span>
+{% load odonto_subrecords %}
+<div class="row">
+  <div class="col-md-6">
+    <table ng-controller="CaseMixHelper as caseMixHelper" class="table table-striped">
+      {% table_row_field_display "CaseMix.ability_to_communicate" %}
+      {% table_row_field_display "CaseMix.ability_to_cooperate" %}
+      {% table_row_field_display "CaseMix.medical_status" %}
+      {% table_row_field_display "CaseMix.oral_risk_factors" %}
+      {% table_row_field_display "CaseMix.access_to_oral_care" %}
+      {% table_row_field_display "CaseMix.legal_and_ethical_barriers_to_care" %}
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Maximum Score</td>
+        <td>[[ caseMixHelper.maxCode(item) ]]</td>
+      </tr>
+      <tr>
+        <td>Banded Total Score</td>
+        <td>[[ caseMixHelper.band(item) ]] ([[ caseMixHelper.totalScore(item) ]])</td>
+      </tr>
+    </table>
+  </div>
+</div>
