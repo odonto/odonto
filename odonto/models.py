@@ -727,3 +727,33 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
         null=True,
         verbose_name="Date of completion or last visit"
     )
+
+
+class CaseMix(models.EpisodeSubrecord):
+    """
+    Case mix is a way of gauging the complexity of
+    patients as laid out by
+    https://bda.org/dentists/governance-and-representation/craft-committees/salaried-primary-care-dentists/Documents/Case%20mix%202019.pdf  #NOQA E501
+    """
+    _is_singleton = True
+
+    CHOICES = enum("0", "A", "B", "C")
+    ability_to_communicate = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+    ability_to_cooperate = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES,
+        verbose_name="Ability To Co-operate"
+    )
+    medical_status = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES,
+    )
+    oral_risk_factors = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+    access_to_oral_care = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+    legal_and_ethical_barriers_to_care = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
