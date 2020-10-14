@@ -22,7 +22,7 @@
         <div ng-hide="pathway.errors" class="pathway-save-button">
             <button
             class="btn btn-lg btn-primary btn-save"
-            ng-click="pathway.errors || form.$valid && pathway.finish(editing)"
+            ng-click="!form.$setSubmitted() && pathway.errors || form.$valid && pathway.finish(editing)"
             check-form="form"
           >
             <i class="[[ pathway.finish_button_icon ]]"></i>
