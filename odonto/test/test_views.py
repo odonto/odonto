@@ -227,18 +227,18 @@ class CaseMixTestCase(OpalTestCase):
         self.assertEqual(len(reader), 1)
         expected = {
             "Date": "2/2020",
-            'Ability To Communicate': '0',
-            'Ability To Cooperate': '0',
-            'Medical Status': '2',
-            'Oral Risk Factors': '12',
-            'Access To Oral Care': '0',
-            'Legal And Ethical Barriers To Care': '0',
-            'Total Score': '14',
-            'Standard Patient': '0',
-            'Some Complexity': '0',
-            'Moderate Complexity': '1',
-            'Severe Complexity': '0',
-            'Extreme Complexity': '0'
+            'Ability to communicate': '0',
+            'Ability to cooperate': '0',
+            'Medical status': '2',
+            'Oral risk factors': '12',
+            'Access to oral care': '0',
+            'Legal and ethical barriers to care': '0',
+            'Total score': '14',
+            'Standard patient': '0',
+            'Some complexity': '0',
+            'Moderate complexity': '1',
+            'Severe complexity': '0',
+            'Extreme complexity': '0'
         }
         self.assertEqual(
             dict(reader[0]),

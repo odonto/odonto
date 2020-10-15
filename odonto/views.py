@@ -97,7 +97,7 @@ class CaseMix(LoginRequiredMixin, View):
         headers.extend(list(models.CaseMix.CASE_MIX_FIELDS.keys()))
         headers.insert(0, "Date")
         headers.extend([
-            "Total Score",
+            "Total score",
             models.CaseMix.STANDARD_PATIENT,
             models.CaseMix.SOME_COMPLEXITY,
             models.CaseMix.MODERATE_COMPLEXITY,
@@ -108,7 +108,7 @@ class CaseMix(LoginRequiredMixin, View):
         return OrderedDict([(self.get_field_title(i), 0) for i in headers])
 
     def get_field_title(self, field_name):
-        return field_name.replace("_", " ").title()
+        return field_name.replace("_", " ").capitalize()
 
 
     def calculate(self, qs):
@@ -136,7 +136,7 @@ class CaseMix(LoginRequiredMixin, View):
                     result[d][self.get_field_title(field)] += score
             total_score = case_mix.total_score()
             if total_score is not None:
-                result[d]["Total Score"] += total_score
+                result[d]["Total score"] += total_score
             band = case_mix.band()
             result[d][band] += 1
         return result
@@ -158,7 +158,7 @@ class CaseMix(LoginRequiredMixin, View):
             row = {}
             val_dict = date_to_values[month_year]
             for key, val in val_dict.items():
-                row[key.title()] = val
+                row[self.get_field_title(key)] = val
             row["Date"] = "{}/{}".format(*month_year)
             writer.writerow(row)
         return response

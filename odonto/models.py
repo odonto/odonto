@@ -758,11 +758,11 @@ class CaseMix(models.EpisodeSubrecord):
         }
     }
 
-    STANDARD_PATIENT = "Standard Patient"
-    SOME_COMPLEXITY = "Some Complexity"
-    MODERATE_COMPLEXITY = "Moderate Complexity"
-    SEVERE_COMPLEXITY = "Severe Complexity"
-    EXTREME_COMPLEXITY = "Extreme Complexity"
+    STANDARD_PATIENT = "Standard patient"
+    SOME_COMPLEXITY = "Some complexity"
+    MODERATE_COMPLEXITY = "Moderate complexity"
+    SEVERE_COMPLEXITY = "Severe complexity"
+    EXTREME_COMPLEXITY = "Extreme complexity"
 
     CHOICES = enum("0", "A", "B", "C")
     ability_to_communicate = fields.CharField(
