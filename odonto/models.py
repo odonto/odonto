@@ -737,6 +737,33 @@ class CaseMix(models.EpisodeSubrecord):
     """
     _is_singleton = True
 
+    CASE_MIX_FIELDS = {
+        "ability_to_communicate": {
+            "0": 0, "A": 2, "B": 4, "C": 8
+        },
+        "ability_to_cooperate": {
+            "0": 0, "A": 3, "B": 6, "C": 12
+        },
+        "medical_status": {
+            "0": 0, "A": 2, "B": 6, "C": 12
+        },
+        "oral_risk_factors": {
+            "0": 0, "A": 3, "B": 6, "C": 12
+        },
+        "access_to_oral_care": {
+            "0": 0, "A": 2, "B": 4, "C": 8
+        },
+        "legal_and_ethical_barriers_to_care": {
+            "0": 0, "A": 2, "B": 4, "C": 8
+        }
+    }
+
+    STANDARD_PATIENT = "Standard Patient"
+    SOME_COMPLEXITY = "Some Complexity"
+    MODERATE_COMPLEXITY = "Moderate Complexity"
+    SEVERE_COMPLEXITY = "Severe Complexity"
+    EXTREME_COMPLEXITY = "Extreme Complexity"
+
     CHOICES = enum("0", "A", "B", "C")
     ability_to_communicate = fields.CharField(
         blank=False, null=True, max_length=256, choices=CHOICES
@@ -757,3 +784,35 @@ class CaseMix(models.EpisodeSubrecord):
     legal_and_ethical_barriers_to_care = fields.CharField(
         blank=False, null=True, max_length=256, choices=CHOICES
     )
+
+    def max_code(self):
+        val = 0
+        code = "0"
+        for field, mapping in self.CASE_MIX_FIELDS.items():
+            val = getattr(self, field)
+
+    def score(self, field):
+        val = getattr(self, field)
+        if val is not None:
+            return self.CASE_MIX_FIELDS[field][val]
+
+    def total_score(self):
+        total = 0
+        for field in self.CASE_MIX_FIELDS.keys():
+            score = self.score(field)
+            if score:
+                total += score
+        return total
+
+    def band(self):
+        total = self.total_score()
+
+        if total == 0:
+            return self.STANDARD_PATIENT
+        if total < 10:
+            return self.SOME_COMPLEXITY
+        if total < 20:
+            return self.MODERATE_COMPLEXITY
+        if total < 30:
+            return self.SEVERE_COMPLEXITY
+        return self.EXTREME_COMPLEXITY

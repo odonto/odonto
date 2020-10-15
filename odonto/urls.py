@@ -17,8 +17,6 @@ urlpatterns = [
          name='odonto-summary-fp17-o'),
     path('view-fp17-o/<int:pk>/', views.ViewFP17ODetailView.as_view(),
          name='odonto-view-fp17-o'),
-
-
     url('^unsubmitted-fp17s',
         views.UnsubmittedFP17s.as_view(),
         name='odonto-unsubmitted-fp17s'),
@@ -27,6 +25,7 @@ urlpatterns = [
         views.OpenFP17s.as_view(),
         name='odonto-open-fp17s'),
     url('^stats', views.Stats.as_view(), name="odonto-stats"),
+    url('^case-mix-csv', views.CaseMix.as_view(), name="case-mix-csv"),
 ]
 
 urlpatterns += opatterns
