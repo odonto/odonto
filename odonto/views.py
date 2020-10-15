@@ -93,9 +93,8 @@ class CaseMix(LoginRequiredMixin, View):
         )
 
     def get_empty_row(self):
-        headers = ["Date"]
+        headers = ["Period start", "Year", "Month"]
         headers.extend(list(models.CaseMix.CASE_MIX_FIELDS.keys()))
-        headers.insert(0, "Date")
         headers.extend([
             "Total score",
             models.CaseMix.STANDARD_PATIENT,
@@ -159,7 +158,11 @@ class CaseMix(LoginRequiredMixin, View):
             val_dict = date_to_values[month_year]
             for key, val in val_dict.items():
                 row[self.get_field_title(key)] = val
-            row["Date"] = "{}/{}".format(*month_year)
+            row["Period start"] = "{}/{}".format(
+                *month_year
+            )
+            row["Month"] = month_year[0]
+            row["Year"] = month_year[1]
             writer.writerow(row)
         return response
 

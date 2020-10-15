@@ -198,7 +198,7 @@ class CaseMixTestCase(OpalTestCase):
         )
         reader = list(csv.reader(response.content.decode("utf-8").strip().split("\n")))
         self.assertEqual(len(reader), 1)
-        self.assertIn("Date", reader[0])
+        self.assertIn("Period start", reader[0])
 
     def test_vanilla(self):
         _, self.episode = self.new_patient_and_episode_please()
@@ -226,7 +226,9 @@ class CaseMixTestCase(OpalTestCase):
         reader = list(csv.DictReader(response.content.decode("utf-8").strip().split("\n")))
         self.assertEqual(len(reader), 1)
         expected = {
-            "Date": "2/2020",
+            "Period start": "2/2020",
+            "Year": "2020",
+            "Month": "2",
             'Ability to communicate': '0',
             'Ability to cooperate': '0',
             'Medical status': '2',
