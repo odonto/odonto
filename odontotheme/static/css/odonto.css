@@ -446,7 +446,7 @@ h5 {
   height: 48px;
 }
 
-.btn-lg {
+.btn-lg, .btn-lg:hover {
   padding: 6px 40px;
   font-size: 18px;
   font-weight: bold;
