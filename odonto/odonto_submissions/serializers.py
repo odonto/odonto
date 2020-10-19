@@ -61,6 +61,16 @@ class TreatmentSerializer(object):
                 treatments.append(v)
         return treatments
 
+class PretreatmentCovidTriageAssessmentsSerializer(TreatmentSerializer):
+    model = models.PretreatmentCovidTriageAssessments
+
+    TREATMENT_MAPPINGS = {
+        "shielding_patient": t.PRETREATMENT_COVID_SHIELDING,
+        "increased_risk": t.PRETREATMENT_COVID_INCREASED_RISK,
+        "possible_covid": t.PRETREATMENT_COVID_POSSIBLE,
+        "symptom_free": t.PRETREATMENT_COVID_SYMPTOM_FREE,
+        "other": t.PRETREATMENT_COVID_OTHER
+    }
 
 class Fp17IncompleteTreatmentSerializer(TreatmentSerializer):
     model = models.Fp17IncompleteTreatment
@@ -614,6 +624,7 @@ def translate_to_fp17o(bcds1, episode):
     bcds1.treatments = []
 
     translators = [
+        PretreatmentCovidTriageAssessmentsSerializer,
         OrthodonticDataSetTranslator,
         ExtractionChartTranslator,
         OrthodonticAssessmentTranslator,
@@ -681,6 +692,7 @@ def translate_to_fp17(bcds1, episode):
     bcds1.treatments = []
 
     translators = [
+        PretreatmentCovidTriageAssessmentsSerializer,
         Fp17IncompleteTreatmentSerializer,
         Fp17TreatmentCategorySerializer,
         Fp17ClinicalDataSetSerializer,
