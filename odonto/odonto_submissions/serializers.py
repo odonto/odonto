@@ -120,7 +120,6 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                 t.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS,
             ),
             ("extractions", t.EXTRACTION),
-            ("aerosol_generating_procedures", t.AEROSOL_GENERATING_PROCEDURE),
             ("crowns_provided", t.CROWN),
             ("upper_denture_acrylic", t.UPPER_DENTURE_ACRYLIC),
             ("lower_denture_acrylic", t.LOWER_DENTURE_ACRYLIC),
@@ -144,6 +143,20 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
         ]
     )
+
+    def to_messages(self):
+        treatments = super().to_messages()
+        # only include aerosols when date of acceptance is after the
+        # below
+        change_date = datetime.date(2020, 3, 23)
+        incomplete_treatment = self.episode.fp17incompletetreatment_set.get()
+        date_of_acceptance = incomplete_treatment.date_of_acceptance
+        if date_of_acceptance and date_of_acceptance >= change_date:
+            if self.model_instance.aerosol_generating_procedures:
+                treatments.append(
+                    t.AEROSOL_GENERATING_PROCEDURE(self.model_instance.aerosol_generating_procedures)
+            )
+        return treatments
 
 
 class Fp17RecallSerializer(TreatmentSerializer):
@@ -380,7 +393,6 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
     TREATMENT_MAPPINGS = {
         "aesthetic_component": t.AESTHETIC_COMPONENT,
         "repair": t.REPAIR_TO_APPLIANCE_FITTED_BY_ANOTHER_DENTIST,
-        "replacement": t.REGULATION_11_REPLACEMENT_APPLIANCE,
         "par_scores_calculated": t.PAR_SCORES_CALCULATED,
     }
 
@@ -397,7 +409,12 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
             else:
                 result.append(t.IOTN(int(self.model_instance.iotn)))
 
-        if self.model_instance.completion_type == self.model.PATIENT_FAILED_TO_RETURN:
+        # logically it is the case you can have a replacement
+        # and a conclusion but compass does not accept them.
+        # Compass says in this case, just send the replacement.
+        if self.model_instance.replacement:
+            result.append(t.REGULATION_11_REPLACEMENT_APPLIANCE)
+        elif self.model_instance.completion_type == self.model.PATIENT_FAILED_TO_RETURN:
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_FAILED_TO_RETURN)
         elif self.model_instance.completion_type == self.model.PATIENT_REQUESTED:
