@@ -150,6 +150,25 @@ class Demographics(models.Demographics):
         verbose_name_plural = "Patient information"
 
 
+class PretreatmentCovidTriageAssessments(models.EpisodeSubrecord):
+    _is_singleton = True
+
+    SHIELDING = "Shielding"
+    INCREASED_RISK = "Increased risk"
+    POSSIBLE_COVID = "Possible COVID"
+    SYMPTOM_FREE = "Symptom free"
+    OTHER = "Other"
+
+    TRIAGE_TYPE = enum(SHIELDING, INCREASED_RISK, POSSIBLE_COVID, SYMPTOM_FREE, OTHER)
+
+    triage_type = fields.CharField(blank=True, null=True, max_length=256, choices=TRIAGE_TYPE)
+    number_of_assessments = fields.IntegerField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "COVID triage assessments"
+        verbose_name_plural = "COVID triage assessments"
+
+
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
