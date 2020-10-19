@@ -188,6 +188,39 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
         verbose_name = "Performer name and clinic"
 
 
+class PretreatmentCovidTriageAssessments(models.EpisodeSubrecord):
+    _is_singleton = True
+    shielding_patient = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Number of assessments for a shielding patient"
+    )
+    increased_risk = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Number of assessments for a patient at increased risk of COVID"
+    )
+    possible_covid = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Number of assessments for a patient with possible/confirmed COVID-19 (or those living in the same household)"
+    )
+    symptom_free = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Number of assessments for a patient who is COVID symptom free at present"
+    )
+    other = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Number of assessments for a patient in other COVID status"
+    )
+
+    class Meta:
+        verbose_name = "COVID triage assessments"
+        verbose_name_plural = "COVID triage assessments"
+
+
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
 
