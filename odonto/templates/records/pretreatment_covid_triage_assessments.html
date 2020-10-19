@@ -1,0 +1,13 @@
+{% load odonto_subrecords %}
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-striped">
+      {% table_row_field_display "PretreatmentCovidTriageAssessments.shielding_patient" %}
+      {% table_row_field_display "PretreatmentCovidTriageAssessments.increased_risk" %}
+      {% table_row_field_display "PretreatmentCovidTriageAssessments.possible_covid" %}
+      {% table_row_field_display "PretreatmentCovidTriageAssessments.symptom_free" %}
+      {% table_row_field_display "PretreatmentCovidTriageAssessments.other" %}
+    </table>
+  </div>
+</div>
+

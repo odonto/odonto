@@ -88,6 +88,9 @@ FP17_STEPS = (
         base_template="pathway/steps/step_base_without_display_name.html"
     ),
     pathway.Step(
+        model=models.PretreatmentCovidTriageAssessments,
+    ),
+    pathway.Step(
         model=models.Fp17IncompleteTreatment,
         step_controller="FP17TreatmentStepCtrl",
     ),
@@ -245,6 +248,9 @@ FP17_O_STEPS = (
     pathway.Step(
         model=models.Demographics,
         base_template="pathway/steps/step_base_without_display_name.html"
+    ),
+    pathway.Step(
+        model=models.PretreatmentCovidTriageAssessments,
     ),
     pathway.Step(model=models.Fp17Exemptions),
     pathway.Step(

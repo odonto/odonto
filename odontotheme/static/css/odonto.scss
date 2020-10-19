@@ -641,3 +641,16 @@ table.patient-list {
     }
 
 }
+
+
+// a div above an input that looks
+// is styled like a label
+.fake-label{
+    text-align: left;
+    font-size: 18px;
+    color: #595F72;
+    font-weight: normal;
+    margin-bottom: -10px;
+    margin-left:-15px;
+    display: block;
+}

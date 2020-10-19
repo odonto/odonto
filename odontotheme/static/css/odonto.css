@@ -844,4 +844,14 @@ table.patient-list {
   color: white;
   font-size: 54px;
 }
+
+.fake-label {
+  text-align: left;
+  font-size: 18px;
+  color: #595F72;
+  font-weight: normal;
+  margin-bottom: -10px;
+  margin-left: -15px;
+  display: block;
+}
 /*# sourceMappingURL=odonto.css.map */

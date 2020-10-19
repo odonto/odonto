@@ -1,0 +1,53 @@
+{% load forms %}
+<div class="row">
+  <div class="col-md-5">
+    <div class="fake-label">
+      Number of assessments for a shielding patient
+    </div>
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    <div class="fake-label">
+      Number of assessments for a patient at increased risk of COVID
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input label="" field="PretreatmentCovidTriageAssessments.shielding_patient" style="vertical" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% input label="" field="PretreatmentCovidTriageAssessments.increased_risk" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    <div class="fake-label">
+      Number of assessments for a patient with possible/confirmed COVID-19 (or those living in the same household)
+    </div>
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    <div class="fake-label">
+      Number of assessments for a patient who is COVID symptom free at present
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input label="" field="PretreatmentCovidTriageAssessments.possible_covid" style="vertical" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% input label="" field="PretreatmentCovidTriageAssessments.symptom_free" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    <div class="fake-label">
+      Number of assessments for a patient in other COVID status
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% input label="" field="PretreatmentCovidTriageAssessments.other" style="vertical" %}
+  </div>
+</div>
