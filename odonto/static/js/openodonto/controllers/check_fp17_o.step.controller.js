@@ -24,7 +24,8 @@ angular.module('opal.controllers').controller(
     Fp17OCompletionType,
     Fp17OPhoneNumberRequired,
     Fp17OEmailRequired,
-    Fp17OCommissionerApproval
+    Fp17OCommissionerApproval,
+    PretreatmentCovidTriageAssessments
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -47,7 +48,8 @@ angular.module('opal.controllers').controller(
     Fp17OCompletionType,
     // Fp17OPhoneNumberRequired, # enable when ALWAYS_DECLINE_EMAIL_PHONE
     // Fp17OEmailRequired, # is turned off.
-    Fp17OCommissionerApproval
+    Fp17OCommissionerApproval,
+    PretreatmentCovidTriageAssessments
   ];
 
   var validate = function(){

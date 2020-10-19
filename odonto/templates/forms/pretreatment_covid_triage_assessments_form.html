@@ -1,0 +1,27 @@
+{% load forms %}
+{% load odonto_forms %}
+<div class="row">
+  <div class="col-md-7">
+    {% btn_radio field="PretreatmentCovidTriageAssessments.triage_type" %}
+    <div class="text-muted" ng-show="editing.pretreatment_covid_triage_assessments.triage_type === '{{ models.PretreatmentCovidTriageAssessments.SHIELDING }}'">
+      Assessments for a shielding patient
+    </div>
+    <div class="text-muted" ng-show="editing.pretreatment_covid_triage_assessments.triage_type === '{{ models.PretreatmentCovidTriageAssessments.INCREASED_RISK }}'">
+      Assessments for a patient at increased risk of COVID Illness
+    </div>
+    <div class="text-muted" ng-show="editing.pretreatment_covid_triage_assessments.triage_type === '{{ models.PretreatmentCovidTriageAssessments.POSSIBLE_COVID }}'">
+      Assessments for a patient with possible/confirmed COVID-19 (or those living in the same household as a possible/confirmed person)
+    </div>
+    <div class="text-muted" ng-show="editing.pretreatment_covid_triage_assessments.triage_type === '{{ models.PretreatmentCovidTriageAssessments.SYMPTOM_FREE }}'">
+      Assessments for a patient who is COVID symptom free at present
+    </div>
+    <div class="text-muted" ng-show="editing.pretreatment_covid_triage_assessments.triage_type === '{{ models.PretreatmentCovidTriageAssessments.OTHER }}'">
+      Assessments for a patient in other COVID status
+    </div>
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% charfield field="PretreatmentCovidTriageAssessments.number_of_assessments" style="vertical" %}
+  </div>
+</div>
+
+
