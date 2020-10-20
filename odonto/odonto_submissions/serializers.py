@@ -76,6 +76,30 @@ class Fp17IncompleteTreatmentSerializer(TreatmentSerializer):
         return [t.INCOMPLETE_TREATMENT(idx + 1)]
 
 
+class PretreatmentCovidTriageAssessments(TreatmentSerializer):
+    model = models.PretreatmentCovidTriageAssessments
+
+    def to_messages(self):
+        treatments = []
+        pcta = self.model_instance
+        if pcta.number_of_assessments is None:
+            return treatments
+        if not pcta.triage_type:
+            return treatments
+        pcta_treatments = {
+            pcta.SHIELDING: t.PRETREATMENT_COVID_SHIELDING,
+            pcta.INCREASED_RISK: t.PRETREATMENT_COVID_INCREASED_RISK,
+            pcta.POSSIBLE_COVID: t.PRETREATMENT_COVID_POSSIBLE,
+            pcta.SYMPTOM_FREE: t.PRETREATMENT_COVID_SYMPTOM_FREE,
+            pcta.OTHER: t.PRETREATMENT_COVID_OTHER,
+        }
+        treatment_type = pcta_treatments.pop(pcta.triage_type)
+        treatment = treatment_type(pcta.number_of_assessments)
+        treatments = [t(0) for t in pcta_treatments.values()]
+        treatments.append(treatment)
+        return treatments
+
+
 class Fp17TreatmentCategorySerializer(TreatmentSerializer):
     model = models.Fp17TreatmentCategory
 
@@ -614,6 +638,7 @@ def translate_to_fp17o(bcds1, episode):
     bcds1.treatments = []
 
     translators = [
+        PretreatmentCovidTriageAssessments,
         OrthodonticDataSetTranslator,
         ExtractionChartTranslator,
         OrthodonticAssessmentTranslator,
@@ -681,6 +706,7 @@ def translate_to_fp17(bcds1, episode):
     bcds1.treatments = []
 
     translators = [
+        PretreatmentCovidTriageAssessments,
         Fp17IncompleteTreatmentSerializer,
         Fp17TreatmentCategorySerializer,
         Fp17ClinicalDataSetSerializer,

@@ -320,6 +320,29 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
             str(v.exception), "Date appliance fitted prior to date of assessment"
         )
 
+class PretreatmentCovidTriageAssessmentsTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        self.pcta = self.episode.pretreatmentcovidtriageassessments_set.get()
+
+    def test_to_messages(self):
+        self.pcta.triage_type = self.pcta.INCREASED_RISK
+        self.pcta.number_of_assessments = 2
+        self.pcta.save()
+        expected = [
+            treatments.PRETREATMENT_COVID_SHIELDING(0),
+            treatments.PRETREATMENT_COVID_POSSIBLE(0),
+            treatments.PRETREATMENT_COVID_SYMPTOM_FREE(0),
+            treatments.PRETREATMENT_COVID_OTHER(0),
+            treatments.PRETREATMENT_COVID_INCREASED_RISK(2),
+        ]
+        found = serializers.PretreatmentCovidTriageAssessments(
+            self.episode
+        ).to_messages()
+        self.assertEqual(
+            expected, found
+        )
+
 
 class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
     def setUp(self):

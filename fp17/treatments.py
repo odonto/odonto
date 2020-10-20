@@ -30,12 +30,38 @@ REMOVAL_OF_SUTURES = Treatment(code=9156)
 EXAMINATION = Treatment(code=9317)
 
 
+class PRETREATMENT_COVID_SHIELDING(Treatment):
+    def __init__(self, num_units):
+        super().__init__(code=9615, instance_count=num_units)
+
+
+class PRETREATMENT_COVID_INCREASED_RISK(Treatment):
+    def __init__(self, num_units):
+        super().__init__(code=9616, instance_count=num_units)
+
+
+class PRETREATMENT_COVID_POSSIBLE(Treatment):
+    def __init__(self, num_units):
+        super().__init__(code=9617, instance_count=num_units)
+
+
+class PRETREATMENT_COVID_SYMPTOM_FREE(Treatment):
+    def __init__(self, num_units):
+        super().__init__(code=9618, instance_count=num_units)
+
+
+class PRETREATMENT_COVID_OTHER(Treatment):
+    def __init__(self, num_units):
+        super().__init__(code=9619, instance_count=num_units)
+
+
 class INCOMPLETE_TREATMENT(Treatment):
     """
     Charge Band for actual treatment provided
     """
     def __init__(self, num_units):
         super().__init__(code=9164, instance_count=num_units)
+
 
 class BRIDGES_FITTED(Treatment):
     """
