@@ -641,3 +641,12 @@ table.patient-list {
     }
 
 }
+
+.case-mix-popover{
+    width: 400px;
+    li{
+        margin-left: 20px;
+        list-style-type: disc;
+        font-weight: normal;
+    }
+}

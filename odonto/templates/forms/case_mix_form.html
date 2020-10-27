@@ -1,15 +1,16 @@
 {% load odonto_forms %}
 <div class="row">
     <div class="col-md-4">
-      {% btn_radio field="CaseMix.ability_to_communicate" required=True %}
-      {% btn_radio field="CaseMix.oral_risk_factors" required=True %}
+      {% btn_radio field="CaseMix.ability_to_communicate" popover_template="'/templates/case_mix/ability_to_communicate_' +  i.toLowerCase() + '.html'" required=True %}
+      {% btn_radio field="CaseMix.oral_risk_factors" popover_template="'/templates/case_mix/oral_risk_factors_' +  i.toLowerCase() + '.html'" required=True %}
     </div>
     <div class="col-md-4">
-      {% btn_radio field="CaseMix.ability_to_cooperate" required=True %}
-      {% btn_radio field="CaseMix.access_to_oral_care" required=True %}
+      {% btn_radio field="CaseMix.ability_to_cooperate" popover_template="'/templates/case_mix/ability_to_cooperate_' +  i.toLowerCase() + '.html'" required=True %}
+      {% btn_radio field="CaseMix.access_to_oral_care" popover_template="'/templates/case_mix/access_to_oral_care_' +  i.toLowerCase() + '.html'" required=True %}
     </div>
     <div class="col-md-4">
-      {% btn_radio field="CaseMix.medical_status" required=True %}
-      {% btn_radio field="CaseMix.legal_and_ethical_barriers_to_care" required=True %}
+      {% btn_radio field="CaseMix.medical_status" popover_template="'/templates/case_mix/medical_status_' +  i.toLowerCase() + '.html'" required=True %}
+      {% btn_radio field="CaseMix.legal_and_ethical_barriers_to_care" popover_template="'/templates/case_mix/legal_and_ethical_barriers_to_care_' +  i.toLowerCase() + '.html'" required=True %}
     </div>
 </div>
+
