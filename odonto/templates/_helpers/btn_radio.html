@@ -17,11 +17,15 @@
               popover-placement="bottom"
               popover-trigger="mouseenter"
               popover_template="{{ popover_template }}"
+              popover-popup-delay="250"
               {% endif %}
               {% if required %}required {% endif %}
               ng-repeat="i in {{ lookuplist }} track by $index">
           [[ i ]]
         </label>
+        <div style="display: none" ng-repeat="i in {{ lookuplist }} track by $index">
+          <div ng-include src="{{ popover_template }}"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -36,3 +40,4 @@
 <div ng-show="errors['{{ model_api_name }}']['{{ field_name }}']" class="row content-offset-below-20 content-offset-10 content-offset-below-20 help-block">
   [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
 </div>
+
