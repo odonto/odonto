@@ -12,6 +12,12 @@
               uib-btn-radio="'[[ i ]]'"
               uncheckable='true'
               name="[[ {{ element_name }} ]]"
+              {% if popover_template %}
+              popover-append-to-body="true"
+              popover-placement="bottom"
+              popover-trigger="mouseenter"
+              popover_template="{{ popover_template }}"
+              {% endif %}
               {% if required %}required {% endif %}
               ng-repeat="i in {{ lookuplist }} track by $index">
           [[ i ]]
