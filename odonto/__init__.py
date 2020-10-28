@@ -18,6 +18,7 @@ class Application(application.OpalApplication):
         'js/openodonto/controllers/check_fp17_o.step.controller.js',
         'js/openodonto/controllers/summary.controller.js',
         'js/openodonto/controllers/dental_care.controller.js',
+        'js/openodonto/controllers/casemix_helper.controller.js',
         'js/openodonto/services/date_conflict_check.js',
         'js/openodonto/services/validators/exemptions_and_remissions.js',
         'js/openodonto/services/validators/fp17_completion_or_last_visit.js',

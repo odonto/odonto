@@ -1,6 +1,9 @@
 import datetime
 import json
+import csv
+from io import StringIO
 from unittest import mock
+from django.urls import reverse
 from opal.core.test import OpalTestCase
 from odonto.episode_categories import (
     FP17OEpisode,  FP17Episode
@@ -174,3 +177,72 @@ class GetContextDataStatsTestCase(OpalTestCase):
         )
         result = Stats().get_context_data()
         self.assertEqual(result, expected)
+
+class CaseMixTestCase(OpalTestCase):
+    def setUp(self):
+        self.url = reverse("case-mix-csv")
+        # create the user
+        self.user
+        self.assertTrue(
+            self.client.login(
+                username=self.USERNAME,
+                password=self.PASSWORD
+            )
+        )
+
+    def test_none(self):
+        response = self.client.get(self.url)
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            'attachment; filename="case_mix.csv"'
+        )
+        reader = list(csv.reader(response.content.decode("utf-8").strip().split("\n")))
+        self.assertEqual(len(reader), 1)
+        self.assertIn("Period start", reader[0])
+
+    def test_vanilla(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.SUBMITTED
+        self.episode.save()
+        self.episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=datetime.date(
+                2020, 2, 1
+            )
+        )
+        self.episode.casemix_set.update(
+            ability_to_communicate="0",
+            ability_to_cooperate="0",
+            medical_status="A",
+            oral_risk_factors="C",
+            access_to_oral_care="0",
+            legal_and_ethical_barriers_to_care="0"
+        )
+        response = self.client.get(self.url)
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            'attachment; filename="case_mix.csv"'
+        )
+        reader = list(csv.DictReader(response.content.decode("utf-8").strip().split("\n")))
+        self.assertEqual(len(reader), 1)
+        expected = {
+            "Period start": "2/2020",
+            "Year": "2020",
+            "Month": "2",
+            'Ability to communicate': '0',
+            'Ability to cooperate': '0',
+            'Medical status': '2',
+            'Oral risk factors': '12',
+            'Access to oral care': '0',
+            'Legal and ethical barriers to care': '0',
+            'Total score': '14',
+            'Standard patient': '0',
+            'Some complexity': '0',
+            'Moderate complexity': '1',
+            'Severe complexity': '0',
+            'Extreme complexity': '0'
+        }
+        self.assertEqual(
+            dict(reader[0]),
+            expected
+        )

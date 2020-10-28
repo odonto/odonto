@@ -48,7 +48,11 @@ def btn_checkbox(*args, **kwargs):
 
 @register.inclusion_tag('_helpers/btn_radio.html')
 def btn_radio(*args, **kwargs):
-    return get_odonto_common_args(kwargs)
+    ctx = get_odonto_common_args(kwargs)
+    popover_template = kwargs.get("popover_template")
+    if popover_template:
+        ctx["popover_template"] = popover_template
+    return ctx
 
 
 def extract_numeric_args(kwargs):

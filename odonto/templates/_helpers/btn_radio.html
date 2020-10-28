@@ -12,23 +12,32 @@
               uib-btn-radio="'[[ i ]]'"
               uncheckable='true'
               name="[[ {{ element_name }} ]]"
+              {% if popover_template %}
+              popover-append-to-body="true"
+              popover-placement="bottom"
+              popover-trigger="mouseenter"
+              popover_template="{{ popover_template }}"
+              popover-popup-delay="250"
+              {% endif %}
               {% if required %}required {% endif %}
               ng-repeat="i in {{ lookuplist }} track by $index">
           [[ i ]]
         </label>
+        <div style="display: none" ng-repeat="i in {{ lookuplist }} track by $index">
+          <div ng-include src="{{ popover_template }}"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 {% if required %}
 <div class="row" ng-show="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required">
-  <div class="col-md-12">
-    <span class="help-block" >
-      {{ label }} is required
-    </span>
-  </div>
+  <span class="help-block" >
+    {{ label }} is required
+  </span>
 </div>
 {% endif %}
 <div ng-show="errors['{{ model_api_name }}']['{{ field_name }}']" class="row content-offset-below-20 content-offset-10 content-offset-below-20 help-block">
   [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
 </div>
+

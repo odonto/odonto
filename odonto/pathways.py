@@ -96,6 +96,7 @@ FP17_STEPS = (
     pathway.Step(model=models.Fp17OtherDentalServices),
     pathway.Step(model=models.Fp17TreatmentCategory),
     pathway.Step(model=models.Fp17Recall),
+    pathway.Step(model=models.CaseMix, help_template="pathway/case_mix_help.html"),
 )
 
 
@@ -253,6 +254,7 @@ FP17_O_STEPS = (
     pathway.Step(model=models.ExtractionChart),
     pathway.Step(model=models.OrthodonticAssessment),
     pathway.Step(model=models.OrthodonticTreatment),
+    pathway.Step(model=models.CaseMix, help_template="pathway/case_mix_help.html"),
 )
 
 

@@ -727,3 +727,92 @@ class OrthodonticTreatment(models.EpisodeSubrecord):
         null=True,
         verbose_name="Date of completion or last visit"
     )
+
+
+class CaseMix(models.EpisodeSubrecord):
+    """
+    Case mix is a way of gauging the complexity of
+    patients as laid out by
+    https://bda.org/dentists/governance-and-representation/craft-committees/salaried-primary-care-dentists/Documents/Case%20mix%202019.pdf  #NOQA E501
+    """
+    _is_singleton = True
+
+    CASE_MIX_FIELDS = {
+        "ability_to_communicate": {
+            "0": 0, "A": 2, "B": 4, "C": 8
+        },
+        "ability_to_cooperate": {
+            "0": 0, "A": 3, "B": 6, "C": 12
+        },
+        "medical_status": {
+            "0": 0, "A": 2, "B": 6, "C": 12
+        },
+        "oral_risk_factors": {
+            "0": 0, "A": 3, "B": 6, "C": 12
+        },
+        "access_to_oral_care": {
+            "0": 0, "A": 2, "B": 4, "C": 8
+        },
+        "legal_and_ethical_barriers_to_care": {
+            "0": 0, "A": 2, "B": 4, "C": 8
+        }
+    }
+
+    STANDARD_PATIENT = "Standard patient"
+    SOME_COMPLEXITY = "Some complexity"
+    MODERATE_COMPLEXITY = "Moderate complexity"
+    SEVERE_COMPLEXITY = "Severe complexity"
+    EXTREME_COMPLEXITY = "Extreme complexity"
+
+    CHOICES = enum("0", "A", "B", "C")
+    ability_to_communicate = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+    ability_to_cooperate = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES,
+        verbose_name="Ability To Co-operate"
+    )
+    medical_status = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES,
+    )
+    oral_risk_factors = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+    access_to_oral_care = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+    legal_and_ethical_barriers_to_care = fields.CharField(
+        blank=False, null=True, max_length=256, choices=CHOICES
+    )
+
+    def max_code(self):
+        val = 0
+        code = "0"
+        for field, mapping in self.CASE_MIX_FIELDS.items():
+            val = getattr(self, field)
+
+    def score(self, field):
+        val = getattr(self, field)
+        if val is not None:
+            return self.CASE_MIX_FIELDS[field][val]
+
+    def total_score(self):
+        total = 0
+        for field in self.CASE_MIX_FIELDS.keys():
+            score = self.score(field)
+            if score:
+                total += score
+        return total
+
+    def band(self):
+        total = self.total_score()
+
+        if total == 0:
+            return self.STANDARD_PATIENT
+        if total < 10:
+            return self.SOME_COMPLEXITY
+        if total < 20:
+            return self.MODERATE_COMPLEXITY
+        if total < 30:
+            return self.SEVERE_COMPLEXITY
+        return self.EXTREME_COMPLEXITY

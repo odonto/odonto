@@ -3,12 +3,14 @@ Odonto views
 """
 import datetime
 import json
-from collections import defaultdict
+import csv
+from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from odonto import episode_categories
 from odonto import models
 from odonto.utils import get_current_financial_year
@@ -72,6 +74,102 @@ class FP17OSummaryDetailView(LoginRequiredMixin, DetailView):
 class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'view_fp17_o.html'
+
+
+class CaseMix(LoginRequiredMixin, View):
+    def get_qs(self):
+        return Episode.objects.filter(
+            category_name__in=[
+                episode_categories.FP17Episode.display_name,
+                episode_categories.FP17OEpisode.display_name
+            ]
+        ).filter(
+            stage=episode_categories.AbstractOdontoCategory.SUBMITTED
+        ).prefetch_related(
+            "orthodonticassessment_set",
+            "orthodontictreatment_set",
+            "fp17incompletetreatment_set",
+            "casemix_set",
+        )
+
+    def get_empty_row(self):
+        headers = ["Period start", "Year", "Month"]
+        headers.extend(list(models.CaseMix.CASE_MIX_FIELDS.keys()))
+        headers.extend([
+            "Total score",
+            models.CaseMix.STANDARD_PATIENT,
+            models.CaseMix.SOME_COMPLEXITY,
+            models.CaseMix.MODERATE_COMPLEXITY,
+            models.CaseMix.SEVERE_COMPLEXITY,
+            models.CaseMix.EXTREME_COMPLEXITY,
+
+        ])
+        return OrderedDict([(self.get_field_title(i), 0) for i in headers])
+
+    def get_field_title(self, field_name):
+        return field_name.replace("_", " ").capitalize()
+
+
+    def calculate(self, qs):
+        """
+        returns a dictionary of dictionaries keyed by a month_year tuple
+        i.e.
+        {
+            {{ sign_off_month_year_tuple }}: {
+                ability_to_communicate: {{ sum of all ability_to_communicate for month_year}},
+                ...
+            }
+        }
+        """
+        result = defaultdict(self.get_empty_row)
+
+        for episode in qs:
+            d = episode.category.get_sign_off_date()
+            if not d:
+                continue
+            d = (d.month, d.year)
+            case_mix = episode.casemix_set.all()[0]
+            for field in case_mix.CASE_MIX_FIELDS.keys():
+                score = case_mix.score(field)
+                if score is not None:
+                    result[d][self.get_field_title(field)] += score
+            total_score = case_mix.total_score()
+            if total_score is not None:
+                result[d]["Total score"] += total_score
+            band = case_mix.band()
+            result[d][band] += 1
+        return result
+
+    def create_response(self, date_to_values):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="case_mix.csv"'
+        ordering = sorted(
+            list(date_to_values.keys()),
+            key=lambda x: int("{}{}".format(*x)),
+            reverse=True
+        )
+        fieldnames = list(self.get_empty_row().keys())
+
+        writer = csv.DictWriter(response, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for month_year in ordering:
+            row = {}
+            val_dict = date_to_values[month_year]
+            for key, val in val_dict.items():
+                row[self.get_field_title(key)] = val
+            row["Period start"] = "{}/{}".format(
+                *month_year
+            )
+            row["Month"] = month_year[0]
+            row["Year"] = month_year[1]
+            writer.writerow(row)
+        return response
+
+    def get(self, *args, **kwargs):
+        qs = self.get_qs()
+        date_to_values = self.calculate(qs)
+        return self.create_response(date_to_values)
 
 
 class Stats(LoginRequiredMixin, TemplateView):

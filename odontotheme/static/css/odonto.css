@@ -844,4 +844,14 @@ table.patient-list {
   color: white;
   font-size: 54px;
 }
+
+.case-mix-popover {
+  width: 400px;
+}
+
+.case-mix-popover li {
+  margin-left: 20px;
+  list-style-type: disc;
+  font-weight: normal;
+}
 /*# sourceMappingURL=odonto.css.map */

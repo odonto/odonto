@@ -4,6 +4,9 @@
   <div class="row">
     <h2>
       {{ step.get_display_name }}
+      {% if step.other_args.help_template %}
+      {% include step.other_args.help_template %}
+      {% endif %}
     </h2>
   </div>
   {% endblock %}
