@@ -22,6 +22,6 @@ click==6.7
 # celery==3.1.25
 
 # Open Health Care repositories
-opal==0.18.0
+opal==0.18.4
 
 -e git+https://github.com/openhealthcare/opal-passwordreset@v0.1#egg=opal_passwordreset
