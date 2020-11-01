@@ -1,6 +1,6 @@
 # cryptography is required for heroku deployment
 # cryptography==1.3.2
-django==2.0.13
+django==2.2.16
 coverage==4.5.4
 dj-database-url==0.2.1
 gunicorn==0.17.4
@@ -22,6 +22,6 @@ click==6.7
 # celery==3.1.25
 
 # Open Health Care repositories
-opal==0.18.0
+-e git+https://github.com/openhealthcare/opal@v0.20.0#egg=opal
 
 -e git+https://github.com/openhealthcare/opal-passwordreset@v0.1#egg=opal_passwordreset
