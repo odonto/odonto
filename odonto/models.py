@@ -766,23 +766,46 @@ class CaseMix(models.EpisodeSubrecord):
 
     CHOICES = enum("0", "A", "B", "C")
     ability_to_communicate = fields.CharField(
-        blank=False, null=True, max_length=256, choices=CHOICES
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=CHOICES,
+        verbose_name="Ability to communicate"
     )
     ability_to_cooperate = fields.CharField(
-        blank=False, null=True, max_length=256, choices=CHOICES,
-        verbose_name="Ability To Co-operate"
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=CHOICES,
+        verbose_name="Ability to co-operate"
     )
     medical_status = fields.CharField(
-        blank=False, null=True, max_length=256, choices=CHOICES,
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=CHOICES,
+        verbose_name="Medical status"
     )
     oral_risk_factors = fields.CharField(
-        blank=False, null=True, max_length=256, choices=CHOICES
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=CHOICES,
+        verbose_name="Oral risk factors"
     )
     access_to_oral_care = fields.CharField(
-        blank=False, null=True, max_length=256, choices=CHOICES
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=CHOICES,
+        verbose_name="Access to oral care"
     )
     legal_and_ethical_barriers_to_care = fields.CharField(
-        blank=False, null=True, max_length=256, choices=CHOICES
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=CHOICES,
+        verbose_name="Legal and ethical barriers to care"
     )
 
     def max_code(self):

@@ -10,6 +10,7 @@ angular.module('opal.controllers').controller(
     DateOfBirthRequired,
     AddressRequired,
     ApplianceGreaterThanAssessment,
+    CaseMixRequired,
     Fp17oUnder18,
     Fp17ODateOfReferral,
     Fp17ODateOfAssessment,
@@ -32,6 +33,7 @@ angular.module('opal.controllers').controller(
   var validators = [
     DateOfBirthRequired,
     AddressRequired,
+    CaseMixRequired,
     ApplianceGreaterThanAssessment,
     Fp17oUnder18,
     Fp17ODateOfReferral,

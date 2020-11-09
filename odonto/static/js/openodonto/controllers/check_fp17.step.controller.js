@@ -5,6 +5,7 @@ angular.module('opal.controllers').controller(
     episode,
     $timeout,
     $rootScope,
+    CaseMixRequired,
     FormValidation,
     ExemptionsAndRemissionsValidator,
     CompletionOrLastVisit,
@@ -20,6 +21,7 @@ angular.module('opal.controllers').controller(
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
+    CaseMixRequired,
     ExemptionsAndRemissionsValidator,
     CompletionOrLastVisit,
     AddressRequired,
