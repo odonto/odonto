@@ -1,4 +1,5 @@
 angular.module('opal.services').factory('ExemptionsAndRemissionsValidator', function(){
+  "use strict";
   // validators return a function that takes a patient
   // returns an object of
   // {stepApiName: field/step_error: errorMessages}
@@ -25,6 +26,9 @@ angular.module('opal.services').factory('ExemptionsAndRemissionsValidator', func
   ]
 
   var exceptionOrCharge = function(editing){
+    if(editing.fp17_other_dental_services.free_repair_or_replacement){
+      return;
+    }
     if(!editing.fp17_exemptions.patient_charge_collected){
       var exemptionSelected = _.some(EXEMPTION_FIELDS, function(exemptionField){
         return editing.fp17_exemptions[exemptionField]
