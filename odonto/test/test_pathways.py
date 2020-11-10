@@ -234,6 +234,30 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
         result = self.client.get(self.url).json()['steps'][-1]
         self.assertFalse(result["episode_submitted"])
 
+    def test_get_other_submitted_bands(self):
+        episode = self.patient.episode_set.create()
+        episode.category_name = episode_categories.FP17Episode.display_name
+        episode.stage = episode_categories.FP17Episode.SUBMITTED
+        episode.save()
+        episode.fp17incompletetreatment_set.update(
+           completion_or_last_visit=datetime.date(2020, 10, 1)
+        )
+        episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        episode.submission_set.create(
+            state=submission_models.Submission.SUCCESS
+        )
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertEqual(
+            result["submitted_bands"],
+            [["01/10/2020", "Band 1"]]
+        )
+
+    def test_get_other_submitted_bands_none(self):
+        result = self.client.get(self.url).json()['steps'][-1]
+        self.assertEqual(result["submitted_bands"], [])
+
 
 class Fp17_O_PathwayTestCase(OpalTestCase):
 

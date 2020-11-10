@@ -3,7 +3,7 @@ Pathways for Odonto
 """
 import logging
 from django.db import transaction
-from opal.core import menus, pathway
+from opal.core import menus, pathway, serialization
 from odonto import models
 from odonto.odonto_submissions import models as submission_models
 from odonto.episode_categories import FP17Episode, FP17OEpisode
@@ -170,6 +170,31 @@ class SubmitFP17Pathway(OdontoPagePathway):
         )
         return [i for i in result if i[0]]
 
+    def get_other_submitted_bands(self, patient, episode):
+        """
+        A free replacement is allowed but only if they have a previous claim
+        with a higher or equal band within the previous 12 months.
+
+        So for each episode we send over a list of all successfully submitted
+        fp17s and their bands
+
+        Returns a list of [sign_off_date, treatment_category]
+        """
+        episodes = patient.episode_set.filter(
+            category_name=FP17Episode.display_name
+        ).exclude(
+            id=episode.id
+        ).filter(
+            submission__state=submission_models.Submission.SUCCESS
+        ).prefetch_related('fp17treatmentcategory_set')
+        result = []
+        for episode in episodes:
+            sign_off_date = episode.category.get_sign_off_date()
+            category = episode.fp17treatmentcategory_set.all()[0].treatment_category
+            if sign_off_date and category:
+                serialized_date = serialization.serialize_date(sign_off_date)
+                result.append([serialized_date, category])
+        return result
 
     def get_further_treatment_information(self, patient, episode):
         """
@@ -222,6 +247,9 @@ class SubmitFP17Pathway(OdontoPagePathway):
         further_treatment_information = self.get_further_treatment_information(patient, episode)
         to_dicted["steps"][check_index]["further_treatment_information"] = further_treatment_information
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        to_dicted["steps"][check_index]["submitted_bands"] = self.get_other_submitted_bands(
+            patient, episode
+        )
         return to_dicted
 
     @transaction.atomic
