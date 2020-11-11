@@ -1,7 +1,9 @@
-from opal.core.test import OpalTestCase
+from unittest import mock
 import datetime
 from django.utils import timezone
 from django.utils.module_loading import import_string
+from django.test import override_settings
+from opal.core.test import OpalTestCase
 from fp17 import bcds1 as message
 from fp17 import treatments
 from fp17.envelope import Envelope
@@ -342,3 +344,43 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
         self.assertEqual(
             str(e.exception), f"Unable to get a date of acceptance for FP17O episode"
         )
+
+class GetEnvelopeTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.now = datetime.datetime.now()
+
+    @override_settings(
+        DESTINATION="DESTINATION",
+    )
+    @mock.patch('odonto.odonto_submissions.serializers.datetime')
+    def test_get_envelope(self, datetime):
+        self.episode.fp17dentalcareprovider_set.update(
+            provider_location_number='Amble'
+        )
+        datetime.datetime.utcnow.return_value = self.now
+        envelope = serializers.get_envelope(self.episode, 1)
+        self.assertEqual(
+            envelope.serial_number, 1
+        )
+        self.assertEqual(
+            envelope.origin, "010112"
+        )
+        self.assertEqual(
+            envelope.destination, "DESTINATION"
+        )
+        self.assertEqual(
+            envelope.release_timestamp, self.now
+        )
+
+    @override_settings(
+        DPB_SITE_ID="010108",
+    )
+    def test_default_location(self):
+        envelope = serializers.get_envelope(self.episode, 1)
+        self.assertEqual(
+            envelope.origin, "010108"
+        )
+
+
+

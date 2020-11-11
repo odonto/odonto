@@ -154,16 +154,16 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
     LOCATION_NUMBERS = (
-        ('010108', 'Albion Road'),
-        ('010112', 'Amble'),
-        ('010113', 'Blyth'),
-        ('016027', 'Hexham'),
-        ('010109', 'Longbenton'),
-        ('24946', 'Morpeth NHS Centre'),
-        ('010117', 'Northgate'),
-        ('010116', 'Seaton Hirst'),
-        ('010111', 'Wallsend'),
-        ('010054', 'Ward 15, WGH'),
+        ('Albion Road', 'Albion Road'),
+        ('Amble', 'Amble'),
+        ('Blyth', 'Blyth'),
+        ('Hexham', 'Hexham'),
+        ('Longbenton', 'Longbenton'),
+        ('Morpeth NHS Centre', 'Morpeth NHS Centre'),
+        ('Northgate', 'Northgate'),
+        ('Seaton Hirst', 'Seaton Hirst'),
+        ('Wallsend', 'Wallsend'),
+        ('Ward 15, WGH', 'Ward 15, WGH'),
     )
 
     # I'm pretty sure this should not be handled as a PatientSubrecord
