@@ -71,6 +71,7 @@ def extract_numeric_args(kwargs):
 def number(*args, **kwargs):
     ctx = extract_numeric_args(kwargs)
     ctx["style"] = "vertical"
+    ctx["unit"] = kwargs.get("unit")
     return ctx
 
 
