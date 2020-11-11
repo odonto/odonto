@@ -13,6 +13,20 @@ from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
 
 
+LOCATION_NUMBERS = {
+    'Albion Road': '010108',
+    'Amble': '010112',
+    'Blyth': '010113',
+    'Hexham': '016027',
+    'Longbenton': '010109',
+    'Morpeth NHS Centre': '24946',
+    'Northgate': '010117',
+    'Seaton Hirst': '010116',
+    'Wallsend': '010111',
+    'Ward 15, WGH': '010054',
+}
+
+
 class SerializerValidationError(Exception):
     pass
 
@@ -492,13 +506,13 @@ def get_envelope(episode, transmission_id):
     """
     envelope = Envelope()
     care_provider = episode.fp17dentalcareprovider_set.get()
-    envelope.origin = care_provider.provider_location_number
-    envelope.release_timestamp = datetime.datetime.utcnow()
+    if care_provider.provider_location_number:
+        envelope.origin = LOCATION_NUMBERS[care_provider.provider_location_number]
+    else:
+        envelope.origin = settings.DPB_SITE_ID
+
     envelope.serial_number = transmission_id
-
-    envelope.origin = str(settings.DPB_SITE_ID)
     envelope.destination = settings.DESTINATION
-
     envelope.approval_number = 1
     envelope.release_timestamp = datetime.datetime.utcnow()
     return envelope
