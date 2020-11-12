@@ -5,6 +5,7 @@ from fp17.bcds1 import Treatment
 from django.conf import settings
 from odonto import models
 from odonto import episode_categories
+from odonto import constants
 from opal.core import subrecords
 from django.db import models as django_models
 from fp17 import treatments as t
@@ -14,16 +15,16 @@ from fp17.bcds1 import BCDS1, Patient as FP17_Patient
 
 
 LOCATION_NUMBERS = {
-    'Albion Road': '010108',
-    'Amble': '010112',
-    'Blyth': '010113',
-    'Hexham': '016027',
-    'Longbenton': '010109',
-    'Morpeth NHS Centre': '24946',
-    'Northgate': '010117',
-    'Seaton Hirst': '010116',
-    'Wallsend': '010111',
-    'Ward 15, WGH': '010054',
+    constants.ALBION_ROAD: '010108',
+    constants.AMBLE: '010112',
+    constants.BLYTH: '010113',
+    constants.HEXHAM: '016027',
+    constants.LONGBENTON: '010109',
+    constants.MORPETH_NHS_CENTRE: '24946',
+    constants.NORTHGATE: '010117',
+    constants.SEATON_HIRST: '010116',
+    constants.WALLSEND: '010111',
+    constants.WARD_15_WGH: '010054',
 }
 
 
