@@ -8,6 +8,7 @@ from django.db import models as djangomodels
 
 from opal import models
 from opal.core.fields import enum
+from odonto import constants
 
 """
 Core Opal models - these inherit from the abstract data models in
@@ -15,16 +16,16 @@ opal.models but can be customised here with extra / altered fields.
 """
 
 LOCATION_NUMBERS = (
-    ('010108', 'Albion Road'),
-    ('010112', 'Amble'),
-    ('010113', 'Blyth'),
-    ('016027', 'Hexham'),
-    ('010109', 'Longbenton'),
-    ('24946', 'Morpeth NHS Centre'),
-    ('010117', 'Northgate'),
-    ('010116', 'Seaton Hirst'),
-    ('010111', 'Wallsend'),
-    ('010054', 'Ward 15, WGH'),
+    ('010108', constants.ALBION_ROAD),
+    ('010112', constants.AMBLE),
+    ('010113', constants.BLYTH),
+    ('016027', constants.HEXHAM),
+    ('010109', constants.LONGBENTON),
+    ('24946', constants.MORPETH_NHS_CENTRE),
+    ('010117', constants.NORTHGATE),
+    ('010116', constants.SEATON_HIRST),
+    ('010111', constants.WALLSEND),
+    ('010054', constants.WARD_15_WGH),
 )
 
 
@@ -153,17 +154,17 @@ class Demographics(models.Demographics):
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
-    LOCATION_NUMBERS = (
-        ('Albion Road', 'Albion Road'),
-        ('Amble', 'Amble'),
-        ('Blyth', 'Blyth'),
-        ('Hexham', 'Hexham'),
-        ('Longbenton', 'Longbenton'),
-        ('Morpeth NHS Centre', 'Morpeth NHS Centre'),
-        ('Northgate', 'Northgate'),
-        ('Seaton Hirst', 'Seaton Hirst'),
-        ('Wallsend', 'Wallsend'),
-        ('Ward 15, WGH', 'Ward 15, WGH'),
+    LOCATION_NUMBERS = enum(
+        constants.ALBION_ROAD,
+        constants.AMBLE,
+        constants.BLYTH,
+        constants.HEXHAM,
+        constants.LONGBENTON,
+        constants.MORPETH_NHS_CENTRE,
+        constants.NORTHGATE,
+        constants.SEATON_HIRST,
+        constants.WALLSEND,
+        constants.WARD_15_WGH
     )
 
     # I'm pretty sure this should not be handled as a PatientSubrecord
