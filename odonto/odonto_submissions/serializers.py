@@ -449,6 +449,47 @@ class DemographicsTranslator(TreatmentSerializer):
         "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED,
     }
 
+
+    NORTH_TYNESIDE = {
+        "address": [
+            "PROTECTED ADDRESS",
+            "CO Childrens Services",
+            "North Tyneside Council",
+            "Quadrant",
+            "The Silverlink North",
+            "Cobalt Business Park",
+            "North Tyneside",
+        ],
+        "post_code": "NE27 0BY",
+        "locations": [
+            constants.ALBION_ROAD,
+            constants.LONGBENTON,
+            constants.WALLSEND,
+        ]
+    }
+
+    NORTHUMBRIA = {
+        "address": [
+            "PROTECTED ADDRESS",
+            "CO Childrens Services",
+            "Northumberland Council",
+            "Foundry House",
+            "The Oval",
+            "Stead Lane",
+            "Bedlington",
+        ],
+        "post_code": "NE22 5H5",
+        "locations": [
+            constants.AMBLE,
+            constants.BLYTH,
+            constants.HEXHAM,
+            constants.MORPETH_NHS_CENTRE,
+            constants.NORTHGATE,
+            constants.SEATON_HIRST,
+            constants.WARD_15_WGH
+        ]
+    }
+
     def sex(self):
         if self.model_instance.sex == "Female":
             return "F"
@@ -470,7 +511,21 @@ class DemographicsTranslator(TreatmentSerializer):
         if phone_number:
             return phone_number.replace(" ", "").replace("-", "")
 
+    def get_protected_area(self):
+        location = self.episode.fp17dentalcareprovider_set.get().provider_location_number
+        if location in self.NORTH_TYNESIDE["locations"]:
+            return self.NORTH_TYNESIDE
+        if location in self.NORTHUMBRIA["locations"]:
+            return self.NORTHUMBRIA
+        raise ValueError(
+            "Unable to find a protected address {} for episode {}".format(
+                location, self.episode.id
+            )
+        )
+
     def address(self):
+        if self.model_instance.protected:
+            return self.get_protected_area()["address"]
         address_list = [
             "{} {}".format(
                 self.model_instance.house_number_or_name, self.model_instance.street
@@ -481,8 +536,6 @@ class DemographicsTranslator(TreatmentSerializer):
 
         if self.model_instance.county:
             address_list.append(self.model_instance.county)
-
-        address_list = [i for i in address_list]
 
         result = []
         for address_line in address_list:
@@ -497,6 +550,9 @@ class DemographicsTranslator(TreatmentSerializer):
         return clean_non_alphanumeric(self.model_instance.surname).upper()
 
     def post_code(self):
+        if self.model_instance.protected:
+            return self.get_protected_area()["post_code"]
+
         if self.model_instance.post_code:
             return clean_non_alphanumeric(self.model_instance.post_code).upper()
 
