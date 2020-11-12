@@ -200,6 +200,33 @@ class CaseMixTestCase(OpalTestCase):
         self.assertEqual(len(reader), 1)
         self.assertIn("Period start", reader[0])
 
+    def test_old(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.SUBMITTED
+        self.episode.save()
+        self.episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=datetime.date(
+                2020, 10, 28
+            )
+        )
+        self.episode.casemix_set.update(
+            ability_to_communicate="0",
+            ability_to_cooperate="0",
+            medical_status="A",
+            oral_risk_factors="C",
+            access_to_oral_care="0",
+            legal_and_ethical_barriers_to_care="0"
+        )
+        response = self.client.get(self.url)
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            'attachment; filename="case_mix.csv"'
+        )
+        reader = list(csv.reader(response.content.decode("utf-8").strip().split("\n")))
+        self.assertEqual(len(reader), 1)
+        self.assertIn("Period start", reader[0])
+
     def test_vanilla(self):
         _, self.episode = self.new_patient_and_episode_please()
         self.episode.category_name = FP17Episode.display_name
@@ -207,7 +234,7 @@ class CaseMixTestCase(OpalTestCase):
         self.episode.save()
         self.episode.fp17incompletetreatment_set.update(
             completion_or_last_visit=datetime.date(
-                2020, 2, 1
+                2021, 8, 1
             )
         )
         self.episode.casemix_set.update(
@@ -226,15 +253,17 @@ class CaseMixTestCase(OpalTestCase):
         reader = list(csv.DictReader(response.content.decode("utf-8").strip().split("\n")))
         self.assertEqual(len(reader), 1)
         expected = {
-            "Period start": "2/2020",
-            "Year": "2020",
-            "Month": "2",
+            "Date index": "202108",
+            "Period start": "8/2021",
+            "Year": "2021",
+            "Month": "8",
             'Ability to communicate': '0',
             'Ability to cooperate': '0',
             'Medical status': '2',
             'Oral risk factors': '12',
             'Access to oral care': '0',
             'Legal and ethical barriers to care': '0',
+            'Total patients': '1',
             'Total score': '14',
             'Standard patient': '0',
             'Some complexity': '0',
