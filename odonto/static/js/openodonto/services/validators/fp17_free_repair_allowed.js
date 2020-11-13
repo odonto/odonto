@@ -1,7 +1,7 @@
 angular.module('opal.services').factory('Fp17FreeRepairAllowed', function(toMomentFilter){
   "use strict";
   /*
-  * A free repair is allow if there is a previous step that is of
+  * A free repair is allowed if there is a previous step that is of
   * a higher band within the last 12 months.
   *
   * Only applies to Band 1, 2 or 3
@@ -67,7 +67,7 @@ angular.module('opal.services').factory('Fp17FreeRepairAllowed', function(toMome
     if(!highestBandIn12Months || !bandWeightings[band] || highestBandIn12Months < bandWeightings[band]){
       return {
         fp17_other_dental_services: {
-          free_repair_or_replacement: "No previous guarenteed item for this patient"
+          free_repair_or_replacement: "No previous guaranteed item for this patient"
         }
       }
     }

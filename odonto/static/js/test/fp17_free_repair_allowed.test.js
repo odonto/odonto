@@ -25,7 +25,7 @@ describe("CaseMixHelper", function () {
     expectedError = {
       fp17_other_dental_services: {
         free_repair_or_replacement:
-          "No previous guarenteed item for this patient",
+          "No previous guaranteed item for this patient",
       },
     };
   });
