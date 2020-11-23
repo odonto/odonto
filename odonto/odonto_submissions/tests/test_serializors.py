@@ -345,6 +345,7 @@ class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
             str(e.exception), f"Unable to get a date of acceptance for FP17O episode"
         )
 
+
 class GetEnvelopeTestCase(OpalTestCase):
     def setUp(self):
         _, self.episode = self.new_patient_and_episode_please()
@@ -352,19 +353,17 @@ class GetEnvelopeTestCase(OpalTestCase):
 
     @override_settings(
         DESTINATION="DESTINATION",
+        DPB_SITE_ID="010108"
     )
     @mock.patch('odonto.odonto_submissions.serializers.datetime')
     def test_get_envelope(self, datetime):
-        self.episode.fp17dentalcareprovider_set.update(
-            provider_location_number='Amble'
-        )
         datetime.datetime.utcnow.return_value = self.now
         envelope = serializers.get_envelope(self.episode, 1)
         self.assertEqual(
             envelope.serial_number, 1
         )
         self.assertEqual(
-            envelope.origin, "010112"
+            envelope.origin, "010108"
         )
         self.assertEqual(
             envelope.destination, "DESTINATION"
@@ -373,14 +372,41 @@ class GetEnvelopeTestCase(OpalTestCase):
             envelope.release_timestamp, self.now
         )
 
+
+class GetBCDS1TestCase(OpalTestCase):
     @override_settings(
-        DPB_SITE_ID="010108",
+        FP17_CONTRACT_NUMBER="FP17_CONTRACT_NUMBER",
     )
-    def test_default_location(self):
-        envelope = serializers.get_envelope(self.episode, 1)
-        self.assertEqual(
-            envelope.origin, "010108"
+    @mock.patch("odonto.odonto_submissions.serializers.translate_to_bdcs1")
+    def test_get_bcds1(self, translate_to_bdcs1):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = episode_categories.FP17Episode.display_name
+        episode.save()
+        episode.fp17dentalcareprovider_set.get()
+        episode.fp17dentalcareprovider_set.update(
+            provider_location_number='Morpeth NHS Centre',
+            performer="Susan Winstanley"
         )
+        models.PerformerNumber.objects.create(
+            user=self.user,
+            number="111",
+            dpb_pin="2222"
+        )
+        self.user.first_name = "Susan"
+        self.user.last_name = "Winstanley"
+        self.user.save()
+
+        bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT")
+        self.assertEqual(bcds1.contract_number, "FP17_CONTRACT_NUMBER")
+        self.assertEqual(bcds1.message_reference_number, "REF_NUM")
+        self.assertEqual(bcds1.resubmission_count, "SUB_COUNT")
+        self.assertEqual(bcds1.location, "24946")
+        self.assertEqual(bcds1.performer_number, 111)
+        self.assertEqual(bcds1.dpb_pin, "2222")
+        self.assertIsNotNone(bcds1.patient)
+        self.assertTrue(translate_to_bdcs1.called)
+
+
 
 
 
