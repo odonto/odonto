@@ -21,6 +21,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/date_conflict_check.js',
         'js/openodonto/services/validators/exemptions_and_remissions.js',
         'js/openodonto/services/validators/case_mix_required.js',
+        'js/openodonto/services/validators/provider_location_number_required.js',
         'js/openodonto/services/validators/fp17_completion_or_last_visit.js',
         'js/openodonto/services/validators/form_validation.js',
         'js/openodonto/services/validators/date_of_birth_required.js',
