@@ -96,7 +96,7 @@ class CaseMix(LoginRequiredMixin, View):
         )
 
     def get_empty_row(self):
-        headers = ["Date index", "Period start", "Year", "Month", "Total patients"]
+        headers = ["Period start", "Year", "Month", "Total patients"]
         headers.extend(list(models.CaseMix.CASE_MIX_FIELDS.keys()))
         headers.extend([
             "Total score",
@@ -143,7 +143,7 @@ class CaseMix(LoginRequiredMixin, View):
             result[d][band] += 1
         return result
 
-    def get_date_index(self, month_year):
+    def get_period_start(self, month_year):
         """
         takes in a month_year e.g. 4, 2020
         and returns it as a string ie 202004
@@ -156,7 +156,7 @@ class CaseMix(LoginRequiredMixin, View):
         response['Content-Disposition'] = 'attachment; filename="case_mix.csv"'
         ordering = sorted(
             list(date_to_values.keys()),
-            key=self.get_date_index,
+            key=self.get_period_start,
             reverse=True
         )
         fieldnames = list(self.get_empty_row().keys())
@@ -169,10 +169,7 @@ class CaseMix(LoginRequiredMixin, View):
             val_dict = date_to_values[month_year]
             for key, val in val_dict.items():
                 row[self.get_field_title(key)] = val
-            row["Date index"] = self.get_date_index(month_year)
-            row["Period start"] = "{}/{}".format(
-                *month_year
-            )
+            row["Period start"] = self.get_period_start(month_year)
             row["Month"] = month_year[0]
             row["Year"] = month_year[1]
             writer.writerow(row)

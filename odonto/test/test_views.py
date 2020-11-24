@@ -253,8 +253,7 @@ class CaseMixTestCase(OpalTestCase):
         reader = list(csv.DictReader(response.content.decode("utf-8").strip().split("\n")))
         self.assertEqual(len(reader), 1)
         expected = {
-            "Date index": "202108",
-            "Period start": "8/2021",
+            "Period start": "202108",
             "Year": "2021",
             "Month": "8",
             'Ability to communicate': '0',
