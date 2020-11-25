@@ -562,12 +562,7 @@ def get_envelope(episode, transmission_id):
     Gets the envelope information
     """
     envelope = Envelope()
-    care_provider = episode.fp17dentalcareprovider_set.get()
-    if care_provider.provider_location_number:
-        envelope.origin = LOCATION_NUMBERS[care_provider.provider_location_number]
-    else:
-        envelope.origin = settings.DPB_SITE_ID
-
+    envelope.origin = settings.DPB_SITE_ID
     envelope.serial_number = transmission_id
     envelope.destination = settings.DESTINATION
     envelope.approval_number = 1
@@ -593,7 +588,7 @@ def get_bcds1(episode, submission_id, submission_count):
     bcds1.message_reference_number = submission_id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
-    bcds1.location = settings.LOCATION
+    bcds1.location = LOCATION_NUMBERS[provider.provider_location_number]
     performer = provider.get_performer_obj()
 
     if not performer:
