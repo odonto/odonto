@@ -14,21 +14,6 @@ from odonto import constants
 Core Opal models - these inherit from the abstract data models in
 opal.models but can be customised here with extra / altered fields.
 """
-
-LOCATION_NUMBERS = (
-    ('010108', constants.ALBION_ROAD),
-    ('010112', constants.AMBLE),
-    ('010113', constants.BLYTH),
-    ('016027', constants.HEXHAM),
-    ('010109', constants.LONGBENTON),
-    ('24946', constants.MORPETH_NHS_CENTRE),
-    ('010117', constants.NORTHGATE),
-    ('010116', constants.SEATON_HIRST),
-    ('010111', constants.WALLSEND),
-    ('010054', constants.WARD_15_WGH),
-)
-
-
 class Location(models.Location):
     _exclude_from_extract = True
     _advanced_searchable = False
@@ -68,7 +53,7 @@ class PatientConsultation(models.PatientConsultation):
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",
-        choices=LOCATION_NUMBERS
+        choices=enum(*constants.LOCATION_NUMBERS.keys())
     )
 
 
@@ -154,19 +139,6 @@ class Demographics(models.Demographics):
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
-    LOCATION_NUMBERS = enum(
-        constants.ALBION_ROAD,
-        constants.AMBLE,
-        constants.BLYTH,
-        constants.HEXHAM,
-        constants.LONGBENTON,
-        constants.MORPETH_NHS_CENTRE,
-        constants.NORTHGATE,
-        constants.SEATON_HIRST,
-        constants.WALLSEND,
-        constants.WARD_15_WGH
-    )
-
     # I'm pretty sure this should not be handled as a PatientSubrecord
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
@@ -174,7 +146,7 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",
-        choices=LOCATION_NUMBERS
+        choices=enum(*constants.LOCATION_NUMBERS.keys())
     )
     performer = fields.CharField(
         max_length=255, blank=True, null=True

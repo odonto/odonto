@@ -14,20 +14,6 @@ from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
 
 
-LOCATION_NUMBERS = {
-    constants.ALBION_ROAD: '010108',
-    constants.AMBLE: '010112',
-    constants.BLYTH: '010113',
-    constants.HEXHAM: '016027',
-    constants.LONGBENTON: '010109',
-    constants.MORPETH_NHS_CENTRE: '24946',
-    constants.NORTHGATE: '010117',
-    constants.SEATON_HIRST: '010116',
-    constants.WALLSEND: '010111',
-    constants.WARD_15_WGH: '010054',
-}
-
-
 class SerializerValidationError(Exception):
     pass
 
@@ -449,7 +435,6 @@ class DemographicsTranslator(TreatmentSerializer):
         "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED,
     }
 
-
     NORTH_TYNESIDE = {
         "address": [
             "PROTECTED ADDRESS",
@@ -588,7 +573,7 @@ def get_bcds1(episode, submission_id, submission_count):
     bcds1.message_reference_number = submission_id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
-    bcds1.location = LOCATION_NUMBERS[provider.provider_location_number]
+    bcds1.location = constants.LOCATION_NUMBERS[provider.provider_location_number]
     performer = provider.get_performer_obj()
 
     if not performer:
