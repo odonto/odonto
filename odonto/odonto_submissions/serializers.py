@@ -3,28 +3,13 @@ from collections import OrderedDict
 from lxml import etree
 from fp17.bcds1 import Treatment
 from django.conf import settings
-from odonto import models
-from odonto import episode_categories
+from odonto import models, constants, episode_categories
 from opal.core import subrecords
 from django.db import models as django_models
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
 from fp17.bcds1 import BCDS1, Patient as FP17_Patient
-
-
-LOCATION_NUMBERS = {
-    'Albion Road': '010108',
-    'Amble': '010112',
-    'Blyth': '010113',
-    'Hexham': '016027',
-    'Longbenton': '010109',
-    'Morpeth NHS Centre': '24946',
-    'Northgate': '010117',
-    'Seaton Hirst': '010116',
-    'Wallsend': '010111',
-    'Ward 15, WGH': '010054',
-}
 
 
 class SerializerValidationError(Exception):
@@ -448,6 +433,46 @@ class DemographicsTranslator(TreatmentSerializer):
         "Patient declined": t.ETHNIC_ORIGIN_PATIENT_DECLINED,
     }
 
+    NORTH_TYNESIDE = {
+        "address": [
+            "PROTECTED ADDRESS",
+            "CO Childrens Services",
+            "North Tyneside Council",
+            "Quadrant",
+            "The Silverlink North",
+            "Cobalt Business Park",
+            "North Tyneside",
+        ],
+        "post_code": "NE27 0BY",
+        "locations": [
+            constants.ALBION_ROAD,
+            constants.LONGBENTON,
+            constants.WALLSEND,
+        ]
+    }
+
+    NORTHUMBRIA = {
+        "address": [
+            "PROTECTED ADDRESS",
+            "CO Childrens Services",
+            "Northumberland Council",
+            "Foundry House",
+            "The Oval",
+            "Stead Lane",
+            "Bedlington",
+        ],
+        "post_code": "NE22 5H5",
+        "locations": [
+            constants.AMBLE,
+            constants.BLYTH,
+            constants.HEXHAM,
+            constants.MORPETH_NHS_CENTRE,
+            constants.NORTHGATE,
+            constants.SEATON_HIRST,
+            constants.WARD_15_WGH
+        ]
+    }
+
     def sex(self):
         if self.model_instance.sex == "Female":
             return "F"
@@ -531,7 +556,7 @@ def get_bcds1(episode, submission_id, submission_count):
     bcds1.message_reference_number = submission_id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
-    bcds1.location = LOCATION_NUMBERS[provider.provider_location_number]
+    bcds1.location = constants.LOCATION_NUMBERS[provider.provider_location_number]
     performer = provider.get_performer_obj()
 
     if not performer:
