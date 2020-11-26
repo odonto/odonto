@@ -8,8 +8,7 @@ from fp17 import bcds1 as message
 from fp17 import treatments
 from fp17.envelope import Envelope
 from odonto.odonto_submissions import serializers
-from odonto import episode_categories
-from odonto import models
+from odonto import episode_categories, models, constants
 from opal import models as opal_models
 from lxml import etree
 
@@ -199,6 +198,67 @@ class DemographicsTranslatorTestCase(OpalTestCase):
             serializers.DemographicsTranslator(self.episode).phone_number(),
             "07887619000"
         )
+
+    def test_protected_address_error(self):
+        self.demographics.protected = True
+        self.demographics.save()
+        translator = serializers.DemographicsTranslator(self.episode)
+        with self.assertRaises(ValueError) as e:
+            translator.get_protected_area()
+        self.assertEqual(
+            str(e.exception), "Unable to find a protected address None for episode {}".format(
+                self.episode.id
+            )
+        )
+
+    def test_protected_address_northumbria(self):
+        self.demographics.protected = True
+        self.demographics.save()
+        self.episode.fp17dentalcareprovider_set.update(
+            provider_location_number=constants.AMBLE
+        )
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertEqual(
+            translator.get_protected_area(),
+            translator.NORTHUMBRIA
+        )
+
+    def test_protected_address_north_tyneside(self):
+        self.demographics.protected = True
+        self.demographics.save()
+        self.episode.fp17dentalcareprovider_set.update(
+            provider_location_number=constants.LONGBENTON
+        )
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertEqual(
+            translator.get_protected_area(),
+            translator.NORTH_TYNESIDE
+        )
+
+    def test_address_protected(self):
+        self.demographics.protected = True
+        self.demographics.save()
+        self.episode.fp17dentalcareprovider_set.update(
+            provider_location_number=constants.AMBLE
+        )
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertEqual(
+            translator.address(),
+            translator.NORTHUMBRIA["address"]
+        )
+
+    def test_post_code_protected(self):
+        self.demographics.protected = True
+        self.demographics.save()
+        self.episode.fp17dentalcareprovider_set.update(
+            provider_location_number=constants.AMBLE
+        )
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertEqual(
+            translator.post_code(),
+            translator.NORTHUMBRIA["post_code"]
+        )
+
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):
     def setUp(self):

@@ -16,14 +16,10 @@ SEND_ALL_AFTER_DATE = date(2020, 4, 1)
 
 class Command(BaseCommand):
     def get_fp17os(self):
-        return FP17OEpisode.get_submitted_episodes().filter(
-            patient__demographics__protected=False
-        )
+        return FP17OEpisode.get_submitted_episodes()
 
     def get_fp17_qs(self):
-        return FP17Episode.get_submitted_episodes().filter(
-            patient__demographics__protected=False
-        )
+        return FP17Episode.get_submitted_episodes()
 
     def filter_for_new_or_failed_since(self, qs):
         to_send = []

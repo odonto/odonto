@@ -8,26 +8,12 @@ from django.db import models as djangomodels
 
 from opal import models
 from opal.core.fields import enum
+from odonto import constants
 
 """
 Core Opal models - these inherit from the abstract data models in
 opal.models but can be customised here with extra / altered fields.
 """
-
-LOCATION_NUMBERS = (
-    ('010108', 'Albion Road'),
-    ('010112', 'Amble'),
-    ('010113', 'Blyth'),
-    ('016027', 'Hexham'),
-    ('010109', 'Longbenton'),
-    ('24946', 'Morpeth NHS Centre'),
-    ('010117', 'Northgate'),
-    ('010116', 'Seaton Hirst'),
-    ('010111', 'Wallsend'),
-    ('010054', 'Ward 15, WGH'),
-)
-
-
 class Location(models.Location):
     _exclude_from_extract = True
     _advanced_searchable = False
@@ -67,7 +53,7 @@ class PatientConsultation(models.PatientConsultation):
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",
-        choices=LOCATION_NUMBERS
+        choices=enum(*constants.LOCATION_NUMBERS.keys())
     )
 
 
@@ -153,19 +139,6 @@ class Demographics(models.Demographics):
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
-    LOCATION_NUMBERS = (
-        ('Albion Road', 'Albion Road'),
-        ('Amble', 'Amble'),
-        ('Blyth', 'Blyth'),
-        ('Hexham', 'Hexham'),
-        ('Longbenton', 'Longbenton'),
-        ('Morpeth NHS Centre', 'Morpeth NHS Centre'),
-        ('Northgate', 'Northgate'),
-        ('Seaton Hirst', 'Seaton Hirst'),
-        ('Wallsend', 'Wallsend'),
-        ('Ward 15, WGH', 'Ward 15, WGH'),
-    )
-
     # I'm pretty sure this should not be handled as a PatientSubrecord
     # but I'm not sure what it /should/ be
     # the following provider information is not currently in an Opal model
@@ -173,7 +146,7 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     provider_location_number = fields.CharField(
         max_length=255, blank=True, null=True,
         verbose_name="Provider location",
-        choices=LOCATION_NUMBERS
+        choices=enum(*constants.LOCATION_NUMBERS.keys())
     )
     performer = fields.CharField(
         max_length=255, blank=True, null=True
