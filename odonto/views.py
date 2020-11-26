@@ -77,6 +77,9 @@ class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
 
 
 class CaseMix(LoginRequiredMixin, View):
+    # only look patients after the rollout
+    CASE_MIX_ROLLOUT = datetime.date(2020, 11, 1)
+
     def get_qs(self):
         return Episode.objects.filter(
             category_name__in=[
@@ -93,7 +96,7 @@ class CaseMix(LoginRequiredMixin, View):
         )
 
     def get_empty_row(self):
-        headers = ["Period start", "Year", "Month"]
+        headers = ["Period start", "Year", "Month", "Total patients"]
         headers.extend(list(models.CaseMix.CASE_MIX_FIELDS.keys()))
         headers.extend([
             "Total score",
@@ -108,7 +111,6 @@ class CaseMix(LoginRequiredMixin, View):
 
     def get_field_title(self, field_name):
         return field_name.replace("_", " ").capitalize()
-
 
     def calculate(self, qs):
         """
@@ -125,10 +127,11 @@ class CaseMix(LoginRequiredMixin, View):
 
         for episode in qs:
             d = episode.category.get_sign_off_date()
-            if not d:
+            if not d or d <= self.CASE_MIX_ROLLOUT:
                 continue
             d = (d.month, d.year)
             case_mix = episode.casemix_set.all()[0]
+            result[d]["Total patients"] += 1
             for field in case_mix.CASE_MIX_FIELDS.keys():
                 score = case_mix.score(field)
                 if score is not None:
@@ -140,12 +143,20 @@ class CaseMix(LoginRequiredMixin, View):
             result[d][band] += 1
         return result
 
+    def get_period_start(self, month_year):
+        """
+        takes in a month_year e.g. 4, 2020
+        and returns it as a string ie 202004
+        """
+        month, year = month_year
+        return int("{}{}".format(year, str(month).zfill(2)))
+
     def create_response(self, date_to_values):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="case_mix.csv"'
         ordering = sorted(
             list(date_to_values.keys()),
-            key=lambda x: int("{}{}".format(*x)),
+            key=self.get_period_start,
             reverse=True
         )
         fieldnames = list(self.get_empty_row().keys())
@@ -158,9 +169,7 @@ class CaseMix(LoginRequiredMixin, View):
             val_dict = date_to_values[month_year]
             for key, val in val_dict.items():
                 row[self.get_field_title(key)] = val
-            row["Period start"] = "{}/{}".format(
-                *month_year
-            )
+            row["Period start"] = self.get_period_start(month_year)
             row["Month"] = month_year[0]
             row["Year"] = month_year[1]
             writer.writerow(row)
