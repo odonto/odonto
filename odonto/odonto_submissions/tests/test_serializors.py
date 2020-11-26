@@ -227,6 +227,47 @@ class Fp17TreatmentCategoryTestCase(OpalTestCase):
         serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
 
+class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.data_set = self.episode.fp17clinicaldataset_set.get()
+        self.incomplete_treatment = self.episode.fp17incompletetreatment_set.get()
+
+    def test_no_aerosol(self):
+        self.data_set.antibiotic_items_prescribed = 3
+        self.data_set.save()
+        serializer = serializers.Fp17ClinicalDataSetSerializer(self.episode)
+        self.assertEqual(serializer.to_messages(), [treatments.ANTIBIOTIC_ITEMS(3)])
+
+    def test_aerosol_before(self):
+        self.data_set.antibiotic_items_prescribed = 3
+        self.data_set.aerosol_generating_procedures = 4
+        self.data_set.save()
+        self.incomplete_treatment.date_of_acceptance = datetime.date(
+            2019, 1, 1
+        )
+        serializer = serializers.Fp17ClinicalDataSetSerializer(self.episode)
+        self.assertEqual(serializer.to_messages(), [treatments.ANTIBIOTIC_ITEMS(3)])
+
+
+    def test_aerosol_after(self):
+        self.data_set.antibiotic_items_prescribed = 3
+        self.data_set.aerosol_generating_procedures = 4
+        self.data_set.save()
+        self.incomplete_treatment.date_of_acceptance = datetime.date(
+            2020, 5, 1
+        )
+        self.incomplete_treatment.save()
+        serializer = serializers.Fp17ClinicalDataSetSerializer(self.episode)
+        self.assertEqual(
+            serializer.to_messages(),
+            [
+                treatments.ANTIBIOTIC_ITEMS(3),
+                treatments.AEROSOL_GENERATING_PROCEDURE(4)
+            ]
+        )
+
+
 class OrthodonticDataSetTranslatorTestCase(OpalTestCase):
     def setUp(self):
         _, self.episode = self.new_patient_and_episode_please()
@@ -320,6 +361,29 @@ class OrthodonticAssessmentTranslatorTestCase(OpalTestCase):
 
         self.assertEqual(
             str(v.exception), "Date appliance fitted prior to date of assessment"
+        )
+
+
+class OrthodonticTreatmentTranslatorTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        self.treatment = self.episode.orthodontictreatment_set.get()
+
+    def test_replacement(self):
+        self.treatment.completion_type = self.treatment.PATIENT_FAILED_TO_RETURN
+        self.treatment.replacement = True
+        self.treatment.save()
+        self.assertEqual(
+            serializers.OrthodonticTreatmentTranslator(self.episode).to_messages(),
+            [treatments.REGULATION_11_REPLACEMENT_APPLIANCE]
+        )
+
+    def test_no_replacement(self):
+        self.treatment.completion_type = self.treatment.PATIENT_FAILED_TO_RETURN
+        self.treatment.save()
+        self.assertEqual(
+            serializers.OrthodonticTreatmentTranslator(self.episode).to_messages(),
+            [treatments.TREATMENT_ABANDONED, treatments.PATIENT_FAILED_TO_RETURN]
         )
 
 

@@ -11,8 +11,8 @@ def annotate(bcds1):
     bcds1.patient.sex = 'M'
     bcds1.patient.date_of_birth = datetime.date(1947, 5, 5)
 
-    bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
-    bcds1.date_of_completion = datetime.date(2017, 4, 1)
+    bcds1.date_of_acceptance = datetime.date(2020, 4, 1)
+    bcds1.date_of_completion = datetime.date(2020, 4, 2)
 
     # Treatments: "Ethnic Origin 8, Missing Permanent 0"
     bcds1.treatments = [
@@ -46,7 +46,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17incompletetreatment_set.update(
-        date_of_acceptance=datetime.date(2017, 4, 1),
-        completion_or_last_visit=datetime.date(2017, 4, 1)
+        date_of_acceptance=datetime.date(2020, 4, 1),
+        completion_or_last_visit=datetime.date(2020, 4, 2)
     )
     translate_to_bdcs1(bcds1, episode)
