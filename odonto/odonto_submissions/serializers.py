@@ -455,12 +455,10 @@ class DemographicsTranslator(TreatmentSerializer):
     NORTH_TYNESIDE = {
         "address": [
             "PROTECTED ADDRESS",
-            "CO Childrens Services",
-            "North Tyneside Council",
-            "Quadrant",
-            "The Silverlink North",
-            "Cobalt Business Park",
-            "North Tyneside",
+            "CO CHILDRENS SERVICES",
+            "NORTH TYNESIDE COUNCIL",
+            "THE SILVERLINK NORTH",
+            "COBALT BUSINESS PARK",
         ],
         "post_code": "NE27 0BY",
         "locations": [
@@ -473,12 +471,10 @@ class DemographicsTranslator(TreatmentSerializer):
     NORTHUMBRIA = {
         "address": [
             "PROTECTED ADDRESS",
-            "CO Childrens Services",
-            "Northumberland Council",
-            "Foundry House",
-            "The Oval",
-            "Stead Lane",
-            "Bedlington",
+            "CO CHILDRENS SERVICES",
+            "NORTHUMBERLAND COUNCIL",
+            "THE OVAL",
+            "STEAD LANE",
         ],
         "post_code": "NE22 5H5",
         "locations": [
