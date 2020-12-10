@@ -524,7 +524,7 @@ class GetBCDS1TestCase(OpalTestCase):
         self.assertEqual(bcds1.contract_number, "FP17_CONTRACT_NUMBER")
         self.assertEqual(bcds1.message_reference_number, "REF_NUM")
         self.assertEqual(bcds1.resubmission_count, "SUB_COUNT")
-        self.assertEqual(bcds1.location, "24946")
+        self.assertEqual(bcds1.location, 24946)
         self.assertEqual(bcds1.performer_number, 111)
         self.assertEqual(bcds1.dpb_pin, "2222")
         self.assertIsNotNone(bcds1.patient)
