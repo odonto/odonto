@@ -27,14 +27,13 @@ class Command(BaseCommand):
             models.Submission.FAILED_TO_SEND, models.Submission.REJECTED_BY_COMPASS
         ])
         for episode in qs:
+            sign_off_date = episode.category.get_sign_off_date()
+            if sign_off_date and sign_off_date < SEND_ALL_AFTER_DATE:
+                continue
             submission = episode.category.submission()
-            if not submission:
+            if not submission or submission.state in failed_states:
                 to_send.append(episode)
-            elif submission.state in failed_states:
-                if episode.category.get_sign_off_date() >= SEND_ALL_AFTER_DATE:
-                    to_send.append(episode)
         return to_send
-
 
     def send_submission(self, episode):
         logger.info(f"Sending {episode.id}")
