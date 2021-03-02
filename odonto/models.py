@@ -129,6 +129,39 @@ class Demographics(models.Demographics):
         verbose_name_plural = "Patient information"
 
 
+class CovidStatus(models.EpisodeSubrecord):
+    """
+    This model appears on both FP17 and FP17O forms
+    and tracks the number of calls of patients of
+    various covid status.
+
+    A patient can encompass different stages
+    throughout the course of treatment.
+    """
+    _is_singleton = True
+
+    shielding_patient = fields.IntegerField(
+        blank=True, null=True
+    )
+    increased_risk = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="At increased risk"
+    )
+    possible_covid = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Possible/confirmed COVID-19 or lives with a \
+possible/confirmed person"
+    )
+    symptom_free = fields.IntegerField(
+        blank=True, null=True
+    )
+    other_covid_status = fields.IntegerField(
+        blank=True, null=True
+    )
+
+
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
