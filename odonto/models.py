@@ -10,10 +10,7 @@ from opal import models
 from opal.core.fields import enum
 from odonto import constants
 
-"""
-Core Opal models - these inherit from the abstract data models in
-opal.models but can be customised here with extra / altered fields.
-"""
+
 class Location(models.Location):
     _exclude_from_extract = True
     _advanced_searchable = False
@@ -35,6 +32,7 @@ class PastMedicalHistory(models.PastMedicalHistory):
 
 class Treatment(models.Treatment):
     _icon = None
+
     class Meta:
         verbose_name = "Current medication"
 
@@ -66,11 +64,6 @@ class PerformerNumber(djangomodels.Model):
 
     def __str__(self):
         return "{}: {}".format(self.user.username, self.number)
-
-
-"""
-End Opal core models
-"""
 
 
 class Demographics(models.Demographics):
