@@ -858,4 +858,9 @@ table.patient-list {
   list-style-type: disc;
   font-weight: normal;
 }
+
+.table > tbody > tr > td.subrecord-row-value {
+  width: 40%;
+  padding-left: 8%;
+}
 /*# sourceMappingURL=odonto.css.map */
