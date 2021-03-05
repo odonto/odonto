@@ -429,6 +429,18 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
         return result
 
 
+class CovidStatusTranslator(TreatmentSerializer):
+    model = models.CovidStatus
+
+    TREATMENT_MAPPINGS = {
+        "shielding_patient": t.SHIELDING_PATIENT,
+        "increased_risk": t.INCREASED_RISK,
+        "possible_covid": t.POSSIBLED_COVID,
+        "symptom_free": t.SYMPTOM_FREE,
+        "other_covid_status": t.OTHER_COVID_STATUS,
+    }
+
+
 class DemographicsTranslator(TreatmentSerializer):
     model = models.Demographics
 
@@ -682,6 +694,7 @@ def translate_to_fp17o(bcds1, episode):
         ExtractionChartTranslator,
         OrthodonticAssessmentTranslator,
         OrthodonticTreatmentTranslator,
+        CovidStatusTranslator,
     ]
 
     for translator in translators:
@@ -750,6 +763,7 @@ def translate_to_fp17(bcds1, episode):
         Fp17ClinicalDataSetSerializer,
         Fp17RecallSerializer,
         Fp17OtherDentalServiceTranslator,
+        CovidStatusTranslator,
     ]
 
     for translator in translators:
