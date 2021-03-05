@@ -740,6 +740,10 @@ class CaseMix(models.EpisodeSubrecord):
     """
     _is_singleton = True
 
+    class Meta:
+        verbose_name = "Case mix"
+        verbose_name_plural = "Case mixes"
+
     CASE_MIX_FIELDS = {
         "ability_to_communicate": {
             "0": 0, "A": 2, "B": 4, "C": 8
