@@ -140,6 +140,10 @@ class CovidStatus(models.EpisodeSubrecord):
     """
     _is_singleton = True
 
+    class Meta:
+        verbose_name = "Covid status"
+        verbose_name_plural = "Covid statuses"
+
     shielding_patient = fields.IntegerField(
         blank=True, null=True
     )
@@ -155,10 +159,10 @@ class CovidStatus(models.EpisodeSubrecord):
 possible/confirmed person"
     )
     symptom_free = fields.IntegerField(
-        blank=True, null=True
+        blank=True, null=True, verbose_name="Symptom free"
     )
     other_covid_status = fields.IntegerField(
-        blank=True, null=True
+        blank=True, null=True, verbose_name="Other covid status"
     )
 
 
