@@ -856,6 +856,8 @@ class CovidTriage(models.EpisodeSubrecord):
     They store data about patient interaction
     where there is not going to be an FP17 or FP17O
     """
+    _is_singleton = True
+
     class Meta:
         verbose_name = "Covid triage"
     
@@ -945,11 +947,10 @@ class CovidTriage(models.EpisodeSubrecord):
         blank=True,
         null=True,
         max_length=256,
+        choices=LOCAL_UCD_REFERRAL_REASONS,
         verbose_name="Reason the patient has been referred to the local UDC"
     )
     face_to_face_appointment = fields.BooleanField(
         default=False,
         verbose_name="The triage call recommended a face to face but patient failed to attend"
     )
-
-
