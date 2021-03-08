@@ -856,6 +856,7 @@ class CovidTriage(models.EpisodeSubrecord):
     They store data about patient interaction
     where there is not going to be an FP17 or FP17O
     """
+    _is_singleton = True
     class Meta:
         verbose_name = "Covid triage"
     
@@ -892,10 +893,10 @@ class CovidTriage(models.EpisodeSubrecord):
         "Routine treatment"
     )
     date_of_contact = fields.DateField(
-        verbose_name="Date of contact"
+        verbose_name="Date of contact", blank=True, null=True
     )
     time_of_contact = fields.TimeField(
-        verbose_name="Time the call ended"
+        verbose_name="Time the call ended", blank=True, null=True
     )
     data_care_professional = fields.BooleanField(
         default=False, 
