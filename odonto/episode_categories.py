@@ -15,6 +15,7 @@ class AbstractOdontoCategory(object):
     SUBMITTED = "Submitted"
     OPEN = "Open"
     NEEDS_INVESTIGATION = "Not sent, needs investigation"
+    NEW = "New"
 
     def submission(self):
         """
