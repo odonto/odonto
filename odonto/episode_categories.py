@@ -344,6 +344,11 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
 
         return uoa
 
+
+class CovidTriageEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
+    display_name = "COVID_TRIAGE"
+
+
 def get_unsubmitted_fp17_and_fp17os(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
     unsubmitted_fp17Os = FP17OEpisode.get_unsubmitted(qs)

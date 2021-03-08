@@ -70,6 +70,9 @@ class AddPatientPathway(OdontoPagePathway):
         patient.create_episode(
             category_name=FP17OEpisode.display_name, stage='New'
         )
+        patient.create_episode(
+            category_name=CovidTriageEpisode.display_name, stage='New'
+        )
         demographics = patient.demographics()
         if models.Demographics.objects.filter(
             first_name=demographics.first_name,
