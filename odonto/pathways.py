@@ -110,7 +110,7 @@ FP17_STEPS = (
     pathway.Step(model=models.CaseMix, help_template="pathway/case_mix_help.html"),
 )
 
-
+#FP17
 class Fp17Pathway(OdontoPagePathway):
     display_name = 'Open FP17'
     slug = 'fp17'
@@ -131,14 +131,6 @@ CHECK_STEP_FP17 = pathway.Step(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
     step_controller="CheckFP17Step",
-    display_name="unused"
-)
-
-
-CHECK_STEP_FP17_O = pathway.Step(
-    template="notused",
-    base_template="pathway/steps/empty_step_base_template.html",
-    step_controller="CheckFP17OStep",
     display_name="unused"
 )
 
@@ -289,10 +281,19 @@ class Fp17OPathway(OdontoPagePathway):
         return patient, episode
 
 
+# FP17O
 class EditFP17OPathway(OdontoPagePathway):
     display_name = 'Edit FP17O'
     slug = 'fp17-o-edit'
     steps = FP17_O_STEPS
+
+
+CHECK_STEP_FP17_O = pathway.Step(
+    template="notused",
+    base_template="pathway/steps/empty_step_base_template.html",
+    step_controller="CheckFP17OStep",
+    display_name="unused"
+)
 
 
 class SubmitFP17OPathway(OdontoPagePathway):
