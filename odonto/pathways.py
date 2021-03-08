@@ -64,8 +64,12 @@ class AddPatientPathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        patient.create_episode(category_name='FP17', stage='New')
-        patient.create_episode(category_name='FP17O', stage='New')
+        patient.create_episode(
+            category_name=FP17Episode.display_name, stage='New'
+        )
+        patient.create_episode(
+            category_name=FP17OEpisode.display_name, stage='New'
+        )
         demographics = patient.demographics()
         if models.Demographics.objects.filter(
             first_name=demographics.first_name,
