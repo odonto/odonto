@@ -6,7 +6,7 @@ from django.db import transaction
 from opal.core import menus, pathway
 from odonto import models
 from odonto.odonto_submissions import models as submission_models
-from odonto.episode_categories import FP17Episode, FP17OEpisode
+from odonto.episode_categories import FP17Episode, FP17OEpisode, CovidTriageEpisode
 from odonto.odonto_submissions import serializers
 from plugins.add_patient_step import FindPatientStep
 
@@ -361,6 +361,42 @@ class SubmitFP17OPathway(OdontoPagePathway):
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
         return to_dicted
 
+
+    @transaction.atomic
+    def save(self, data, user=None, patient=None, episode=None):
+        result = super().save(data, user, patient, episode)
+        episode.stage = 'Submitted'
+        episode.save()
+        return result
+
+
+# Covid triage
+COVID_TRIAGE_STEPS = (
+    pathway.Step(
+        model=models.Fp17DentalCareProvider,
+        step_controller="CareProviderStepCtrl",
+    ),
+    pathway.Step(
+        model=models.Demographics,
+        base_template="pathway/steps/step_base_without_display_name.html"
+    ),
+    pathway.Step(
+        model=models.CovidTriage,
+        base_template="pathway/steps/step_base_without_display_name.html"
+    ),
+)
+
+
+class EditCovidTriagePathway(OdontoPagePathway):
+    display_name = 'Edit triage'
+    slug = 'covid-triage-edit'
+    steps = COVID_TRIAGE_STEPS
+
+
+class SubmitCovidTriagePathway(OdontoPagePathway):
+    display_name = "Submit triage"
+    slug = 'covid-triage-edit'
+    steps = COVID_TRIAGE_STEPS
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
