@@ -41,8 +41,7 @@ def table_row_field_display(model_and_field):
 @register.inclusion_tag('templatetags/covid_status_row_display.html')
 def covid_status_row_display(field):
     """
-    A table row field display that is just for covid status and states
-    calls.
+    Displays a patient's covid status in a table.
     """
     ctx = {
         "model": "item.{}".format(field),

@@ -435,7 +435,7 @@ class CovidStatusTranslator(TreatmentSerializer):
     TREATMENT_MAPPINGS = {
         "shielding_patient": t.SHIELDING_PATIENT,
         "increased_risk": t.INCREASED_RISK,
-        "possible_covid": t.POSSIBLED_COVID,
+        "possible_covid": t.POSSIBLE_COVID,
         "symptom_free": t.SYMPTOM_FREE,
         "other_covid_status": t.OTHER_COVID_STATUS,
     }
