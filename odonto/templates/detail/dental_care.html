@@ -51,7 +51,10 @@
       <div class="col-md-12">
         <table class="table table-striped">
           <tr ng-repeat="episode in dentalCare.openAndSubmittedEpisodes | orderBy:'-id'">
-            <td>[[ episode.category_name ]]</td>
+            <td>
+              <span ng-show="episode.category_name === 'COVID_TRIAGE'">Covid triage</span>
+              <span ng-hide="episode.category_name === 'COVID_TRIAGE'"">[[ episode.category_name ]]</span>
+            </td>
             <td>[[ episode.fp17_treatment_category[0].treatment_category ]]</td>
             <td>[[ episode.stage ]]</td>
             <td>[[ episode.fp17_dental_care_provider[0].provider_location_number ]]</td>
