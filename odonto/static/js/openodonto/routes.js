@@ -27,5 +27,14 @@
                 },
           templateUrl: function(params){ return '/templates/view_summary_fp17o.html' }
         })
+        .when('/summary/covid_triage/:patient_id/:episode_id', {
+          controller: 'SummaryCtrl',
+                resolve: {
+                    patient: function(patientLoader) { return patientLoader(); },
+                },
+          templateUrl: function(params){
+            return '/templates/view_summary_covid_triage.html'
+          }
+        })
    }]);
 })();
