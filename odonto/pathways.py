@@ -3,11 +3,10 @@ Pathways for Odonto
 """
 import logging
 from django.db import transaction
-from opal.core import menus, pathway
+from opal.core import pathway
 from odonto import models
 from odonto.odonto_submissions import models as submission_models
 from odonto.episode_categories import FP17Episode, FP17OEpisode, CovidTriageEpisode
-from odonto.odonto_submissions import serializers
 from plugins.add_patient_step import FindPatientStep
 
 
@@ -123,7 +122,7 @@ class Fp17Pathway(OdontoPagePathway):
         )
         episode.stage = 'Open'
         episode.save()
-        patient.create_episode(category_name='FP17', stage='New')
+        patient.create_episode(category_name=FP17Episode.display_name, stage='New')
         return patient, episode
 
 
@@ -277,7 +276,7 @@ class Fp17OPathway(OdontoPagePathway):
         )
         episode.stage = 'Open'
         episode.save()
-        patient.create_episode(category_name='FP17O', stage='New')
+        patient.create_episode(category_name=FP17OEpisode.display_name, stage='New')
         return patient, episode
 
 
