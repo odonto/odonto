@@ -386,6 +386,24 @@ COVID_TRIAGE_STEPS = (
 )
 
 
+class CovidTriagePathway(OdontoPagePathway):
+    display_name = 'Covid triage claim form'
+    slug = 'covid-triage-new'
+    steps = COVID_TRIAGE_STEPS
+
+    @transaction.atomic
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        episode.stage = 'Open'
+        episode.save()
+        patient.create_episode(
+            category_name=CovidTriageEpisode.display_name, stage='New'
+        )
+        return patient, episode
+
+
 class EditCovidTriagePathway(OdontoPagePathway):
     display_name = 'Edit triage'
     slug = 'covid-triage-edit'
@@ -394,7 +412,7 @@ class EditCovidTriagePathway(OdontoPagePathway):
 
 class SubmitCovidTriagePathway(OdontoPagePathway):
     display_name = "Submit triage"
-    slug = 'covid-triage-edit'
+    slug = 'covid-triage-submit'
     steps = COVID_TRIAGE_STEPS
 
     @transaction.atomic
