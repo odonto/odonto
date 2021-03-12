@@ -135,12 +135,12 @@ class SerializerTestCase(OpalTestCase):
     def test_cases(self):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
-        for case_number in range(1, 50):
+        for case_number in range(1, 51):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 6):
+        for case_number in range(1, 7):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -444,6 +444,55 @@ class OrthodonticTreatmentTranslatorTestCase(OpalTestCase):
         self.assertEqual(
             serializers.OrthodonticTreatmentTranslator(self.episode).to_messages(),
             [treatments.TREATMENT_ABANDONED, treatments.PATIENT_FAILED_TO_RETURN]
+        )
+
+class CovidStatusTranslatorTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        self.status = self.episode.covidstatus_set.get()
+
+    def test_populated(self):
+        self.status.shielding_patient = 1
+        self.status.increased_risk = 2
+        self.status.possible_covid = 3
+        self.status.symptom_free = 4
+        self.status.other_covid_status = 5
+        self.status.save()
+        messages = serializers.CovidStatusTranslator(self.episode).to_messages()
+        self.assertEqual(
+            messages[0].code, 9615
+        )
+        self.assertEqual(
+            messages[0].instance_count, 1
+        )
+        self.assertEqual(
+            messages[1].code, 9616
+        )
+        self.assertEqual(
+            messages[1].instance_count, 2
+        )
+        self.assertEqual(
+            messages[2].code, 9617
+        )
+        self.assertEqual(
+            messages[2].instance_count, 3
+        )
+        self.assertEqual(
+            messages[3].code, 9618
+        )
+        self.assertEqual(
+            messages[3].instance_count, 4
+        )
+        self.assertEqual(
+            messages[4].code, 9619
+        )
+        self.assertEqual(
+            messages[4].instance_count, 5
+        )
+
+    def test_none(self):
+        self.assertEqual(
+            serializers.CovidStatusTranslator(self.episode).to_messages(), []
         )
 
 

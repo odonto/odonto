@@ -129,6 +129,44 @@ class Demographics(models.Demographics):
         verbose_name_plural = "Patient information"
 
 
+class CovidStatus(models.EpisodeSubrecord):
+    """
+    This model appears on both FP17 and FP17O forms
+    and tracks the number of calls with patients of
+    various covid status.
+
+    During a course of treatment a patient can undergo
+    multiple stages. E.g. they can have possible/confirmed
+    covid and then later be symptom free.
+    """
+    _is_singleton = True
+
+    class Meta:
+        verbose_name = "Covid status"
+        verbose_name_plural = "Covid statuses"
+
+    shielding_patient = fields.IntegerField(
+        blank=True, null=True
+    )
+    increased_risk = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="At increased risk"
+    )
+    possible_covid = fields.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Possible/confirmed COVID-19 or lives with a \
+possible/confirmed person"
+    )
+    symptom_free = fields.IntegerField(
+        blank=True, null=True, verbose_name="Symptom free"
+    )
+    other_covid_status = fields.IntegerField(
+        blank=True, null=True, verbose_name="Other covid status"
+    )
+
+
 class Fp17DentalCareProvider(models.EpisodeSubrecord):
     _is_singleton = True
 
@@ -277,7 +315,6 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
     BRIDGE_REPAIRS = "Bridge repairs"
     ARREST_OF_BLEEDING = "Arrest of bleeding"
     REMOVAL_OF_SUTURES = "Removal of sutures"
-
 
     TREATMENT_CATEGORIES = enum(
         BAND_1,
@@ -702,6 +739,10 @@ class CaseMix(models.EpisodeSubrecord):
     https://bda.org/dentists/governance-and-representation/craft-committees/salaried-primary-care-dentists/Documents/Case%20mix%202019.pdf  #NOQA E501
     """
     _is_singleton = True
+
+    class Meta:
+        verbose_name = "Case mix"
+        verbose_name_plural = "Case mixes"
 
     CASE_MIX_FIELDS = {
         "ability_to_communicate": {

@@ -1,0 +1,16 @@
+<tr>
+  <td>
+    {{ display_name }}
+  </td>
+  <td class="subrecord-row-value">
+    <span ng-show="{{ model }} !== undefined && {{ model }} !== null">
+      [[ {{ model }} ]]
+      <span ng-show="{{ model }} == 1">
+        call
+      </span>
+      <span ng-show="{{ model }} !== 1">
+        calls
+      </span>
+    </span>
+  </td>
+</tr>

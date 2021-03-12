@@ -1,0 +1,12 @@
+{% load odonto_subrecords %}
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-striped">
+      {% covid_status_row_display "shielding_patient" %}
+      {% covid_status_row_display "increased_risk" %}
+      {% covid_status_row_display "possible_covid" %}
+      {% covid_status_row_display "symptom_free" %}
+      {% covid_status_row_display "other_covid_status" %}
+    </table>
+  </div>
+</div>
