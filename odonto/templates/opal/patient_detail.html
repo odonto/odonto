@@ -25,6 +25,10 @@
 
       <div class="row content-offset">
         <a class="btn btn-primary btn-lg pull-right {% if open_fp17 %}disabled{% endif %} open-claim-button"
+           href="/pathway/#/covid-triage-new/{{ object.pk }}/{{ new_fp17_pk }}">
+          Open Covid triage
+      </a>
+        <a class="btn btn-primary btn-lg pull-right {% if open_fp17 %}disabled{% endif %} open-claim-button"
            href="/pathway/#/fp17/{{ object.pk }}/{{ new_fp17_pk }}">
           Open FP17
         </a>
@@ -66,6 +70,9 @@
                       {% if episode.category_name == "FP17O" %}
                         href="/pathway/#/fp17-o-edit/{{ object.pk }}/{{ episode.pk }}"
                       {% endif %}
+                      {% if episode.category_name == "COVID_TRIAGE" %}
+                        href="/pathway/#/covid-triage-edit/{{ object.pk }}/{{ episode.pk }}"
+                      {% endif %}
                     class="btn btn-small btn-primary">
                     Edit &nbsp;
                   </a>
@@ -76,6 +83,9 @@
                     {% endif %}
                     {% if episode.category_name == "FP17O" %}
                       href="/#/summary/fp17o/{{ object.pk }}/{{ episode.pk }}"
+                    {% endif %}
+                    {% if episode.category_name == "COVID_TRIAGE" %}
+                      href="/#/summary/covid-triage/{{ object.pk }}/{{ episode.pk }}"
                     {% endif %}
                     class="btn btn-small btn-default">
                     View
