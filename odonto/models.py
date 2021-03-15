@@ -132,11 +132,12 @@ class Demographics(models.Demographics):
 class CovidStatus(models.EpisodeSubrecord):
     """
     This model appears on both FP17 and FP17O forms
-    and tracks the number of calls of patients of
+    and tracks the number of calls with patients of
     various covid status.
 
-    A patient can encompass different stages
-    throughout the course of treatment.
+    During a course of treatment a patient can undergo
+    multiple stages. E.g. they can have possible/confirmed
+    covid and then later be symptom free.
     """
     _is_singleton = True
 
@@ -314,7 +315,6 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
     BRIDGE_REPAIRS = "Bridge repairs"
     ARREST_OF_BLEEDING = "Arrest of bleeding"
     REMOVAL_OF_SUTURES = "Removal of sutures"
-
 
     TREATMENT_CATEGORIES = enum(
         BAND_1,
