@@ -142,8 +142,8 @@ class CovidStatus(models.EpisodeSubrecord):
     _is_singleton = True
 
     class Meta:
-        verbose_name = "Covid status"
-        verbose_name_plural = "Covid statuses"
+        verbose_name = "COVID-19 status"
+        verbose_name_plural = "COVID-19 statuses"
 
     shielding_patient = fields.IntegerField(
         blank=True, null=True
@@ -163,7 +163,7 @@ possible/confirmed person"
         blank=True, null=True, verbose_name="Symptom free"
     )
     other_covid_status = fields.IntegerField(
-        blank=True, null=True, verbose_name="Other covid status"
+        blank=True, null=True, verbose_name="Other COVID-19 status"
     )
 
 
@@ -859,7 +859,7 @@ class CovidTriage(models.EpisodeSubrecord):
     _is_singleton = True
 
     class Meta:
-        verbose_name = "Covid triage"
+        verbose_name = "COVID-19 triage"
     
     # Order is important for the choices
     # the code sent to compass is the idx + 1
@@ -904,7 +904,7 @@ class CovidTriage(models.EpisodeSubrecord):
         null=True,
     )
     data_care_professional = fields.BooleanField(
-        default=False, 
+        default=False,
         verbose_name="Carried out by a dental care professional"
     )
     primary_reason = fields.CharField(
@@ -917,8 +917,8 @@ class CovidTriage(models.EpisodeSubrecord):
     covid_status = fields.CharField(
         blank=True, 
         null=True, 
-        max_length=256, 
-        verbose_name="Covid status",
+        max_length=256,
+        verbose_name="COVID-19 status",
         choices=COVID_STATUS
     )
     triage_via_video = fields.BooleanField(
