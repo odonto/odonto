@@ -142,8 +142,8 @@ class CovidStatus(models.EpisodeSubrecord):
     _is_singleton = True
 
     class Meta:
-        verbose_name = "Covid status"
-        verbose_name_plural = "Covid statuses"
+        verbose_name = "COVID-19 status"
+        verbose_name_plural = "COVID-19 statuses"
 
     shielding_patient = fields.IntegerField(
         blank=True, null=True
@@ -163,7 +163,7 @@ possible/confirmed person"
         blank=True, null=True, verbose_name="Symptom free"
     )
     other_covid_status = fields.IntegerField(
-        blank=True, null=True, verbose_name="Other covid status"
+        blank=True, null=True, verbose_name="Other COVID-19 status"
     )
 
 
@@ -846,3 +846,116 @@ class CaseMix(models.EpisodeSubrecord):
         if total < 30:
             return self.SEVERE_COMPLEXITY
         return self.EXTREME_COMPLEXITY
+
+
+class CovidTriage(models.EpisodeSubrecord):
+    """
+    Triage models are the data used by the covid
+    triage episode category.
+
+    They store data about patient interaction
+    where there is not going to be an FP17 or FP17O
+    """
+    _is_singleton = True
+
+    class Meta:
+        verbose_name = "COVID-19 triage"
+    
+    # Order is important for the choices
+    # the code sent to compass is the idx + 1
+    LOCAL_UCD_REFERRAL_REASONS = enum(
+        "Life threatening emergencies",
+        "Trauma",
+        "Oro-facial swelling",
+        "Post extraction bleeding",
+        "Dental conditions resulting in systematic illness",
+        "Severe dental or facial pain",
+        "Fractured teeth with pulp exposure",
+        "Dental and soft tissue infections",
+        "Suspected oral cancer",
+        "Oro-dental conditions worsening systemic illness"
+    )
+
+    COVID_STATUS = enum(
+        "Patient is shielded",
+        "Increased risk of illness from COVID-19",
+        "Possible/confirmed COVID-19 patient (or those living in household)",
+        "Other",
+        "Patient is COVID-19 symptom free at present"
+    )
+
+    REASONS_FOR_THE_CALL = enum(
+        "Pain",
+        "Swelling",
+        "Bleeding"
+        "Trauma",
+        "Soft tissue pathology",
+        "Other",
+        "Routine treatment"
+    )
+    date_of_contact = fields.DateField(
+        verbose_name="Date of contact",
+        blank=True,
+        null=True,
+    )
+    time_of_contact = fields.TimeField(
+        verbose_name="Time the call ended",
+        blank=True,
+        null=True,
+    )
+    data_care_professional = fields.BooleanField(
+        default=False,
+        verbose_name="Carried out by a dental care professional"
+    )
+    primary_reason = fields.CharField(
+        blank=True,
+        null=True,
+        max_length=256,
+        verbose_name='Primary reason for call',
+        choices=REASONS_FOR_THE_CALL
+    )
+    covid_status = fields.CharField(
+        blank=True, 
+        null=True, 
+        max_length=256,
+        verbose_name="COVID-19 status",
+        choices=COVID_STATUS
+    )
+    triage_via_video = fields.BooleanField(
+        default=False,
+        verbose_name="Triage via video"
+    )
+    advice_given = fields.BooleanField(
+        default=False, verbose_name="Advice given"
+    )
+    advised_analgesics = fields.BooleanField(
+        default=False, verbose_name="Advised analgesics"
+    )
+    remote_prescription_analgesics = fields.BooleanField(
+        default=False, 
+        verbose_name="Remote prescription of analgesics"
+    )
+    remote_prescription_antibiotics = fields.BooleanField(
+        default=False, 
+        verbose_name="Remote prescription of antibiotics"
+    )
+    follow_up_call_required = fields.BooleanField(
+        default=False,
+        verbose_name="Follow up call required"
+    )
+    call_back_if_symptoms_worsen = fields.BooleanField(
+        default=False,
+        verbose_name="Recommended a call back if symptoms worsened"
+    )
+    referrered_to_local_udc_reason = fields.CharField(
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=LOCAL_UCD_REFERRAL_REASONS,
+        verbose_name="Reason the patient has been referred to the local urgent \
+dental care centre"
+    )
+    face_to_face_appointment = fields.BooleanField(
+        default=False,
+        verbose_name="The triage call recommended a face to face but patient failed to attend"
+    )

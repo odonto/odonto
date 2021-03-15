@@ -121,6 +121,13 @@ def odonto_datepicker(*args, **kwargs):
     return context
 
 
+@register.inclusion_tag('_helpers/timefield.html')
+def timefield(*args, **kwargs):
+    ctx = extract_common_args(kwargs)
+    ctx["style"] = "vertical"
+    return ctx
+
+
 @register.inclusion_tag('_helpers/extraction_chart.html')
 def extraction_chart(*args, **kwargs):
     ctx = {}
@@ -158,8 +165,10 @@ def chart_tooth(notation, **kwargs):
     }
     return ctx
 
+
 @register.inclusion_tag('_helpers/odonto_select.html')
 def odonto_select(*args, **kwargs):
     ctx = get_odonto_common_args(kwargs)
     ctx['lookuplist'] = kwargs.pop("lookuplist", ctx.get("lookuplist", None))
+    ctx["directives"] = args
     return ctx
