@@ -384,7 +384,8 @@ COVID_TRIAGE_STEPS = (
     ),
     pathway.Step(
         model=models.CovidTriage,
-        base_template="pathway/steps/step_base_without_display_name.html"
+        base_template="pathway/steps/step_base_without_display_name.html",
+        step_controller="CovidTriageStepCtrl"
     ),
 )
 
