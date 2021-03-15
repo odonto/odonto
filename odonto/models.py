@@ -894,18 +894,22 @@ class CovidTriage(models.EpisodeSubrecord):
         "Routine treatment"
     )
     date_of_contact = fields.DateField(
-        verbose_name="Date of contact"
+        verbose_name="Date of contact",
+        blank=True,
+        null=True,
     )
     time_of_contact = fields.TimeField(
-        verbose_name="Time the call ended"
+        verbose_name="Time the call ended",
+        blank=True,
+        null=True,
     )
     data_care_professional = fields.BooleanField(
         default=False, 
         verbose_name="Carried out by a dental care professional"
     )
     primary_reason = fields.CharField(
-        blank=True, 
-        null=True, 
+        blank=True,
+        null=True,
         max_length=256,
         verbose_name='Primary reason for call',
         choices=REASONS_FOR_THE_CALL
