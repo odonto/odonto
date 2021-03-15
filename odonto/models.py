@@ -952,7 +952,8 @@ class CovidTriage(models.EpisodeSubrecord):
         null=True,
         max_length=256,
         choices=LOCAL_UCD_REFERRAL_REASONS,
-        verbose_name="Reason the patient has been referred to the local UDC"
+        verbose_name="Reason the patient has been referred to the local urgent \
+dental care centre"
     )
     face_to_face_appointment = fields.BooleanField(
         default=False,
