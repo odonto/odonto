@@ -16,6 +16,7 @@ class Application(application.OpalApplication):
         'js/openodonto/controllers/complete_fp17_other_dental_services.controller.step.js',
         'js/openodonto/controllers/check_fp17.step.controller.js',
         'js/openodonto/controllers/check_fp17_o.step.controller.js',
+        'js/openodonto/controllers/check_covid_triage.step.controller.js',
         'js/openodonto/controllers/summary.controller.js',
         'js/openodonto/controllers/dental_care.controller.js',
         'js/openodonto/controllers/casemix_helper.controller.js',
@@ -48,4 +49,8 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17_aged_18_full_time_education.js',
         'js/openodonto/services/validators/fp17o_aged_18_full_time_education.js',
         'js/openodonto/services/validators/fp17o_completion_type.js',
+        'js/openodonto/services/validators/covid_triage_covid_status_required.js',
+        'js/openodonto/services/validators/covid_triage_date_of_contact_required.js',
+        'js/openodonto/services/validators/covid_triage_primary_reason_required.js',
+        'js/openodonto/services/validators/covid_triage_time_of_contact_required.js',
     ]

@@ -390,11 +390,20 @@ COVID_TRIAGE_STEPS = (
     ),
 )
 
+CHECK_COVID_TRIAGE_STEP = pathway.Step(
+    template="notused",
+    base_template="pathway/steps/empty_step_base_template.html",
+    step_controller="CheckCovidTriageStep",
+    display_name="unused"
+)
+
 
 class CovidTriagePathway(OdontoPagePathway):
     display_name = 'Covid triage claim form'
     slug = 'covid-triage-new'
     steps = COVID_TRIAGE_STEPS
+    template = "pathway/templates/check_pathway.html"
+    summary_template = "partials/covid_triage_summary.html"
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
@@ -419,7 +428,20 @@ class EditCovidTriagePathway(OdontoPagePathway):
 class SubmitCovidTriagePathway(OdontoPagePathway):
     display_name = "Submit triage"
     slug = 'covid-triage-submit'
-    steps = COVID_TRIAGE_STEPS
+    steps = COVID_TRIAGE_STEPS + (CHECK_COVID_TRIAGE_STEP,)
+    template = "pathway/templates/check_pathway.html"
+    summary_template = "partials/covid_triage_summary.html"
+
+    def to_dict(self, *args, **kwargs):
+        episode = kwargs.get('episode')
+        to_dicted = super().to_dict(*args, **kwargs)
+        check_index = None
+        step_ctrl = CHECK_COVID_TRIAGE_STEP.get_step_controller()
+        for index, step_dict in enumerate(to_dicted["steps"]):
+            if step_dict["step_controller"] == step_ctrl:
+                check_index = index
+        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        return to_dicted
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):

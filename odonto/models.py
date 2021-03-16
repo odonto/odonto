@@ -915,7 +915,7 @@ class CovidTriage(models.EpisodeSubrecord):
         choices=REASONS_FOR_THE_CALL
     )
     covid_status = fields.CharField(
-        blank=True, 
+        blank=True,
         null=True, 
         max_length=256,
         verbose_name="COVID-19 status",
