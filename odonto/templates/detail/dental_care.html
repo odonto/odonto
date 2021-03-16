@@ -32,8 +32,6 @@
       </div>
     </div>
 
-
-
     <div class="row content-offset">
       <a ng-class="{disabled: dentalCare.hasOpenFp17}" class="btn btn-primary btn-lg pull-right open-claim-button"
         href="{% link_url pathways.Fp17Pathway ngpatient='patient.id' ngepisode='dentalCare.newFp17.id' %}">
@@ -43,13 +41,19 @@
         href="{% link_url pathways.Fp17OPathway ngpatient='patient.id' ngepisode='dentalCare.newFp17o.id' %}">
         Open FP17O
       </a>
+      <a ng-class="{disabled: dentalCare.hasCovidTriage}" class="btn btn-primary btn-lg pull-right open-claim-button"
+        href="{% link_url pathways.CovidTriagePathway ngpatient='patient.id' ngepisode='dentalCare.newCovidTriage.id' %}">
+        Open COVID-19 triage
+      </a>
     </div>
 
     <div class="row content-offset-20">
       <div class="col-md-12">
         <table class="table table-striped">
           <tr ng-repeat="episode in dentalCare.openAndSubmittedEpisodes | orderBy:'-id'">
-            <td>[[ episode.category_name ]]</td>
+            <td>
+              [[ episode.category_name ]]
+            </td>
             <td>[[ episode.fp17_treatment_category[0].treatment_category ]]</td>
             <td>[[ episode.stage ]]</td>
             <td>[[ episode.fp17_dental_care_provider[0].provider_location_number ]]</td>
@@ -79,6 +83,11 @@
                     Edit &nbsp;
                   </a>
                 </span>
+                <span ng-show="episode.category_name === 'COVID-19 triage'">
+                  <a class="btn btn-small btn-primary" href="{% link_url pathways.EditCovidTriagePathway ngpatient='patient.id' ngepisode='episode.id' %}">
+                    Edit &nbsp;
+                  </a>
+                </span>
               </span>
             </td>
             <td>
@@ -89,6 +98,9 @@
                 </span>
                 <span ng-show="episode.category_name === 'FP17O'">
                   {% button_to 'Submit' pathways.SubmitFP17OPathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-small btn-primary" %}
+                </span>
+                <span ng-show="episode.category_name === 'COVID-19 triage'">
+                  {% button_to 'Submit' pathways.SubmitCovidTriagePathway ngpatient="patient.id" ngepisode="episode.id" classes="btn-small btn-primary" %}
                 </span>
               </span>
               {% endif %}
