@@ -349,6 +349,16 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
 class CovidTriageEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
     display_name = "COVID-19 triage"
 
+    def get_submit_link(self):
+        patient_id = self.episode.patient_id
+        episode_id = self.episode.id
+        return f"/pathway/#/covid-triage-submit/{patient_id}/{episode_id}"
+
+    def get_edit_link(self):
+        patient_id = self.episode.patient_id
+        episode_id = self.episode.id
+        return f"/pathway/#/covid-triage-edit/{patient_id}/{episode_id}"
+
 
 def get_unsubmitted_fp17_and_fp17os(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
