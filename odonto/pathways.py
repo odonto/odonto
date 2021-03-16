@@ -66,13 +66,13 @@ class AddPatientPathway(OdontoPagePathway):
             data, user=user, patient=patient, episode=episode
         )
         patient.create_episode(
-            category_name=FP17Episode.display_name, stage='New'
+            category_name=FP17Episode.display_name, stage=FP17Episode.NEW
         )
         patient.create_episode(
-            category_name=FP17OEpisode.display_name, stage='New'
+            category_name=FP17OEpisode.display_name, stage=FP17OEpisode.NEW
         )
         patient.create_episode(
-            category_name=CovidTriageEpisode.display_name, stage='New'
+            category_name=CovidTriageEpisode.display_name, stage=FP17OEpisode.NEW
         )
         demographics = patient.demographics()
         if models.Demographics.objects.filter(
@@ -122,9 +122,11 @@ class Fp17Pathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open'
+        episode.stage = FP17Episode.OPEN
         episode.save()
-        patient.create_episode(category_name='FP17', stage='New')
+        patient.create_episode(
+            category_name=FP17Episode.display_name, stage=FP17Episode.NEW
+        )
         return patient, episode
 
 
@@ -179,8 +181,8 @@ class SubmitFP17Pathway(OdontoPagePathway):
         If ‘Further treatment within 2 months’ is present then the same provider
         must have a claim(s) for this patient in the two months prior to the acceptance
         date of the continuation claim. There must be at least one instance of a valid
-        claim in the two month period.  Valid claims exclude urgent (9150 4), incomplete (9164),
-        Further treatment within 2 months (9163) or a lower band.
+        claim in the two month period.  Valid claims exclude urgent (9150 4),
+        incomplete (9164), further treatment within 2 months (9163) or a lower band.
 
         return [{treatment_category: date_of_acceptance}]
         """
@@ -197,7 +199,8 @@ class SubmitFP17Pathway(OdontoPagePathway):
         ).filter(
             fp17otherdentalservices__further_treatment_within_2_months=False
         ).values(
-            "fp17treatmentcategory__treatment_category", "fp17incompletetreatment__date_of_acceptance"
+            "fp17treatmentcategory__treatment_category",
+            "fp17incompletetreatment__date_of_acceptance"
         )
 
         result = []
@@ -230,7 +233,7 @@ class SubmitFP17Pathway(OdontoPagePathway):
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
-        episode.stage = 'Submitted'
+        episode.stage = FP17OEpisode.SUBMITTED
         episode.save()
         return result
 
@@ -275,9 +278,11 @@ class Fp17OPathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open'
+        episode.stage = FP17OEpisode.OPEN
         episode.save()
-        patient.create_episode(category_name='FP17O', stage='New')
+        patient.create_episode(
+            category_name=FP17OEpisode.display_name, stage=FP17OEpisode.NEW
+        )
         return patient, episode
 
 
@@ -363,7 +368,7 @@ class SubmitFP17OPathway(OdontoPagePathway):
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
-        episode.stage = 'Submitted'
+        episode.stage = FP17OEpisode.SUBMITTED
         episode.save()
         return result
 
@@ -396,7 +401,7 @@ class CovidTriagePathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open'
+        episode.stage = CovidTriageEpisode.OPEN
         episode.save()
         patient.create_episode(
             category_name=CovidTriageEpisode.display_name,
@@ -419,7 +424,7 @@ class SubmitCovidTriagePathway(OdontoPagePathway):
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
-        episode.stage = 'Submitted'
+        episode.stage = CovidTriageEpisode.SUBMITTED
         episode.save()
         return result
 
