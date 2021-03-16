@@ -14,6 +14,7 @@ class AbstractOdontoCategory(object):
     detail_template = None
     SUBMITTED = "Submitted"
     OPEN = "Open"
+    NEW = "New"
     NEEDS_INVESTIGATION = "Not sent, needs investigation"
 
     def submission(self):
@@ -343,6 +344,11 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
             uoa = 0
 
         return uoa
+
+
+class CovidTriageEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
+    display_name = "COVID-19 triage"
+
 
 def get_unsubmitted_fp17_and_fp17os(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
