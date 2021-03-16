@@ -45,7 +45,7 @@ describe('CovidTriageStepCtrl', function(){
       $controller("CovidTriageStepCtrl", {scope: scope, step: {}, episode: {}});
       scope.local = {time_of_contact: timeOfContact};
       scope.preSave(toSave);
-      expect(toSave.covid_triage.time_of_contact).toBe("10:30");
+      expect(toSave.covid_triage.time_of_contact).toBe("10:30:00");
     });
 
     it('should not set time if there is nothing on the scope', function(){

@@ -33,7 +33,7 @@ angular.module('opal.controllers').controller('CovidTriageStepCtrl', function(sc
   scope.preSave = function(editing){
     if(scope.local.time_of_contact){
       var timeDate = scope.local.time_of_contact;
-      editing.covid_triage.time_of_contact = "" + timeDate.getHours() + ":" + timeDate.getMinutes();
+      editing.covid_triage.time_of_contact = "" + timeDate.getHours() + ":" + timeDate.getMinutes() + ":00";
     }
     return editing;
   }
