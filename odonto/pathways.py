@@ -112,7 +112,7 @@ FP17_STEPS = (
     pathway.Step(model=models.CaseMix, help_template="pathway/case_mix_help.html"),
 )
 
-#FP17
+
 class Fp17Pathway(OdontoPagePathway):
     display_name = 'Open FP17'
     slug = 'fp17'
@@ -174,7 +174,6 @@ class SubmitFP17Pathway(OdontoPagePathway):
             'fp17incompletetreatment__completion_or_last_visit'
         )
         return [i for i in result if i[0]]
-
 
     def get_further_treatment_information(self, patient, episode):
         """
@@ -283,7 +282,6 @@ class Fp17OPathway(OdontoPagePathway):
         return patient, episode
 
 
-# FP17O
 class EditFP17OPathway(OdontoPagePathway):
     display_name = 'Edit FP17O'
     slug = 'fp17-o-edit'
@@ -362,7 +360,6 @@ class SubmitFP17OPathway(OdontoPagePathway):
         to_dicted["steps"][check_index]["overlapping_dates"] = overlapping_dates
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
         return to_dicted
-
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
