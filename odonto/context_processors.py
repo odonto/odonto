@@ -31,7 +31,7 @@ def episode_counts(request):
     for_user = episode_categories.get_episodes_for_user(
         episodes, request.user
     )
-    unsubmitted = episode_categories.get_unsubmitted_fp17_and_fp17os(
+    unsubmitted = episode_categories.get_unsubmitted_compass_episodes(
         for_user
     )
     open_episodes = for_user.exclude(

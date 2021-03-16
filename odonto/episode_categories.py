@@ -359,19 +359,26 @@ class CovidTriageEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         episode_id = self.episode.id
         return f"/pathway/#/covid-triage-edit/{patient_id}/{episode_id}"
 
+    @classmethod
+    def get_unsubmitted(cls, qs):
+        return qs.filter(
+            category_name=cls.display_name
+        ).filter(stage="Open")
 
-def get_unsubmitted_fp17_and_fp17os(qs):
+
+def get_unsubmitted_compass_episodes(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
     unsubmitted_fp17Os = FP17OEpisode.get_unsubmitted(qs)
-    return unsubmitted_fp17s | unsubmitted_fp17Os
+    unsubmitted_covid_triage = CovidTriageEpisode.get_unsubmitted(qs)
+    return unsubmitted_fp17s | unsubmitted_fp17Os | unsubmitted_covid_triage
 
 
-def get_unsubmitted_fp17_and_fp17os_for_user(user):
+def get_unsubmitted_compass_episodes_for_user(user):
     from opal.models import Episode
 
     qs = Episode.objects.all()
     for_user = get_episodes_for_user(qs, user)
-    return get_unsubmitted_fp17_and_fp17os(for_user)
+    return get_unsubmitted_compass_episodes(for_user)
 
 
 def get_episodes_for_user(qs, user):
