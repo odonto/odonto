@@ -64,7 +64,10 @@
             </td>
             <td>
               <span ng-show="episode.stage === 'Submitted'">
-                <a class="btn btn-small btn-default" href="/#/summary/[[ episode.category_name.toLowerCase() ]]/[[ patient.id  ]]/[[ episode.id ]]">
+                <a ng-hide="episode.category_name.toLowerCase() === 'covid-19 triage'" class="btn btn-small btn-default" href="/#/summary/[[ episode.category_name.toLowerCase() ]]/[[ patient.id  ]]/[[ episode.id ]]">
+                  View
+                </a>
+                <a ng-show="episode.category_name.toLowerCase() === 'covid-19 triage'" class="btn btn-small btn-default" href="/#/summary/covid-triage/[[ patient.id  ]]/[[ episode.id ]]">
                   View
                 </a>
               </span>
