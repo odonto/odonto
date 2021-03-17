@@ -4,6 +4,7 @@ Get's a csv of episodes that cannot be processed by compass
 import csv
 import os
 import datetime
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from opal.models import Episode
 from opal.core import serialization
@@ -18,12 +19,14 @@ UNSUBMITTED_FILE = os.path.join("..", "unsubmitted.csv")
 class Command(BaseCommand):
 
     def get_row(self, episode, rejection_reason):
+        sub_link = episode.category.get_submit_link()
+        abs_sub_link = f"{settings.HOST_NAME_AND_PROTOCOL}{sub_link}"
         return {
             "category": episode.category_name,
             "date": episode.category.get_sign_off_date(),
             "location": episode.fp17dentalcareprovider_set.get().provider_location_number,
             "performer": episode.fp17dentalcareprovider_set.get().performer,
-            "submit_link": episode.category.get_submit_link(),
+            "submit_link": abs_sub_link,
             "rejection_reason": rejection_reason
         }
 

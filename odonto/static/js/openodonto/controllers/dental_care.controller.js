@@ -4,26 +4,33 @@ angular.module('opal.controllers').controller(
     "use strict";
     var FP17 = 'FP17';
     var FP17O = 'FP17O';
+    var COVID_TRIAGE = "COVID-19 triage"
     var NEW = 'New';
     var OPEN = 'Open';
   $scope.episode = _.findWhere($scope.patient.episodes, {category_name: 'Dental Care'});
 
-  var fp17Andfp17os = _.reject($scope.patient.episodes, {category_name: 'Dental Care'});
+  var nonDentalCare = _.reject($scope.patient.episodes, {category_name: 'Dental Care'});
 
   $scope.dentalCare = {
-    newFp17: _.findWhere(fp17Andfp17os, {
+    newFp17: _.findWhere(nonDentalCare, {
       category_name: FP17, stage: NEW
     }),
-    newFp17o: _.findWhere(fp17Andfp17os, {
+    newFp17o: _.findWhere(nonDentalCare, {
       category_name: FP17O, stage: NEW
     }),
-    hasOpenFp17: !!_.filter(fp17Andfp17os, {
+    newCovidTriage: _.findWhere(nonDentalCare, {
+      category_name: COVID_TRIAGE, stage: NEW
+    }),
+    hasOpenFp17: !!_.filter(nonDentalCare, {
       category_name: FP17, stage: OPEN
     }).length,
-    hasOpenFp17o: !!_.filter(fp17Andfp17os, {
+    hasOpenFp17o: !!_.filter(nonDentalCare, {
       category_name: FP17O, stage: OPEN
     }).length,
-    openAndSubmittedEpisodes: _.reject(fp17Andfp17os, {
+    hasCovidTriage: !!_.filter(nonDentalCare, {
+      category_name: COVID_TRIAGE, stage: OPEN
+    }).length,
+    openAndSubmittedEpisodes: _.reject(nonDentalCare, {
       stage: NEW
     })
   };
