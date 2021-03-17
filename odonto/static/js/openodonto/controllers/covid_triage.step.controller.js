@@ -26,13 +26,13 @@ angular.module('opal.controllers').controller('CovidTriageStepCtrl', function(sc
       var timeDate = new Date();
       timeDate.setHours(hoursAndMinute[0]);
       timeDate.setMinutes(hoursAndMinute[1])
-      scope.local.time_of_contact = timeDate;
+      scope.editing.covid_triage.time_of_contact = timeDate;
     }
   }
 
   scope.preSave = function(editing){
-    if(scope.local.time_of_contact){
-      var timeDate = scope.local.time_of_contact;
+    if(scope.editing.covid_triage.time_of_contact){
+      var timeDate = scope.editing.covid_triage.time_of_contact;
       editing.covid_triage.time_of_contact = "" + timeDate.getHours() + ":" + timeDate.getMinutes() + ":00";
     }
     return editing;

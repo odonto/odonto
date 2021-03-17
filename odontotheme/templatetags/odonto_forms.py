@@ -125,6 +125,9 @@ def odonto_datepicker(*args, **kwargs):
 def timefield(*args, **kwargs):
     ctx = extract_common_args(kwargs)
     ctx["style"] = "vertical"
+    api_name, field_name = get_field_name_and_api_name(kwargs["field"])
+    ctx["model_api_name"] = api_name
+    ctx["field_name"] = field_name
     return ctx
 
 
