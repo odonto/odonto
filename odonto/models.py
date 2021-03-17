@@ -903,7 +903,7 @@ class CovidTriage(models.EpisodeSubrecord):
         blank=True,
         null=True,
     )
-    data_care_professional = fields.BooleanField(
+    dental_care_professional = fields.BooleanField(
         default=False,
         verbose_name="Carried out by a dental care professional"
     )
