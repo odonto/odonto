@@ -56,19 +56,9 @@ class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
         )
 
 
-class FP17SummaryDetailView(LoginRequiredMixin, DetailView):
-    model = Episode
-    template_name = 'fp17_summary.html'
-
-
 class ViewFP17DetailView(LoginRequiredMixin, DetailView):
     model = Episode
     template_name = 'view_fp17.html'
-
-
-class FP17OSummaryDetailView(LoginRequiredMixin, DetailView):
-    model = Episode
-    template_name = 'fp17_o_summary.html'
 
 
 class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
