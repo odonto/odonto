@@ -1,29 +1,28 @@
 import datetime
+from django.conf import settings
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 
 from fp17 import treatments
 
 
 def annotate(bcds1):
+    bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
     bcds1.patient.surname = "BARLASTON"
     bcds1.patient.forename = "SALLY"
     bcds1.patient.address = ["1 HIGH STREET"]
     bcds1.patient.sex = 'F'
     bcds1.patient.date_of_birth = datetime.date(1958, 1, 23)
 
-    bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
-    bcds1.date_of_completion = datetime.date(2017, 4, 1)
-
-    bcds1.patient_charge_pence = 2060
+    bcds1.date_of_acceptance = datetime.date(2020, 3, 1)
+    bcds1.date_of_completion = datetime.date(2020, 3, 1)
 
     # Treatments: "Examination (9317), Recall Interval (9172 9), Scale &
     # Polish, Ethnic Origin 1"
     bcds1.treatments = [
-        treatments.TREATMENT_CATEGORY(1),
-        treatments.EXAMINATION,
-        treatments.RECALL_INTERVAL(num_months=9),
-        treatments.SCALE_AND_POLISH,
-        treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
+        treatments.TREATMENT_CATEGORY(6),
+        treatments.PATIENT_GROUP(2),
+        treatments.HOUR_OF_CONTACT(14),
+        treatments.MINUTE_OF_CONTACT(10)
     ]
 
     return bcds1
@@ -39,24 +38,9 @@ def from_model(bcds1, patient, episode):
     demographics.date_of_birth = datetime.date(1958, 1, 23)
     demographics.ethnicity = "White british"
     demographics.save()
-    episode.fp17treatmentcategory_set.update(
-        treatment_category="Band 1",
-    )
-    episode.fp17recall_set.update(
-        number_of_months=9
-    )
-
-    episode.fp17clinicaldataset_set.update(
-        scale_and_polish=True,
-        examination=True
-    )
-
-    episode.fp17exemptions_set.update(
-        patient_charge_collected="20.60"
-    )
-
-    episode.fp17incompletetreatment_set.update(
-        date_of_acceptance=datetime.date(2017, 4, 1),
-        completion_or_last_visit=datetime.date(2017, 4, 1)
+    episode.covidtriage_set.update(
+        covid_status="Increased risk of illness from COVID-19",
+        date_of_contact=datetime.date(2020, 3, 1),
+        time_of_contact=datetime.time(14, 10)
     )
     translate_to_bdcs1(bcds1, episode)

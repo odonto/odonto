@@ -54,12 +54,12 @@ def generate_envelope():
 
 
 def get_from_message_method(category_name, number):
-    category_name = category_name.lower()
+    category_name = category_name.lower().replace("-", "_").replace(" ", "_")
     return import_string(FROM_MESSAGE.format(category_name, number))
 
 
 def get_from_model_method(category_name, number):
-    category_name = category_name.lower()
+    category_name = category_name.lower().replace("-", "_").replace(" ", "_")
     return import_string(FROM_MODEL.format(category_name, number))
 
 
@@ -139,6 +139,7 @@ class SerializerTestCase(OpalTestCase):
     def test_cases(self):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
+        covid_19_category = episode_categories.CovidTriageEpisode.display_name
         for case_number in range(1, 51):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
@@ -149,9 +150,15 @@ class SerializerTestCase(OpalTestCase):
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
 
+        for case_number in range(1, 2):
+            new = from_model(case_number, covid_19_category)
+            old = from_message(case_number, covid_19_category)
+            self.assertTrue(equal(old, new))
+
     def test_clean_non_alphanumeric(self):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(serializers.clean_non_alphanumeric(name), "McWilsonSmithjones")
+
 
 class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
     def setUp(self):
