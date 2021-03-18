@@ -591,10 +591,6 @@ def get_bcds1(episode, submission_id, submission_count):
     bcds1 = BCDS1()
     # According to the spec this is a required random number
     # however upscompass have requested the following numbers
-    if episode.category_name == episode_categories.FP17Episode.display_name:
-        bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
-    elif episode.category_name == episode_categories.FP17OEpisode.display_name:
-        bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
     bcds1.message_reference_number = submission_id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
@@ -640,6 +636,7 @@ def translate_to_bdcs1(bcds1, episode):
     if episode.category_name == episode_categories.FP17Episode.display_name:
         return translate_to_fp17(bcds1, episode)
     elif episode.category_name == episode_categories.FP17OEpisode.display_name:
+
         return translate_to_fp17o(bcds1, episode)
     raise ValueError(
         f"Unable to recognise episode category {episode.category_name} \
@@ -667,6 +664,7 @@ def get_fp17o_date_of_acceptance(episode):
 
 
 def translate_to_fp17o(bcds1, episode):
+    bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(episode)
     # surname must be upper case according to the form submitting guidelines
@@ -734,6 +732,7 @@ def translate_to_fp17o(bcds1, episode):
 
 
 def translate_to_fp17(bcds1, episode):
+    bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(episode)
     # surname must be upper case according to the form submitting guidelines

@@ -1,5 +1,6 @@
 from unittest import mock
 import datetime
+from django.conf import settings
 from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.test import override_settings
@@ -18,8 +19,11 @@ FROM_MESSAGE = "{}.annotate".format(BASE_CASE_PATH)
 FROM_MODEL = "{}.from_model".format(BASE_CASE_PATH)
 
 
-def generate_bcds1():
-    contract_number = 1000000000
+def generate_bcds1(category_name):
+    if category_name == episode_categories.FP17Episode.display_name:
+        contract_number = settings.FP17_CONTRACT_NUMBER
+    else:
+        contract_number = settings.FP17O_CONTRACT_NUMBER
     performer_number = 100000
     location_id = 4
     pin = "100000"
@@ -60,7 +64,7 @@ def get_from_model_method(category_name, number):
 
 
 def from_message(number, category_name):
-    bcds1 = generate_bcds1()
+    bcds1 = generate_bcds1(category_name)
     envelope = generate_envelope()
     from_message_method = get_from_message_method(category_name, number)
     from_message_method(bcds1)
@@ -77,7 +81,7 @@ def from_model(number, category_name):
     episode = patient.create_episode()
     episode.fp17dentalcareprovider_set.update(provider_location_number="site_number")
     episode.category_name = category_name
-    bcds1 = generate_bcds1()
+    bcds1 = generate_bcds1(category_name)
     envelope = generate_envelope()
     from_model_method = get_from_model_method(category_name, number)
     from_model_method(bcds1, patient, episode)
@@ -570,7 +574,6 @@ class GetBCDS1TestCase(OpalTestCase):
         self.user.save()
 
         bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT")
-        self.assertEqual(bcds1.contract_number, "FP17_CONTRACT_NUMBER")
         self.assertEqual(bcds1.message_reference_number, "REF_NUM")
         self.assertEqual(bcds1.resubmission_count, "SUB_COUNT")
         self.assertEqual(bcds1.location, 24946)
@@ -578,8 +581,3 @@ class GetBCDS1TestCase(OpalTestCase):
         self.assertEqual(bcds1.dpb_pin, "2222")
         self.assertIsNotNone(bcds1.patient)
         self.assertTrue(translate_to_bdcs1.called)
-
-
-
-
-
