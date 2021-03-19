@@ -445,7 +445,7 @@ class CovidTriageTranslator(TreatmentSerializer):
     model = models.CovidTriage
 
     TREATMENT_MAPPINGS = {
-        "data_care_professional": t.DENTAL_CARE_PROFESSIONAL,
+        "dental_care_professional": t.DENTAL_CARE_PROFESSIONAL,
         "triage_via_video": t.TRIAGE_VIA_VIDEO,
         "advice_given": t.ADVICE_GIVEN,
         "advised_analgesics": t.ADVISED_ANALGESICS,
