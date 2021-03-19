@@ -544,3 +544,49 @@ class OTHER_COVID_STATUS(Treatment):
     def __init__(self, call_count):
         super().__init__(code=9619, instance_count=call_count)
 # end covid status treatments
+
+
+# covid triage treatments
+DENTAL_CARE_PROFESSIONAL = Treatment(code=9600)
+TRIAGE_VIA_VIDEO = Treatment(code=9601)
+ADVICE_GIVEN = Treatment(code=9602)
+ADVISED_ANALGESICS = Treatment(code=9603)
+REMOTE_PRESCRIPTION_ANALGESICS = Treatment(code=9604)
+REMOTE_PRESCRIPTION_ANTIBIOTICS = Treatment(code=9605)
+FOLLOW_UP_CALL_REQUIRED = Treatment(code=9606)
+CALL_BACK_IF_SYMPTOMS_WORSEN = Treatment(code=9607)
+
+
+class REFERRERED_TO_LOCAL_UDC_REASON(Treatment):
+    def __init__(self, reason_code):
+        super().__init__(code=9609, instance_count=reason_code)
+
+
+class PATIENT_GROUP(Treatment):
+    # On the model this is the covid_status field
+    def __init__(self, status_code):
+        super().__init__(code=9610, instance_count=status_code)
+
+
+class PRIMARY_REASON(Treatment):
+    def __init__(self, reason_code):
+        super().__init__(code=9611, instance_count=reason_code)
+
+
+class HOUR_OF_CONTACT(Treatment):
+    def __init__(self, hour_number):
+        # hour number is 24 hour
+        super().__init__(code=9612, instance_count=hour_number)
+
+
+class MINUTE_OF_CONTACT(Treatment):
+    # the time the call ended
+    def __init__(self, minute_number):
+        super().__init__(code=9613, instance_count=minute_number)
+
+
+FACE_TO_FACE_ARRANGED_BUT_NOT_ATTENDED = Treatment(code=9614)
+
+
+COVID_19_TREATMENT_CATEGORY = Treatment(code=9150, instance_count=6)
+# end covid triage treatments

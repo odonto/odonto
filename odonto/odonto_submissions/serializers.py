@@ -441,6 +441,44 @@ class CovidStatusTranslator(TreatmentSerializer):
     }
 
 
+class CovidTriageTranslator(TreatmentSerializer):
+    model = models.CovidTriage
+
+    TREATMENT_MAPPINGS = {
+        "dental_care_professional": t.DENTAL_CARE_PROFESSIONAL,
+        "triage_via_video": t.TRIAGE_VIA_VIDEO,
+        "advice_given": t.ADVICE_GIVEN,
+        "advised_analgesics": t.ADVISED_ANALGESICS,
+        "remote_prescription_analgesics": t.REMOTE_PRESCRIPTION_ANALGESICS,
+        "remote_prescription_antibiotics": t.REMOTE_PRESCRIPTION_ANTIBIOTICS,
+        "follow_up_call_required": t.FOLLOW_UP_CALL_REQUIRED,
+        "call_back_if_symptoms_worsen": t.CALL_BACK_IF_SYMPTOMS_WORSEN,
+        "face_to_face_appointment": t.FACE_TO_FACE_ARRANGED_BUT_NOT_ATTENDED,
+    }
+
+    def to_messages(self):
+        result = super().to_messages()
+        choices_fields = (
+            ("referrered_to_local_udc_reason", t.REFERRERED_TO_LOCAL_UDC_REASON),
+            ("covid_status", t.PATIENT_GROUP),
+            ("primary_reason", t.PRIMARY_REASON),
+        )
+        for model_field_name, treatment in choices_fields:
+            model_field = self.model._meta.get_field(model_field_name)
+            choices = model_field.choices
+            model_value = getattr(self.model_instance, model_field_name)
+            for idx, val in enumerate(choices):
+                val = val[0]
+                if val == model_value:
+                    result.append(treatment(idx + 1))
+
+        hours = self.model_instance.time_of_contact.hour
+        result.append(t.HOUR_OF_CONTACT(hours))
+        minutes = self.model_instance.time_of_contact.minute
+        result.append(t.MINUTE_OF_CONTACT(minutes))
+        return result
+
+
 class DemographicsTranslator(TreatmentSerializer):
     model = models.Demographics
 
@@ -591,10 +629,6 @@ def get_bcds1(episode, submission_id, submission_count):
     bcds1 = BCDS1()
     # According to the spec this is a required random number
     # however upscompass have requested the following numbers
-    if episode.category_name == episode_categories.FP17Episode.display_name:
-        bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
-    elif episode.category_name == episode_categories.FP17OEpisode.display_name:
-        bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
     bcds1.message_reference_number = submission_id
     bcds1.resubmission_count = submission_count
     provider = episode.fp17dentalcareprovider_set.get()
@@ -641,6 +675,8 @@ def translate_to_bdcs1(bcds1, episode):
         return translate_to_fp17(bcds1, episode)
     elif episode.category_name == episode_categories.FP17OEpisode.display_name:
         return translate_to_fp17o(bcds1, episode)
+    elif episode.category_name == episode_categories.CovidTriageEpisode.display_name:
+        return translate_to_covid_19(bcds1, episode)
     raise ValueError(
         f"Unable to recognise episode category {episode.category_name} \
 for episode {episode.id}"
@@ -667,6 +703,7 @@ def get_fp17o_date_of_acceptance(episode):
 
 
 def translate_to_fp17o(bcds1, episode):
+    bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(episode)
     # surname must be upper case according to the form submitting guidelines
@@ -734,6 +771,7 @@ def translate_to_fp17o(bcds1, episode):
 
 
 def translate_to_fp17(bcds1, episode):
+    bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(episode)
     # surname must be upper case according to the form submitting guidelines
@@ -784,3 +822,29 @@ def translate_to_fp17(bcds1, episode):
         bcds1.patient_charge_pence = charge
     return bcds1
 
+
+def translate_to_covid_19(bcds1, episode):
+    bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
+    demographics = episode.patient.demographics()
+    demographics_translator = DemographicsTranslator(episode)
+    # Surname must be upper case according to the form submitting guidelines
+    # Notably ethnicity should
+    bcds1.patient.surname = demographics_translator.surname()
+    bcds1.patient.forename = demographics_translator.forename()
+
+    bcds1.patient.date_of_birth = demographics.date_of_birth
+    bcds1.patient.address = demographics_translator.address()
+    bcds1.patient.sex = demographics_translator.sex()
+    post_code = demographics_translator.post_code()
+
+    if post_code:
+        bcds1.patient.postcode = post_code
+
+    bcds1.treatments = [t.COVID_19_TREATMENT_CATEGORY]
+    bcds1.treatments.extend(CovidTriageTranslator(episode).to_messages())
+
+    # Date of contact should be used as the acceptance and completion
+    date_of_contact = episode.covidtriage_set.get().date_of_contact
+    bcds1.date_of_acceptance = date_of_contact
+    bcds1.date_of_completion = date_of_contact
+    return bcds1
