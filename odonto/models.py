@@ -893,6 +893,13 @@ class CovidTriage(models.EpisodeSubrecord):
         "Other",
         "Routine treatment"
     )
+    TRIAGE_TYPE = enum("FP17", "FP17O")
+    triage_type = fields.CharField(
+        blank=True,
+        null=True,
+        choices=TRIAGE_TYPE,
+        max_length=256
+    )
     date_of_contact = fields.DateField(
         verbose_name="Date of contact",
         blank=True,
