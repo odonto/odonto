@@ -402,8 +402,6 @@ class CovidTriagePathway(OdontoPagePathway):
     display_name = 'Covid triage claim form'
     slug = 'covid-triage-new'
     steps = COVID_TRIAGE_STEPS
-    template = "pathway/templates/check_pathway.html"
-    summary_template = "partials/covid_triage_summary.html"
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
