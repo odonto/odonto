@@ -16,8 +16,9 @@ angular.module('opal.services').factory('CovidTriageTimeOfContact', function(toM
         var existingDates = _.map(step.other_triage, toMomentFilter);
         var ourDate = new Date(editing.covid_triage.date_of_contact);
         var timeOfContact = editing.covid_triage.time_of_contact;
-        ourDate.setHours(timeOfContact.getHours());
-        ourDate.setMinutes(timeOfContact.getMinutes());
+        ourDate.setHours(
+          timeOfContact.getHours(), timeOfContact.getMinutes()
+        );
         var ourMoment = moment(ourDate);
         var error = false;
         _.each(existingDates, function(existingDate){
