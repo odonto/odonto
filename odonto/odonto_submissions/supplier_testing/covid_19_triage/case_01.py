@@ -1,6 +1,7 @@
 import datetime
 from django.conf import settings
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
+from odonto.models import CovidTriage
 
 from fp17 import treatments
 
@@ -41,6 +42,7 @@ def from_model(bcds1, patient, episode):
     episode.covidtriage_set.update(
         covid_status="Increased risk of illness from COVID-19",
         date_of_contact=datetime.date(2020, 3, 1),
-        time_of_contact=datetime.time(14, 10)
+        time_of_contact=datetime.time(14, 10),
+        triage_type=CovidTriage.FP17
     )
     translate_to_bdcs1(bcds1, episode)

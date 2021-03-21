@@ -893,7 +893,9 @@ class CovidTriage(models.EpisodeSubrecord):
         "Other",
         "Routine treatment"
     )
-    TRIAGE_TYPE = enum("FP17", "FP17O")
+    FP17 = "FP17"
+    FP17O = "FP17O"
+    TRIAGE_TYPE = enum(FP17, FP17O)
     triage_type = fields.CharField(
         blank=True,
         null=True,

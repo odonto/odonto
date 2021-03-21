@@ -824,7 +824,11 @@ def translate_to_fp17(bcds1, episode):
 
 
 def translate_to_covid_19(bcds1, episode):
-    bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
+    triage = episode.covidtriage_set.get()
+    if triage.triage_type == models.CovidTriage.FP17:
+        bcds1.contract_number = settings.FP17_CONTRACT_NUMBER
+    else:
+        bcds1.contract_number = settings.FP17O_CONTRACT_NUMBER
     demographics = episode.patient.demographics()
     demographics_translator = DemographicsTranslator(episode)
     # Surname must be upper case according to the form submitting guidelines
