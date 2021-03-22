@@ -4,10 +4,13 @@
   <h2>COVID-19 triage</h2>
 </div>
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-3">
+    {% btn_radio field="CovidTriage.triage_type" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
     {% odonto_datepicker field="CovidTriage.date_of_contact" %}
   </div>
-  <div class="col-md-5 col-md-offset-1">
+  <div class="col-md-3 col-md-offset-1">
     {% timefield field="CovidTriage.time_of_contact" %}
   </div>
 </div>

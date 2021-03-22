@@ -53,4 +53,5 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/covid_triage_date_of_contact_required.js',
         'js/openodonto/services/validators/covid_triage_primary_reason_required.js',
         'js/openodonto/services/validators/covid_triage_time_of_contact.js',
+        'js/openodonto/services/validators/covid_triage_type_required.js',
     ]

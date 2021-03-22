@@ -9,7 +9,8 @@ angular.module('opal.controllers').controller(
     CovidTriageCovidStatusRequired,
     CovidTriageDateOfContactRequired,
     CovidTriagePrimaryReasonRequired,
-    CovidTriageTimeOfContact
+    CovidTriageTimeOfContact,
+    CovidTriageTypeRequired,
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -19,6 +20,7 @@ angular.module('opal.controllers').controller(
     CovidTriageDateOfContactRequired,
     CovidTriagePrimaryReasonRequired,
     CovidTriageTimeOfContact,
+    CovidTriageTypeRequired
   ];
 
   var validate = function(){
