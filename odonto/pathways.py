@@ -377,6 +377,10 @@ class SubmitFP17OPathway(OdontoPagePathway):
 # Covid triage
 COVID_TRIAGE_STEPS = (
     pathway.Step(
+        display_name="",
+        template="covid_triage_explanation.html"
+    ),
+    pathway.Step(
         model=models.Fp17DentalCareProvider,
         step_controller="CareProviderStepCtrl",
     ),
