@@ -9,7 +9,7 @@ angular.module('opal.controllers').controller(
     CovidTriageCovidStatusRequired,
     CovidTriageDateOfContactRequired,
     CovidTriagePrimaryReasonRequired,
-    CovidTriageTimeOfContactRequired,
+    CovidTriageTimeOfContact,
     CovidTriageTypeRequired,
 ){
   "use strict";
@@ -19,7 +19,7 @@ angular.module('opal.controllers').controller(
     CovidTriageCovidStatusRequired,
     CovidTriageDateOfContactRequired,
     CovidTriagePrimaryReasonRequired,
-    CovidTriageTimeOfContactRequired,
+    CovidTriageTimeOfContact,
     CovidTriageTypeRequired
   ];
 

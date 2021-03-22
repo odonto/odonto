@@ -245,6 +245,7 @@ class Fp17_O_PathwayTestCase(OpalTestCase):
         fp17_o = Episode.objects.get(pk=fp17_o.pk)
         self.assertEqual('Open', fp17_o.stage)
 
+
 class SubmitFP17OPathwayTestCase(OpalTestCase):
     def setUp(self):
         self.patient, self.episode = self.new_patient_and_episode_please()
@@ -362,3 +363,42 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         result = self.client.get(self.url).json()['steps'][-1]
         self.assertFalse(result["episode_submitted"])
 
+
+class SubmitCovidTriagePathwayTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        self.episode.category_name = episode_categories.CovidTriageEpisode.display_name
+
+        self.assertTrue(
+            self.client.login(
+                username=self.user.username, password=self.PASSWORD
+            )
+        )
+        self.url = reverse(
+            "pathway", kwargs=dict(
+                name="covid-triage-submit",
+                patient_id=self.patient.id,
+                episode_id=self.episode.id
+            )
+        )
+
+    def test_other_triage(self):
+        other_episode = self.patient.create_episode(
+            category_name=episode_categories.CovidTriageEpisode.display_name,
+            stage=episode_categories.CovidTriageEpisode.SUBMITTED
+        )
+        other_episode.covidtriage_set.update(
+            date_of_contact=datetime.date(2020, 10, 4),
+            time_of_contact=datetime.time(12, 30)
+        )
+        result = self.client.get(self.url)
+        self.assertEqual(
+            result.json()['steps'][-1]["other_triage"],
+            ['04/10/2020 12:30:00']
+        )
+
+    def test_no_other_triage(self):
+        result = self.client.get(self.url)
+        self.assertEqual(
+            result.json()['steps'][-1]["other_triage"], []
+        )

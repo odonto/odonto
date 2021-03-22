@@ -2,6 +2,7 @@
 Pathways for Odonto
 """
 import logging
+import datetime
 from django.db import transaction
 from opal.core import pathway
 from odonto import models
@@ -439,6 +440,22 @@ class SubmitCovidTriagePathway(OdontoPagePathway):
             if step_dict["step_controller"] == step_ctrl:
                 check_index = index
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        other_submitted = episode.patient.episode_set.filter(
+            category_name=CovidTriageEpisode.display_name,
+            stage=CovidTriageEpisode.SUBMITTED
+        )
+        submitted_triages = models.CovidTriage.objects.filter(
+            episode__in=other_submitted
+        )
+        other_submitted_dts = []
+        for other in submitted_triages:
+            other_date = other.date_of_contact
+            other_time = other.time_of_contact
+            if other_date and other_time:
+                other_submitted_dts.append(
+                    datetime.datetime.combine(other_date, other_time)
+                )
+        to_dicted["steps"][check_index]["other_triage"] = other_submitted_dts
         return to_dicted
 
     @transaction.atomic
@@ -447,4 +464,3 @@ class SubmitCovidTriagePathway(OdontoPagePathway):
         episode.stage = CovidTriageEpisode.SUBMITTED
         episode.save()
         return result
-
