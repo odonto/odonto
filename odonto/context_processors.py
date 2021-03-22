@@ -9,7 +9,8 @@ def odonto_roles(request):
     default = {
         'roles': {
             'is_dentist': False,
-            'is_admin'  : False
+            'is_admin'  : False,
+            'can_see_covid': False
         }
     }
 
@@ -20,6 +21,9 @@ def odonto_roles(request):
 
     if request.user.performernumber_set.count() > 0:
         default['roles']['is_dentist'] = True
+
+    for user_role in request.user.profile.roles.all():
+        default['roles'][user_role.name] = True
 
     return default
 
