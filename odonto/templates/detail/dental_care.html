@@ -41,10 +41,12 @@
         href="{% link_url pathways.Fp17OPathway ngpatient='patient.id' ngepisode='dentalCare.newFp17o.id' %}">
         Open FP17O
       </a>
+      {% if odonto_roles.can_see_covid_triage %}
       <a ng-class="{disabled: dentalCare.hasCovidTriage}" class="btn btn-primary btn-lg pull-right open-claim-button"
         href="{% link_url pathways.CovidTriagePathway ngpatient='patient.id' ngepisode='dentalCare.newCovidTriage.id' %}">
         Open COVID-19 triage
       </a>
+      {% endif %}
     </div>
 
     <div class="row content-offset-20">
