@@ -11,7 +11,7 @@
     {% odonto_datepicker field="CovidTriage.date_of_contact" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% timefield field="CovidTriage.time_of_contact" %}
+    {% timefield field="CovidTriage.time_of_contact" model="local.time_of_contact" change="timeChange()" %}
   </div>
 </div>
 <div class="row">

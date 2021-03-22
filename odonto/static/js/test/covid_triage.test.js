@@ -35,7 +35,7 @@ describe('CovidTriageTimeOfContact', function() {
   describe('time of contact should not be the same as a different triage', function(){
     it('should error if there is a triage with the same date', function(){
       editing.covid_triage.date_of_contact = new Date(2020, 4, 21);
-      editing.covid_triage.time_of_contact = new Date(1900, 1, 1, 12, 40);
+      editing.covid_triage.time_of_contact = "12:40:00";
       step.other_triage = ["21/05/2020 12:40:00"]
       var result = CovidTriageTimeOfContact(editing, step);
       expect(result).toEqual({
@@ -47,15 +47,14 @@ describe('CovidTriageTimeOfContact', function() {
 
     it('should not error if there is a triage with the different date', function(){
       editing.covid_triage.date_of_contact = new Date(2020, 2, 22);
-      editing.covid_triage.time_of_contact = new Date(1900, 1, 1, 13, 40);
+      editing.covid_triage.time_of_contact = "13:40:00";
       step.other_triage = ["21/03/2020 12:40:00"]
       var result = CovidTriageTimeOfContact(editing, step);
       expect(result).toBeUndefined();
     });
 
     it('should not error if there is no triage date', function(){
-      editing.covid_triage.time_of_contact = new Date(1900, 1, 1, 11, 40);
-      step.other_triage = ["21/03/2020 12:40:00"]
+      editing.covid_triage.time_of_contact = "11:30:00";
       var result = CovidTriageTimeOfContact(editing, step);
       expect(result).toBeUndefined();
     });

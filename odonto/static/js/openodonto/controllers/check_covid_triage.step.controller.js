@@ -34,7 +34,8 @@ angular.module('opal.controllers').controller(
     }
   }
   scope.$watch("editing", validate, true);
-  $rootScope.episodeSubmitted = step["episode_submitted"]
+  $rootScope.episodeSubmitted = step["episode_submitted"];
+  scope.pathway.validate = validate;
 
   $timeout(function(){
     scope.form.$setSubmitted();
