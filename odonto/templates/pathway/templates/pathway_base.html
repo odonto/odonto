@@ -15,6 +15,16 @@
       </div>
 
       {% block pathway_body %}
+      {% for step in pathway.get_steps %}
+        {% if step.model == models.CovidTriage.model %}
+          {% if odonto_roles.can_see_covid_triage %}
+            {% include step.get_base_template %}
+          {% endif %}
+        {% else %}
+          {% include step.get_base_template %}
+        {% endif %}
+
+      {% endfor %}
       {% endblock pathway_body %}
 
       {% block pathway_footer %}

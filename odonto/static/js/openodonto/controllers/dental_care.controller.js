@@ -11,6 +11,16 @@ angular.module('opal.controllers').controller(
 
   var nonDentalCare = _.reject($scope.patient.episodes, {category_name: 'Dental Care'});
 
+  $scope.showCovidTriage = function(episode, userHasPermission){
+    if(episode.category_name !==  COVID_TRIAGE){
+      return true;
+    }
+    if(userHasPermission){
+      return true;
+    }
+    return false
+  }
+
   $scope.dentalCare = {
     newFp17: _.findWhere(nonDentalCare, {
       category_name: FP17, stage: NEW
