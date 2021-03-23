@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="cancel()">×</button>
+  <h3>
+    <i class="fa fa-trash-o"></i>
+    Delete [[ episode.category_name ]]?
+    [[ title ]]
+  </h3>
+</div>
+<div class="modal-body">
+  <p class="lead text-center">
+    Do you want to delete this [[ episode.category_name ]]?
+  </p>
+  <center>
+    <form action="[[ deleteUrl ]]" method="POST">
+      {% csrf_token %}
+      <button class="btn btn-primary">
+        <i class="fa fa-trash-o"></i>
+        Delete
+      </button>
+    </form>
+  </center>
+</div>
+<div class="modal-footer">
+  <button class="btn" ng-click="cancel()">Cancel</button>
+</div>

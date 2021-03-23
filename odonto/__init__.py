@@ -20,6 +20,7 @@ class Application(application.OpalApplication):
         'js/openodonto/controllers/summary.controller.js',
         'js/openodonto/controllers/dental_care.controller.js',
         'js/openodonto/controllers/casemix_helper.controller.js',
+        'js/openodonto/controllers/delete_episode.step.controller.js',
         'js/openodonto/services/date_conflict_check.js',
         'js/openodonto/services/validators/exemptions_and_remissions.js',
         'js/openodonto/services/validators/case_mix_required.js',

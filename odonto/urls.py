@@ -1,10 +1,9 @@
 """
 Urls for the Odonto project
 """
-from django.conf.urls import include, url
+from django.conf.urls import url
 from django.urls import path
 from opal.urls import urlpatterns as opatterns
-
 from odonto import views
 
 urlpatterns = [
@@ -26,6 +25,11 @@ urlpatterns = [
         name='odonto-open-fp17s'),
     url('^stats', views.Stats.as_view(), name="odonto-stats"),
     url('^case-mix-csv', views.CaseMix.as_view(), name="case-mix-csv"),
+    path(
+        'delete-episode/<int:patient_pk>/<int:episode_pk>/',
+        views.DeleteEpisode.as_view(),
+        name="delete-episode"
+    ),
 ]
 
 urlpatterns += opatterns
