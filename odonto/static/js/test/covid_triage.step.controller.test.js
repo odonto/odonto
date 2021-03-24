@@ -2,6 +2,7 @@ describe('CovidTriageStepCtrl', function(){
   "use strict";
   var $controller;
   var scope;
+  var Pathway = function(){};
 
   beforeEach(function(){
     module('opal.controllers');
@@ -17,7 +18,7 @@ describe('CovidTriageStepCtrl', function(){
         referred: null,
         time_of_contact: null
       }
-      scope.pathway = {};
+      scope.pathway = new Pathway();
     });
   });
 

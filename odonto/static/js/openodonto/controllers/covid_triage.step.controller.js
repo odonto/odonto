@@ -38,9 +38,11 @@ angular.module('opal.controllers').controller('CovidTriageStepCtrl', function(sc
     else{
       scope.editing.covid_triage.time_of_contact = null;
     }
-    // the watch event will not trigger as we're in an ngchange so trigger validate manually
-    // if we're in the submit pathway
-    if(scope.pathway.validate){
+
+    // The validate function is only set in the submit pathway by the check step.
+    // Usually validate is triggered by $watch but this
+    // will not trigger as we're in an ngchange so trigger validate manually
+    if(scope.pathway.hasOwnProperty("validate")){
       scope.pathway.validate();
     }
   }
