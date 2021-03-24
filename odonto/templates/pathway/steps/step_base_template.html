@@ -1,4 +1,19 @@
 {% load forms %}
+{% if step.get_api_name == 'covid_status' %}
+  <div pathway-step="{{ step.get_api_name }}">
+    {% if roles.can_see_covid_triage %}
+      <div class="row">
+        <h2>
+          {{ step.get_display_name }}
+          {% if step.other_args.help_template %}
+          {% include step.other_args.help_template %}
+          {% endif %}
+        </h2>
+      </div>
+      {% include step.get_template %}
+  {% endif %}
+  </div>
+{% else %}
 <div pathway-step="{{ step.get_api_name }}">
   {% block heading %}
   <div class="row">
@@ -12,3 +27,5 @@
   {% endblock %}
   {% include step.get_template %}
 </div>
+{% endif %}
+
