@@ -35,6 +35,8 @@ def table_row_field_display(model_and_field):
         ctx["is_boolean"] = True
     if isinstance(field, models.DateField):
         ctx["is_date"] = True
+    if isinstance(field, models.TimeField):
+        ctx["is_time"] = True
     return ctx
 
 
