@@ -7,11 +7,8 @@
   <div class="col-md-3">
     {% btn_radio field="CovidTriage.triage_type" %}
   </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% odonto_datepicker field="CovidTriage.date_of_contact" %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% timefield field="CovidTriage.time_of_contact" model="local.time_of_contact" change="timeChange()" %}
+  <div class="col-md-6 col-md-offset-1">
+    {% datetimepicker field="CovidTriage.datetime_of_contact" %}
   </div>
 </div>
 <div class="row">
