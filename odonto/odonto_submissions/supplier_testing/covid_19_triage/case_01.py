@@ -41,8 +41,7 @@ def from_model(bcds1, patient, episode):
     demographics.save()
     episode.covidtriage_set.update(
         covid_status="Increased risk of illness from COVID-19",
-        date_of_contact=datetime.date(2020, 3, 1),
-        time_of_contact=datetime.time(14, 10),
+        datetime_of_contact=datetime.datetime(2020, 3, 1, 14, 10),
         triage_type=CovidTriage.FP17
     )
     translate_to_bdcs1(bcds1, episode)

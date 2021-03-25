@@ -388,8 +388,7 @@ class SubmitCovidTriagePathwayTestCase(OpalTestCase):
             stage=episode_categories.CovidTriageEpisode.SUBMITTED
         )
         other_episode.covidtriage_set.update(
-            date_of_contact=datetime.date(2020, 10, 4),
-            time_of_contact=datetime.time(12, 30)
+            datetime_of_contact=datetime.datetime(2020, 10, 4, 12, 30),
         )
         result = self.client.get(self.url)
         self.assertEqual(
