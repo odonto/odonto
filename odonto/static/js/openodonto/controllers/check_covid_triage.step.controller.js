@@ -7,9 +7,8 @@ angular.module('opal.controllers').controller(
     $rootScope,
     FormValidation,
     CovidTriageCovidStatusRequired,
-    CovidTriageDateOfContactRequired,
+    CovidTriageDateTimeOfContact,
     CovidTriagePrimaryReasonRequired,
-    CovidTriageTimeOfContact,
     CovidTriageTypeRequired,
 ){
   "use strict";
@@ -17,9 +16,8 @@ angular.module('opal.controllers').controller(
   $rootScope.showSummary = null;
   var validators = [
     CovidTriageCovidStatusRequired,
-    CovidTriageDateOfContactRequired,
+    CovidTriageDateTimeOfContact,
     CovidTriagePrimaryReasonRequired,
-    CovidTriageTimeOfContact,
     CovidTriageTypeRequired
   ];
 
@@ -35,7 +33,6 @@ angular.module('opal.controllers').controller(
   }
   scope.$watch("editing", validate, true);
   $rootScope.episodeSubmitted = step["episode_submitted"];
-  scope.pathway.validate = validate;
 
   $timeout(function(){
     scope.form.$setSubmitted();

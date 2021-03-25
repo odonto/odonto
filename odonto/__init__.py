@@ -51,8 +51,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17o_aged_18_full_time_education.js',
         'js/openodonto/services/validators/fp17o_completion_type.js',
         'js/openodonto/services/validators/covid_triage_covid_status_required.js',
-        'js/openodonto/services/validators/covid_triage_date_of_contact_required.js',
+        'js/openodonto/services/validators/covid_triage_datetime_of_contact.js',
         'js/openodonto/services/validators/covid_triage_primary_reason_required.js',
-        'js/openodonto/services/validators/covid_triage_time_of_contact.js',
         'js/openodonto/services/validators/covid_triage_type_required.js',
     ]
