@@ -454,11 +454,9 @@ class SubmitCovidTriagePathway(OdontoPagePathway):
         )
         other_submitted_dts = []
         for other in submitted_triages:
-            other_date = other.date_of_contact
-            other_time = other.time_of_contact
-            if other_date and other_time:
+            if other.datetime_of_contact:
                 other_submitted_dts.append(
-                    datetime.datetime.combine(other_date, other_time)
+                    other.datetime_of_contact
                 )
         to_dicted["steps"][check_index]["other_triage"] = other_submitted_dts
         return to_dicted

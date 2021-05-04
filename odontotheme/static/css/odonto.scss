@@ -659,3 +659,13 @@ table.patient-list {
     width: 40%;
     padding-left: 8%;
 }
+
+.datetime-picker{
+    .time-picker{
+        padding-left: 20px;
+        padding-top: 6px;
+    }
+    .btn.btn-default{
+        margin-left: 4px;
+    }
+}

@@ -472,9 +472,9 @@ class CovidTriageTranslator(TreatmentSerializer):
                 if val == model_value:
                     result.append(treatment(idx + 1))
 
-        hours = self.model_instance.time_of_contact.hour
+        hours = self.model_instance.datetime_of_contact.hour
         result.append(t.HOUR_OF_CONTACT(hours))
-        minutes = self.model_instance.time_of_contact.minute
+        minutes = self.model_instance.datetime_of_contact.minute
         result.append(t.MINUTE_OF_CONTACT(minutes))
         return result
 
@@ -848,7 +848,7 @@ def translate_to_covid_19(bcds1, episode):
     bcds1.treatments.extend(CovidTriageTranslator(episode).to_messages())
 
     # Date of contact should be used as the acceptance and completion
-    date_of_contact = episode.covidtriage_set.get().date_of_contact
+    date_of_contact = episode.covidtriage_set.get().datetime_of_contact.date()
     bcds1.date_of_acceptance = date_of_contact
     bcds1.date_of_completion = date_of_contact
     return bcds1

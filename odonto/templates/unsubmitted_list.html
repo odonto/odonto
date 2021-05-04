@@ -26,7 +26,7 @@
               {{ episode.orthodontictreatment_set.get.date_of_completion }}
             {% endif %}
             {% if episode.category_name == "COVID-19 triage" %}
-              {{ episode.covidtriage_set.get.date_of_contact }}
+              {{ episode.covidtriage_set.get.datetime_of_contact }}
             {% endif %}
           </td>
           <td>

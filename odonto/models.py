@@ -902,13 +902,8 @@ class CovidTriage(models.EpisodeSubrecord):
         choices=TRIAGE_TYPE,
         max_length=256
     )
-    date_of_contact = fields.DateField(
+    datetime_of_contact = fields.DateTimeField(
         verbose_name="Date of contact",
-        blank=True,
-        null=True,
-    )
-    time_of_contact = fields.TimeField(
-        verbose_name="Time the call ended",
         blank=True,
         null=True,
     )
