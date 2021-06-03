@@ -7,26 +7,29 @@ import csv
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
-from django.views.generic import TemplateView, DetailView, View, RedirectView
+from django.views.generic import TemplateView, RedirectView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseBadRequest
 from odonto import episode_categories
 from odonto import models
 from odonto.utils import get_current_financial_year
-from opal.models import Episode, Patient
+from opal.models import Episode
 
 
 def has_open_fp17(patient):
     return patient.episode_set.filter(
-        category_name='FP17').exclude(
-            stage__in=['New', 'Submitted']).exists()
+        category_name='FP17').exclude(stage__in=[
+            episode_categories.FP17Episode.NEW,
+            episode_categories.FP17Episode.SUBMITTED
+        ]).exists()
 
 
 def has_open_fp17o(patient):
     return patient.episode_set.filter(
-        category_name='FP17O').exclude(
-            stage__in=['New', 'Submitted']).exists()
+        category_name='FP17O').exclude(stage__in=[
+            episode_categories.FP17Episode.NEW,
+            episode_categories.FP17Episode.SUBMITTED
+        ]).exists()
 
 
 class OpenFP17s(TemplateView):
@@ -38,7 +41,7 @@ class OpenFP17s(TemplateView):
             qs, self.request.user
         )
 
-        unsubmitted = episode_categories.get_unsubmitted_compass_episodes(qs)
+        unsubmitted = episode_categories.get_unsubmitted_fp17_and_fp17os(qs)
         unsubmitted_ids = unsubmitted.values_list("id", flat=True)
         return qs.exclude(id__in=unsubmitted_ids)
 
@@ -51,7 +54,7 @@ class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
         qs = episode_categories.get_episodes_for_user(
             qs, self.request.user
         )
-        return episode_categories.get_unsubmitted_compass_episodes_for_user(
+        return episode_categories.get_unsubmitted_fp17_and_fp17os_for_user(
             self.request.user
         )
 

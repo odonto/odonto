@@ -12,6 +12,7 @@ class DentalCareEpisodeCategory(episodes.EpisodeCategory):
 
 class AbstractOdontoCategory(object):
     detail_template = None
+    NEW = "New"
     SUBMITTED = "Submitted"
     OPEN = "Open"
     NEEDS_INVESTIGATION = "Not sent, needs investigation"

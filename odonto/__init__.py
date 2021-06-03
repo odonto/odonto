@@ -18,6 +18,7 @@ class Application(application.OpalApplication):
         'js/openodonto/controllers/summary.controller.js',
         'js/openodonto/controllers/dental_care.controller.js',
         'js/openodonto/controllers/casemix_helper.controller.js',
+        'js/openodonto/controllers/delete_form.controller.js',
         'js/openodonto/services/date_conflict_check.js',
         'js/openodonto/services/validators/exemptions_and_remissions.js',
         'js/openodonto/services/validators/case_mix_required.js',
@@ -47,5 +48,4 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17_aged_18_full_time_education.js',
         'js/openodonto/services/validators/fp17o_aged_18_full_time_education.js',
         'js/openodonto/services/validators/fp17o_completion_type.js',
-        'js/openodonto/controllers/delete_episode.step.controller.js',
     ]
