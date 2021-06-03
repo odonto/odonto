@@ -6,11 +6,11 @@ import json
 import csv
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import TemplateView, ListView, DetailView, View
+from django.views.generic import TemplateView, DetailView, View, RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from odonto import episode_categories
 from odonto import models
 from odonto.utils import get_current_financial_year
@@ -38,7 +38,7 @@ class OpenFP17s(TemplateView):
             qs, self.request.user
         )
 
-        unsubmitted = episode_categories.get_unsubmitted_fp17_and_fp17os(qs)
+        unsubmitted = episode_categories.get_unsubmitted_compass_episodes(qs)
         unsubmitted_ids = unsubmitted.values_list("id", flat=True)
         return qs.exclude(id__in=unsubmitted_ids)
 
@@ -51,7 +51,7 @@ class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
         qs = episode_categories.get_episodes_for_user(
             qs, self.request.user
         )
-        return episode_categories.get_unsubmitted_fp17_and_fp17os_for_user(
+        return episode_categories.get_unsubmitted_compass_episodes_for_user(
             self.request.user
         )
 
@@ -392,3 +392,33 @@ class Stats(LoginRequiredMixin, TemplateView):
             },
             "performer_info": performer_info
         }
+
+
+class DeleteEpisode(LoginRequiredMixin, RedirectView):
+    """
+    This view is for when an episode has been opened in error
+    it deletes and redirects to the patient detail page.
+
+    Note the way Odonto functions is that a patient
+    always has a new episode. So after it has deleted
+    it creates an episode of the same category with
+    the stage of new if it does not already exist
+    """
+    def get_redirect_url(self, *args, **kwargs):
+        return f'/#/patient/{self.kwargs["patient_pk"]}'
+
+    def post(self, *args, **kwargs):
+        episode = get_object_or_404(Episode, pk=kwargs["episode_pk"])
+        patient = episode.patient
+        category_name = episode.category_name
+        if category_name == episode_categories.DentalCareEpisodeCategory.display_name:
+            return HttpResponseBadRequest()
+        new = episode.category.NEW
+        if episode.stage == episode.category.SUBMITTED:
+            return HttpResponseBadRequest()
+        episode.delete()
+        patient.episode_set.get_or_create(
+            category_name=category_name,
+            stage=new
+        )
+        return super().post(*args, **kwargs)
