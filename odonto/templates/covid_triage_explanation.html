@@ -1,4 +1,4 @@
-<div class="row">
+<div ng-show="pathway.episode.stage !== 'Submitted'" class="row">
   <div class="row">
     <div class="col-md-10">
       <p class="lead">
@@ -6,7 +6,6 @@
         face to face appointment with the service as a direct result of the
         triage carried out.
       </p>
-      <button ng-click="delete()" class="btn btn-lg btn-primary btn-save">Cancel this claim</button>
     </div>
   </div>
 </div>
