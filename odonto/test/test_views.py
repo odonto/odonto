@@ -1,12 +1,11 @@
 import datetime
 import json
 import csv
-from io import StringIO
 from unittest import mock
 from django.urls import reverse
 from opal.core.test import OpalTestCase
 from odonto.episode_categories import (
-    FP17OEpisode,  FP17Episode
+    FP17OEpisode,  FP17Episode, DentalCareEpisodeCategory
 )
 from odonto.models import Fp17TreatmentCategory, OrthodonticAssessment
 from odonto.odonto_submissions.models import Submission
@@ -274,3 +273,69 @@ class CaseMixTestCase(OpalTestCase):
             dict(reader[0]),
             expected
         )
+
+
+class DeleteEpisodeTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        # initialise the user property so we can log in
+        self.user
+        self.url = reverse("delete-episode", kwargs={
+            "patient_pk": self.patient.pk,
+            "episode_pk": self.episode.pk
+        })
+        self.assertTrue(
+            self.client.login(
+                username=self.user.username, password=self.PASSWORD
+            )
+        )
+        self.assertTrue(
+            self.client.login(
+                username=self.user.username, password=self.PASSWORD
+            )
+        )
+
+    def test_delete_and_redirect(self):
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.OPEN
+        self.episode.save()
+        other_episode = self.patient.episode_set.create(
+            category_name=FP17Episode.display_name,
+            stage=FP17Episode.NEW
+        )
+        response = self.client.post(self.url)
+        self.assertRedirects(response, f'/#/patient/{self.patient.id}')
+        self.assertEqual(
+            self.patient.episode_set.get().id, other_episode.id
+        )
+
+    def test_delete_create_new_stage_and_redirect(self):
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.NEW
+        self.episode.save()
+        response = self.client.post(self.url)
+        other_episode = self.patient.episode_set.get()
+        self.assertRedirects(response, f'/#/patient/{self.patient.id}')
+        self.assertEqual(
+            other_episode.patient_id, self.patient.id
+        )
+        self.assertEqual(
+            other_episode.category_name, FP17Episode.display_name
+        )
+        self.assertEqual(
+            other_episode.stage, FP17Episode.NEW
+        )
+
+    def test_dental_care_episode(self):
+        self.episode.category_name = DentalCareEpisodeCategory.display_name
+        self.episode.save()
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(self.patient.episode_set.get().id, self.episode.id)
+
+    def test_episode_submitted(self):
+        self.episode.stage = FP17Episode.SUBMITTED
+        self.episode.save()
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(self.patient.episode_set.get().id, self.episode.id)
