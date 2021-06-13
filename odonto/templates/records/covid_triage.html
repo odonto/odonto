@@ -1,0 +1,22 @@
+{% load odonto_subrecords %}
+<div class="row">
+  <div class="col-md-6">
+    <table class="table table-striped">
+      {% table_row_field_display "CovidTriage.triage_type" %}
+      {% table_row_field_display "CovidTriage.datetime_of_contact" %}
+      {% table_row_field_display "CovidTriage.dental_care_professional" %}
+      {% table_row_field_display "CovidTriage.primary_reason" %}
+      {% table_row_field_display "CovidTriage.covid_status" %}
+      {% table_row_field_display "CovidTriage.triage_via_video" %}
+      {% table_row_field_display "CovidTriage.advice_given" %}
+      {% table_row_field_display "CovidTriage.advised_analgesics" %}
+      {% table_row_field_display "CovidTriage.remote_prescription_analgesics" %}
+      {% table_row_field_display "CovidTriage.remote_prescription_antibiotics" %}
+      {% table_row_field_display "CovidTriage.follow_up_call_required" %}
+      {% table_row_field_display "CovidTriage.call_back_if_symptoms_worsen" %}
+      {% table_row_field_display "CovidTriage.referrered_to_local_udc_reason" %}
+      {% table_row_field_display "CovidTriage.face_to_face_appointment" %}
+    </table>
+  </div>
+</div>
+

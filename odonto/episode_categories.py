@@ -15,6 +15,7 @@ class AbstractOdontoCategory(object):
     NEW = "New"
     SUBMITTED = "Submitted"
     OPEN = "Open"
+    NEW = "New"
     NEEDS_INVESTIGATION = "Not sent, needs investigation"
 
     def submission(self):
@@ -174,12 +175,12 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
     def get_submit_link(self):
         patient_id = self.episode.patient_id
         episode_id = self.episode.id
-        return f"{settings.HOST_NAME_AND_PROTOCOL}/pathway/#/fp17-submit/{patient_id}/{episode_id}"
+        return f"/pathway/#/fp17-submit/{patient_id}/{episode_id}"
 
     def get_edit_link(self):
         patient_id = self.episode.patient_id
         episode_id = self.episode.id
-        return f"{settings.HOST_NAME_AND_PROTOCOL}/pathway/#/fp17-edit/{patient_id}/{episode_id}"
+        return f"/pathway/#/fp17-edit/{patient_id}/{episode_id}"
 
     @classmethod
     def get_unsubmitted(cls, qs):
@@ -233,12 +234,12 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
     def get_submit_link(self):
         patient_id = self.episode.patient_id
         episode_id = self.episode.id
-        return f"{settings.HOST_NAME_AND_PROTOCOL}/pathway/#/fp17-o-submit/{patient_id}/{episode_id}"
+        return f"/pathway/#/fp17-o-submit/{patient_id}/{episode_id}"
 
     def get_edit_link(self):
         patient_id = self.episode.patient_id
         episode_id = self.episode.id
-        return f"{settings.HOST_NAME_AND_PROTOCOL}/pathway/#/fp17-o-edit/{patient_id}/{episode_id}"
+        return f"/pathway/#/fp17-o-edit/{patient_id}/{episode_id}"
 
     @classmethod
     def get_unsubmitted(cls, qs):
@@ -345,18 +346,40 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
 
         return uoa
 
-def get_unsubmitted_fp17_and_fp17os(qs):
+
+class CovidTriageEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
+    display_name = "COVID-19 triage"
+
+    def get_submit_link(self):
+        patient_id = self.episode.patient_id
+        episode_id = self.episode.id
+        return f"/pathway/#/covid-triage-submit/{patient_id}/{episode_id}"
+
+    def get_edit_link(self):
+        patient_id = self.episode.patient_id
+        episode_id = self.episode.id
+        return f"/pathway/#/covid-triage-edit/{patient_id}/{episode_id}"
+
+    @classmethod
+    def get_unsubmitted(cls, qs):
+        return qs.filter(
+            category_name=cls.display_name
+        ).filter(stage="Open")
+
+
+def get_unsubmitted_compass_episodes(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
     unsubmitted_fp17Os = FP17OEpisode.get_unsubmitted(qs)
-    return unsubmitted_fp17s | unsubmitted_fp17Os
+    unsubmitted_covid_triage = CovidTriageEpisode.get_unsubmitted(qs)
+    return unsubmitted_fp17s | unsubmitted_fp17Os | unsubmitted_covid_triage
 
 
-def get_unsubmitted_fp17_and_fp17os_for_user(user):
+def get_unsubmitted_compass_episodes_for_user(user):
     from opal.models import Episode
 
     qs = Episode.objects.all()
     for_user = get_episodes_for_user(qs, user)
-    return get_unsubmitted_fp17_and_fp17os(for_user)
+    return get_unsubmitted_compass_episodes(for_user)
 
 
 def get_episodes_for_user(qs, user):

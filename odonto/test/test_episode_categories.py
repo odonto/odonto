@@ -202,13 +202,13 @@ translate_episode_to_xml"
 
     def test_get_submit_link(self):
         episode = self.get_episode()
-        l = f"http://ntghcomdent1/pathway/#/fp17-submit/{episode.patient.id}/{episode.id}"
-        self.assertEqual(episode.category.get_submit_link(), l)
+        link = f"/pathway/#/fp17-submit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_submit_link(), link)
 
     def test_get_edit_link(self):
         episode = self.get_episode()
-        l = f"http://ntghcomdent1/pathway/#/fp17-edit/{episode.patient.id}/{episode.id}"
-        self.assertEqual(episode.category.get_edit_link(), l)
+        link = f"/pathway/#/fp17-edit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_edit_link(), link)
 
     def test_uda(self):
         episode = self.get_episode()
@@ -292,13 +292,13 @@ class FP17OEpisodeTestCase(OpalTestCase):
 
     def test_get_submit_link(self):
         episode = self.open_episode
-        l = f"http://ntghcomdent1/pathway/#/fp17-o-submit/{episode.patient.id}/{episode.id}"
-        self.assertEqual(episode.category.get_submit_link(), l)
+        link = f"/pathway/#/fp17-o-submit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_submit_link(), link)
 
     def test_get_edit_link(self):
         episode = self.open_episode
-        l = f"http://ntghcomdent1/pathway/#/fp17-o-edit/{episode.patient.id}/{episode.id}"
-        self.assertEqual(episode.category.get_edit_link(), l)
+        link = f"/pathway/#/fp17-o-edit/{episode.patient.id}/{episode.id}"
+        self.assertEqual(episode.category.get_edit_link(), link)
 
     def test_uoa_assessment_and_review(self):
         episode = self.open_episode

@@ -1,0 +1,19 @@
+{% load odonto_forms %}
+<div class="row datetime-picker">
+  <div class="col-md-4">
+    {% odonto_datepicker label=label change=change field=field data=date_picker_args style=style %}
+  </div>
+  <div class="col-md-4 time-picker">
+    <div class="form-group"
+    {% if visibility %} {{ visibility|safe }} {% endif %}
+    >
+ <div >
+   <uib-timepicker
+     {% if change %}
+     ng-change="{{ change }}"
+     {% endif %}
+     ng-model="{{ model }}" ></uib-timepicker>
+ </div>
+</div>
+  </div>
+</div>

@@ -654,3 +654,18 @@ table.patient-list {
         font-weight: normal;
     }
 }
+
+.table > tbody > tr > td.subrecord-row-value{
+    width: 40%;
+    padding-left: 8%;
+}
+
+.datetime-picker{
+    .time-picker{
+        padding-left: 20px;
+        padding-top: 6px;
+    }
+    .btn.btn-default{
+        margin-left: 4px;
+    }
+}

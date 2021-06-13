@@ -4,6 +4,7 @@ Odonto Subrecord rendering
 from django import template
 from opal.templatetags import forms
 from django.db import models
+from odonto.models import CovidStatus
 
 register = template.Library()
 
@@ -28,10 +29,24 @@ def table_row_field_display(model_and_field):
     model, field = forms._model_and_field_from_path(model_and_field)
     ctx = {
         "model": "item.{}".format(field.attname),
-        "display_name": model._get_field_title(field.attname)
+        "display_name": model._get_field_title(field.attname),
     }
     if isinstance(field, (models.BooleanField, models.NullBooleanField,)):
         ctx["is_boolean"] = True
     if isinstance(field, models.DateField):
         ctx["is_date"] = True
+    if isinstance(field, models.TimeField):
+        ctx["is_time"] = True
+    return ctx
+
+
+@register.inclusion_tag('templatetags/covid_status_row_display.html')
+def covid_status_row_display(field):
+    """
+    Displays a patient's covid status in a table.
+    """
+    ctx = {
+        "model": "item.{}".format(field),
+        "display_name": CovidStatus._get_field_title(field),
+    }
     return ctx

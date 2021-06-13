@@ -2,12 +2,16 @@
   <td>
     {{ display_name }}
   </td>
-  <td>
+  <td class="subrecord-row-value">
     <span ng-show="{{ model }}">
     {% if is_boolean %}
       X
     {% elif is_date %}
       [[ {{ model }} | displayDate ]]
+    {% elif is_time %}
+      <span ng-if="{{ model }}">
+        [[ {{ model }}.substring(0, 5) ]]
+      </span>
     {% else %}
       [[ {{ model }} ]]
     {% endif %}

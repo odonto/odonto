@@ -37,3 +37,11 @@ class OdontoRolesTestCase(OpalTestCase):
 
         self.assertEqual(True, ctx['roles']['is_dentist'])
         self.assertEqual(True, ctx['roles']['is_admin'])
+
+    def test_custom_role(self):
+        request = self.rf.get('/')
+        user = User.objects.create(username='no')
+        user.profile.roles.create(name="something")
+        request.user = user
+        ctx = cp.odonto_roles(request)
+        self.assertTrue(ctx['roles']['something'])

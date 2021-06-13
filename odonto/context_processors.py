@@ -9,7 +9,8 @@ def odonto_roles(request):
     default = {
         'roles': {
             'is_dentist': False,
-            'is_admin'  : False
+            'is_admin'  : False,
+            'can_see_covid': False
         }
     }
 
@@ -21,6 +22,9 @@ def odonto_roles(request):
     if request.user.performernumber_set.count() > 0:
         default['roles']['is_dentist'] = True
 
+    for user_role in request.user.profile.roles.all():
+        default['roles'][user_role.name] = True
+
     return default
 
 
@@ -31,7 +35,7 @@ def episode_counts(request):
     for_user = episode_categories.get_episodes_for_user(
         episodes, request.user
     )
-    unsubmitted = episode_categories.get_unsubmitted_fp17_and_fp17os(
+    unsubmitted = episode_categories.get_unsubmitted_compass_episodes(
         for_user
     )
     open_episodes = for_user.exclude(

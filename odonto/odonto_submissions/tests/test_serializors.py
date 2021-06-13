@@ -1,5 +1,6 @@
 from unittest import mock
 import datetime
+from django.conf import settings
 from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.test import override_settings
@@ -18,8 +19,11 @@ FROM_MESSAGE = "{}.annotate".format(BASE_CASE_PATH)
 FROM_MODEL = "{}.from_model".format(BASE_CASE_PATH)
 
 
-def generate_bcds1():
-    contract_number = 1000000000
+def generate_bcds1(category_name):
+    if category_name == episode_categories.FP17Episode.display_name:
+        contract_number = settings.FP17_CONTRACT_NUMBER
+    else:
+        contract_number = settings.FP17O_CONTRACT_NUMBER
     performer_number = 100000
     location_id = 4
     pin = "100000"
@@ -50,17 +54,17 @@ def generate_envelope():
 
 
 def get_from_message_method(category_name, number):
-    category_name = category_name.lower()
+    category_name = category_name.lower().replace("-", "_").replace(" ", "_")
     return import_string(FROM_MESSAGE.format(category_name, number))
 
 
 def get_from_model_method(category_name, number):
-    category_name = category_name.lower()
+    category_name = category_name.lower().replace("-", "_").replace(" ", "_")
     return import_string(FROM_MODEL.format(category_name, number))
 
 
 def from_message(number, category_name):
-    bcds1 = generate_bcds1()
+    bcds1 = generate_bcds1(category_name)
     envelope = generate_envelope()
     from_message_method = get_from_message_method(category_name, number)
     from_message_method(bcds1)
@@ -77,7 +81,7 @@ def from_model(number, category_name):
     episode = patient.create_episode()
     episode.fp17dentalcareprovider_set.update(provider_location_number="site_number")
     episode.category_name = category_name
-    bcds1 = generate_bcds1()
+    bcds1 = generate_bcds1(category_name)
     envelope = generate_envelope()
     from_model_method = get_from_model_method(category_name, number)
     from_model_method(bcds1, patient, episode)
@@ -135,19 +139,26 @@ class SerializerTestCase(OpalTestCase):
     def test_cases(self):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
-        for case_number in range(1, 50):
+        covid_19_category = episode_categories.CovidTriageEpisode.display_name
+        for case_number in range(1, 51):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 6):
+        for case_number in range(1, 7):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
+            self.assertTrue(equal(old, new))
+
+        for case_number in range(1, 2):
+            new = from_model(case_number, covid_19_category)
+            old = from_message(case_number, covid_19_category)
             self.assertTrue(equal(old, new))
 
     def test_clean_non_alphanumeric(self):
         name = "Mc'Wilson-Smith-jones"
         self.assertEqual(serializers.clean_non_alphanumeric(name), "McWilsonSmithjones")
+
 
 class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
     def setUp(self):
@@ -446,6 +457,55 @@ class OrthodonticTreatmentTranslatorTestCase(OpalTestCase):
             [treatments.TREATMENT_ABANDONED, treatments.PATIENT_FAILED_TO_RETURN]
         )
 
+class CovidStatusTranslatorTestCase(OpalTestCase):
+    def setUp(self):
+        self.patient, self.episode = self.new_patient_and_episode_please()
+        self.status = self.episode.covidstatus_set.get()
+
+    def test_populated(self):
+        self.status.shielding_patient = 1
+        self.status.increased_risk = 2
+        self.status.possible_covid = 3
+        self.status.symptom_free = 4
+        self.status.other_covid_status = 5
+        self.status.save()
+        messages = serializers.CovidStatusTranslator(self.episode).to_messages()
+        self.assertEqual(
+            messages[0].code, 9615
+        )
+        self.assertEqual(
+            messages[0].instance_count, 1
+        )
+        self.assertEqual(
+            messages[1].code, 9616
+        )
+        self.assertEqual(
+            messages[1].instance_count, 2
+        )
+        self.assertEqual(
+            messages[2].code, 9617
+        )
+        self.assertEqual(
+            messages[2].instance_count, 3
+        )
+        self.assertEqual(
+            messages[3].code, 9618
+        )
+        self.assertEqual(
+            messages[3].instance_count, 4
+        )
+        self.assertEqual(
+            messages[4].code, 9619
+        )
+        self.assertEqual(
+            messages[4].instance_count, 5
+        )
+
+    def test_none(self):
+        self.assertEqual(
+            serializers.CovidStatusTranslator(self.episode).to_messages(), []
+        )
+
 
 class GetFp17oDateOfAcceptanceTestCase(OpalTestCase):
     def setUp(self):
@@ -521,7 +581,6 @@ class GetBCDS1TestCase(OpalTestCase):
         self.user.save()
 
         bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT")
-        self.assertEqual(bcds1.contract_number, "FP17_CONTRACT_NUMBER")
         self.assertEqual(bcds1.message_reference_number, "REF_NUM")
         self.assertEqual(bcds1.resubmission_count, "SUB_COUNT")
         self.assertEqual(bcds1.location, 24946)
@@ -529,8 +588,3 @@ class GetBCDS1TestCase(OpalTestCase):
         self.assertEqual(bcds1.dpb_pin, "2222")
         self.assertIsNotNone(bcds1.patient)
         self.assertTrue(translate_to_bdcs1.called)
-
-
-
-
-

@@ -29,7 +29,6 @@
       </div>
     </div>
   </div>
-</div>
 {% if required %}
 <div class="row" ng-show="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required">
   <span class="help-block" >
@@ -37,7 +36,10 @@
   </span>
 </div>
 {% endif %}
-<div ng-show="errors['{{ model_api_name }}']['{{ field_name }}']" class="row content-offset-below-20 content-offset-10 content-offset-below-20 help-block">
-  [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
+<div class="col-md-12">
+  <div ng-show="errors['{{ model_api_name }}']['{{ field_name }}']" class="row content-offset-below-20 content-offset-below-20 help-block">
+    [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
+  </div>
+</div>
 </div>
 

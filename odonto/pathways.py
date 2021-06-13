@@ -2,12 +2,14 @@
 Pathways for Odonto
 """
 import logging
+import datetime
 from django.db import transaction
-from opal.core import menus, pathway
+from opal.core import pathway
 from odonto import models
 from odonto.odonto_submissions import models as submission_models
-from odonto.episode_categories import FP17Episode, FP17OEpisode
-from odonto.odonto_submissions import serializers
+from odonto.episode_categories import (
+    FP17Episode, FP17OEpisode, CovidTriageEpisode
+)
 from plugins.add_patient_step import FindPatientStep
 
 
@@ -64,8 +66,15 @@ class AddPatientPathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        patient.create_episode(category_name='FP17', stage='New')
-        patient.create_episode(category_name='FP17O', stage='New')
+        patient.create_episode(
+            category_name=FP17Episode.display_name, stage=FP17Episode.NEW
+        )
+        patient.create_episode(
+            category_name=FP17OEpisode.display_name, stage=FP17OEpisode.NEW
+        )
+        patient.create_episode(
+            category_name=CovidTriageEpisode.display_name, stage=FP17OEpisode.NEW
+        )
         demographics = patient.demographics()
         if models.Demographics.objects.filter(
             first_name=demographics.first_name,
@@ -96,6 +105,10 @@ FP17_STEPS = (
     pathway.Step(model=models.Fp17OtherDentalServices),
     pathway.Step(model=models.Fp17TreatmentCategory),
     pathway.Step(model=models.Fp17Recall),
+    pathway.Step(
+        model=models.CovidStatus,
+        help_template="pathway/covid_status_help.html"
+    ),
     pathway.Step(model=models.CaseMix, help_template="pathway/case_mix_help.html"),
 )
 
@@ -110,9 +123,11 @@ class Fp17Pathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open'
+        episode.stage = FP17Episode.OPEN
         episode.save()
-        patient.create_episode(category_name='FP17', stage='New')
+        patient.create_episode(
+            category_name=FP17Episode.display_name, stage=FP17Episode.NEW
+        )
         return patient, episode
 
 
@@ -120,14 +135,6 @@ CHECK_STEP_FP17 = pathway.Step(
     template="notused",
     base_template="pathway/steps/empty_step_base_template.html",
     step_controller="CheckFP17Step",
-    display_name="unused"
-)
-
-
-CHECK_STEP_FP17_O = pathway.Step(
-    template="notused",
-    base_template="pathway/steps/empty_step_base_template.html",
-    step_controller="CheckFP17OStep",
     display_name="unused"
 )
 
@@ -170,14 +177,13 @@ class SubmitFP17Pathway(OdontoPagePathway):
         )
         return [i for i in result if i[0]]
 
-
     def get_further_treatment_information(self, patient, episode):
         """
         If ‘Further treatment within 2 months’ is present then the same provider
         must have a claim(s) for this patient in the two months prior to the acceptance
         date of the continuation claim. There must be at least one instance of a valid
-        claim in the two month period.  Valid claims exclude urgent (9150 4), incomplete (9164),
-        Further treatment within 2 months (9163) or a lower band.
+        claim in the two month period.  Valid claims exclude urgent (9150 4),
+        incomplete (9164), further treatment within 2 months (9163) or a lower band.
 
         return [{treatment_category: date_of_acceptance}]
         """
@@ -194,7 +200,8 @@ class SubmitFP17Pathway(OdontoPagePathway):
         ).filter(
             fp17otherdentalservices__further_treatment_within_2_months=False
         ).values(
-            "fp17treatmentcategory__treatment_category", "fp17incompletetreatment__date_of_acceptance"
+            "fp17treatmentcategory__treatment_category",
+            "fp17incompletetreatment__date_of_acceptance"
         )
 
         result = []
@@ -227,7 +234,7 @@ class SubmitFP17Pathway(OdontoPagePathway):
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
-        episode.stage = 'Submitted'
+        episode.stage = FP17OEpisode.SUBMITTED
         episode.save()
         return result
 
@@ -254,6 +261,10 @@ FP17_O_STEPS = (
     pathway.Step(model=models.ExtractionChart),
     pathway.Step(model=models.OrthodonticAssessment),
     pathway.Step(model=models.OrthodonticTreatment),
+    pathway.Step(
+        model=models.CovidStatus,
+        help_template="pathway/covid_status_help.html"
+    ),
     pathway.Step(model=models.CaseMix, help_template="pathway/case_mix_help.html"),
 )
 
@@ -268,9 +279,11 @@ class Fp17OPathway(OdontoPagePathway):
         patient, episode = super().save(
             data, user=user, patient=patient, episode=episode
         )
-        episode.stage = 'Open'
+        episode.stage = FP17OEpisode.OPEN
         episode.save()
-        patient.create_episode(category_name='FP17O', stage='New')
+        patient.create_episode(
+            category_name=FP17OEpisode.display_name, stage=FP17OEpisode.NEW
+        )
         return patient, episode
 
 
@@ -278,6 +291,14 @@ class EditFP17OPathway(OdontoPagePathway):
     display_name = 'Edit FP17O'
     slug = 'fp17-o-edit'
     steps = FP17_O_STEPS
+
+
+CHECK_STEP_FP17_O = pathway.Step(
+    template="notused",
+    base_template="pathway/steps/empty_step_base_template.html",
+    step_controller="CheckFP17OStep",
+    display_name="unused"
+)
 
 
 class SubmitFP17OPathway(OdontoPagePathway):
@@ -345,11 +366,103 @@ class SubmitFP17OPathway(OdontoPagePathway):
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
         return to_dicted
 
+    @transaction.atomic
+    def save(self, data, user=None, patient=None, episode=None):
+        result = super().save(data, user, patient, episode)
+        episode.stage = FP17OEpisode.SUBMITTED
+        episode.save()
+        return result
+
+
+# Covid triage
+COVID_TRIAGE_STEPS = (
+    pathway.Step(
+        display_name="",
+        template="covid_triage_explanation.html",
+    ),
+    pathway.Step(
+        model=models.Fp17DentalCareProvider,
+        step_controller="CareProviderStepCtrl",
+    ),
+    pathway.Step(
+        model=models.Demographics,
+        base_template="pathway/steps/step_base_without_display_name.html"
+    ),
+    pathway.Step(
+        model=models.CovidTriage,
+        base_template="pathway/steps/step_base_without_display_name.html",
+        step_controller="CovidTriageStepCtrl"
+    ),
+)
+
+CHECK_COVID_TRIAGE_STEP = pathway.Step(
+    template="notused",
+    base_template="pathway/steps/empty_step_base_template.html",
+    step_controller="CheckCovidTriageStep",
+    display_name="unused"
+)
+
+
+class CovidTriagePathway(OdontoPagePathway):
+    display_name = 'Covid triage claim form'
+    slug = 'covid-triage-new'
+    steps = COVID_TRIAGE_STEPS
+
+    @transaction.atomic
+    def save(self, data, user=None, patient=None, episode=None):
+        patient, episode = super().save(
+            data, user=user, patient=patient, episode=episode
+        )
+        episode.stage = CovidTriageEpisode.OPEN
+        episode.save()
+        patient.create_episode(
+            category_name=CovidTriageEpisode.display_name,
+            stage=CovidTriageEpisode.NEW
+        )
+        return patient, episode
+
+
+class EditCovidTriagePathway(OdontoPagePathway):
+    display_name = 'Edit triage'
+    slug = 'covid-triage-edit'
+    steps = COVID_TRIAGE_STEPS
+
+
+class SubmitCovidTriagePathway(OdontoPagePathway):
+    display_name = "Submit triage"
+    slug = 'covid-triage-submit'
+    steps = COVID_TRIAGE_STEPS + (CHECK_COVID_TRIAGE_STEP,)
+    template = "pathway/templates/check_pathway.html"
+    summary_template = "partials/covid_triage_summary.html"
+
+    def to_dict(self, *args, **kwargs):
+        episode = kwargs.get('episode')
+        to_dicted = super().to_dict(*args, **kwargs)
+        check_index = None
+        step_ctrl = CHECK_COVID_TRIAGE_STEP.get_step_controller()
+        for index, step_dict in enumerate(to_dicted["steps"]):
+            if step_dict["step_controller"] == step_ctrl:
+                check_index = index
+        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        other_submitted = episode.patient.episode_set.filter(
+            category_name=CovidTriageEpisode.display_name,
+            stage=CovidTriageEpisode.SUBMITTED
+        )
+        submitted_triages = models.CovidTriage.objects.filter(
+            episode__in=other_submitted
+        )
+        other_submitted_dts = []
+        for other in submitted_triages:
+            if other.datetime_of_contact:
+                other_submitted_dts.append(
+                    other.datetime_of_contact
+                )
+        to_dicted["steps"][check_index]["other_triage"] = other_submitted_dts
+        return to_dicted
 
     @transaction.atomic
     def save(self, data, user=None, patient=None, episode=None):
         result = super().save(data, user, patient, episode)
-        episode.stage = 'Submitted'
+        episode.stage = CovidTriageEpisode.SUBMITTED
         episode.save()
         return result
-

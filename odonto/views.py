@@ -7,7 +7,7 @@ import csv
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, RedirectView, DetailView, View
+from django.views.generic import TemplateView, DetailView, View, RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseBadRequest
 from odonto import episode_categories
@@ -41,7 +41,7 @@ class OpenFP17s(TemplateView):
             qs, self.request.user
         )
 
-        unsubmitted = episode_categories.get_unsubmitted_fp17_and_fp17os(qs)
+        unsubmitted = episode_categories.get_unsubmitted_compass_episodes(qs)
         unsubmitted_ids = unsubmitted.values_list("id", flat=True)
         return qs.exclude(id__in=unsubmitted_ids)
 
@@ -54,7 +54,7 @@ class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
         qs = episode_categories.get_episodes_for_user(
             qs, self.request.user
         )
-        return episode_categories.get_unsubmitted_fp17_and_fp17os_for_user(
+        return episode_categories.get_unsubmitted_compass_episodes_for_user(
             self.request.user
         )
 

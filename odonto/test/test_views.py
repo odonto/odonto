@@ -177,6 +177,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
         result = Stats().get_context_data()
         self.assertEqual(result, expected)
 
+
 class CaseMixTestCase(OpalTestCase):
     def setUp(self):
         self.url = reverse("case-mix-csv")

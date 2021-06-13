@@ -1,0 +1,47 @@
+{% load forms %}
+{% load odonto_forms %}
+<div class="row">
+  <h2>COVID-19 triage</h2>
+</div>
+<div class="row">
+  <div class="col-md-2">
+    {% btn_radio field="CovidTriage.triage_type" %}
+  </div>
+  <div class="col-md-6 ">
+    {% odonto_datetimepicker label="Date/time of contact" field="CovidTriage.datetime_of_contact" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% odonto_select field="CovidTriage.primary_reason" style="vertical" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% odonto_select field="CovidTriage.covid_status" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    {% checkbox field="CovidTriage.dental_care_professional" style="vertical" %}
+    {% checkbox field="CovidTriage.advised_analgesics" style="vertical" %}
+    {% checkbox field="CovidTriage.follow_up_call_required" style="vertical" %}
+    {% checkbox label="Referred to local urgent dental care centre" model="local.referred" style="vertical" change="editing.covid_triage.referrered_to_local_udc_reason=''" %}
+    <div class="row" ng-if="local.referred">
+      <div class="col-md-12">
+        {% odonto_select "ng-required='local.referred'" field="CovidTriage.referrered_to_local_udc_reason" style="vertical" %}
+      </div>
+      <div ng-show="form.$submitted && local.referred && !editing.covid_triage.referrered_to_local_udc_reason" class="col-md-12 help-block">
+        A reason is required when the patient is referred to the local urgent dental care centre
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    {% checkbox field="CovidTriage.triage_via_video" style="vertical" %}
+    {% checkbox field="CovidTriage.remote_prescription_analgesics" style="vertical" %}
+    {% checkbox field="CovidTriage.call_back_if_symptoms_worsen" style="vertical" %}
+  </div>
+  <div class="col-md-4">
+    {% checkbox field="CovidTriage.advice_given" style="vertical" %}
+    {% checkbox field="CovidTriage.remote_prescription_antibiotics" style="vertical" %}
+    {% checkbox field="CovidTriage.face_to_face_appointment" style="vertical" %}
+  </div>
+</div>
