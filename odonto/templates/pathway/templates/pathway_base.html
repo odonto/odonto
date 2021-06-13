@@ -31,8 +31,17 @@
       <div class="text-center" ng-show="form.$submitted && (!form.$valid || pathway.errors)">
         <strong class="help-block">Please fix the above errors</strong>
       </div>
-
-      <div class="pathway-save-button content-offset-below-150">
+      <div ng-show="pathway.episode.stage !== 'Submitted'" ng-controller="DeleteFormCtrl">
+        <div class="pathway-save-button pull-left content-offset-below-150">
+          <a
+            class="btn btn-lg btn-warning btn-save"
+            ng-click="delete()"
+          >
+            Delete this [[ pathway.episode.category_name ]]
+          </a>
+        </div>
+      </div>
+      <div class="pathway-save-button pull-right content-offset-below-150">
           <a
           class="btn btn-lg btn-primary btn-save"
           ng-click="!form.$setSubmitted() && (!pathway.errors && form.$valid) && pathway.finish(editing)"

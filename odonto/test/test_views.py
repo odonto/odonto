@@ -5,7 +5,7 @@ from unittest import mock
 from django.urls import reverse
 from opal.core.test import OpalTestCase
 from odonto.episode_categories import (
-    FP17OEpisode,  FP17Episode, CovidTriageEpisode, DentalCareEpisodeCategory
+    FP17OEpisode,  FP17Episode, DentalCareEpisodeCategory
 )
 from odonto.models import Fp17TreatmentCategory, OrthodonticAssessment
 from odonto.odonto_submissions.models import Submission
@@ -177,6 +177,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
         result = Stats().get_context_data()
         self.assertEqual(result, expected)
 
+
 class CaseMixTestCase(OpalTestCase):
     def setUp(self):
         self.url = reverse("case-mix-csv")
@@ -296,12 +297,12 @@ class DeleteEpisodeTestCase(OpalTestCase):
         )
 
     def test_delete_and_redirect(self):
-        self.episode.category_name = CovidTriageEpisode.display_name
-        self.episode.stage = CovidTriageEpisode.OPEN
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.OPEN
         self.episode.save()
         other_episode = self.patient.episode_set.create(
-            category_name=CovidTriageEpisode.display_name,
-            stage=CovidTriageEpisode.NEW
+            category_name=FP17Episode.display_name,
+            stage=FP17Episode.NEW
         )
         response = self.client.post(self.url)
         self.assertRedirects(response, f'/#/patient/{self.patient.id}')
@@ -310,8 +311,8 @@ class DeleteEpisodeTestCase(OpalTestCase):
         )
 
     def test_delete_create_new_stage_and_redirect(self):
-        self.episode.category_name = CovidTriageEpisode.display_name
-        self.episode.stage = CovidTriageEpisode.NEW
+        self.episode.category_name = FP17Episode.display_name
+        self.episode.stage = FP17Episode.NEW
         self.episode.save()
         response = self.client.post(self.url)
         other_episode = self.patient.episode_set.get()
@@ -320,10 +321,10 @@ class DeleteEpisodeTestCase(OpalTestCase):
             other_episode.patient_id, self.patient.id
         )
         self.assertEqual(
-            other_episode.category_name, CovidTriageEpisode.display_name
+            other_episode.category_name, FP17Episode.display_name
         )
         self.assertEqual(
-            other_episode.stage, CovidTriageEpisode.NEW
+            other_episode.stage, FP17Episode.NEW
         )
 
     def test_dental_care_episode(self):
@@ -334,7 +335,7 @@ class DeleteEpisodeTestCase(OpalTestCase):
         self.assertEqual(self.patient.episode_set.get().id, self.episode.id)
 
     def test_episode_submitted(self):
-        self.episode.stage = CovidTriageEpisode.SUBMITTED
+        self.episode.stage = FP17Episode.SUBMITTED
         self.episode.save()
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 400)
