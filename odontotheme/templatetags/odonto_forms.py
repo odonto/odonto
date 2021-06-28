@@ -165,3 +165,10 @@ def odonto_select(*args, **kwargs):
     ctx['lookuplist'] = kwargs.pop("lookuplist", ctx.get("lookuplist", None))
     ctx["directives"] = args
     return ctx
+
+
+@register.inclusion_tag('_helpers/odonto_datetime_picker.html')
+def odonto_datetimepicker(*args, **kwargs):
+    ctx = get_odonto_common_args(kwargs)
+    ctx["field"] = kwargs["field"]
+    return ctx
