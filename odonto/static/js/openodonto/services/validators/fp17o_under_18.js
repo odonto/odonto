@@ -2,12 +2,12 @@ angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter)
 
   /*
   * An FP17O can have multiple dates so look at them all starting with the earliest
-  * and make sure the patient was under 18 at the time
+  * and make sure the patient was under 18 at the time.
+  *
+  * If the person is under 18 and the exemption is not checked,
+  * that will also be rejected by Compass
   */
   return function(editing){
-    if(!editing.fp17_exemptions.patient_under_18){
-      return;
-    }
     if(editing.demographics.date_of_birth){
       var otherDate = editing.orthodontic_assessment.date_of_referral;
       otherDate = otherDate || editing.orthodontic_assessment.date_of_assessment;
@@ -20,10 +20,19 @@ angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter)
         var dobMoment = toMomentFilter(editing.demographics.date_of_birth);
         var eighteenBirthday = dobMoment.add(18, 'years');
 
-        if(otherMoment.diff(eighteenBirthday, "days") >= 0){
+        var overEighteen = otherMoment.diff(eighteenBirthday, "days") >= 0;
+
+        if(overEighteen && editing.fp17_exemptions.patient_under_18){
           return {
             fp17_exemptions: {
               patient_under_18: "This patient is not under 18"
+            }
+          }
+        }
+        if(!overEighteen && !editing.fp17_exemptions.patient_under_18){
+          return {
+            fp17_exemptions: {
+              patient_under_18: "This patient is under 18"
             }
           }
         }
