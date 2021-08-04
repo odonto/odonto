@@ -174,6 +174,7 @@ class SubmissionAdmin(VersionAdmin):
     list_display = ('id', 'episode_id', 'first_name', 'surname', 'created', 'state',)
     list_editable = ("state",)
     list_filter = ('state',)
+    ordering = ('-created',)
 
     def first_name(self, obj):
         return obj.episode.patient.demographics().first_name
