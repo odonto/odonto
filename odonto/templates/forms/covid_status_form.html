@@ -1,24 +1,22 @@
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-5">
-    {% number field="CovidStatus.shielding_patient" max=100 %}
+    {% number field="CovidStatus.shielding_patient" min=1 max=100 %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% number field="CovidStatus.increased_risk" %}
+    {% number field="CovidStatus.increased_risk" min=1 %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% number field="CovidStatus.possible_covid" max=100 %}
+    {% number field="CovidStatus.possible_covid" min=1 max=100 %}
   </div>
   <div class="col-md-5 col-md-offset-1">
-    {% number field="CovidStatus.symptom_free" %}
+    {% number field="CovidStatus.symptom_free" min=1 %}
   </div>
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% number field="CovidStatus.other_covid_status" max=100 %}
+    {% number field="CovidStatus.other_covid_status" min=1 max=100 %}
   </div>
 </div>
-
-
