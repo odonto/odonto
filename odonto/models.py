@@ -860,7 +860,7 @@ class CovidTriage(models.EpisodeSubrecord):
 
     class Meta:
         verbose_name = "COVID-19 triage"
-    
+
     # Order is important for the choices
     # the code sent to compass is the idx + 1
     LOCAL_UCD_REFERRAL_REASONS = enum(
@@ -887,7 +887,7 @@ class CovidTriage(models.EpisodeSubrecord):
     REASONS_FOR_THE_CALL = enum(
         "Pain",
         "Swelling",
-        "Bleeding"
+        "Bleeding",
         "Trauma",
         "Soft tissue pathology",
         "Other",
@@ -920,7 +920,7 @@ class CovidTriage(models.EpisodeSubrecord):
     )
     covid_status = fields.CharField(
         blank=True,
-        null=True, 
+        null=True,
         max_length=256,
         verbose_name="COVID-19 status",
         choices=COVID_STATUS
@@ -936,11 +936,11 @@ class CovidTriage(models.EpisodeSubrecord):
         default=False, verbose_name="Advised analgesics"
     )
     remote_prescription_analgesics = fields.BooleanField(
-        default=False, 
+        default=False,
         verbose_name="Remote prescription of analgesics"
     )
     remote_prescription_antibiotics = fields.BooleanField(
-        default=False, 
+        default=False,
         verbose_name="Remote prescription of antibiotics"
     )
     follow_up_call_required = fields.BooleanField(

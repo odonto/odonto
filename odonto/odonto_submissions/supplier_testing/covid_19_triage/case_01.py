@@ -23,7 +23,8 @@ def annotate(bcds1):
         treatments.TREATMENT_CATEGORY(6),
         treatments.PATIENT_GROUP(2),
         treatments.HOUR_OF_CONTACT(14),
-        treatments.MINUTE_OF_CONTACT(10)
+        treatments.MINUTE_OF_CONTACT(10),
+        treatments.PRIMARY_REASON(7)
     ]
 
     return bcds1
@@ -42,6 +43,7 @@ def from_model(bcds1, patient, episode):
     episode.covidtriage_set.update(
         covid_status="Increased risk of illness from COVID-19",
         datetime_of_contact=datetime.datetime(2020, 3, 1, 14, 10),
-        triage_type=CovidTriage.FP17
+        triage_type=CovidTriage.FP17,
+        primary_reason="Routine treatment"
     )
     translate_to_bdcs1(bcds1, episode)

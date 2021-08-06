@@ -20,11 +20,11 @@ class Transmission(models.Model):
     """
     A transmission is an occassion on which we send a message to an
     upstream system.
-    
-    In our current implementation when we send data upstream we make 
+
+    In our current implementation when we send data upstream we make
     one transmission per episode, however this is not mandated by the
     upstream spec.
-    
+
     This model provides such transmissions with a uniquie ID.
     """
     transmission_id = models.IntegerField(unique=True)
@@ -243,7 +243,7 @@ class Submission(models.Model):
         latest_submission = episode.submission_set.order_by(
             "-submission_count"
         ).first()
-        
+
         transmission = Transmission.create()
 
         if latest_submission is None:
