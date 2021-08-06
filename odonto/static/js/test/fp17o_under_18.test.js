@@ -32,11 +32,23 @@ describe('Fp17oUnder18', function() {
       expect(Fp17oUnder18(editing)).toEqual(expected);
     });
 
-    it('should not error if the exemption is not clicked', function(){
+    it('should not error if the exemption is not clicked and the patient is not under 18', function(){
       editing.demographics.date_of_birth = new Date(1980, 1, 1);
       editing.orthodontic_assessment.date_of_referral = new Date(2019, 1, 1);
       editing.fp17_exemptions.patient_under_18 = false;
       expect(Fp17oUnder18(editing)).toBe(undefined);
+    });
+
+    it('should error if the exemption is not clicked and the patient is under 18', function(){
+      editing.demographics.date_of_birth = new Date(2000, 1, 1);
+      editing.orthodontic_assessment.date_of_referral = new Date(2017, 1, 1);
+      editing.fp17_exemptions.patient_under_18 = false;
+      var expected = {
+        fp17_exemptions: {
+          patient_under_18: "This patient is under 18"
+        }
+      }
+      expect(Fp17oUnder18(editing)).toEqual(expected);
     });
 
     it('should not error if the date of birth is under 18 years ago', function(){
