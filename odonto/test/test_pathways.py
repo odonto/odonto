@@ -196,6 +196,24 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
             result, []
         )
 
+    def test_get_free_repair_replacement_information(self):
+        self.other_episode.fp17treatmentcategory_set.update(
+            treatment_category=models.Fp17TreatmentCategory.BAND_1
+        )
+        self.other_episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=self.date_1,
+            incomplete_treatment=models.Fp17IncompleteTreatment.BAND_1
+        )
+        result = self.pathway.get_free_repair_replacement_information(
+            self.patient, self.episode
+        )
+        self.assertEqual(
+            result, [{
+                "category": models.Fp17TreatmentCategory.BAND_1,
+                "completion_or_last_visit": self.date_1,
+            }]
+        )
+
     def test_get_further_treatment_with_information_with_no_other_episodes(self):
         self.other_episode.delete()
         result = self.pathway.get_further_treatment_information(
@@ -222,6 +240,14 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
                 "date_of_acceptance": '04/10/2019'
             }]
         )
+        self.assertEqual(
+            result["free_repair_replacement_information"],
+            [{
+                "category": models.Fp17TreatmentCategory.BAND_1,
+                "completion_or_last_visit": '05/10/2019'
+            }]
+        )
+
 
     def test_episode_submitted(self):
         self.episode.submission_set.create(

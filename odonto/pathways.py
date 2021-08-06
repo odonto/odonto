@@ -4,6 +4,7 @@ Pathways for Odonto
 import logging
 import datetime
 from django.db import transaction
+from django.db.models.query import prefetch_related_objects
 from opal.core import pathway
 from odonto import models
 from odonto.odonto_submissions import models as submission_models
@@ -177,6 +178,32 @@ class SubmitFP17Pathway(OdontoPagePathway):
         )
         return [i for i in result if i[0]]
 
+    def get_free_repair_replacement_information(self, patient, episode):
+        """
+        For free repair and replacement to be allowed
+        "a previous claim must be present with a higher or equal band
+        within the previous 12 months."
+        """
+        category_and_acceptance = patient.episode_set.filter(
+            category_name=FP17Episode.display_name
+        ).exclude(
+            id=episode.id
+        ).exclude(
+            fp17incompletetreatment__completion_or_last_visit=None
+        ).filter(
+            stage=FP17Episode.SUBMITTED
+        ).prefetch_related(
+            "fp17treatmentcategory_set",
+            "fp17incompletetreatment_set"
+        )
+        result = []
+        for episode in category_and_acceptance:
+            result.append({
+                "category": episode.fp17treatmentcategory_set.all()[0].treatment_category,
+                "completion_or_last_visit": episode.fp17incompletetreatment_set.all()[0].completion_or_last_visit
+            })
+        return result
+
     def get_further_treatment_information(self, patient, episode):
         """
         If ‘Further treatment within 2 months’ is present then the same provider
@@ -228,6 +255,8 @@ class SubmitFP17Pathway(OdontoPagePathway):
         to_dicted["steps"][check_index]["overlapping_dates"] = overlapping_dates
         further_treatment_information = self.get_further_treatment_information(patient, episode)
         to_dicted["steps"][check_index]["further_treatment_information"] = further_treatment_information
+        free_repair_information = self.get_free_repair_replacement_information(patient, episode)
+        to_dicted["steps"][check_index]["free_repair_replacement_information"] = free_repair_information
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
         return to_dicted
 

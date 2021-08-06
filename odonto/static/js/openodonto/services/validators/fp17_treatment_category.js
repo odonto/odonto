@@ -1,4 +1,4 @@
-angular.module('opal.services').factory('Fp17TreatmentCategory', function(){
+angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMomentFilter){
   "use strict";
   /*
   * If there is no treatment category we receive an
@@ -29,7 +29,7 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(){
     }
   }
 
-  return function(editing){
+  return function(editing, step){
     var treatmentCategory = editing.fp17_treatment_category.treatment_category;
 
     if(!treatmentCategory|| treatmentCategory === ""){
@@ -39,6 +39,38 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(){
     if(editing.fp17_other_dental_services.free_repair_or_replacement && treatmentCategory === BAND_1){
       return getErr("A patient cannot have band 1 and free repair or replacement");
     }
+
+    if(editing.fp17_other_dental_services.free_repair_or_replacement){
+      /*
+      * To claim a free repair or replacement
+      * "a previous claim must be present with a higher or equal band within
+      * the previous 12 months."
+      */
+      var completion = toMomentFilter(editing.fp17_incomplete_treatment.completion_or_last_visit)
+      if(completion){
+        var lastYear = toMomentFilter(completion).subtract(1, "years").toDate()
+        var err = getErr('Free repair or replacement requires a band equal or lower to a previous treatment in the last 12 months');
+        _.each(step.free_repair_replacement_information, function(frr){
+          frr.completion_or_last_visit = toMomentFilter(frr.completion_or_last_visit).toDate();
+          if(frr.completion_or_last_visit >= lastYear && frr.completion_or_last_visit <= completion){
+            if(treatmentCategory == BAND_2){
+              if(frr.category == BAND_2 || frr.category == BAND_3){
+                err = null;
+              }
+            }
+            if(treatmentCategory == BAND_3){
+              if(frr.category == BAND_3){
+                err = null;
+              }
+            }
+          }
+        });
+        if(err){
+          return err
+        }
+      }
+    }
+
     if(editing.fp17_other_dental_services.further_treatment_within_2_months && treatmentCategory === URGENT_TREATMENT){
       return getErr("A patient cannot have urgent treatment and further treatment within 2 months");
     }
