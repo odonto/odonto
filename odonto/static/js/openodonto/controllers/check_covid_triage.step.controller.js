@@ -6,6 +6,7 @@ angular.module('opal.controllers').controller(
     $timeout,
     $rootScope,
     FormValidation,
+    ProviderLocationNumberRequired,
     CovidTriageCovidStatusRequired,
     CovidTriageDateTimeOfContact,
     CovidTriagePrimaryReasonRequired,
@@ -15,6 +16,7 @@ angular.module('opal.controllers').controller(
   $rootScope.isFormValid = null;
   $rootScope.showSummary = null;
   var validators = [
+    ProviderLocationNumberRequired,
     CovidTriageCovidStatusRequired,
     CovidTriageDateTimeOfContact,
     CovidTriagePrimaryReasonRequired,
