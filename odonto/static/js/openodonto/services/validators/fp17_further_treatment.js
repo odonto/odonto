@@ -48,14 +48,14 @@ angular.module('opal.services').factory('Fp17FurtherTreatment', function(toMomen
     var twoMonthsAgo = moment(dateOfAcceptance).subtract(2, "month");
 
     var furtherInformation = _.map(step.further_treatment_information, function(fti){
-      fti.date_of_acceptance = toMomentFilter(fti.date_of_acceptance)
+      fti.completion_or_last_visit = toMomentFilter(fti.completion_or_last_visit)
       return fti;
     });
 
     var beforeEpisode = [];
 
     _.each(furtherInformation, function(fti){
-      if(fti.date_of_acceptance < dateOfAcceptance && fti.date_of_acceptance > twoMonthsAgo){
+      if(fti.completion_or_last_visit.isBefore(dateOfAcceptance, "d") && fti.completion_or_last_visit.isAfter(twoMonthsAgo, "d")){
         beforeEpisode.push(fti);
       }
     });
