@@ -228,15 +228,16 @@ class SubmitFP17Pathway(OdontoPagePathway):
             fp17otherdentalservices__further_treatment_within_2_months=False
         ).values(
             "fp17treatmentcategory__treatment_category",
-            "fp17incompletetreatment__date_of_acceptance"
+            "fp17incompletetreatment__completion_or_last_visit"
         )
 
         result = []
         for i in category_and_acceptance:
-            if i["fp17incompletetreatment__date_of_acceptance"]:
+            completion = i["fp17incompletetreatment__completion_or_last_visit"]
+            if completion:
                 result.append({
                     "category": i["fp17treatmentcategory__treatment_category"],
-                    "date_of_acceptance": i["fp17incompletetreatment__date_of_acceptance"]
+                    "completion_or_last_visit": completion
                 })
 
         return result

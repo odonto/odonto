@@ -77,7 +77,7 @@ describe('Fp17FurtherTreatment', function() {
   it('should error if there are prior episodes but they are over 2 months ago', function(){
     step.further_treatment_information = [{
       category: BAND_1,
-      date_of_acceptance: janDate
+      completion_or_last_visit: janDate
     }];
 
     var expected = {
@@ -91,7 +91,7 @@ describe('Fp17FurtherTreatment', function() {
   it('should error if other episodes are in the future', function(){
     step.further_treatment_information = [{
       category: BAND_1,
-      date_of_acceptance: augDate
+      completion_or_last_visit: augDate
     }];
 
     var expected = {
@@ -105,7 +105,7 @@ describe('Fp17FurtherTreatment', function() {
   it('should not error if there is a previous episode with a higher band', function(){
     step.further_treatment_information = [{
       category: BAND_3,
-      date_of_acceptance: juneDate
+      completion_or_last_visit: juneDate
     }];
 
     expect(Fp17FurtherTreatment(editing, step)).toBe(undefined)
@@ -115,7 +115,7 @@ describe('Fp17FurtherTreatment', function() {
     editing.fp17_treatment_category.treatment_category = BAND_3;
     step.further_treatment_information = [{
       category: BAND_1,
-      date_of_acceptance: juneDate
+      completion_or_last_visit: juneDate
     }];
 
     var expected = {
@@ -130,7 +130,7 @@ describe('Fp17FurtherTreatment', function() {
     editing.fp17_treatment_category.treatment_category = BAND_3;
     step.further_treatment_information = [{
       category: PRESCRIPTION_ONLY,
-      date_of_acceptance: juneDate
+      completion_or_last_visit: juneDate
     }];
     expect(Fp17FurtherTreatment(editing, step)).toBe(undefined);
   });

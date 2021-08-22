@@ -161,7 +161,7 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
         self.assertEqual(
             result, [{
                 "category": models.Fp17TreatmentCategory.BAND_1,
-                "date_of_acceptance": self.date_1
+                "completion_or_last_visit": self.date_2
             }]
         )
 
@@ -237,7 +237,7 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
             result["further_treatment_information"],
             [{
                 "category": models.Fp17TreatmentCategory.BAND_1,
-                "date_of_acceptance": '04/10/2019'
+                "completion_or_last_visit": '05/10/2019'
             }]
         )
         self.assertEqual(
