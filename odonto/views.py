@@ -68,7 +68,7 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
         performer_to_period_to_count = defaultdict(lambda: defaultdict(int))
         for unsubmitted_episode in unsubmitted:
             provider = unsubmitted_episode.fp17dentalcareprovider_set.all()[0]
-            performer = provider.performer
+            performer = provider.performer or ""
             sign_off = unsubmitted_episode.category.get_sign_off_date()
             if sign_off < six_weeks_ago:
                 performer_to_period_to_count[performer]['less_than_6_weeks'] += 1
