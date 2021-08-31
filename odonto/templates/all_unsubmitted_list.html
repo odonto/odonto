@@ -18,9 +18,11 @@
             {% endif %}
           </td>
           <td>
-            {{ episode.fp17dentalcareprovider_set.get.performer }}
-            {% if episode.fp17dentalcareprovider_set.get.provider_location_number %}
-            ({{ episode.fp17dentalcareprovider_set.get.provider_location_number }})
+            {% if episode.fp17dentalcareprovider_set.all.0.performer %}
+            {{ episode.fp17dentalcareprovider_set.all.0.performer }}
+            {% if episode.fp17dentalcareprovider_set.all.0.provider_location_number %}
+            ({{ episode.fp17dentalcareprovider_set.all.0.provider_location_number }})
+            {% endif %}
             {% endif %}
           </td>
           <td>

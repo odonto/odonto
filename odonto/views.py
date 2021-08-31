@@ -52,6 +52,7 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
     def get_fp17s(self):
         qs = Episode.objects.all()
         result = episode_categories.get_unsubmitted_compass_episodes(qs)
+        result = result.prefetch_related('fp17dentalcareprovider_set')
         return sorted(
             result,
             key=lambda x: x.category.get_sign_off_date() or datetime.date.min
