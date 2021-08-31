@@ -28,6 +28,11 @@ def odonto_roles(request):
     return default
 
 
+def all_unsubmitted_count():
+    qs = Episode.objects.all()
+    return episode_categories.get_unsubmitted_compass_episodes(qs).count()
+
+
 def episode_counts(request):
     if not request.user.is_authenticated:
         return {}
@@ -41,9 +46,13 @@ def episode_counts(request):
     open_episodes = for_user.exclude(
         id__in=unsubmitted.values_list("id", flat=True)
     )
+
     return {
         "episode_counts": {
             "open": open_episodes.count(),
-            "unsubmitted": unsubmitted.count()
+            "unsubmitted": unsubmitted.count(),
+            # we return the method so its lazily evaluated if the user
+            # has the right permissions
+            "all_unsubmitted": all_unsubmitted_count
         }
     }
