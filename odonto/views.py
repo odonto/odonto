@@ -50,10 +50,6 @@ class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
     template_name = "unsubmitted_list.html"
 
     def get_fp17s(self):
-        qs = Episode.objects.all()
-        qs = episode_categories.get_episodes_for_user(
-            qs, self.request.user
-        )
         return episode_categories.get_unsubmitted_compass_episodes_for_user(
             self.request.user
         )
