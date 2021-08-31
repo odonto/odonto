@@ -46,6 +46,14 @@ class OpenFP17s(TemplateView):
         return qs.exclude(id__in=unsubmitted_ids)
 
 
+class AllUnsubmitted(LoginRequiredMixin, TemplateView):
+    template_name = "all_unsubmitted_list.html"
+
+    def get_fp17s(self):
+        qs = Episode.objects.all()
+        return episode_categories.get_unsubmitted_compass_episodes(qs)
+
+
 class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
     template_name = "unsubmitted_list.html"
 

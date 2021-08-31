@@ -1,0 +1,44 @@
+{% extends "opal.html" %}
+
+{% block odonto_viewport %}
+  <div class="content-offset">
+    <h2>All unsubmitted FP17s and FP17Os</h2>
+    <table class="table table-striped">
+      {% for episode in view.get_fp17s %}
+        <tr>
+          <td>
+            <a href="/#/patient/{{ episode.patient.pk }}/">
+              {{ episode.patient.demographics.name }}
+            </a>
+          </td>
+          <td>{{ episode.category_name }}</td>
+          <td>
+            {% if episode.fp17treatmentcategory_set.get.treatment_category %}
+              {{ episode.fp17treatmentcategory_set.get.treatment_category }}
+            {% endif %}
+          </td>
+          <td>
+            {{ episode.fp17dentalcareprovider_set.get.performer }}
+            {% if episode.fp17dentalcareprovider_set.get.provider_location_number %}
+            ({{ episode.fp17dentalcareprovider_set.get.provider_location_number }})
+            {% endif %}
+          </td>
+          <td>
+            {{ episode.category.get_sign_off_date }}
+          </td>
+          <td>
+            <a class="btn btn-small btn-default" href="{{ episode.patient.get_absolute_url }}">
+              Patient
+            </a>
+          </td>
+          <td>
+            <a href="{{ episode.category.get_edit_link }}" class="btn btn-small btn-primary">
+              Edit &nbsp;
+            </a>
+          </td>
+        </tr>
+
+{% endfor %}
+    </table>
+  </div>
+{% endblock %}
