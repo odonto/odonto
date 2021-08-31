@@ -366,6 +366,11 @@ class CovidTriageEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
             category_name=cls.display_name
         ).filter(stage="Open")
 
+    def get_sign_off_date(self):
+        dt = self.episode.covidtriage_set.all()[0].datetime_of_contact
+        if dt:
+            return dt.date()
+
 
 def get_unsubmitted_compass_episodes(qs):
     unsubmitted_fp17s = FP17Episode.get_unsubmitted(qs)
