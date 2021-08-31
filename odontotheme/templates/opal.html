@@ -32,7 +32,7 @@
                 </a>
               </li>
             {% endif %}
-            {% if roles.dental_administrator %}
+            {% if roles.dental_administrator or request.user.is_superuser %}
             <li {% if request.resolver_match.url_name == "odonto-all-unsubmitted" %}class="active"{% endif %}>
               <a href="{% url 'odonto-all-unsubmitted' %}">
                 All unsubmitted <span class="badge">{{ episode_counts.all_unsubmitted }}</span>
