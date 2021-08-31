@@ -2,9 +2,58 @@
 
 {% block odonto_viewport %}
   <div class="content-offset">
+    <h2>Unsubmitted by user</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            Performer
+          </th>
+          <th class="text-center">
+            < 6 weeks
+          </th>
+          <th class="text-center">
+            6 weeks to 2 months
+          </th>
+          <th class="text-center">
+            > 2 month
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for performer, values in performer_to_period_to_count.items %}
+        <tr>
+          <td>
+            {{ performer }}
+          </td>
+          <td class="text-center">
+            {% if not values.less_than_6_weeks %}
+            0
+            {% endif %}
+            {{ values.less_than_6_weeks }}
+          </td>
+          <td class="text-center">
+            {% if not values.less_than_2_months %}
+            0
+            {% endif %}
+            {{ values.less_than_2_months }}
+          </td>
+          <td class="text-center">
+            {% if not values.more_than_2_months %}
+            0
+            {% endif %}
+            {{ values.more_than_2_months }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+
     <h2>All unsubmitted FP17s and FP17Os</h2>
     <table class="table table-striped">
-      {% for episode in view.get_fp17s %}
+      {% for episode in unsubmitted %}
         <tr>
           <td>
             <a href="/#/patient/{{ episode.patient.pk }}/">

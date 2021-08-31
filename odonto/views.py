@@ -4,6 +4,7 @@ Odonto views
 import datetime
 import json
 import csv
+import dateutil.relativedelta
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import get_object_or_404
@@ -49,7 +50,7 @@ class OpenFP17s(TemplateView):
 class AllUnsubmitted(LoginRequiredMixin, TemplateView):
     template_name = "all_unsubmitted_list.html"
 
-    def get_fp17s(self):
+    def get_unsubmitted(self):
         qs = Episode.objects.all()
         result = episode_categories.get_unsubmitted_compass_episodes(qs)
         result = result.prefetch_related('fp17dentalcareprovider_set')
@@ -57,6 +58,37 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
             result,
             key=lambda x: x.category.get_sign_off_date() or datetime.date.min
         )
+
+    def unsubmitted_by_user_and_range(self, unsubmitted):
+        today = datetime.date.today()
+        six_weeks_ago = today - datetime.timedelta(42)
+        two_months_ago = today - dateutil.relativedelta.relativedelta(
+            months=2
+        )
+        performer_to_period_to_count = defaultdict(lambda: defaultdict(int))
+        for unsubmitted_episode in unsubmitted:
+            provider = unsubmitted_episode.fp17dentalcareprovider_set.all()[0]
+            performer = provider.performer
+            sign_off = unsubmitted_episode.category.get_sign_off_date()
+            if sign_off < six_weeks_ago:
+                performer_to_period_to_count[performer]['less_than_6_weeks'] += 1
+            elif sign_off >= six_weeks_ago and sign_off <= two_months_ago:
+                performer_to_period_to_count[performer]['less_than_2_months'] += 1
+            else:
+                performer_to_period_to_count[performer]['more_than_2_months'] += 1
+        return {
+            k: dict(v) for k, v in sorted(
+                performer_to_period_to_count.items(), key=lambda x: x[0]
+            )
+        }
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["unsubmitted"] = self.get_unsubmitted()
+        ctx["performer_to_period_to_count"] = self.unsubmitted_by_user_and_range(
+            ctx["unsubmitted"]
+        )
+        return ctx
 
 
 class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
