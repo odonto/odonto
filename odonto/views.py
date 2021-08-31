@@ -51,7 +51,11 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
 
     def get_fp17s(self):
         qs = Episode.objects.all()
-        return episode_categories.get_unsubmitted_compass_episodes(qs)
+        result = episode_categories.get_unsubmitted_compass_episodes(qs)
+        return sorted(
+            result,
+            key=lambda x: x.category.get_sign_off_date() or datetime.date.min
+        )
 
 
 class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
