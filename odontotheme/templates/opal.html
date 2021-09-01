@@ -16,7 +16,7 @@
             </li>
           </ul>
 
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right clearfix">
             <li ng-class="{active: $location.absUrl().indexOf('add_patient') != -1}">
               {% link_to "Register patient" pathways.AddPatientPathway %}
             </li>
@@ -33,8 +33,6 @@
               </li>
             {% endif %}
           </ul>
-
-
           <div id="logout">
             <ul class="app-info">
               {% if request.user.profile.can_extract %}

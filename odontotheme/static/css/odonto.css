@@ -408,11 +408,6 @@ h5 {
   padding: 5px;
 }
 
-#logout {
-  position: fixed;
-  bottom: 0px;
-}
-
 .patient-detail-heading {
   margin-top: 110px;
 }
@@ -639,7 +634,7 @@ h5 {
   }
 }
 
-#side-nav ul.app-info {
+ul.app-info {
   padding-top: 160px;
   padding-bottom: 30px;
 }
@@ -650,8 +645,24 @@ h5 {
 }
 
 #side-nav {
+  overflow: scroll;
   background-color: #487CBC;
   position: fixed;
+}
+
+#side-nav #logout {
+  position: fixed;
+  bottom: 0px;
+}
+
+@media (max-height: 650px) {
+  #side-nav #logout {
+    position: static;
+    margin-top: 100%;
+  }
+  #side-nav #logout ul.app-info {
+    padding-top: 12px;
+  }
 }
 
 #side-nav .navbar-nav {

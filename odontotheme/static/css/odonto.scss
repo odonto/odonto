@@ -230,10 +230,6 @@ h5{
     padding: 5px;
 }
 
-#logout {
-    position: fixed;
-    bottom: 0px;
-}
 
 .patient-detail-heading {
     margin-top: 110px;
@@ -448,7 +444,9 @@ h5{
     display: none;
   }
 }
-#side-nav ul.app-info {
+
+
+ul.app-info {
   padding-top: 160px;
   padding-bottom: 30px;
 }
@@ -458,8 +456,24 @@ h5{
 }
 
 #side-nav {
+    overflow: scroll;
     background-color: $odonto_blue;
     position: fixed;
+
+    #logout {
+        position: fixed;
+        bottom: 0px;
+
+        @media(max-height: 650px){
+            position: static;
+            margin-top: 100%;
+
+            ul.app-info{
+                padding-top: 12px;
+            }
+
+        }
+    }
 
     .navbar-nav{
         width: 100%;
