@@ -27,19 +27,19 @@
             {{ performer }}
           </td>
           <td class="text-center">
-            {% if not values.less_than_6_weeks %}
+            {% if values.less_than_6_weeks == None %}
             0
             {% endif %}
             {{ values.less_than_6_weeks }}
           </td>
           <td class="text-center">
-            {% if not values.less_than_2_months %}
+            {% if values.less_than_2_months == None %}
             0
             {% endif %}
             {{ values.less_than_2_months }}
           </td>
           <td class="text-center">
-            {% if not values.more_than_2_months %}
+            {% if values.more_than_2_months == None %}
             0
             {% endif %}
             {{ values.more_than_2_months }}

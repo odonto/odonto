@@ -65,6 +65,9 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
         two_months_ago = today - dateutil.relativedelta.relativedelta(
             months=2
         )
+        less_than_6_weeks_total = 0
+        less_than_2_months_total = 0
+        more_than_2_months_total = 0
         performer_to_period_to_count = defaultdict(lambda: defaultdict(int))
         for unsubmitted_episode in unsubmitted:
             provider = unsubmitted_episode.fp17dentalcareprovider_set.all()[0]
@@ -72,15 +75,24 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
             sign_off = unsubmitted_episode.category.get_sign_off_date()
             if sign_off < six_weeks_ago:
                 performer_to_period_to_count[performer]['less_than_6_weeks'] += 1
+                less_than_6_weeks_total += 1
             elif sign_off >= six_weeks_ago and sign_off <= two_months_ago:
                 performer_to_period_to_count[performer]['less_than_2_months'] += 1
+                less_than_2_months_total += 1
             else:
                 performer_to_period_to_count[performer]['more_than_2_months'] += 1
-        return {
+                more_than_2_months_total += 1
+        result = {
             k: dict(v) for k, v in sorted(
                 performer_to_period_to_count.items(), key=lambda x: x[0]
             )
         }
+        result["Totals"] = {
+            'less_than_6_weeks': less_than_6_weeks_total,
+            'less_than_2_months': less_than_2_months_total,
+            'more_than_2_months': more_than_2_months_total,
+        }
+        return result
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
