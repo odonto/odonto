@@ -39,6 +39,6 @@ angular.module('opal.controllers').controller(
   $timeout(function(){
     scope.form.$setSubmitted();
     validate();
-    $rootScope.showSummary = $rootScope.isFormValid || $rootScope.episodeSubmitted;
+    $rootScope.showSummary = $rootScope.isFormValid && $rootScope.episodeSubmitted;
   });
 });
