@@ -24,6 +24,7 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType,
+    Fp17ORegulation11,
     Fp17OPhoneNumberRequired,
     Fp17OEmailRequired,
     Fp17OCommissionerApproval
@@ -49,6 +50,7 @@ angular.module('opal.controllers').controller(
     Fp17ODateOfCompletion,
     Fp17OAged18InFullTimeEducation,
     Fp17OCompletionType,
+    Fp17ORegulation11,
     // Fp17OPhoneNumberRequired, # enable when ALWAYS_DECLINE_EMAIL_PHONE
     // Fp17OEmailRequired, # is turned off.
     Fp17OCommissionerApproval
