@@ -378,6 +378,32 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
             ]
         )
 
+    def test_other_assessments(self):
+        appliance_fitted = models.OrthodonticAssessment.ASSESS_AND_APPLIANCE_FITTED
+        self.other_episode.orthodonticassessment_set.update(
+            date_of_assessment=self.date_1,
+            assessment=appliance_fitted
+        )
+        self.other_episode.category_name = episode_categories.FP17OEpisode.display_name
+        self.other_episode.stage = episode_categories.FP17OEpisode.SUBMITTED
+        self.other_episode.save()
+        other_episode_2 = self.patient.episode_set.create(
+            category_name=episode_categories.FP17OEpisode.display_name,
+            stage=episode_categories.FP17OEpisode.SUBMITTED
+        )
+        other_episode_2.orthodontictreatment_set.update(
+            date_of_completion=self.date_2,
+            completion_type=models.OrthodonticTreatment.TREATMENT_COMPLETED
+        )
+        result = self.client.get(self.url)
+        self.assertEqual(
+            result.json()['steps'][-1]["other_assessments"],
+            [
+                {"date": '04/10/2019', "assessment": appliance_fitted},
+                {"date": '05/10/2019', "assessment": None},
+            ]
+        )
+
     def test_episode_submitted(self):
         self.episode.submission_set.create(
             state="SUCCESS"

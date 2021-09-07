@@ -381,6 +381,33 @@ class SubmitFP17OPathway(OdontoPagePathway):
                 })
         return result
 
+    def other_assessments(self, patient, episode):
+        """
+        The patient cannot have an FP17O with 'assessment and appliance fitted'
+        then a subsequent FP17O with an assessment, e.g. assessment and review.
+
+        If there is an FP17O with a completion type in between that's ok.
+
+        So we send over the dates and the assessments and let the front end
+        make sure that the claim before is not an 'assessment and appliance fitted'
+        """
+        episodes = patient.episode_set.filter(
+            category_name=FP17OEpisode.display_name
+        ).exclude(
+            id=episode.id
+        ).filter(
+            stage=FP17OEpisode.SUBMITTED
+        ).prefetch_related(
+            'orthodonticassessment_set'
+        )
+        result = []
+        for ep in episodes:
+            result.append({
+                "date": ep.category.get_sign_off_date(),
+                "assessment": ep.orthodonticassessment_set.all()[0].assessment
+            })
+        return result
+
     def to_dict(self, *args, **kwargs):
         patient = kwargs.get('patient')
         episode = kwargs.get('episode')
@@ -394,6 +421,9 @@ class SubmitFP17OPathway(OdontoPagePathway):
         overlapping_dates = self.get_overlapping_dates(patient, episode)
         to_dicted["steps"][check_index]["overlapping_dates"] = overlapping_dates
         to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        to_dicted["steps"][check_index]["other_assessments"] = self.other_assessments(
+            patient, episode
+        )
         return to_dicted
 
     @transaction.atomic

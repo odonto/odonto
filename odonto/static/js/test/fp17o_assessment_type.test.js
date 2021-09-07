@@ -1,8 +1,9 @@
 describe('Fp17OAssessmentType', function() {
   "use strict";
   var Fp17OAssessmentType;
-  var editing;
+  var editing, step;
 
+  beforeEach(module('opal.filters'));
   beforeEach(module('opal.services'));
 
   beforeEach(function(){
@@ -19,6 +20,9 @@ describe('Fp17OAssessmentType', function() {
         },
         orthodontic_data_set: {}
       };
+      step = {
+        other_assessments: []
+      }
   });
 
   describe('assessment is required if there is a date of referral', function(){
@@ -29,7 +33,7 @@ describe('Fp17OAssessmentType', function() {
           "assessment": "An assessment type is required when there is a date of referral"
         }
       }
-      expect(Fp17OAssessmentType(editing)).toEqual(expected);
+      expect(Fp17OAssessmentType(editing, step)).toEqual(expected);
     });
 
     it('should error if there is a date of referral but assessment is null', function(){
@@ -40,17 +44,17 @@ describe('Fp17OAssessmentType', function() {
           "assessment": "An assessment type is required when there is a date of referral"
         }
       }
-      expect(Fp17OAssessmentType(editing)).toEqual(expected);
+      expect(Fp17OAssessmentType(editing, step)).toEqual(expected);
     });
 
     it('should not error if there is no date of referral', function(){
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
-  
+
     it('should not error if there is a date of referral and an assessment', function(){
       editing.orthodontic_assessment.date_of_referral = new Date();
       editing.orthodontic_assessment.assessment = "Assessment & Review"
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
   });
 
@@ -67,29 +71,29 @@ describe('Fp17OAssessmentType', function() {
         },
       }
       editing.orthodontic_treatment.completion_type = "";
-      expect(Fp17OAssessmentType(editing)).toEqual(expected);
+      expect(Fp17OAssessmentType(editing, step)).toEqual(expected);
     });
 
     it('should not error if there is an assessment', function(){
       editing.orthodontic_assessment.assessment = "Assessment & Review";
       editing.orthodontic_treatment.completion_type = "";
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
 
     it('it should not error if there is a completion type', function(){
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
 
     it('should not error if there is a repair', function(){
       editing.orthodontic_treatment.completion_type = "";
       editing.orthodontic_treatment.repair = true;
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
 
     it('should not error if there is a regulation', function(){
       editing.orthodontic_treatment.completion_type = "";
       editing.orthodontic_treatment.replacement = true;
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
   });
 
@@ -97,7 +101,7 @@ describe('Fp17OAssessmentType', function() {
     it('should error if assessment is not assess and appliance fitted but treatment type is proposed', function(){
       editing.orthodontic_data_set.treatment_type = "Proposed"
       editing.orthodontic_assessment.assessment = "Assessment & Review";
-      expect(Fp17OAssessmentType(editing)).toEqual({
+      expect(Fp17OAssessmentType(editing, step)).toEqual({
         orthodontic_assessment: {
           assessment: "Treatment type 'Proposed' requires an assessment of 'Assess & appliance fitted'"
         }
@@ -107,13 +111,84 @@ describe('Fp17OAssessmentType', function() {
     it('should not error if assessment type is assess and appliance fitted and treatment is proposed', function(){
       editing.orthodontic_data_set.treatment_type = "Proposed"
       editing.orthodontic_assessment.assessment = "Assess & appliance fitted";
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     })
 
     it('should not error if assessment is not proposed', function(){
       editing.orthodontic_data_set.treatment_type = undefined;
       editing.orthodontic_assessment.assessment = "Assessment & Review";
-      expect(Fp17OAssessmentType(editing)).toBe(undefined);
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
+  });
+
+
+  describe('after an assessment and appliance fitted, the next fp17o for the patient cannot be another assessment', function(){
+    it('should error if there is a previous claim and it is an assessment', function(){
+      step.other_assessments = [{
+        date: '20/08/2021',
+        assessment: 'Assess & appliance fitted'
+      }];
+      editing.orthodontic_treatment.completion_type = '';
+      editing.orthodontic_assessment.date_of_referral = new Date();
+      editing.orthodontic_assessment.date_of_assessment = new Date();
+      editing.orthodontic_assessment.assessment = 'Assess & appliance fitted';
+      var error = {
+        orthodontic_assessment: {
+          assessment: "This cannot have an assessment type as the patient's previous FP17O was 'Assess & appliance fitted'"
+        }
+      }
+      expect(Fp17OAssessmentType(editing, step)).toEqual(error);
+    });
+
+    it('should not error if it is not an assessment', function(){
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
+    it('should not error if there are no previous submitted claims', function(){
+      editing.orthodontic_treatment.completion_type = '';
+      editing.orthodontic_assessment.date_of_referral = new Date();
+      editing.orthodontic_assessment.date_of_assessment = new Date();
+      editing.orthodontic_assessment.assessment = 'Assess & appliance fitted'
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
+    it('should not error if there is a previous assessment but there is another claim between', function(){
+      step.other_assessments = [
+        {
+          date: '20/08/2021',
+          assessment: 'Assess & appliance fitted'
+        },
+        {
+          date: '21/08/2021',
+          assessment: null
+        }
+      ];
+      editing.orthodontic_treatment.completion_type = '';
+      editing.orthodontic_assessment.date_of_referral = new Date();
+      editing.orthodontic_assessment.date_of_assessment = new Date();
+      editing.orthodontic_assessment.assessment = 'Assess & appliance fitted';
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
+    it('should not error if there is an assessment but its in the future', function(){
+      var today = new Date();
+      var future = new Date();
+      future.setFullYear(today.getFullYear() + 1);
+      step.other_assessments = [{
+        date: future,
+        assessment: 'Assess & appliance fitted'
+      }];
+      editing.orthodontic_treatment.completion_type = '';
+      editing.orthodontic_assessment.date_of_referral = today;
+      editing.orthodontic_assessment.date_of_assessment = today;
+      editing.orthodontic_assessment.assessment = 'Assess & appliance fitted';
+      var error = {
+        orthodontic_assessment: {
+          assessment: "This cannot have an assessment type as the patient's previous FP17O was 'Assess & appliance fitted'"
+        }
+      }
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
   });
 });
