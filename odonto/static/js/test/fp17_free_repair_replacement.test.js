@@ -24,7 +24,7 @@ describe('Fp17FreeRepaireReplacement', function() {
 		editing.fp17_clinical_data_set.referral_for_advanced_mandatory_services_band = 1;
 		var err = {
 			fp17_other_dental_services: {
-				free_repair_or_replacement: "A free repair is not a allowed with a referral for AMS"
+				free_repair_or_replacement: "A free repair is not allowed with a referral for AMS"
 			}
 		};
 		expect(Fp17FreeRepaireReplacement(editing)).toEqual(err);
