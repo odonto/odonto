@@ -4,6 +4,7 @@ Odonto views
 import datetime
 import json
 import csv
+import dateutil.relativedelta
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import get_object_or_404
@@ -44,6 +45,66 @@ class OpenFP17s(TemplateView):
         unsubmitted = episode_categories.get_unsubmitted_compass_episodes(qs)
         unsubmitted_ids = unsubmitted.values_list("id", flat=True)
         return qs.exclude(id__in=unsubmitted_ids)
+
+
+class AllUnsubmitted(LoginRequiredMixin, TemplateView):
+    template_name = "all_unsubmitted_list.html"
+
+    def get_unsubmitted(self):
+        qs = Episode.objects.all()
+        result = episode_categories.get_unsubmitted_compass_episodes(qs)
+        result = result.prefetch_related('fp17dentalcareprovider_set')
+        return sorted(
+            result,
+            key=lambda x: x.category.get_sign_off_date() or datetime.date.min
+        )
+
+    def unsubmitted_by_user_and_range(self, unsubmitted):
+        today = datetime.date.today()
+        six_weeks_ago = today - datetime.timedelta(42)
+        two_months_ago = today - dateutil.relativedelta.relativedelta(
+            months=2
+        )
+        less_than_6_weeks_total = 0
+        less_than_2_months_total = 0
+        more_than_2_months_total = 0
+        performer_to_period_to_count = defaultdict(lambda: defaultdict(int))
+        for unsubmitted_episode in unsubmitted:
+            provider = unsubmitted_episode.fp17dentalcareprovider_set.all()[0]
+            performer = provider.performer or ""
+            sign_off = unsubmitted_episode.category.get_sign_off_date()
+            if sign_off < six_weeks_ago:
+                performer_to_period_to_count[performer]['less_than_6_weeks'] += 1
+                less_than_6_weeks_total += 1
+            elif sign_off >= six_weeks_ago and sign_off <= two_months_ago:
+                performer_to_period_to_count[performer]['less_than_2_months'] += 1
+                less_than_2_months_total += 1
+            else:
+                performer_to_period_to_count[performer]['more_than_2_months'] += 1
+                more_than_2_months_total += 1
+
+        result = {
+            "Totals": {
+                'less_than_6_weeks': less_than_6_weeks_total,
+                'less_than_2_months': less_than_2_months_total,
+                'more_than_2_months': more_than_2_months_total,
+            }
+        }
+        sorted_by_performer_name = sorted(
+            performer_to_period_to_count.items(), key=lambda x: x[0]
+        )
+        for name, results in sorted_by_performer_name:
+            result[name] = dict(results)
+        return result
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["six_weeks_ago"] = datetime.date.today() - datetime.timedelta(42)
+        ctx["unsubmitted"] = self.get_unsubmitted()
+        ctx["performer_to_period_to_count"] = self.unsubmitted_by_user_and_range(
+            ctx["unsubmitted"]
+        )
+        return ctx
 
 
 class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):

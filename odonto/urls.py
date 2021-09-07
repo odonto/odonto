@@ -14,7 +14,9 @@ urlpatterns = [
     url('^unsubmitted-fp17s',
         views.UnsubmittedFP17s.as_view(),
         name='odonto-unsubmitted-fp17s'),
-
+    url('^all-unsubmitted',
+        views.AllUnsubmitted.as_view(),
+        name='odonto-all-unsubmitted'),
     url('^open-fp17s',
         views.OpenFP17s.as_view(),
         name='odonto-open-fp17s'),

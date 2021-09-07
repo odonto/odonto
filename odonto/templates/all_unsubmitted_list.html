@@ -1,0 +1,113 @@
+{% extends "opal.html" %}
+
+{% block odonto_viewport %}
+  <div class="content-offset">
+    <h2>All unsubmitted FP17s and FP17Os</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            Performer
+          </th>
+          <th class="text-center">
+            < 6 weeks
+          </th>
+          <th class="text-center">
+            6 weeks to 2 months
+          </th>
+          <th class="text-center">
+            > 2 month
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for performer, values in performer_to_period_to_count.items %}
+        <tr>
+          <td>
+            {{ performer }}
+          </td>
+          <td class="text-center">
+            {% if values.less_than_6_weeks == None %}
+            0
+            {% endif %}
+            {{ values.less_than_6_weeks }}
+          </td>
+          <td class="text-center">
+            {% if values.less_than_2_months == None %}
+            0
+            {% endif %}
+            {{ values.less_than_2_months }}
+          </td>
+          <td class="text-center">
+            {% if values.more_than_2_months == None %}
+            0
+            {% endif %}
+            {{ values.more_than_2_months }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <table class="table table-striped content-offset">
+      <thead>
+        <tr>
+          <th>
+            Name
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Band
+          </th>
+          <th>
+            Performer
+          </th>
+          <th>
+            Date
+          </th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for episode in unsubmitted %}
+        <tr>
+          <td>
+            <a href="/#/patient/{{ episode.patient.pk }}/">
+              {{ episode.patient.demographics.name }}
+            </a>
+          </td>
+          <td>{{ episode.category_name }}</td>
+          <td>
+            {% if episode.fp17treatmentcategory_set.get.treatment_category %}
+              {{ episode.fp17treatmentcategory_set.get.treatment_category }}
+            {% endif %}
+          </td>
+          <td>
+            {% if episode.fp17dentalcareprovider_set.all.0.performer %}
+            {{ episode.fp17dentalcareprovider_set.all.0.performer }}
+            {% if episode.fp17dentalcareprovider_set.all.0.provider_location_number %}
+            ({{ episode.fp17dentalcareprovider_set.all.0.provider_location_number }})
+            {% endif %}
+            {% endif %}
+          </td>
+          <td {% if episode.category.get_sign_off_date < six_weeks_ago %}class="text-danger"{% endif %}>
+            {{ episode.category.get_sign_off_date }}
+          </td>
+          <td>
+            <a class="btn btn-small btn-default" href="{{ episode.patient.get_absolute_url }}">
+              Patient
+            </a>
+          </td>
+          <td>
+            <a href="{{ episode.category.get_edit_link }}" class="btn btn-small btn-primary">
+              Edit &nbsp;
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

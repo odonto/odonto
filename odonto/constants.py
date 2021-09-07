@@ -22,3 +22,5 @@ LOCATION_NUMBERS = {
     WALLSEND: 10111,
     WARD_15_WGH: 10054,
 }
+
+DENTAL_ADMINISTRATOR = "dental_administrator"
