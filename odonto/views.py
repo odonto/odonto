@@ -82,16 +82,19 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
             else:
                 performer_to_period_to_count[performer]['more_than_2_months'] += 1
                 more_than_2_months_total += 1
+
         result = {
-            k: dict(v) for k, v in sorted(
-                performer_to_period_to_count.items(), key=lambda x: x[0]
-            )
+            "Totals": {
+                'less_than_6_weeks': less_than_6_weeks_total,
+                'less_than_2_months': less_than_2_months_total,
+                'more_than_2_months': more_than_2_months_total,
+            }
         }
-        result["Totals"] = {
-            'less_than_6_weeks': less_than_6_weeks_total,
-            'less_than_2_months': less_than_2_months_total,
-            'more_than_2_months': more_than_2_months_total,
-        }
+        sorted_by_performer_name = sorted(
+            performer_to_period_to_count.items(), key=lambda x: x[0]
+        )
+        for name, results in sorted_by_performer_name:
+            result[name] = dict(results)
         return result
 
     def get_context_data(self, **kwargs):
