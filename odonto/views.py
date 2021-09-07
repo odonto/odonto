@@ -99,6 +99,7 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx["six_weeks_ago"] = datetime.date.today() - datetime.timedelta(42)
         ctx["unsubmitted"] = self.get_unsubmitted()
         ctx["performer_to_period_to_count"] = self.unsubmitted_by_user_and_range(
             ctx["unsubmitted"]

@@ -92,7 +92,7 @@
             {% endif %}
             {% endif %}
           </td>
-          <td>
+          <td {% if episode.category.get_sign_off_date < six_weeks_ago %}class="text-danger"{% endif %}>
             {{ episode.category.get_sign_off_date }}
           </td>
           <td>
