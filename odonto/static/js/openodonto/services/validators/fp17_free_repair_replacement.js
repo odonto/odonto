@@ -19,7 +19,7 @@ angular.module('opal.services').factory('Fp17FreeRepaireReplacement', function()
 			if(editing.fp17_clinical_data_set.referral_for_advanced_mandatory_services_band){
 				return {
 					fp17_other_dental_services: {
-						free_repair_or_replacement: "A free repair is not a allowed with a referral for AMS"
+						free_repair_or_replacement: "A free repair is not allowed with a referral for AMS"
 					}
 				}
 			}
