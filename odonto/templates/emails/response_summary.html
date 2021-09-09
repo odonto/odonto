@@ -2,6 +2,30 @@
 <html>
 <body>
   <h1>{{ title }}</h1>
+  {% if rejections %}
+  <table style="margin-bottom: 50px;" width="280" cellpadding="0" cellspacing="0" border="0">
+    {% for rejection in rejections %}
+    <tr>
+      <td>
+        {{ rejection.category.get_sign_off_date }}
+      </td>
+      <td>
+        {{ rejection.category.display_name }}
+      </td>
+      <td>
+        {{ rejection.category.submission.rejection }}
+      </td>
+      <td>
+        {{ rejection.category.get_submit_link }}
+      </td>
+      <td>
+        {{ rejection.fp17dentalcareprovider_set.all.0.get_performer_obj.user.email }}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+
   {% for section_title, section in summary.items %}
   <h3>{{ section_title }}</h3>
   <table table width="280" cellpadding="0" cellspacing="0" border="0">

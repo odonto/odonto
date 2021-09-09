@@ -49,10 +49,7 @@ def clean_episodes_being_investigated():
 
 
 class Command(BaseCommand):
-    def filter_by_tax_year(self, episode_category):
-        episodes = Episode.objects.filter(
-            category_name=episode_category.display_name
-        )
+    def filter_by_tax_year(self, episodes):
         start_of_tax_year = get_current_financial_year()[0]
         episode_ids = set()
         for episode in episodes:
@@ -60,6 +57,28 @@ class Command(BaseCommand):
             if sign_off_date and sign_off_date >= start_of_tax_year:
                 episode_ids.add(episode.id)
         return episodes.filter(id__in=episode_ids)
+
+    def get_rejections(self):
+        """
+        Returns this tax years rejected episodes
+        """
+        rejected_fp17s = self.filter_by_tax_year(
+            FP17Episode.get_rejected_episodes()
+        ).prefetch_related(
+            'submission_set',
+            'fp17dentalcareprovider_set'
+        )
+        rejected_fp17os = self.filter_by_tax_year(
+            FP17OEpisode.get_rejected_episodes()
+        ).prefetch_related(
+            'submission_set',
+            'fp17dentalcareprovider_set'
+        )
+        rejected = list(rejected_fp17s) + list(rejected_fp17os)
+        rejected = sorted(
+            rejected, key=lambda x: x.category.get_sign_off_date()
+        )
+        return rejected
 
     def send_email(self, response):
         """
@@ -78,6 +97,7 @@ class Command(BaseCommand):
 
         fp17_category = FP17Episode.display_name
         fp17o_category = FP17OEpisode.display_name
+        context["rejections"] = self.get_rejections()
         context["summary"]["Latest response"] = {
             "FP17 Success": successful.filter(episode__category_name=fp17_category).count(),
             "FP17 Rejected": rejected.filter(episode__category_name=fp17_category).count(),
@@ -86,7 +106,7 @@ class Command(BaseCommand):
         }
 
         context["summary"]["FP17 current tax year"] = FP17Episode.summary(
-            self.filter_by_tax_year(FP17Episode)
+            self.filter_by_tax_year(FP17Episode.get_submitted_episodes())
         )
         error_states = [AbstractOdontoCategory.NEEDS_INVESTIGATION, Submission.REJECTED_BY_COMPASS]
         warning = False
@@ -99,7 +119,7 @@ class Command(BaseCommand):
                 warning = True
 
         context["summary"]["FP17O current tax year"] = FP17OEpisode.summary(
-            self.filter_by_tax_year(FP17OEpisode)
+            self.filter_by_tax_year(FP17OEpisode.get_submitted_episodes())
         )
         for error_state in error_states:
             if error_state in context["summary"]["FP17O current tax year"]:
