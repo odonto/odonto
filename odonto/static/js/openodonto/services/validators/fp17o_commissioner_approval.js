@@ -22,5 +22,17 @@ angular.module('opal.services').factory('Fp17OCommissionerApproval', function(to
         }
       }
     }
+
+    /*
+    * This is undocumented but if you click both patient under 18 and
+    * commissioner approval compass will raise an error.
+    */
+    if(editing.fp17_exemptions.patient_under_18 && commissionerApproval){
+      return {
+        fp17_exemptions: {
+          commissioner_approval: "Commissioner approval is not allowed for patients under 18"
+        }
+      }
+    }
   }
 });
