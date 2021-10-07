@@ -444,6 +444,10 @@ class Stats(LoginRequiredMixin, TemplateView):
         }
 
 
+class PatientCharges(LoginRequiredMixin, TemplateView):
+    template_name = 'patient_charges.html'
+
+
 class DeleteEpisode(LoginRequiredMixin, RedirectView):
     """
     This view is for when an episode has been opened in error

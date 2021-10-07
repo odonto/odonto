@@ -21,6 +21,11 @@ urlpatterns = [
         views.OpenFP17s.as_view(),
         name='odonto-open-fp17s'),
     url('^stats', views.Stats.as_view(), name="odonto-stats"),
+    path(
+        '^patient-charges/<int:year>/<month>/',
+        views.PatientCharges.as_view(),
+        name="patient-charges"
+    ),
     url('^case-mix-csv', views.CaseMix.as_view(), name="case-mix-csv"),
     path(
         'delete-episode/<int:patient_pk>/<int:episode_pk>/',
