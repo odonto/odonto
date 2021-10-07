@@ -8,7 +8,9 @@ import dateutil.relativedelta
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, DetailView, View, RedirectView
+from django.views.generic import (
+    TemplateView, DetailView, View, RedirectView, ListView
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseBadRequest
 from odonto import episode_categories
@@ -444,8 +446,66 @@ class Stats(LoginRequiredMixin, TemplateView):
         }
 
 
-class PatientCharges(LoginRequiredMixin, TemplateView):
+class PatientCharges(LoginRequiredMixin, ListView):
     template_name = 'patient_charges.html'
+
+    def get_date_range(self):
+        """
+        Returns the daterange covered by the page as a
+        tuple where the last date is exclusive
+        """
+        month_num = datetime.datetime.strptime(self.kwargs["month"], '%b').month
+        month_start = datetime.date(
+            self.kwargs["year"],
+            month_num,
+            1
+        )
+        if month_num == 12:
+            month_end = datetime.date(
+                self.kwargs["year"] + 1,
+                1,
+                1
+            )
+        else:
+            month_end = datetime.date(
+                self.kwargs["year"],
+                month_num + 1,
+                1
+            )
+        return month_start, month_end
+
+    def get_queryset(self):
+        qs = Episode.objects.exclude(
+            fp17exemptions__patient_charge_collected=None
+        ).exclude(
+            fp17exemptions__patient_charge_collected=0
+        )
+        fp17_qs = episode_categories.FP17Episode.get_submitted_episodes(qs)
+        fp17_qs = fp17_qs.prefetch_related('fp17incompletetreatment_set')
+        fp17o_qs = episode_categories.FP17OEpisode.get_submitted_episodes(qs)
+        fp17o_qs = fp17o_qs.prefetch_related(
+            'orthodonticassessment_set', 'orthodontictreatment_set'
+        )
+        submitted = list(fp17_qs) + list(fp17o_qs)
+        episodes = []
+        start_date, end_date = self.get_date_range()
+
+        for sub in submitted:
+            sign_off_date = episodes.category.get_sign_off_date()
+            if not sign_off_date:
+                continue
+            if sign_off_date >= start_date:
+                if sign_off_date < end_date:
+                    episodes.append(sub)
+
+        return Episode.objects.filter(id__in=[i.id for i in episodes]).prefetch_related(
+            'fp17incompletetreatment_set',
+            'orthodonticassessment_set',
+            'orthodontictreatment_set',
+            'fp17dentalcareprovider_set',
+            'fp17exemptions_set',
+            'patient__demographics'
+        )
 
 
 class DeleteEpisode(LoginRequiredMixin, RedirectView):
