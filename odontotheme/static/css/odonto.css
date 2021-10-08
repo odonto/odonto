@@ -883,4 +883,9 @@ table.patient-list {
 .datetime-picker .btn.btn-default {
   margin-left: 4px;
 }
+
+.view-switcher .btn-group .btn {
+  padding: 10px 20px;
+  margin-top: 4px;
+}
 /*# sourceMappingURL=odonto.css.map */

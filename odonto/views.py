@@ -449,6 +449,66 @@ class Stats(LoginRequiredMixin, TemplateView):
 class PatientCharges(LoginRequiredMixin, ListView):
     template_name = 'patient_charges.html'
 
+    def next_month(self, some_dt):
+        current_month = some_dt.month
+        current_year = some_dt.year
+        if current_month + 1 > 12:
+            return datetime.date(
+                current_year+1, 1, 1
+            )
+        return datetime.date(
+            current_year, current_month+1, 1
+        )
+
+    def prev_month(self, some_dt):
+        current_month = some_dt.month
+        current_year = some_dt.year
+        if current_month - 1 == 0:
+            return datetime.date(
+                current_year-1, 12, 1
+            )
+        return datetime.date(
+            current_year, current_month-1, 1
+        )
+
+    def menu_dates(self):
+        """
+        By default returns the latest four months.
+
+        If the user is not looking at a page in the
+        most recent four months then it shows
+        the date the user is looking at plus
+        the next 3 months
+        """
+        today = datetime.date.today()
+        current_menu_dates = [
+            datetime.date(
+                today.year, today.month, 1
+            )
+        ]
+        for _ in range(3):
+            current_menu_dates.insert(
+                0, self.prev_month(current_menu_dates[0])
+            )
+
+        our_date = self.get_date_range()[0]
+        if our_date in current_menu_dates:
+            return current_menu_dates
+
+        return [
+            self.prev_month(our_date),
+            our_date,
+            self.next_month(our_date),
+        ]
+
+    def previous_menu_month(self):
+        return self.prev_month(self.menu_dates()[0])
+
+    def next_menu_month(self):
+        next_month = self.next_month(self.menu_dates()[-1])
+        if next_month < datetime.date.today():
+            return next_month
+
     def get_date_range(self):
         """
         Returns the daterange covered by the page as a
@@ -460,18 +520,7 @@ class PatientCharges(LoginRequiredMixin, ListView):
             month_num,
             1
         )
-        if month_num == 12:
-            month_end = datetime.date(
-                self.kwargs["year"] + 1,
-                1,
-                1
-            )
-        else:
-            month_end = datetime.date(
-                self.kwargs["year"],
-                month_num + 1,
-                1
-            )
+        month_end = self.next_month(month_start)
         return month_start, month_end
 
     def get_queryset(self):
@@ -506,6 +555,12 @@ class PatientCharges(LoginRequiredMixin, ListView):
             'fp17exemptions_set',
             'patient__demographics'
         )
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["previous_menu_month"] = self.previous_menu_month()
+        ctx["next_menu_month"] = self.next_menu_month()
+        return ctx
 
 
 class DeleteEpisode(LoginRequiredMixin, RedirectView):
