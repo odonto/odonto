@@ -1,4 +1,4 @@
-angular.module('opal.services').factory('Fp17OCompletionType', function(){
+angular.module('opal.services').factory('Fp17OCompletionType', function(toMomentFilter){
   /*
   * We have an exception of the nature
   * "Conflicting assessment and/or completion items on an EDI FP17O claim"
@@ -61,24 +61,45 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(){
 
     var dateAndCompletionType = []
     _.each(step.overlapping_dates, function(od){
-      var lastDate = _.last(od.dates);
-      if(lastDate < dateOfCompletion){
-        dateAndCompletionType.push({
-          date: lastDate,
-          completion_type: od.completion_type
-        });
-      }
+      var lastDate = toMomentFilter(_.last(od.dates));
+      dateAndCompletionType.push({
+        date: lastDate,
+        completion_type: od.completion_type
+      });
     });
 
     if(!dateAndCompletionType.length){
       return
     }
-    dateAndCompletionType = _.sortBy(dateAndCompletionType, function(x){ return x.date });
-    var mostRecent = _.last(dateAndCompletionType);
-    if(mostRecent.completion_type){
+
+    var previous = null;
+    var next = null;
+    var ourCompletionDate = toMomentFilter(treatment.date_of_completion);
+
+    dateAndCompletionType = _.sortBy(dateAndCompletionType, function(x){ return x.date.toDate() });
+
+    _.each(dateAndCompletionType, function(dc){
+      if(dc.date.isSame(ourCompletionDate, "d") || dc.date.isBefore(ourCompletionDate, "d")){
+        previous = dc;
+      }
+      if(!next && (ourCompletionDate.isSame(dc.date) || ourCompletionDate.isBefore(dc.date))){
+        next = dc;
+      }
+    })
+
+    if(previous && previous.completion_type){
       return {
         "orthodontic_treatment": {
           "completion_type": 'The previous claim was also a completion'
+        }
+      }
+    }
+    console.error('hello');
+    console.error(next);
+    if(next && next.completion_type){
+      return {
+        "orthodontic_treatment": {
+          "completion_type": 'The next claim for this patient is also a completion'
         }
       }
     }

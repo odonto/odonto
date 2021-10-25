@@ -3,6 +3,7 @@ describe('Fp17OCompletionType', function() {
   var editing, step;
   var Fp17OCompletionType;
 
+  beforeEach(module('opal.filters'));
   beforeEach(module('opal.services'));
 
   beforeEach(function(){
@@ -34,19 +35,19 @@ describe('Fp17OCompletionType', function() {
       }
       expect(Fp17OCompletionType(editing, step)).toEqual(expected);
     });
-  
+
     it('should not error if there is a completion type and an assessment of something other than Assess & refuse treatment', function(){
       editing.orthodontic_assessment.assessment = "Assessment & review";
       editing.orthodontic_treatment.completion_type = "Treatment completed";
       expect(Fp17OCompletionType(editing, step)).toBe(undefined);
     });
-  
+
     it('should not error if there is a completion type and no assessment type', function(){
       editing.orthodontic_assessment.assessment = null;
       editing.orthodontic_treatment.completion_type = "Treatment completed";
       expect(Fp17OCompletionType(editing, step)).toBe(undefined);
     });
-  
+
     it('shold not error if there is no completion type and an assessment of Assess & refuse treatment', function(){
       editing.orthodontic_assessment.assessment = "Assessment & review";
       editing.orthodontic_treatment.completion_type = "";
@@ -79,7 +80,7 @@ describe('Fp17OCompletionType', function() {
     });
   });
 
-  describe('The recent episode cannot also be treatment completed', function(){
+  describe('Sequential episodes cannot also be treatment completed', function(){
     var day1 = moment().subtract(3, "days");
     var day2 = moment().subtract(2, "days");
     var day3 = moment().subtract(1, "days");
@@ -90,7 +91,7 @@ describe('Fp17OCompletionType', function() {
       expect(Fp17OCompletionType(editing, step)).toBe(undefined);
     });
 
-    it('should error if the most recent episode has a completion type', function(){
+    it('should error if the previous episode has a completion type', function(){
       step.overlapping_dates = [{
         "dates": [day1, day2],
         "completion_type": "Treatment completed"
@@ -103,16 +104,6 @@ describe('Fp17OCompletionType', function() {
         }
       }
       expect(Fp17OCompletionType(editing, step)).toEqual(expected);
-    });
-
-    it('should ignore episodes with a greater completion date', function(){
-      step.overlapping_dates = [{
-        "dates": [day2],
-        "completion_type": "Treatment completed"
-      }]
-      editing.orthodontic_treatment.completion_type = "Treatment completed";
-      editing.orthodontic_treatment.date_of_completion = day1;
-      expect(Fp17OCompletionType(editing, step)).toBe(undefined);
     });
 
     it('should not error if the most recent episode does not have a completion type', function(){
@@ -130,5 +121,38 @@ describe('Fp17OCompletionType', function() {
       editing.orthodontic_treatment.date_of_completion = day3;
       expect(Fp17OCompletionType(editing, step)).toBe(undefined);;
     });
+
+    it('should error if the next episode has a completion type', function(){
+      step.overlapping_dates = [{
+        "dates": [day2, day3],
+        "completion_type": "Treatment completed"
+      }]
+      editing.orthodontic_treatment.completion_type = "Treatment completed";
+      editing.orthodontic_treatment.date_of_completion = day1;
+      var expected = {
+        orthodontic_treatment: {
+          completion_type: 'The next claim for this patient is also a completion'
+        }
+      }
+      expect(Fp17OCompletionType(editing, step)).toEqual(expected);
+    });
+
+    it('should not error if the subsequent episode does not have a completion type', function(){
+      step.overlapping_dates = [
+        {
+          "dates": [day2],
+          "completion_type": undefined
+        },
+        {
+          "dates": [day3],
+          "completion_type": "Treatment completed"
+        }
+      ]
+      editing.orthodontic_treatment.completion_type = "Treatment completed";
+      editing.orthodontic_treatment.date_of_completion = day1;
+      expect(Fp17OCompletionType(editing, step)).toBe(undefined);;
+    });
+
+
   });
 });
