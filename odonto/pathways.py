@@ -363,6 +363,9 @@ class SubmitFP17OPathway(OdontoPagePathway):
         other_episodes = patient.episode_set.exclude(
             id=episode.id, category_name=FP17OEpisode.display_name
         )
+        other_episodes = other_episodes.filter(
+            stage=FP17OEpisode.SUBMITTED
+        )
         for episode in other_episodes:
             assessment = episode.orthodonticassessment_set.all()[0]
             completion = episode.orthodontictreatment_set.all()[0]
