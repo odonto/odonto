@@ -553,11 +553,22 @@ class PatientCharges(LoginRequiredMixin, ListView):
             'orthodontictreatment_set',
             'fp17dentalcareprovider_set',
             'fp17exemptions_set',
-            'patient__demographics_set'
+            'patient__demographics_set',
+            'submission_set'
         )
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
+        ctx["object_list"] = sorted(
+            list(ctx["object_list"]),
+            key=lambda x: x.category.get_sign_off_date(),
+            reverse=True
+        )
+        ctx["total"] = sum([
+            i.fp17exemptions_set.all()[0].patient_charge_collected for i in ctx[
+                "object_list"
+            ]
+        ])
         ctx["previous_menu_month"] = self.previous_menu_month()
         ctx["next_menu_month"] = self.next_menu_month()
         return ctx
