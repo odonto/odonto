@@ -71,7 +71,7 @@
       </td>
       <td>
         {% if row.category.submission %}
-          {% if row.category.submission.state == row.category.SUCCESS or row.category.submission.state == row.category.MANUALLY_PROCESSED %}
+          {% if row.category.submission.state == row.category.submission.SUCCESS or row.category.submission.state == row.category.submission.MANUALLY_PROCESSED %}
             <i class="fa fa-check"></i>
           {% else %}
           <i class="fa fa-times"></i>
