@@ -540,7 +540,7 @@ class PatientCharges(LoginRequiredMixin, ListView):
         start_date, end_date = self.get_date_range()
 
         for sub in submitted:
-            sign_off_date = episodes.category.get_sign_off_date()
+            sign_off_date = sub.category.get_sign_off_date()
             if not sign_off_date:
                 continue
             if sign_off_date >= start_date:
@@ -553,7 +553,7 @@ class PatientCharges(LoginRequiredMixin, ListView):
             'orthodontictreatment_set',
             'fp17dentalcareprovider_set',
             'fp17exemptions_set',
-            'patient__demographics'
+            'patient__demographics_set'
         )
 
     def get_context_data(self, *args, **kwargs):
