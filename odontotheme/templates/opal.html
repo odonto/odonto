@@ -11,7 +11,6 @@
         <div class="col-md-2" id="side-nav">
           <ul class="app-info">
             <li>
-              <i class="fa fa-user cambridge_blue"></i>&nbsp;
               {{ user.first_name }} {{ user.last_name }}
             </li>
           </ul>
@@ -45,7 +44,6 @@
               {% if request.user.profile.can_extract %}
               <li {% if request.resolver_match.url_name == "odonto-stats" %}class="active"{% endif %}>
                 <a href="{% url 'odonto-stats' %}">
-                  <i class="fa fa-bar-chart"></i>
                   Stats
                 </a>
               </li>
@@ -53,7 +51,6 @@
               {% if request.user.profile.can_extract %}
                 <li>
                   <a href="/search/#/extract" title="Query">
-                    <i class="fa fa-download"></i>
                     Query
                   </a>
                 </li>
@@ -61,7 +58,6 @@
               {% if request.user.is_superuser %}
                 <li>
                   <a href="/admin/" title="Admin">
-                    <i class="fa fa-cogs"></i>
                     Admin
                   </a>
                 </li>
@@ -69,7 +65,6 @@
 
               <li>
                 <a href="{% url 'logout' %}" title="Log out">
-                  <i class="fa fa-sign-out"></i>
                   Log out
                 </a>
               </li>
