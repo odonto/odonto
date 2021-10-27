@@ -94,8 +94,6 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(toMoment
         }
       }
     }
-    console.error('hello');
-    console.error(next);
     if(next && next.completion_type){
       return {
         "orthodontic_treatment": {
