@@ -5,6 +5,8 @@
 {% block navbar %}{% include 'navbar.html' %}{% endblock %}
 
 {% block content %}
+{% now "Y" as current_year %}
+{% now "b" as current_month %}
   <div class="outer-container">
     <div class="container-fluid">
       <div class="row">
@@ -35,6 +37,11 @@
             <li {% if request.resolver_match.url_name == "odonto-all-unsubmitted" %}class="active"{% endif %}>
               <a href="{% url 'odonto-all-unsubmitted' %}">
                 All unsubmitted <span class="badge hidden-md hidden-lg">{{ episode_counts.all_unsubmitted }}</span>
+              </a>
+            </li>
+            <li {% if request.resolver_match.url_name == "patient-charges" %}class="active"{% endif %}>
+              <a href="{% url 'patient-charges' year=current_year month=current_month %}">
+                Patient charges
               </a>
             </li>
             {% endif %}

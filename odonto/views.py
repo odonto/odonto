@@ -8,7 +8,9 @@ import dateutil.relativedelta
 from collections import defaultdict, OrderedDict
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, DetailView, View, RedirectView
+from django.views.generic import (
+    TemplateView, DetailView, View, RedirectView, ListView
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseBadRequest
 from odonto import episode_categories
@@ -442,6 +444,134 @@ class Stats(LoginRequiredMixin, TemplateView):
             },
             "performer_info": performer_info
         }
+
+
+class PatientCharges(LoginRequiredMixin, ListView):
+    template_name = 'patient_charges.html'
+
+    def next_month(self, some_dt):
+        current_month = some_dt.month
+        current_year = some_dt.year
+        if current_month + 1 > 12:
+            return datetime.date(
+                current_year+1, 1, 1
+            )
+        return datetime.date(
+            current_year, current_month+1, 1
+        )
+
+    def prev_month(self, some_dt):
+        current_month = some_dt.month
+        current_year = some_dt.year
+        if current_month - 1 == 0:
+            return datetime.date(
+                current_year-1, 12, 1
+            )
+        return datetime.date(
+            current_year, current_month-1, 1
+        )
+
+    def menu_dates(self):
+        """
+        By default returns the latest four months.
+
+        If the user is not looking at a page in the
+        most recent four months then it shows
+        the date the user is looking at plus
+        the next 3 months
+        """
+        today = datetime.date.today()
+        current_menu_dates = [
+            datetime.date(
+                today.year, today.month, 1
+            )
+        ]
+        for _ in range(3):
+            current_menu_dates.insert(
+                0, self.prev_month(current_menu_dates[0])
+            )
+
+        our_date = self.get_date_range()[0]
+        if our_date in current_menu_dates:
+            return current_menu_dates
+
+        return [
+            self.prev_month(our_date),
+            our_date,
+            self.next_month(our_date),
+        ]
+
+    def previous_menu_month(self):
+        return self.prev_month(self.menu_dates()[0])
+
+    def next_menu_month(self):
+        next_month = self.next_month(self.menu_dates()[-1])
+        if next_month < datetime.date.today():
+            return next_month
+
+    def get_date_range(self):
+        """
+        Returns the daterange covered by the page as a
+        tuple where the last date is exclusive
+        """
+        month_num = datetime.datetime.strptime(self.kwargs["month"], '%b').month
+        month_start = datetime.date(
+            self.kwargs["year"],
+            month_num,
+            1
+        )
+        month_end = self.next_month(month_start)
+        return month_start, month_end
+
+    def get_queryset(self):
+        qs = Episode.objects.exclude(
+            fp17exemptions__patient_charge_collected=None
+        ).exclude(
+            fp17exemptions__patient_charge_collected=0
+        )
+        fp17_qs = episode_categories.FP17Episode.get_submitted_episodes(qs)
+        fp17_qs = fp17_qs.prefetch_related('fp17incompletetreatment_set')
+        fp17o_qs = episode_categories.FP17OEpisode.get_submitted_episodes(qs)
+        fp17o_qs = fp17o_qs.prefetch_related(
+            'orthodonticassessment_set', 'orthodontictreatment_set'
+        )
+        submitted = list(fp17_qs) + list(fp17o_qs)
+        episodes = []
+        start_date, end_date = self.get_date_range()
+
+        for sub in submitted:
+            sign_off_date = sub.category.get_sign_off_date()
+            if not sign_off_date:
+                continue
+            if sign_off_date >= start_date:
+                if sign_off_date < end_date:
+                    episodes.append(sub)
+
+        return Episode.objects.filter(id__in=[i.id for i in episodes]).prefetch_related(
+            'fp17incompletetreatment_set',
+            'orthodonticassessment_set',
+            'orthodontictreatment_set',
+            'fp17dentalcareprovider_set',
+            'fp17exemptions_set',
+            'patient__demographics_set',
+            'submission_set'
+        )
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
+        ctx["object_list"] = sorted(
+            list(ctx["object_list"]),
+            key=lambda x: x.category.get_sign_off_date(),
+            reverse=True
+        )
+        ctx["total"] = sum([
+            i.fp17exemptions_set.all()[0].patient_charge_collected for i in ctx[
+                "object_list"
+            ]
+        ])
+        ctx["previous_menu_month"] = self.previous_menu_month()
+        ctx["next_menu_month"] = self.next_menu_month()
+        return ctx
 
 
 class DeleteEpisode(LoginRequiredMixin, RedirectView):

@@ -1,0 +1,90 @@
+{% extends "opal.html" %}
+
+{% block odonto_viewport %}
+{% now "Y" as current_year %}
+{% now "b" as current_month %}
+<div class="content-offset">
+<div class="row">
+  <div class="col-md-6">
+    <h1>Patient charges for {{ view.get_date_range.0 | date:'F' }} {{ view.kwargs.year }} (£{{ total }})</h1>
+  </div>
+  <div class="col-md-6 text-right view-switcher">
+    <div class="btn-group">
+      {% with menu_month=previous_menu_month|date:'b' %}
+      <a class="btn btn-default" href="{% url 'patient-charges' year=previous_menu_month.year month=menu_month %}">
+        &laquo;
+      </a>
+      {% endwith %}
+      {% for some_dt in view.menu_dates %}
+      {% with menu_month=some_dt|date:'b' %}
+      <a class="btn {% if view.kwargs.month == menu_month and view.kwargs.year == some_dt.year %}btn-primary {% else %} btn-default {% endif %}" href="{% url 'patient-charges' year=some_dt.year month=menu_month %}">
+        {{ menu_month.title }}
+        {% if not some_dt.year == current_year %}
+        {{ some_dt.year }}
+        {% endif %}
+      </a>
+      {% endwith %}
+      {% endfor %}
+      {% if next_menu_month %}
+      {% with menu_month=next_menu_month|date:'b' %}
+      <a class="btn btn-default" href="{% url 'patient-charges' year=next_menu_month.year month=menu_month %}">
+        &raquo;
+      </a>
+      {% endwith %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Completed</th>
+      <th>Clinic</th>
+      <th>Charge</th>
+      <th>Submitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in object_list %}
+    <tr>
+      <td>
+        <a href='{{ row.category.get_summary_link }}'>
+        {{ row.patient.demographics_set.all.0.name }}
+        {% if row.patient.demographics_set.all.0.date_of_birth %}
+          ({{ row.patient.demographics_set.all.0.date_of_birth }})
+        {% endif %}
+        </a>
+      </td>
+      <td>
+        {{ row.category_name }}
+      </td>
+      <td>
+        {{ row.category.get_sign_off_date }}
+      </td>
+      <td>
+        {{ row.fp17dentalcareprovider_set.all.0.provider_location_number }}
+      </td>
+      <td>
+        £{{ row.fp17exemptions_set.all.0.patient_charge_collected }}
+      </td>
+      <td>
+        {% if row.category.submission %}
+          {% if row.category.submission.state == row.category.submission.SUCCESS or row.category.submission.state == row.category.submission.MANUALLY_PROCESSED %}
+            <i class="fa fa-check"></i>
+          {% else %}
+          <i class="fa fa-times"></i>
+          {% endif %}
+        {% else %}
+          <i class="fa fa-times"></i>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+
+</table>
+</div>
+{% endblock %}
