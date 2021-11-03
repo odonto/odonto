@@ -275,7 +275,9 @@ class Fp17_O_PathwayTestCase(OpalTestCase):
 class SubmitFP17OPathwayTestCase(OpalTestCase):
     def setUp(self):
         self.patient, self.episode = self.new_patient_and_episode_please()
-        self.other_episode = self.patient.create_episode()
+        self.other_episode = self.patient.create_episode(
+            stage=episode_categories.FP17OEpisode.SUBMITTED
+        )
         self.date_1 = datetime.date(2019, 10, 4)
         self.date_2 = datetime.date(2019, 10, 5)
         self.date_3 = datetime.date(2019, 10, 6)
@@ -362,7 +364,9 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
         )
 
     def test_with_multiple_other_episodes(self):
-        other_episode_2 = self.patient.create_episode()
+        other_episode_2 = self.patient.create_episode(
+            stage=episode_categories.FP17OEpisode.SUBMITTED
+        )
         other_episode_2.orthodontictreatment_set.update(
             date_of_completion=self.date_1
         )
