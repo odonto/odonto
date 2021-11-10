@@ -17,6 +17,7 @@ def send_message(xml):
         request_kwargs = {
             "auth": HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
             "data": xml,
+            "verify": settings.SSH_CERTS
         }
         if hasattr(settings, "PROXY"):
             request_kwargs["proxies"] = settings.PROXY
@@ -44,7 +45,8 @@ def get_responses():
             f"Unable to get responses as the save dir {responses_dir} does not exist"
         )
     request_kwargs = {
-        "auth": HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD)
+        "auth": HTTPBasicAuth(settings.DPB_USERNAME, settings.DPB_PASSWORD),
+        "verify": settings.SSH_CERTS
     }
     if hasattr(settings, "PROXY"):
         request_kwargs["proxies"] = settings.PROXY
@@ -71,4 +73,3 @@ def get_responses():
     raise ValueError(
         f"Unable to get responses {response.status_code} {response.content}"
     )
-
