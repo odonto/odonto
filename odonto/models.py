@@ -341,6 +341,13 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
 
 class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     _is_singleton = True
+    HARD = "Hard"
+    SOFT = "Soft"
+    BOTH = "Both"
+
+    OCCLUSAL_APPLIANCE_OPTIONS = enum(
+        HARD, SOFT, BOTH
+    )
 
     scale_and_polish = fields.BooleanField(
         default=False,
@@ -445,9 +452,22 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     aerosol_generating_procedures = fields.IntegerField(
         blank=True, null=True
     )
+    custom_made_occlusal_appliance = fields.CharField(
+        blank=True,
+        null=True,
+        choices=OCCLUSAL_APPLIANCE_OPTIONS,
+        max_length=256,
+        verbose_name="Custom made occlusal appliance",
+    )
+    denture_additions_reline_rebase = fields.BooleanField(
+        default=False, verbose_name="Denture Additions/Reline/Rebase"
+    )
+    phased_treatment = fields.BooleanField(
+        default=False, verbose_name="Phased treatment"
+    )
 
     class Meta:
-        verbose_name="Clinical data set"
+        verbose_name = "Clinical data set"
 
 
 class Fp17OtherDentalServices(models.EpisodeSubrecord):

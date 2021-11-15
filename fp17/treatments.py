@@ -171,6 +171,19 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
 SCALE_AND_POLISH = Treatment(code=9301)
 FLUORIDE_VARNISH = Treatment(code=9302)
 
+CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE = Treatment(code=9376)
+CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE = Treatment(code=9377)
+DENTURE_ADDITIONS_RELINE_REBASE = Treatment(code=9353)
+PHASED_TREATMENT = Treatment(code=9375)
+
+
+class ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT(Treatment):
+    """
+    If present, the code must be accompanied by a quantity of 1-6 (number of sextants)
+    """
+    def __init__(self, sextants):
+        super().__init__(code=9325, instance_count=sextants)
+
 
 OTHER_TREATMENT = Treatment(code=9399)
 

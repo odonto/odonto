@@ -142,6 +142,8 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
             ("filled_teeth_permanent", t.FILLED_PERMANENT),
             ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
+            ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
+            ("phased_treatment", t.PHASED_TREATMENT),
         ]
     )
 
@@ -155,8 +157,19 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
         if date_of_acceptance and date_of_acceptance >= change_date:
             if self.model_instance.aerosol_generating_procedures:
                 treatments.append(
-                    t.AEROSOL_GENERATING_PROCEDURE(self.model_instance.aerosol_generating_procedures)
-            )
+                    t.AEROSOL_GENERATING_PROCEDURE(
+                        self.model_instance.aerosol_generating_procedures
+                    )
+                )
+
+        if self.model_instance.custom_made_occlusal_appliance in [
+            self.model_instance.HARD, self.model_instance.BOTH
+        ]:
+            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
+        if self.model_instance.custom_made_occlusal_appliance in [
+            self.model_instance.SOFT, self.model_instance.BOTH
+        ]:
+            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
         return treatments
 
 
