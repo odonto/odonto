@@ -21,7 +21,7 @@ def annotate(bcds1):
 
     # Treatments: "Filling 1"
     bcds1.treatments = [
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
+        treatments.PERMANENT_FILLINGS(1),
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
 
         # 'Band 4'
@@ -52,7 +52,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17clinicaldataset_set.update(
-        permanent_fillings_and_sealant_restorations=1
+        permanent_fillings=1
     )
 
     episode.fp17incompletetreatment_set.update(
@@ -60,4 +60,3 @@ def from_model(bcds1, patient, episode):
         completion_or_last_visit=datetime.date(2017, 4, 1)
     )
     translate_to_bdcs1(bcds1, episode)
-

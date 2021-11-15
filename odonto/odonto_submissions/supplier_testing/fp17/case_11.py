@@ -24,7 +24,7 @@ def annotate(bcds1):
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(3),
         treatments.RADIOGRAPHS(2),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(2),
+        treatments.PERMANENT_FILLINGS(2),
         treatments.EXTRACTION(6),
         treatments.REFERRAL_FOR_ADVANCED_MANDATORY_SERVICES(3),
         treatments.RECALL_INTERVAL(num_months=12),
@@ -56,7 +56,7 @@ def from_model(bcds1, patient, episode):
 
     episode.fp17clinicaldataset_set.update(
         radiographs_taken=2,
-        permanent_fillings_and_sealant_restorations=2,
+        permanent_fillings=2,
         extractions=6,
         referral_for_advanced_mandatory_services_band=3,
     )

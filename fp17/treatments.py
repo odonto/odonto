@@ -122,7 +122,7 @@ class ENDODONTIC_TREATMENT(Treatment):
         super().__init__(code=9305, instance_count=num_teeth)
 
 
-class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
+class PERMANENT_FILLINGS(Treatment):
     """
     The number of teeth (not the total number of individual restorations) that
     have been therapeutically treated by the placement of directly applied
@@ -131,9 +131,6 @@ class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
     Permanent fillings in amalgam, composite resin, synthetic resin, glass
     ionomer, compomers, silicate or silico-phosphate materials (includes any
     acid-etch or pin retention.
-
-    Sealant restorations involving the placement of composite resin, glass
-    ionomer or compomer material.
     """
 
     def __init__(self, num_fillings):

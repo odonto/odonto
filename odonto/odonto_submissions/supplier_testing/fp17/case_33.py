@@ -20,7 +20,7 @@ def annotate(bcds1):
     # Recall Interval (9172 18), Ethnic Origin 1, Best Practice Prevention"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(2),
+        treatments.PERMANENT_FILLINGS(2),
         treatments.SCALE_AND_POLISH,
         treatments.RADIOGRAPHS(2),
         treatments.EXAMINATION,
@@ -50,7 +50,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17clinicaldataset_set.update(
-        permanent_fillings_and_sealant_restorations=2,
+        permanent_fillings=2,
         scale_and_polish=True,
         radiographs_taken=2,
         examination=1,

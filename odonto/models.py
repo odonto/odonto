@@ -370,9 +370,9 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         blank=True, null=True,
         verbose_name="Endontic treatment"
     )
-    permanent_fillings_and_sealant_restorations = fields.IntegerField(
+    permanent_fillings = fields.IntegerField(
         blank=True, null=True,
-        verbose_name="Permanent fillings and sealant restorations"
+        verbose_name="Permanent fillings"
     )
     extractions = fields.IntegerField(blank=True, null=True)
     crowns_provided = fields.IntegerField(
