@@ -142,6 +142,11 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
             ("filled_teeth_permanent", t.FILLED_PERMANENT),
             ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
+            ("pre_formed_crowns", t.PREFORMED_CROWNS),
+            (
+                "advanced_perio_root_surface_debridement",
+                t.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT
+            ),
             ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
             ("phased_treatment", t.PHASED_TREATMENT),
         ]

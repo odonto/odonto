@@ -449,6 +449,14 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         blank=True, null=True,
         verbose_name="Filled teeth deciduous"
     )
+    pre_formed_crowns = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Pre-Formed Crowns"
+    )
+    advanced_perio_root_surface_debridement = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Advanced perio root surface debridement"
+    )
     aerosol_generating_procedures = fields.IntegerField(
         blank=True, null=True
     )

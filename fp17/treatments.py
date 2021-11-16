@@ -321,6 +321,16 @@ class LOWER_DENTURE_METAL(Treatment):
         super().__init__(code=9312, instance_count=num_teeth)
 
 
+class PREFORMED_CROWNS(Treatment):
+    """
+    If present, the code must be accompanied by a
+    quantity representing the number of teeth.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9338, instance_count=num_teeth)
+
+
 ETHNIC_ORIGIN_1_WHITE_BRITISH = Treatment(code=9025, instance_count=1)
 ETHNIC_ORIGIN_2_WHITE_IRISH = Treatment(code=9025, instance_count=2)
 ETHNIC_ORIGIN_3_WHITE_OTHER = Treatment(code=9025, instance_count=3)
