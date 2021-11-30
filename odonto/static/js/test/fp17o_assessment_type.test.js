@@ -97,6 +97,32 @@ describe('Fp17OAssessmentType', function() {
     });
   });
 
+  describe('there cannot be an assessment and a treatment type of completed', function(){
+    it('should error if there is an assessment and a treatment type of completed', function(){
+      editing.orthodontic_data_set.treatment_type = "Completed / Abandoned / Discontinued Treatment"
+      editing.orthodontic_assessment.assessment = "Assess & appliance fitted";
+      var err = "An assessment type cannot be combined with a treatment type of Completed / Abandoned / Discontinued Treatment"
+      var expected = {
+        "orthodontic_assessment": {
+          "assessment": err
+        }
+      }
+      expect(Fp17OAssessmentType(editing, step)).toEqual(expected);
+    });
+
+    it('should not error if there is no assessment type and a treatment type of completed', function(){
+      editing.orthodontic_data_set.treatment_type = "Completed / Abandoned / Discontinued Treatment"
+      editing.orthodontic_assessment.assessment = null;
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
+    it('should not error if there is an assessment type and a no treatment type', function(){
+      editing.orthodontic_data_set.treatment_type = null
+      editing.orthodontic_assessment.assessment = null;
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+  });
+
   describe('treatment type is proposed but assessment type is not assess and appliance', function(){
     it('should error if assessment is not assess and appliance fitted but treatment type is proposed', function(){
       editing.orthodontic_data_set.treatment_type = "Proposed"
@@ -120,7 +146,6 @@ describe('Fp17OAssessmentType', function() {
       expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
   });
-
 
   describe('after an assessment and appliance fitted, the next fp17o for the patient cannot be another assessment', function(){
     it('should error if there is a previous claim and it is an assessment', function(){
