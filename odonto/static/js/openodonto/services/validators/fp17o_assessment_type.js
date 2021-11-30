@@ -9,14 +9,17 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(toMoment
   * they cannot have a subsequent claim that is an assessment.
   * ie they require a completion claim in between.
   *
+  * There is an unwritten rule that a patient cannot have a
+  * a completion treatment type and an assessment.
   */
   return function(editing, step){
     "use strict";
     var assessment = editing.orthodontic_assessment;
     var treatment = editing.orthodontic_treatment;
     var treatmentType = editing.orthodontic_data_set.treatment_type;
-    var PROPOSED = "Proposed"
-    var ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted"
+    var PROPOSED = "Proposed";
+    var COMPLETED = "Completed / Abandoned / Discontinued Treatment";
+    var ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted";
 
     if(assessment.date_of_referral && !assessment.assessment){
       return {
@@ -38,6 +41,17 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(toMoment
         }
       }
     }
+    /*
+    * A claim with a Completed / Abandoned / Discontinued Treatment
+    * treatment type cannot also have an assessment type
+    */
+   if(assessment.assessment && treatmentType === COMPLETED){
+     return {
+      orthodontic_assessment: {
+        assessment: 'An assessment type cannot be combined with a treatment type of ' + COMPLETED
+      }
+     }
+   }
 
     /*
     * Proposed treatment "Must be accompanied by Assess/Appliance Fitted"
