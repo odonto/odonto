@@ -341,6 +341,12 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
 
 class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     _is_singleton = True
+    HARD = "Hard"
+    SOFT = "Soft"
+
+    OCCLUSAL_APPLIANCE_OPTIONS = enum(
+        HARD, SOFT
+    )
 
     scale_and_polish = fields.BooleanField(
         default=False,
@@ -363,9 +369,9 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         blank=True, null=True,
         verbose_name="Endontic treatment"
     )
-    permanent_fillings_and_sealant_restorations = fields.IntegerField(
+    permanent_fillings = fields.IntegerField(
         blank=True, null=True,
-        verbose_name="Permanent fillings and sealant restorations"
+        verbose_name="Permanent fillings"
     )
     extractions = fields.IntegerField(blank=True, null=True)
     crowns_provided = fields.IntegerField(
@@ -442,12 +448,33 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         blank=True, null=True,
         verbose_name="Filled teeth deciduous"
     )
+    pre_formed_crowns = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Pre-Formed Crowns"
+    )
+    advanced_perio_root_surface_debridement = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Advanced perio root surface debridement"
+    )
     aerosol_generating_procedures = fields.IntegerField(
         blank=True, null=True
     )
+    custom_made_occlusal_appliance = fields.CharField(
+        blank=True,
+        null=True,
+        choices=OCCLUSAL_APPLIANCE_OPTIONS,
+        max_length=256,
+        verbose_name="Custom made occlusal appliance",
+    )
+    denture_additions_reline_rebase = fields.BooleanField(
+        default=False, verbose_name="Denture Additions/Reline/Rebase"
+    )
+    phased_treatment = fields.BooleanField(
+        default=False, verbose_name="Phased treatment"
+    )
 
     class Meta:
-        verbose_name="Clinical data set"
+        verbose_name = "Clinical data set"
 
 
 class Fp17OtherDentalServices(models.EpisodeSubrecord):

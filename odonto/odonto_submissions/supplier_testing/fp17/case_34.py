@@ -18,7 +18,7 @@ def annotate(bcds1):
     # Treatments: "Fillings x 1, Examination (9317), Ethnic Origin 16"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
+        treatments.PERMANENT_FILLINGS(1),
         treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_ANY_OTHER_ETHNIC_GROUP,
     ]
@@ -42,7 +42,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17clinicaldataset_set.update(
-        permanent_fillings_and_sealant_restorations=1,
+        permanent_fillings=1,
         examination=True,
     )
 

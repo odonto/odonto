@@ -122,7 +122,7 @@ class ENDODONTIC_TREATMENT(Treatment):
         super().__init__(code=9305, instance_count=num_teeth)
 
 
-class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
+class PERMANENT_FILLINGS(Treatment):
     """
     The number of teeth (not the total number of individual restorations) that
     have been therapeutically treated by the placement of directly applied
@@ -131,9 +131,6 @@ class PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(Treatment):
     Permanent fillings in amalgam, composite resin, synthetic resin, glass
     ionomer, compomers, silicate or silico-phosphate materials (includes any
     acid-etch or pin retention.
-
-    Sealant restorations involving the placement of composite resin, glass
-    ionomer or compomer material.
     """
 
     def __init__(self, num_fillings):
@@ -170,6 +167,19 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
 
 SCALE_AND_POLISH = Treatment(code=9301)
 FLUORIDE_VARNISH = Treatment(code=9302)
+
+CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE = Treatment(code=9376)
+CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE = Treatment(code=9377)
+DENTURE_ADDITIONS_RELINE_REBASE = Treatment(code=9353)
+PHASED_TREATMENT = Treatment(code=9375)
+
+
+class ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT(Treatment):
+    """
+    If present, the code must be accompanied by a quantity of 1-6 (number of sextants)
+    """
+    def __init__(self, sextants):
+        super().__init__(code=9325, instance_count=sextants)
 
 
 OTHER_TREATMENT = Treatment(code=9399)
@@ -309,6 +319,16 @@ class LOWER_DENTURE_METAL(Treatment):
 
     def __init__(self, num_teeth):
         super().__init__(code=9312, instance_count=num_teeth)
+
+
+class PREFORMED_CROWNS(Treatment):
+    """
+    If present, the code must be accompanied by a
+    quantity representing the number of teeth.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9338, instance_count=num_teeth)
 
 
 ETHNIC_ORIGIN_1_WHITE_BRITISH = Treatment(code=9025, instance_count=1)

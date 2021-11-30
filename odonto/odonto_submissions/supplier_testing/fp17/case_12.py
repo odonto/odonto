@@ -25,7 +25,7 @@ def annotate(bcds1):
         treatments.EXAMINATION,
         treatments.SCALE_AND_POLISH,
         treatments.RADIOGRAPHS(1),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(3),
+        treatments.PERMANENT_FILLINGS(3),
         treatments.RECALL_INTERVAL(24),
         treatments.DECAYED_DECIDUOUS(4),
         treatments.ETHNIC_ORIGIN_12_BLACK_OR_BLACK_BRITISH_CARIBBEAN,
@@ -62,7 +62,7 @@ def from_model(bcds1, patient, episode):
         examination=True,
         scale_and_polish=True,
         radiographs_taken=1,
-        permanent_fillings_and_sealant_restorations=3,
+        permanent_fillings=3,
         decayed_teeth_deciduous=4
     )
 

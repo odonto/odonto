@@ -18,7 +18,7 @@ def annotate(bcds1):
     # Treatments: "Fluoride Varnish, Filling x 1, Ethnic Origin 14"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
+        treatments.PERMANENT_FILLINGS(1),
         treatments.ETHNIC_ORIGIN_14_OTHER_BLACK_BACKGROUND,
     ]
 
@@ -41,7 +41,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17clinicaldataset_set.update(
-        permanent_fillings_and_sealant_restorations=1,
+        permanent_fillings=1,
     )
 
     episode.fp17exemptions_set.update(

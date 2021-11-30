@@ -117,8 +117,8 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("radiographs_taken", t.RADIOGRAPHS),
             ("endodontic_treatment", t.ENDODONTIC_TREATMENT),
             (
-                "permanent_fillings_and_sealant_restorations",
-                t.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS,
+                "permanent_fillings",
+                t.PERMANENT_FILLINGS,
             ),
             ("extractions", t.EXTRACTION),
             ("crowns_provided", t.CROWN),
@@ -142,6 +142,13 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
             ("filled_teeth_permanent", t.FILLED_PERMANENT),
             ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
+            ("pre_formed_crowns", t.PREFORMED_CROWNS),
+            (
+                "advanced_perio_root_surface_debridement",
+                t.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT
+            ),
+            ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
+            ("phased_treatment", t.PHASED_TREATMENT),
         ]
     )
 
@@ -155,8 +162,15 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
         if date_of_acceptance and date_of_acceptance >= change_date:
             if self.model_instance.aerosol_generating_procedures:
                 treatments.append(
-                    t.AEROSOL_GENERATING_PROCEDURE(self.model_instance.aerosol_generating_procedures)
-            )
+                    t.AEROSOL_GENERATING_PROCEDURE(
+                        self.model_instance.aerosol_generating_procedures
+                    )
+                )
+
+        if self.model_instance.custom_made_occlusal_appliance == self.model_instance.HARD:
+            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
+        elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
+            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
         return treatments
 
 

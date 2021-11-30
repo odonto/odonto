@@ -67,11 +67,19 @@
   <div class="col-md-1 col-md-offset-1">
     {% teeth field="Fp17ClinicalDataSet.inlays" %}
   </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% number label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" min="1" max="3" %}
+  <div class="col-md-1 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.permanent_fillings" %}
+  </div>
+  <div class="col-md-1 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.pre_formed_crowns" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% number field="Fp17ClinicalDataSet.advanced_perio_root_surface_debridement" min="1" max="6" unit="sextant" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.permanent_fillings_and_sealant_restorations" %}
+    {% number label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" min="1" max="3" %}
   </div>
 </div>
 
@@ -93,5 +101,17 @@
   </div>
   <div class="col-md-1 col-md-offset-1">
     {% teeth field="Fp17ClinicalDataSet.missing_teeth_deciduous" max="12" %}
+  </div>
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% btn_radio field="Fp17ClinicalDataSet.custom_made_occlusal_appliance" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17ClinicalDataSet.denture_additions_reline_rebase" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17ClinicalDataSet.phased_treatment" %}
   </div>
 </div>
