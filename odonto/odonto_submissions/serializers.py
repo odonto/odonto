@@ -167,13 +167,9 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                     )
                 )
 
-        if self.model_instance.custom_made_occlusal_appliance in [
-            self.model_instance.HARD, self.model_instance.BOTH
-        ]:
+        if self.model_instance.custom_made_occlusal_appliance == self.model_instance.HARD:
             treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
-        if self.model_instance.custom_made_occlusal_appliance in [
-            self.model_instance.SOFT, self.model_instance.BOTH
-        ]:
+        elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
             treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
         return treatments
 

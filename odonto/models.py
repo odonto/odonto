@@ -343,10 +343,9 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     _is_singleton = True
     HARD = "Hard"
     SOFT = "Soft"
-    BOTH = "Both"
 
     OCCLUSAL_APPLIANCE_OPTIONS = enum(
-        HARD, SOFT, BOTH
+        HARD, SOFT
     )
 
     scale_and_polish = fields.BooleanField(

@@ -22,7 +22,6 @@ def annotate(bcds1):
         treatments.TREATMENT_CATEGORY(1),
         treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
-        treatments.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE,
         treatments.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE,
         treatments.PHASED_TREATMENT
     ]
@@ -47,7 +46,7 @@ def from_model(bcds1, patient, episode):
     episode.fp17clinicaldataset_set.update(
         examination=True,
         phased_treatment=True,
-        custom_made_occlusal_appliance=Fp17ClinicalDataSet.BOTH
+        custom_made_occlusal_appliance=Fp17ClinicalDataSet.SOFT
     )
 
     episode.fp17exemptions_set.update(
