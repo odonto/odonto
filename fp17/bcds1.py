@@ -261,9 +261,9 @@ class BCDS1(Message):
             #
             # The provider's unique contract number.
             'contract_number': {
-                'type': 'number',
-                'min': min_digits(10),
-                'max': max_digits(15),
+                'type': 'string',
+                'min': min_digits(11),
+                'max': max_digits(11),
                 'required': True,
             },
 
