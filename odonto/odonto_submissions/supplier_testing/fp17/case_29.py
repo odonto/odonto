@@ -16,7 +16,7 @@ def annotate(bcds1):
     # Treatments: "Fillings x 1, Ethnic Origin 11"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
+        treatments.PERMANENT_FILLINGS(1),
         treatments.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
 
         # "Free Repair Replacement" service
@@ -41,7 +41,7 @@ def from_model(bcds1, patient, episode):
         treatment_category="Band 2",
     )
     episode.fp17clinicaldataset_set.update(
-        permanent_fillings_and_sealant_restorations=1
+        permanent_fillings=1
     )
     episode.fp17otherdentalservices_set.update(
         free_repair_or_replacement=True

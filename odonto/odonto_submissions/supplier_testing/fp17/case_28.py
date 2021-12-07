@@ -18,7 +18,7 @@ def annotate(bcds1):
     # Treatments: "Fillings x 1, Recall Interval (9172 12), Ethnic Origin 11"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(2),
-        treatments.PERMANENT_FILLINGS_AND_SEALANT_RESTORATIONS(1),
+        treatments.PERMANENT_FILLINGS(1),
         treatments.RECALL_INTERVAL(12),
         treatments.ETHNIC_ORIGIN_11_OTHER_ASIAN_BACKGROUND,
     ]
@@ -48,7 +48,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17clinicaldataset_set.update(
-        permanent_fillings_and_sealant_restorations=1
+        permanent_fillings=1
     )
     episode.fp17incompletetreatment_set.update(
         date_of_acceptance=datetime.date(2017, 4, 1),
