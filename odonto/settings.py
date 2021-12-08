@@ -343,8 +343,9 @@ DPB_SITE_ID = "89651"
 SEND_MESSAGES = False
 LOCATION = 10108
 DESTINATION = "A0DPB"
-FP17_CONTRACT_NUMBER = 1946890001
-FP17O_CONTRACT_NUMBER = 1946890002
+# These used to be different but are now the same.
+FP17_CONTRACT_NUMBER = "102170/0000"
+FP17O_CONTRACT_NUMBER = "102170/0000"
 # DPB Credentials ------>
 
 # Requests does not use the server cert certificates so pass them in
