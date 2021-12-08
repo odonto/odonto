@@ -44,7 +44,6 @@ def has_changed(episode):
         latest_submission.transmission_id
     )
     old_xml = latest_submission.raw_xml
-    latest_submission.raw_xml
     old_inner_xml = ET.tostring(ET.fromstring(old_xml).getchildren()[0])
     new_inner_xml = ET.tostring(ET.fromstring(new_xml).getchildren()[0])
     if old_inner_xml == new_inner_xml:
