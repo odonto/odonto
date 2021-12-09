@@ -302,9 +302,20 @@ class Submission(models.Model):
             transmission=transmission
         )
 
-
     @classmethod
     def send(cls, episode, force=False):
+        """
+        Creates a new submission and sends it down stream.
+
+        By default this will not send the episode down if
+        it is the same as a previous submission.
+
+        Use the flag force=True if you want to send it down
+        even if the previous submission was the same.
+
+        It will never send down a submission if the
+        episodes current submission is sent
+        """
         latest_submission = episode.submission_set.order_by(
             "-created"
         ).first()
@@ -323,7 +334,7 @@ to compass for submission {} not sending"
             ))
 
         if latest_submission and not force:
-            if not has_changed(episode, latest_submission):
+            if not has_changed(episode):
                 logger.info(
                     " ".join([
                         f'Submission for episode {episode.id}:',
