@@ -22,3 +22,22 @@
     <b>[[ item.performer ]]</b>
   </div>
 </div>
+{% if pathway %}
+<div ng-show="editing.fp17_commissioning.flexible_commissioning_flag" class="row">
+  <div class="col-md-3">
+    Flexible commissioning flag:
+  </div>
+  <div class="col-md-9">
+    <b>[[ editing.fp17_commissioning.flexible_commissioning_flag ]]</b>
+  </div>
+</div>
+{% else %}
+<div ng-show="episode.fp17_commissioning[0].flexible_commissioning_flag" class="row">
+  <div class="col-md-3">
+    Flexible commissioning flag:
+  </div>
+  <div class="col-md-9">
+    <b>[[ episode.fp17_commissioning[0].flexible_commissioning_flag ]]</b>
+  </div>
+</div>
+{% endif %}
