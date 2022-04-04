@@ -192,6 +192,34 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
         verbose_name = "Performer name and clinic"
 
 
+class Fp17Commissioning(models.EpisodeSubrecord):
+    """
+    Commissioning is something that exists in the documentation
+    in the same section as the provider, however
+    it only exists for FP17s and not FP17Os
+    """
+    _is_singleton = True
+
+    # Note the order is important and used by the
+    # serializer
+    FLEXIBLE_FLAGS = enum(
+        "Securing Access for Urgent Care",
+        "Promoting Access to Routine Care",
+        "Providing Care of High Needs Groups",
+        "Starting Well",
+        "Enhanced Health in Care Homes",
+        "Collaboration in Local Care Networks"
+    )
+
+    flexible_commissioning_flag = fields.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        choices=FLEXIBLE_FLAGS,
+        verbose_name="Flexible commissioning flag"
+    )
+
+
 class Fp17IncompleteTreatment(models.EpisodeSubrecord):
     _is_singleton = True
 

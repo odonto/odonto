@@ -91,7 +91,9 @@ same name and DOB"
 FP17_STEPS = (
     pathway.Step(
         model=models.Fp17DentalCareProvider,
+        display_name="Performer name, clinic and commissioning",
         step_controller="CareProviderStepCtrl",
+        template="pathway/steps/performer_name_clinic_and_commissioning.html"
     ),
     pathway.Step(
         model=models.Demographics,
