@@ -15,8 +15,6 @@ def annotate(bcds1):
 
     bcds1.patient_charge_pence = 2060
 
-    # Treatments: "Examination (9317), Recall Interval (9172 9), Scale &
-    # Polish, Ethnic Origin 1"
     bcds1.treatments = [
         treatments.FLEXIBLE_COMMISSIONING_FLAG(3),
         treatments.TREATMENT_CATEGORY(1),
