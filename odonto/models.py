@@ -211,12 +211,12 @@ class Fp17Commissioning(models.EpisodeSubrecord):
         "Collaboration in Local Care Networks"
     )
 
-    flexible_commissioning_flag = fields.CharField(
+    flexible_commissioning = fields.CharField(
         max_length=255,
         blank=True,
         null=True,
         choices=FLEXIBLE_FLAGS,
-        verbose_name="Flexible commissioning flag"
+        verbose_name="Flexible commissioning"
     )
 
 

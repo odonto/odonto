@@ -67,12 +67,12 @@ class Fp17CommissioningSerializer(TreatmentSerializer):
     model = models.Fp17Commissioning
 
     def to_messages(self):
-        flexible_commissioning_flag = self.model_instance.flexible_commissioning_flag
-        if not flexible_commissioning_flag:
+        flexible_commissioning = self.model_instance.flexible_commissioning
+        if not flexible_commissioning:
             return []
         flags = models.Fp17Commissioning.FLEXIBLE_FLAGS
         flags = [i[0] for i in flags]
-        idx = flags.index(flexible_commissioning_flag)
+        idx = flags.index(flexible_commissioning)
         return [t.FLEXIBLE_COMMISSIONING_FLAG(idx + 1)]
 
 

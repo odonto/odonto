@@ -35,7 +35,7 @@ def from_model(bcds1, patient, episode):
     demographics.ethnicity = "White british"
     demographics.save()
     episode.fp17commissioning_set.update(
-        flexible_commissioning_flag="Providing Care of High Needs Groups"
+        flexible_commissioning="Providing Care of High Needs Groups"
     )
     episode.fp17treatmentcategory_set.update(
         treatment_category="Band 1",
