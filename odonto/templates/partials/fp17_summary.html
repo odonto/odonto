@@ -1,7 +1,7 @@
 {% load links %}
 {% load odonto_subrecords %}
 
-{% subrecord_row models.Fp17DentalCareProvider pathway=pathway %}
+{% subrecord_row models.Fp17DentalCareProvider pathway=pathway title="Performer name, clinic and commissioning" %}
 {% subrecord_row models.Fp17IncompleteTreatment pathway=pathway %}
 {% subrecord_row models.Fp17Exemptions pathway=pathway %}
 {% subrecord_row models.Fp17ClinicalDataSet pathway=pathway %}
@@ -10,4 +10,3 @@
 {% subrecord_row models.Fp17Recall pathway=pathway %}
 {% subrecord_row models.CovidStatus pathway=pathway %}
 {% subrecord_row models.CaseMix pathway=pathway %}
-

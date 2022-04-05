@@ -63,6 +63,19 @@ class TreatmentSerializer(object):
         return treatments
 
 
+class Fp17CommissioningSerializer(TreatmentSerializer):
+    model = models.Fp17Commissioning
+
+    def to_messages(self):
+        flexible_commissioning = self.model_instance.flexible_commissioning
+        if not flexible_commissioning:
+            return []
+        flags = models.Fp17Commissioning.FLEXIBLE_FLAGS
+        flags = [i[0] for i in flags]
+        idx = flags.index(flexible_commissioning)
+        return [t.FLEXIBLE_COMMISSIONING_FLAG(idx + 1)]
+
+
 class Fp17IncompleteTreatmentSerializer(TreatmentSerializer):
     model = models.Fp17IncompleteTreatment
 
@@ -810,6 +823,7 @@ def translate_to_fp17(bcds1, episode):
     bcds1.treatments = []
 
     translators = [
+        Fp17CommissioningSerializer,
         Fp17IncompleteTreatmentSerializer,
         Fp17TreatmentCategorySerializer,
         Fp17ClinicalDataSetSerializer,

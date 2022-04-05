@@ -8,6 +8,11 @@ import datetime
 from .bcds1 import Treatment
 
 
+class FLEXIBLE_COMMISSIONING_FLAG(Treatment):
+    def __init__(self, commissioning_flag):
+        super().__init__(code=9181, instance_count=commissioning_flag)
+
+
 class TREATMENT_CATEGORY(Treatment):
     def __init__(self, band):
         super().__init__(code=9150, instance_count=band)
@@ -36,6 +41,7 @@ class INCOMPLETE_TREATMENT(Treatment):
     """
     def __init__(self, num_units):
         super().__init__(code=9164, instance_count=num_units)
+
 
 class BRIDGES_FITTED(Treatment):
     """

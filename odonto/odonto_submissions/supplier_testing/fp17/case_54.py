@@ -1,7 +1,5 @@
 import datetime
-import decimal
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
-
 from fp17 import treatments
 
 
@@ -17,13 +15,9 @@ def annotate(bcds1):
 
     bcds1.patient_charge_pence = 2060
 
-    # Treatments: "Examination (9317), Recall Interval (9172 9), Scale &
-    # Polish, Ethnic Origin 1"
     bcds1.treatments = [
+        treatments.FLEXIBLE_COMMISSIONING_FLAG(3),
         treatments.TREATMENT_CATEGORY(1),
-        treatments.EXAMINATION,
-        treatments.RECALL_INTERVAL(num_months=9),
-        treatments.SCALE_AND_POLISH,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
     ]
 
@@ -40,18 +34,12 @@ def from_model(bcds1, patient, episode):
     demographics.date_of_birth = datetime.date(1958, 1, 23)
     demographics.ethnicity = "White british"
     demographics.save()
+    episode.fp17commissioning_set.update(
+        flexible_commissioning="Providing Care of High Needs Groups"
+    )
     episode.fp17treatmentcategory_set.update(
         treatment_category="Band 1",
     )
-    episode.fp17recall_set.update(
-        number_of_months=9
-    )
-
-    episode.fp17clinicaldataset_set.update(
-        scale_and_polish=True,
-        examination=True
-    )
-
     episode.fp17exemptions_set.update(
         patient_charge_collected="20.60"
     )
