@@ -18,6 +18,37 @@ class SerializerValidationError(Exception):
     pass
 
 
+def is_nhs_number_valid(nhs_number):
+    """
+    The NHS number is a ten digit number one digit is
+    check sum this validates whether the nhs number
+    is true.
+    """
+    if not nhs_number:
+        return False
+    nhs_number = nhs_number.replace(" ", "")
+    if not nhs_number.isnumeric():
+        return False
+        return "0" * 10
+    if not len(nhs_number) == 10:
+        return False
+    # https://www.datadictionary.nhs.uk/attributes/nhs_number.html
+    # step 1, for the first 9 numbers multiple by 11 - idx,
+    # step 2, sum them together
+    # step 3, mod the result by 11
+    # step 4, if the modded result is 0, then it becomes 11
+    # step 5, subtract the result from 11
+    # step 6, return result == nhs_number[9]
+    weighted_number = [
+        int(nhs_num) * (10 - idx) for idx, nhs_num in enumerate(nhs_number[:9])
+    ]
+    modded = sum(weighted_number) % 11
+    if modded == 0:
+        modded = 11
+    check_digit = 11 - modded
+    return int(nhs_number[-1]) == check_digit
+
+
 class TreatmentSerializer(object):
     message = Treatment
     TREATMENT_MAPPINGS = None
@@ -312,7 +343,6 @@ class ExtractionChartTranslator(TreatmentSerializer):
         if teeth:
             result.append(t.ORTHODONTIC_EXTRACTIONS(teeth))
         return result
-
 
 
 class OrthodonticAssessmentTranslator(TreatmentSerializer):
@@ -630,17 +660,14 @@ class DemographicsTranslator(TreatmentSerializer):
         # our users have generally been good at putting one in anyway however
         # we were not validating the field because we did not send it down as it was not
         # required.
-        # now we will send it down but only if it is correctly formed.
+        # now we will send it down but only if it is correctly formed and valid.
         # the client side will validate it but this was not always the case.
-        nhs_number = self.model_instance.nhs_number
-        if not nhs_number:
-            return None
-        nhs_number = nhs_number.strip()
-        if not nhs_number.isnumeric():
-            return None
-        if not len(nhs_number) == 10:
-            return None
-        return nhs_number
+        #
+        # the docs say that if it is not known it is still required but they
+        # just expect 10 zeros
+        if is_nhs_number_valid(self.model_instance.nhs_number):
+            return self.model_instance.nhs_number.replace(" ", "")
+        return "0" * 10
 
     def surname(self):
         return clean_non_alphanumeric(self.model_instance.surname).upper()
@@ -766,10 +793,7 @@ def translate_to_fp17o(bcds1, episode):
     if post_code:
         bcds1.patient.postcode = post_code
 
-    nhs_number = demographics_translator.nhs_number()
-
-    if nhs_number:
-        bcds1.patient.nhs_number = nhs_number
+    bcds1.patient.nhs_number = demographics_translator.nhs_number()
 
     bcds1.date_of_acceptance = get_fp17o_date_of_acceptance(episode)
 
@@ -809,7 +833,6 @@ def translate_to_fp17o(bcds1, episode):
         elif demographics.patient_declined_phone:
             bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
 
-
     fp17_exemption = episode.fp17exemptions_set.get()
     if fp17_exemption.commissioner_approval:
         bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
@@ -839,10 +862,7 @@ def translate_to_fp17(bcds1, episode):
     if post_code:
         bcds1.patient.postcode = post_code
 
-    nhs_number = demographics_translator.nhs_number()
-
-    if nhs_number:
-        bcds1.patient.nhs_number = nhs_number
+    bcds1.patient.nhs_number = demographics_translator.nhs_number()
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance
@@ -898,6 +918,7 @@ def translate_to_covid_19(bcds1, episode):
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translator.address()
     bcds1.patient.sex = demographics_translator.sex()
+    bcds1.patient.nhs_number = demographics_translator.nhs_number()
     post_code = demographics_translator.post_code()
 
     if post_code:

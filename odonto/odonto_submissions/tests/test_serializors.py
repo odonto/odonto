@@ -176,6 +176,36 @@ class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
         self.assertEqual(messages, [])
 
 
+class IsNhsNumberValidTestCase(OpalTestCase):
+    def test_nhs_number_is_none(self):
+        self.assertFalse(serializers.is_nhs_number_valid(None))
+
+    def test_nhs_number_is_empty(self):
+        self.assertFalse(serializers.is_nhs_number_valid(""))
+
+    def test_nhs_number_is_too_short(self):
+        self.assertFalse(serializers.is_nhs_number_valid("123"))
+
+    def test_nhs_number_contains_letter(self):
+        self.assertFalse(serializers.is_nhs_number_valid("012345678F"))
+
+    def test_valid(self):
+        self.assertTrue(serializers.is_nhs_number_valid("687 234 3060"))
+        self.assertTrue(serializers.is_nhs_number_valid("975 155 7305"))
+        self.assertTrue(serializers.is_nhs_number_valid("045 543 6029"))
+        self.assertTrue(serializers.is_nhs_number_valid("711 049 3547"))
+        self.assertTrue(serializers.is_nhs_number_valid("603 725 5857"))
+        self.assertTrue(serializers.is_nhs_number_valid("942 150 4356"))
+
+    def test_invalid(self):
+        self.assertFalse(serializers.is_nhs_number_valid("687 234 3061"))
+        self.assertFalse(serializers.is_nhs_number_valid("975 155 7306"))
+        self.assertFalse(serializers.is_nhs_number_valid("045 543 6031"))
+        self.assertFalse(serializers.is_nhs_number_valid("711 049 3548"))
+        self.assertFalse(serializers.is_nhs_number_valid("603 725 5858"))
+        self.assertFalse(serializers.is_nhs_number_valid("942 150 4357"))
+
+
 class DemographicsTranslatorTestCase(OpalTestCase):
     def setUp(self):
         patient, self.episode = self.new_patient_and_episode_please()
@@ -270,35 +300,6 @@ class DemographicsTranslatorTestCase(OpalTestCase):
             translator.NORTHUMBRIA["post_code"]
         )
 
-    def test_nhs_number_is_none(self):
-        self.demographics.nhs_number = None
-        self.demographics.save()
-        translator = serializers.DemographicsTranslator(self.episode)
-        self.assertIsNone(translator.nhs_number())
-
-    def test_nhs_number_is_empty(self):
-        self.demographics.nhs_number = ""
-        self.demographics.save()
-        translator = serializers.DemographicsTranslator(self.episode)
-        self.assertIsNone(translator.nhs_number())
-
-    def test_nhs_number_is_too_short(self):
-        self.demographics.nhs_number = "123"
-        self.demographics.save()
-        translator = serializers.DemographicsTranslator(self.episode)
-        self.assertIsNone(translator.nhs_number())
-
-    def test_nhs_number_contains_letter(self):
-        self.demographics.nhs_number = "012345678F"
-        self.demographics.save()
-        translator = serializers.DemographicsTranslator(self.episode)
-        self.assertIsNone(translator.nhs_number())
-
-    def test_nhs_number_is_populated(self):
-        self.demographics.nhs_number = "0123456789"
-        self.demographics.save()
-        translator = serializers.DemographicsTranslator(self.episode)
-        self.assertEqual(translator.nhs_number(), "0123456789")
 
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):

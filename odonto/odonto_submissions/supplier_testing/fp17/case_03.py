@@ -9,6 +9,7 @@ def annotate(bcds1):
     bcds1.patient.forename = "CHARLIE"
     bcds1.patient.address = ["3 HIGH STREET"]
     bcds1.patient.sex = 'M'
+    bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(2001, 1, 24)
 
     bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
@@ -65,4 +66,3 @@ def from_model(bcds1, patient, episode):
     )
 
     translate_to_bdcs1(bcds1, episode)
-
