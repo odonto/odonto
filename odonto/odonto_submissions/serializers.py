@@ -270,6 +270,7 @@ class OrthodonticDataSetTranslator(TreatmentSerializer):
             messages.append(t.COMPLETED_TREATMENT)
         return messages
 
+
 class ExtractionChartTranslator(TreatmentSerializer):
     model = models.ExtractionChart
 
@@ -621,6 +622,26 @@ class DemographicsTranslator(TreatmentSerializer):
     def forename(self):
         return clean_non_alphanumeric(self.model_instance.first_name).upper()
 
+    def nhs_number(self):
+        """
+        Returns the nhs number of a patient if it is a number and ten digits long
+        """
+        # previously they did not require an NHS number, now for some forms they do
+        # our users have generally been good at putting one in anyway however
+        # we were not validating the field because we did not send it down as it was not
+        # required.
+        # now we will send it down but only if it is correctly formed.
+        # the client side will validate it but this was not always the case.
+        nhs_number = self.model_instance.nhs_number
+        if not nhs_number:
+            return None
+        nhs_number = nhs_number.strip()
+        if not nhs_number.isnumeric():
+            return None
+        if not len(nhs_number) == 10:
+            return None
+        return nhs_number
+
     def surname(self):
         return clean_non_alphanumeric(self.model_instance.surname).upper()
 
@@ -745,6 +766,11 @@ def translate_to_fp17o(bcds1, episode):
     if post_code:
         bcds1.patient.postcode = post_code
 
+    nhs_number = demographics_translator.nhs_number()
+
+    if nhs_number:
+        bcds1.patient.nhs_number = nhs_number
+
     bcds1.date_of_acceptance = get_fp17o_date_of_acceptance(episode)
 
     orthodontic_treatment = episode.orthodontictreatment_set.get()
@@ -812,6 +838,11 @@ def translate_to_fp17(bcds1, episode):
 
     if post_code:
         bcds1.patient.postcode = post_code
+
+    nhs_number = demographics_translator.nhs_number()
+
+    if nhs_number:
+        bcds1.patient.nhs_number = nhs_number
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance

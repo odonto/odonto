@@ -140,12 +140,12 @@ class SerializerTestCase(OpalTestCase):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
         covid_19_category = episode_categories.CovidTriageEpisode.display_name
-        for case_number in range(1, 55):
+        for case_number in range(1, 56):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 7):
+        for case_number in range(1, 8):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -270,6 +270,36 @@ class DemographicsTranslatorTestCase(OpalTestCase):
             translator.NORTHUMBRIA["post_code"]
         )
 
+    def test_nhs_number_is_none(self):
+        self.demographics.nhs_number = None
+        self.demographics.save()
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertIsNone(translator.nhs_number())
+
+    def test_nhs_number_is_empty(self):
+        self.demographics.nhs_number = ""
+        self.demographics.save()
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertIsNone(translator.nhs_number())
+
+    def test_nhs_number_is_too_short(self):
+        self.demographics.nhs_number = "123"
+        self.demographics.save()
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertIsNone(translator.nhs_number())
+
+    def test_nhs_number_contains_letter(self):
+        self.demographics.nhs_number = "012345678F"
+        self.demographics.save()
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertIsNone(translator.nhs_number())
+
+    def test_nhs_number_is_populated(self):
+        self.demographics.nhs_number = "0123456789"
+        self.demographics.save()
+        translator = serializers.DemographicsTranslator(self.episode)
+        self.assertEqual(translator.nhs_number(), "0123456789")
+
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):
     def setUp(self):
@@ -298,6 +328,7 @@ class Fp17TreatmentCategoryTestCase(OpalTestCase):
         serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
 
+
 class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
     def setUp(self):
         _, self.episode = self.new_patient_and_episode_please()
@@ -319,7 +350,6 @@ class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
         )
         serializer = serializers.Fp17ClinicalDataSetSerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.ANTIBIOTIC_ITEMS(3)])
-
 
     def test_aerosol_after(self):
         self.data_set.antibiotic_items_prescribed = 3
