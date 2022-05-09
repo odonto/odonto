@@ -22,6 +22,7 @@ def annotate(bcds1):
     bcds1.treatments = [
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.ASSESS_AND_APPLIANCE_FITTED,
+        treatments.PROPOSED_TREATMENT,
         treatments.DAY_OF_REFERRAL(11),
         treatments.MONTH_OF_REFERRAL(10),
         treatments.YEAR_OF_REFERRAL(19),

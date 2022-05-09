@@ -370,33 +370,6 @@ class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
         )
 
 
-class OrthodonticDataSetTranslatorTestCase(OpalTestCase):
-    def setUp(self):
-        _, self.episode = self.new_patient_and_episode_please()
-        self.data_set = self.episode.orthodonticdataset_set.get()
-
-    def test_to_messages_proposed(self):
-        self.data_set.treatment_type = models.OrthodonticDataSet.PROPOSED
-        self.data_set.save()
-        self.assertEqual(
-            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
-            [treatments.TREATMENT_TYPE(1)]
-        )
-
-    def test_to_messages_completed(self):
-        self.data_set.treatment_type = models.OrthodonticDataSet.COMPLETED
-        self.data_set.save()
-        self.assertEqual(
-            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
-            [treatments.TREATMENT_TYPE(2)]
-        )
-
-    def test_to_messages_none(self):
-        self.assertEqual(
-            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
-            []
-        )
-
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):
         field_to_result = {
@@ -485,8 +458,13 @@ class OrthodonticTreatmentTranslatorTestCase(OpalTestCase):
         self.treatment.save()
         self.assertEqual(
             serializers.OrthodonticTreatmentTranslator(self.episode).to_messages(),
-            [treatments.TREATMENT_ABANDONED, treatments.PATIENT_FAILED_TO_RETURN]
+            [
+                treatments.COMPLETED_TREATMENT,
+                treatments.TREATMENT_ABANDONED,
+                treatments.PATIENT_FAILED_TO_RETURN
+            ]
         )
+
 
 class CovidStatusTranslatorTestCase(OpalTestCase):
     def setUp(self):

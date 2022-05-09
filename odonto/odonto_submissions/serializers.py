@@ -293,13 +293,6 @@ class OrthodonticDataSetTranslator(TreatmentSerializer):
         "aerosol_generating_procedures": t.AEROSOL_GENERATING_PROCEDURE,
     }
 
-    def to_messages(self):
-        messages = super().to_messages()
-        if self.model_instance.treatment_type == models.OrthodonticDataSet.PROPOSED:
-            messages.append(t.PROPOSED_TREATMENT)
-        elif self.model_instance.treatment_type == models.OrthodonticDataSet.COMPLETED:
-            messages.append(t.COMPLETED_TREATMENT)
-        return messages
 
 
 class ExtractionChartTranslator(TreatmentSerializer):
@@ -430,6 +423,8 @@ appliance fitted"'
 
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
             result.append(t.ASSESS_AND_APPLIANCE_FITTED)
+            # assess and appliance fitted must be accompanied by proposed treatment
+            result.append(t.PROPOSED_TREATMENT)
 
         if self.model_instance.date_of_referral:
             dt = self.model_instance.date_of_referral
@@ -474,14 +469,18 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
         if self.model_instance.replacement:
             result.append(t.REGULATION_11_REPLACEMENT_APPLIANCE)
         elif self.model_instance.completion_type == self.model.PATIENT_FAILED_TO_RETURN:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_FAILED_TO_RETURN)
         elif self.model_instance.completion_type == self.model.PATIENT_REQUESTED:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_REQUESTED)
         elif self.model_instance.completion_type == self.model.TREATMENT_DISCONTINUED:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_DISCONTINUED)
         elif self.model_instance.completion_type == self.model.TREATMENT_COMPLETED:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_COMPLETED)
 
         return result

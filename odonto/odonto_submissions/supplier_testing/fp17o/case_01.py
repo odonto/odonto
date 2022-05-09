@@ -21,7 +21,6 @@ def annotate(bcds1):
     }
 
     bcds1.treatments = [
-        treatments.PROPOSED_TREATMENT,
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.ASSESS_AND_REVIEW,
         treatments.COMMISSIONER_APPROVAL,
@@ -67,7 +66,6 @@ def from_model(bcds1, patient, episode):
     episode.orthodonticdataset_set.update(
         radiograph=3,
         aerosol_generating_procedures=2,
-        treatment_type=models.OrthodonticDataSet.PROPOSED
     )
 
     episode.extractionchart_set.update(

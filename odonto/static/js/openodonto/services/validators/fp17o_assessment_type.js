@@ -16,9 +16,6 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(toMoment
     "use strict";
     var assessment = editing.orthodontic_assessment;
     var treatment = editing.orthodontic_treatment;
-    var treatmentType = editing.orthodontic_data_set.treatment_type;
-    var PROPOSED = "Proposed";
-    var COMPLETED = "Completed / Abandoned / Discontinued Treatment";
     var ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted";
 
     if(assessment.date_of_referral && !assessment.assessment){
@@ -38,29 +35,6 @@ angular.module('opal.services').factory('Fp17OAssessmentType', function(toMoment
           "completion_type": "An assessment type, completion type, repair or reg 11 are required",
           "repair": "An assessment type, completion type, repair or reg 11 are required",
           "replacement": "An assessment type, completion type, repair or reg 11 are required"
-        }
-      }
-    }
-    /*
-    * A claim with a Completed / Abandoned / Discontinued Treatment
-    * treatment type cannot also have an assessment type
-    */
-   if(assessment.assessment && treatmentType === COMPLETED){
-     return {
-      orthodontic_assessment: {
-        assessment: 'An assessment type cannot be combined with a treatment type of ' + COMPLETED
-      }
-     }
-   }
-
-    /*
-    * Proposed treatment "Must be accompanied by Assess/Appliance Fitted"
-    */
-    if(assessment.assessment !== ASSESS_AND_APPLIANCE_FITTED && treatmentType === PROPOSED){
-      var er = "Treatment type '" + PROPOSED + "' requires an assessment of '" + ASSESS_AND_APPLIANCE_FITTED + "'";
-      return {
-        orthodontic_assessment: {
-          assessment: er
         }
       }
     }
