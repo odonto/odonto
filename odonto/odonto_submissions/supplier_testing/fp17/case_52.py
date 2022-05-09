@@ -23,8 +23,6 @@ def annotate(bcds1):
         treatments.TREATMENT_CATEGORY(1),
         treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
-        treatments.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE,
-        treatments.PHASED_TREATMENT
     ]
 
     return bcds1
