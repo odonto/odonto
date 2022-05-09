@@ -41,6 +41,20 @@ class TreatmentSerializer(object):
         field = self.get_field(name)
         return isinstance(field, django_models.IntegerField)
 
+    def get_treatment_value_for_field(self, field_name, treatment):
+        """
+        if the model value for the field is an integer and not none return
+        treatment(model_value)
+
+        if the model value is a boolean and True return treatment
+        """
+        value = getattr(self.model_instance, field_name)
+        if self.is_integer(field_name):
+            if value is not None:
+                return treatment(value)
+        elif value:
+            return treatment
+
     def to_messages(self):
         """
         Translates fields to messages.
@@ -54,12 +68,9 @@ class TreatmentSerializer(object):
         treatments = []
 
         for k, v in self.TREATMENT_MAPPINGS.items():
-            value = getattr(self.model_instance, k)
-            if self.is_integer(k):
-                if value is not None:
-                    treatments.append(v(value))
-            elif value:
-                treatments.append(v)
+            treatment = self.get_treatment_value_for_field(k, v)
+            if treatment:
+                treatments.append(treatment)
         return treatments
 
 
@@ -155,13 +166,6 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
             ("filled_teeth_permanent", t.FILLED_PERMANENT),
             ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
-            ("pre_formed_crowns", t.PREFORMED_CROWNS),
-            (
-                "advanced_perio_root_surface_debridement",
-                t.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT
-            ),
-            ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
-            ("phased_treatment", t.PHASED_TREATMENT),
         ]
     )
 
@@ -180,10 +184,29 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                     )
                 )
 
-        if self.model_instance.custom_made_occlusal_appliance == self.model_instance.HARD:
-            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
-        elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
-            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
+        # Compass raises an error if it receives the below from
+        # episodes with dates of acceptance prior to 1/12/21
+        # before 1/12/21
+        if date_of_acceptance and date_of_acceptance >= datetime.date(2021, 12, 1):
+            after_1_12_21 = [
+                ("pre_formed_crowns", t.PREFORMED_CROWNS),
+                (
+                    "advanced_perio_root_surface_debridement",
+                    t.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT
+                ),
+                ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
+                ("phased_treatment", t.PHASED_TREATMENT),
+            ]
+            for our_field, treatment_obj in after_1_12_21:
+                treatment = self.get_treatment_value_for_field(
+                    our_field, treatment_obj
+                )
+                if treatment:
+                    treatments.append(treatment)
+            if self.model_instance.custom_made_occlusal_appliance == self.model_instance.HARD:
+                treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
+            elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
+                treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
         return treatments
 
 
