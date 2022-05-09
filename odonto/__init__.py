@@ -27,6 +27,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/provider_location_number_required.js',
         'js/openodonto/services/validators/fp17_completion_or_last_visit.js',
         'js/openodonto/services/validators/form_validation.js',
+        'js/openodonto/services/validators/nhs_number_validator.js',
         'js/openodonto/services/validators/date_of_birth_required.js',
         'js/openodonto/services/validators/address_required.js',
         'js/openodonto/services/validators/appliance_greater_than_assessment.js',
