@@ -11,7 +11,6 @@ angular.module('opal.services').factory('ExemptionsAndRemissionsValidator', func
   var EXEMPTION_FIELDS = [
     "patient_under_18",
     "full_remission_hc2_cert",
-    "partial_remission_hc3_cert",
     "expectant_mother",
     "nursing_mother",
     "aged_18_in_full_time_education",
@@ -26,27 +25,36 @@ angular.module('opal.services').factory('ExemptionsAndRemissionsValidator', func
   ]
 
   var exceptionOrCharge = function(editing){
+    /*
+    * returns an error message if the form is invalid
+    */
     if(editing.fp17_other_dental_services.free_repair_or_replacement){
       return;
     }
+
     if(!editing.fp17_exemptions.patient_charge_collected){
       var exemptionSelected = _.some(EXEMPTION_FIELDS, function(exemptionField){
         return editing.fp17_exemptions[exemptionField]
       })
 
       if(!exemptionSelected){
-        return true;
+        if(editing.fp17_exemptions.partial_remission_hc3_cert){
+          return "A charge is required if there is only a partial exemption";
+        }
+        return "Please select an exemption or add the charge";
       }
     }
   }
 
   return function(editing) {
-    if(exceptionOrCharge(editing)){
+    var err = exceptionOrCharge(editing);
+    if(err){
       return {
         fp17_exemptions: {
-          step_error: "Please select an exemption or add the charge"
+          step_error: err
         }
       }
     }
+
   }
 });
