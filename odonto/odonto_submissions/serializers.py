@@ -11,7 +11,12 @@ from django.db import models as django_models
 from fp17 import treatments as t
 from fp17 import exemptions as e
 from fp17.envelope import Envelope
-from fp17.bcds1 import BCDS1, Patient as FP17_Patient
+from fp17.bcds1 import (
+    BCDS1,
+    Patient as FP17_Patient,
+    SCHEDULE_QUERY_FALSE,
+    SCHEDULE_QUERY_DELETE
+)
 
 
 class SerializerValidationError(Exception):
@@ -645,7 +650,7 @@ def get_envelope(episode, transmission_id):
     return envelope
 
 
-def get_bcds1(episode, submission_id, submission_count):
+def get_bcds1(episode, submission_id, submission_count, delete=False, replace=False):
     """
     creates a a BDCS1 message segmant.
 
@@ -653,11 +658,25 @@ def get_bcds1(episode, submission_id, submission_count):
     Gets the bcs1 information
     """
 
+    if delete and replace:
+        raise ValueError(
+            " ".join([
+                f"Submission for {episode.id} failed,",
+                "submissions can either be deleted or replaced but not both"
+            ])
+        )
+
     bcds1 = BCDS1()
     # According to the spec this is a required random number
     # however upscompass have requested the following numbers
     bcds1.message_reference_number = submission_id
     bcds1.resubmission_count = submission_count
+
+    if delete:
+        bcds1.schedule_query = SCHEDULE_QUERY_DELETE
+    elif replace:
+        bcds1.schedule_query = SCHEDULE_QUERY_FALSE
+
     provider = episode.fp17dentalcareprovider_set.get()
     bcds1.location = constants.LOCATION_NUMBERS[provider.provider_location_number]
     performer = provider.get_performer_obj()
@@ -672,12 +691,24 @@ def get_bcds1(episode, submission_id, submission_count):
     bcds1.performer_number = int(performer.number)
     bcds1.dpb_pin = performer.dpb_pin
     bcds1.patient = FP17_Patient()
-    translate_to_bdcs1(bcds1, episode)
+
+    # assumption is that for a delete we do not need to do the translation
+    if not delete:
+        translate_to_bdcs1(bcds1, episode)
     return bcds1
 
 
-def translate_episode_to_xml(episode, submission_id, submission_count, transmission_id):
-    bcds1 = get_bcds1(episode, submission_id, submission_count)
+def translate_episode_to_xml(
+    episode,
+    submission_id,
+    submission_count,
+    transmission_id,
+    replace=False,
+    delete=False
+):
+    bcds1 = get_bcds1(
+        episode, submission_id, submission_count, delete=delete, replace=replace
+    )
     envelope = get_envelope(episode, transmission_id)
     envelope.add_message(bcds1)
     assert not bcds1.get_errors(), bcds1.get_errors()

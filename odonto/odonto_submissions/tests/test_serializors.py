@@ -557,11 +557,11 @@ class GetEnvelopeTestCase(OpalTestCase):
         )
 
 
+@override_settings(
+    FP17_CONTRACT_NUMBER="FP17_CONTRACT_NUMBER",
+)
+@mock.patch("odonto.odonto_submissions.serializers.translate_to_bdcs1")
 class GetBCDS1TestCase(OpalTestCase):
-    @override_settings(
-        FP17_CONTRACT_NUMBER="FP17_CONTRACT_NUMBER",
-    )
-    @mock.patch("odonto.odonto_submissions.serializers.translate_to_bdcs1")
     def test_get_bcds1(self, translate_to_bdcs1):
         _, episode = self.new_patient_and_episode_please()
         episode.category_name = episode_categories.FP17Episode.display_name
@@ -588,3 +588,45 @@ class GetBCDS1TestCase(OpalTestCase):
         self.assertEqual(bcds1.dpb_pin, "2222")
         self.assertIsNotNone(bcds1.patient)
         self.assertTrue(translate_to_bdcs1.called)
+
+    def test_replace_bcds1(self, translate_to_bdcs1):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = episode_categories.FP17Episode.display_name
+        episode.save()
+        episode.fp17dentalcareprovider_set.get()
+        episode.fp17dentalcareprovider_set.update(
+            provider_location_number='Morpeth NHS Centre',
+            performer="Susan Winstanley"
+        )
+        models.PerformerNumber.objects.create(
+            user=self.user,
+            number="111",
+            dpb_pin="2222"
+        )
+        self.user.first_name = "Susan"
+        self.user.last_name = "Winstanley"
+        self.user.save()
+
+        bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT", replace=True)
+        self.assertEqual(bcds1.schedule_query, message.SCHEDULE_QUERY_FALSE)
+
+    def test_delete_bcds1(self, translate_to_bdcs1):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = episode_categories.FP17Episode.display_name
+        episode.save()
+        episode.fp17dentalcareprovider_set.get()
+        episode.fp17dentalcareprovider_set.update(
+            provider_location_number='Morpeth NHS Centre',
+            performer="Susan Winstanley"
+        )
+        models.PerformerNumber.objects.create(
+            user=self.user,
+            number="111",
+            dpb_pin="2222"
+        )
+        self.user.first_name = "Susan"
+        self.user.last_name = "Winstanley"
+        self.user.save()
+
+        bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT", delete=True)
+        self.assertEqual(bcds1.schedule_query, message.SCHEDULE_QUERY_DELETE)
