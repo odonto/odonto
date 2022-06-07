@@ -151,7 +151,7 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
     if(treatment_category === BAND_2){
       if(!treatmentsOfBand2.length){
         return getErr(
-          'To justify a band 2, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["2"]).join(', ')
+          'To justify a Band 2, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["2"]).join(', ')
         )
       }
     }

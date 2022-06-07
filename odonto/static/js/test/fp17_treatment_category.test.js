@@ -496,7 +496,7 @@ describe('Fp17TreatmentCategory', function() {
       // a band 1 treatment
       editing.fp17_clinical_data_set.other_treatment = true;
 
-      var expected = getError('To justify a band 2, at least one of the following is required: endodontic treatment, permanent fillings, extractions, pre formed_crowns, advanced perio_root_surface_debridement, denture additions_reline_rebase');
+      var expected = getError('To justify a Band 2, at least one of the following is required: endodontic treatment, permanent fillings, extractions, pre formed_crowns, advanced perio_root_surface_debridement, denture additions_reline_rebase');
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
 
