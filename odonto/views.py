@@ -13,9 +13,9 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.utils.functional import cached_property
 from odonto import episode_categories
 from odonto import models
-from odonto.utils import get_current_financial_year
 from opal.models import Episode
 
 
@@ -236,14 +236,21 @@ class CaseMix(LoginRequiredMixin, View):
 class Stats(LoginRequiredMixin, TemplateView):
     template_name = "stats.html"
 
-    def get_previous_financial_year(self):
-        current_start = get_current_financial_year()[0]
+    def get_range_for_year(self, year):
         return (
-            datetime.date(
-                current_start.year-1, current_start.month, current_start.day
-            ),
-            current_start - datetime.timedelta(1)
+            datetime.date(year, 4, 1),
+            datetime.date(year + 1, 4, 1),
         )
+
+    @cached_property
+    def date_range(self):
+        year = int(self.kwargs["year"])
+        return self.get_range_for_year(year)
+
+    @cached_property
+    def previous_date_range(self):
+        year = int(self.kwargs["year"]) - 1
+        return self.get_range_for_year(year)
 
     def get_fp17_qs(self, date_range):
         return Episode.objects.filter(
@@ -292,8 +299,8 @@ class Stats(LoginRequiredMixin, TemplateView):
         result = {}
         monthly_claims = []
         time_periods = {
-            "current": get_current_financial_year(),
-            "previous": self.get_previous_financial_year()
+            "current": self.date_range,
+            "previous": self.previous_date_range
         }
         for period_name, period_range in time_periods.items():
             monthly_claims = []
@@ -307,29 +314,27 @@ class Stats(LoginRequiredMixin, TemplateView):
         return result
 
     def get_state_counts(self):
-        current_financial_year = get_current_financial_year()
         return {
             "fp17s": {
-                "total": self.get_fp17_qs(current_financial_year).count(),
-                "submitted": self.get_successful_fp17s(current_financial_year).count(),
-                "open": self.get_fp17_qs(current_financial_year).filter(
+                "total": self.get_fp17_qs(self.date_range).count(),
+                "submitted": self.get_successful_fp17s(self.date_range).count(),
+                "open": self.get_fp17_qs(self.date_range).filter(
                     stage=episode_categories.FP17Episode.OPEN
                 ).count()
             },
             "fp17os": {
-                "total": self.get_fp17o_qs(current_financial_year).count(),
-                "submitted": self.get_successful_fp17os(current_financial_year).count(),
-                "open": self.get_fp17o_qs(current_financial_year).filter(
+                "total": self.get_fp17o_qs(self.date_range).count(),
+                "submitted": self.get_successful_fp17os(self.date_range).count(),
+                "open": self.get_fp17o_qs(self.date_range).filter(
                     stage=episode_categories.FP17OEpisode.OPEN
                 ).count()
             }
         }
 
     def get_uoa_data(self):
-        current_financial_year = get_current_financial_year()
         time_periods = {
-            "current": get_current_financial_year(),
-            "previous": self.get_previous_financial_year()
+            "current": self.date_range,
+            "previous": self.previous_date_range
         }
         by_period = defaultdict(list)
         by_performer = defaultdict(int)
@@ -356,10 +361,9 @@ class Stats(LoginRequiredMixin, TemplateView):
         return by_period, by_performer
 
     def get_uda_data(self):
-        current_financial_year = get_current_financial_year()
         time_periods = {
-            "current": get_current_financial_year(),
-            "previous": self.get_previous_financial_year()
+            "current": self.date_range,
+            "previous": self.previous_date_range
         }
         by_period = defaultdict(list)
         by_performer = defaultdict(lambda: defaultdict(int))
@@ -392,9 +396,6 @@ class Stats(LoginRequiredMixin, TemplateView):
         uoa_performers = list(uoa_by_performer.keys())
         performers = list(set(uda_performers + uoa_performers))
         performers = sorted(performers)
-        fp17s = self.get_successful_fp17s(
-            get_current_financial_year()
-        )
 
         for performer in performers:
             row = {"name": performer}
@@ -413,23 +414,20 @@ class Stats(LoginRequiredMixin, TemplateView):
             result.append(row)
         return result
 
-    def get_context_data(self):
-        current_financial_year = get_current_financial_year()
-        previous_financial_year = self.get_previous_financial_year()
+    def get_context_data(self, *args, **kwargs):
+        ctx = super().get_context_data(*args, **kwargs)
         uda_by_period, uda_by_performer = self.get_uda_data()
         uoa_by_period, uoa_by_performer = self.get_uoa_data()
         performer_info = self.aggregate_performer_information(
             uda_by_performer, uoa_by_performer
         )
-        current = "{}-{}".format(
-            current_financial_year[0].year,
-            current_financial_year[0].year + 1,
-        )
-        previous = "{}-{}".format(
-            previous_financial_year[0].year,
-            previous_financial_year[0].year + 1,
-        )
-        return {
+        current = f"{self.date_range[0].year}-{self.date_range[1].year}"
+        previous = f"{self.previous_date_range[0].year}-{self.previous_date_range[1].year}"
+        today = datetime.date.today()
+        menu_years = sorted([today.year - i for i in range(4)])
+
+        ctx.update({
+            "menu_years": menu_years,
             "current": current,
             "previous": previous,
             "state_counts": self.get_state_counts(),
@@ -443,7 +441,8 @@ class Stats(LoginRequiredMixin, TemplateView):
                 "by_period": json.dumps(uoa_by_period)
             },
             "performer_info": performer_info
-        }
+        })
+        return ctx
 
 
 class PatientCharges(LoginRequiredMixin, ListView):
