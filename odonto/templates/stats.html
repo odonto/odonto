@@ -130,18 +130,10 @@
 
 <script>
 
-  var createGraph = function(elementId, graphData, current, previous){
+  var createGraph = function(elementId, graphData, current){
     var result = [];
-    _.each(graphData, function(value, key){
-      var row = value;
-      if(key === "current"){
-        row.unshift(current);
-      }
-      else{
-        row.unshift(previous);
-      }
-      result.push(row);
-    })
+    graphData.unshift(current)
+    result.push(graphData)
 
     var graphConfig = {
       bindto: document.getElementById(elementId),
@@ -178,13 +170,11 @@
     }
 
     graphConfig.data.colors[result[0][0]] = '#333333';
-    graphConfig.data.colors[result[1][0]] = '#CCCCCC';
-
     c3.generate(graphConfig)
   };
 
-  createGraph("monthly-claims-graph", {{ month_totals | safe }}, "{{ current }}", "{{ previous }}");
-  createGraph("uda-activity", {{ uda_info.by_period | safe }}, "{{ current }}", "{{ previous }}");
-  createGraph("uoa-activity", {{ uoa_info.by_period | safe }}, "{{ current }}", "{{ previous }}");
+  createGraph("monthly-claims-graph", {{ month_totals | safe }}, "{{ current }}");
+  createGraph("uda-activity", {{ uda_info.by_period | safe }}, "{{ current }}");
+  createGraph("uoa-activity", {{ uoa_info.by_period | safe }}, "{{ current }}");
 </script>
 {% endblock %}
