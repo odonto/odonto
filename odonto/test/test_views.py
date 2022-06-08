@@ -18,8 +18,13 @@ class GetContextDataStatsTestCase(OpalTestCase):
             datetime.date(2019, 4, 1),
             datetime.date(2020, 3, 31),
         )
+        self.previous_financial_year = (
+            datetime.date(2018, 4, 1),
+            datetime.date(2019, 3, 31),
+        )
         self.current_date = datetime.date(2020, 1, 1)
         self.previous_date = datetime.date(2019, 1, 1)
+        self.view = Stats()
 
     def new_fp17_episode(self):
         patient, episode = self.new_patient_and_episode_please()
@@ -47,6 +52,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
 
     def expected(self):
         return {
+            'menu_years': [2019, 2020, 2021, 2022],
             'current': '2019-2020',
             'previous': '2018-2019',
             "state_counts": {
@@ -79,12 +85,16 @@ class GetContextDataStatsTestCase(OpalTestCase):
                 },
                 "total": 0,
             },
-            "performer_info": {}
+            "performer_info": {},
+            "view": self.view
         }
 
-    @mock.patch('odonto.views.get_current_financial_year')
-    def test_single_current_fp17_episode(self, current_financial_year):
-        current_financial_year.return_value = self.current_financial_year
+    @mock.patch('odonto.views.Stats.date_range')
+    @mock.patch('odonto.views.Stats.previous_date_range')
+    def test_single_current_fp17_episode(self, previous_date_range, date_range):
+        self.maxDiff = None
+        date_range.__get__ = mock.Mock(return_value=self.current_financial_year)
+        previous_date_range.__get__ = mock.Mock(return_value=self.previous_financial_year)
         episode = self.new_fp17_episode()
         episode.stage = FP17Episode.SUBMITTED
         episode.save()
@@ -97,10 +107,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
         episode.submission_set.create(
             state=Submission.SUCCESS
         )
-        result = Stats().get_uda_data()
-
-
-        result = Stats().get_context_data()
+        result = self.view.get_context_data()
         expected = self.expected()
         expected["state_counts"]["fp17s"]["total"] = 1
         expected["state_counts"]["fp17s"]["submitted"] = 1
@@ -125,12 +132,14 @@ class GetContextDataStatsTestCase(OpalTestCase):
         expected["uoa_info"]["by_period"] = json.dumps(
             expected["uoa_info"]["by_period"]
         )
-        result = Stats().get_context_data()
+        result = self.view.get_context_data()
         self.assertEqual(result, expected)
 
-    @mock.patch('odonto.views.get_current_financial_year')
-    def test_single_current_fp17o_episode(self, current_financial_year):
-        current_financial_year.return_value = self.current_financial_year
+    @mock.patch('odonto.views.Stats.date_range')
+    @mock.patch('odonto.views.Stats.previous_date_range')
+    def test_single_current_fp17o_episode(self, previous_date_range, date_range):
+        date_range.__get__ = mock.Mock(return_value=self.current_financial_year)
+        previous_date_range.__get__ = mock.Mock(return_value=self.previous_financial_year)
         episode = self.new_fp17o_episode()
         episode.stage = FP17Episode.SUBMITTED
         episode.save()
@@ -174,7 +183,7 @@ class GetContextDataStatsTestCase(OpalTestCase):
         expected["uoa_info"]["by_period"] = json.dumps(
             expected["uoa_info"]["by_period"]
         )
-        result = Stats().get_context_data()
+        result = self.view.get_context_data()
         self.assertEqual(result, expected)
 
 
