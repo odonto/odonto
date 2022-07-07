@@ -27,6 +27,7 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
   });
 
   var getErr = function(someStr){
+    someStr = someStr.charAt(0).toUpperCase() + someStr.slice(1);
     return {
       fp17_treatment_category: {
         treatment_category: someStr
@@ -134,13 +135,13 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
     if(treatment_category === BAND_3){
       if(!treatmentsOfBand3.length){
         return getErr(
-          'One of ' + getClinicDataSetTitles(BANDS_TO_FIELDS["3"]).join(', ') + 'are required to justify a Band 3'
+          'One of ' + getClinicDataSetTitles(BANDS_TO_FIELDS["3"]).join(', ') + 'are required to justify a band 3'
         )
       }
     }
     else if(treatmentsOfBand3.length && treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
       return getErr(
-        getClinicDataSetTitles(treatmentsOfBand3).join(",") + " requires a Band 3"
+        getClinicDataSetTitles(treatmentsOfBand3).join(",") + " requires a band 3"
       )
     }
 
@@ -151,14 +152,14 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
     if(treatment_category === BAND_2){
       if(!treatmentsOfBand2.length){
         return getErr(
-          'To justify a Band 2, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["2"]).join(', ')
+          'To justify a band 2, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["2"]).join(', ')
         )
       }
     }
     else if(treatment_category !== URGENT_TREATMENT && treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
       if(treatmentsOfBand2.length && !treatmentsOfBand3.length){
         return getErr(
-          getClinicDataSetTitles(treatmentsOfBand2).join(",") + " requires a Band 2"
+          getClinicDataSetTitles(treatmentsOfBand2).join(",") + " requires a band 2"
         )
       }
     }
@@ -174,13 +175,13 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
       treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
       if(treatmentsOfBand1.length && !treatmentsOfBand2.length && !treatmentsOfBand3.length){
         return getErr(
-          getClinicDataSetTitles(treatmentsOfBand1).join(", ") + " requires a Band 1"
+          getClinicDataSetTitles(treatmentsOfBand1).join(", ") + " requires a band 1"
         )
       }
     }
     if(treatment_category === BAND_1 && !treatmentsOfBand1.length){
       return getErr(
-        'To justify a Band 1, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["1"]).join(', ')
+        'To justify a band 1, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["1"]).join(', ')
       )
     }
   }

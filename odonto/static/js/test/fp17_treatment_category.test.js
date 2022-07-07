@@ -420,7 +420,7 @@ describe('Fp17TreatmentCategory', function() {
       // a band 3 treatment
       editing.fp17_clinical_data_set.veneers_applied = 2
 
-      var expected = getError('veneers applied requires a Band 3')
+      var expected = getError('Veneers applied requires a band 3')
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
 
     });
@@ -478,14 +478,14 @@ describe('Fp17TreatmentCategory', function() {
     it('should error if there is a band 1 treatment and no CDS band 1', function(){
       editing.fp17_treatment_category.treatment_category = BRIDGE_REPAIRS;
       editing.fp17_clinical_data_set.other_treatment = true
-      expected = getError('other treatment requires a Band 1');
+      expected = getError('Other treatment requires a band 1');
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
 
     it('should error if there it is marked as band 1 but there is nothing recorded in the clinical dataset', function(){
       editing.fp17_treatment_category.treatment_category = BAND_1;
       expected = getError(
-        "To justify a Band 1, at least one of the following is required: examination, scale and_polish, fluoride varnish, fissure sealants, radiographs taken, phased treatment, other treatment"
+        "To justify a band 1, at least one of the following is required: examination, scale and_polish, fluoride varnish, fissure sealants, radiographs taken, phased treatment, other treatment"
       );
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
@@ -494,7 +494,7 @@ describe('Fp17TreatmentCategory', function() {
       editing.fp17_treatment_category.treatment_category = BAND_1;
       editing.fp17_clinical_data_set.best_practice_prevention = true
       expected = getError(
-        "To justify a Band 1, at least one of the following is required: examination, scale and_polish, fluoride varnish, fissure sealants, radiographs taken, phased treatment, other treatment"
+        "To justify a band 1, at least one of the following is required: examination, scale and_polish, fluoride varnish, fissure sealants, radiographs taken, phased treatment, other treatment"
       );
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
@@ -513,7 +513,7 @@ describe('Fp17TreatmentCategory', function() {
       // a band 1 treatment
       editing.fp17_clinical_data_set.other_treatment = true;
 
-      var expected = getError('To justify a Band 2, at least one of the following is required: endodontic treatment, permanent fillings, extractions, pre formed_crowns, advanced perio_root_surface_debridement, denture additions_reline_rebase');
+      var expected = getError('To justify a band 2, at least one of the following is required: endodontic treatment, permanent fillings, extractions, pre formed_crowns, advanced perio_root_surface_debridement, denture additions_reline_rebase');
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
 
@@ -530,7 +530,7 @@ describe('Fp17TreatmentCategory', function() {
 
       // a band 3 treatment
       editing.fp17_clinical_data_set.veneers_applied = 2
-      expected = getError('veneers applied requires a Band 3')
+      expected = getError('Veneers applied requires a band 3')
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
 
     });
@@ -540,7 +540,7 @@ describe('Fp17TreatmentCategory', function() {
 
       // a band 3 treatment
       editing.fp17_clinical_data_set.veneers_applied = 2
-      expected = getError('veneers applied requires a Band 3')
+      expected = getError('Veneers applied requires a band 3')
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
 
