@@ -178,6 +178,11 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
         )
       }
     }
+    if(treatment_category === BAND_1 && !treatmentsOfBand1.length){
+      return getErr(
+        'To justify a Band 1, at least one of the following is required: ' + getClinicDataSetTitles(BANDS_TO_FIELDS["1"]).join(', ')
+      )
+    }
   }
 
 

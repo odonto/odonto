@@ -482,6 +482,23 @@ describe('Fp17TreatmentCategory', function() {
       expect(Fp17TreatmentCategory(editing)).toEqual(expected);
     });
 
+    it('should error if there it is marked as band 1 but there is nothing recorded in the clinical dataset', function(){
+      editing.fp17_treatment_category.treatment_category = BAND_1;
+      expected = getError(
+        "To justify a Band 1, at least one of the following is required: examination, scale and_polish, fluoride varnish, fissure sealants, radiographs taken, phased treatment, other treatment"
+      );
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+
+    it('should error if there it is marked as band 1 but there are only null treatments in the clincial dataset', function(){
+      editing.fp17_treatment_category.treatment_category = BAND_1;
+      editing.fp17_clinical_data_set.best_practice_prevention = true
+      expected = getError(
+        "To justify a Band 1, at least one of the following is required: examination, scale and_polish, fluoride varnish, fissure sealants, radiographs taken, phased treatment, other treatment"
+      );
+      expect(Fp17TreatmentCategory(editing)).toEqual(expected);
+    });
+
     it('should not error treatment band 2 if the highest treatment is band 2', function(){
       editing.fp17_treatment_category.treatment_category = BAND_2
       // a band 2 treatment
