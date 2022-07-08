@@ -56,7 +56,7 @@ class TreatmentSerializer(object):
         for k, v in self.TREATMENT_MAPPINGS.items():
             value = getattr(self.model_instance, k)
             if self.is_integer(k):
-                if value is not None:
+                if value is not None and not value == 0:
                     treatments.append(v(value))
             elif value:
                 treatments.append(v)

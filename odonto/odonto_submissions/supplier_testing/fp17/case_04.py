@@ -22,7 +22,6 @@ def annotate(bcds1):
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY_URGENT,
         treatments.ANTIBIOTIC_ITEMS(1),
-        treatments.DECAYED_PERMANENT(0),
         treatments.MISSING_PERMANENT(1),
         treatments.FILLED_PERMANENT(12),
         treatments.ETHNIC_ORIGIN_4_WHITE_AND_BLACK_CARIBBEAN,
@@ -63,6 +62,3 @@ def from_model(bcds1, patient, episode):
     )
 
     translate_to_bdcs1(bcds1, episode)
-
-
-
