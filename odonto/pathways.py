@@ -14,13 +14,9 @@ from odonto.episode_categories import (
 from plugins.add_patient_step import FindPatientStep
 
 
-def is_submitted(episode):
-    failed = [
-        submission_models.Submission.FAILED_TO_SEND,
-        submission_models.Submission.REJECTED_BY_COMPASS,
-    ]
-    return episode.submission_set.exclude(
-        state__in=failed
+def is_successfully_submitted(episode):
+    return episode.submission_set.filter(
+        state=submission_models.Submission.SUCCESS
     ).exists()
 
 
@@ -258,7 +254,7 @@ class SubmitFP17Pathway(OdontoPagePathway):
         to_dicted["steps"][check_index]["further_treatment_information"] = further_treatment_information
         free_repair_information = self.get_free_repair_replacement_information(patient, episode)
         to_dicted["steps"][check_index]["free_repair_replacement_information"] = free_repair_information
-        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        to_dicted["steps"][check_index]["episode_submitted"] = is_successfully_submitted(episode)
         return to_dicted
 
     @transaction.atomic
@@ -423,7 +419,7 @@ class SubmitFP17OPathway(OdontoPagePathway):
         to_dicted["steps"][check_index]
         overlapping_dates = self.get_overlapping_dates(patient, episode)
         to_dicted["steps"][check_index]["overlapping_dates"] = overlapping_dates
-        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        to_dicted["steps"][check_index]["episode_submitted"] = is_successfully_submitted(episode)
         to_dicted["steps"][check_index]["other_assessments"] = self.other_assessments(
             patient, episode
         )
@@ -506,7 +502,7 @@ class SubmitCovidTriagePathway(OdontoPagePathway):
         for index, step_dict in enumerate(to_dicted["steps"]):
             if step_dict["step_controller"] == step_ctrl:
                 check_index = index
-        to_dicted["steps"][check_index]["episode_submitted"] = is_submitted(episode)
+        to_dicted["steps"][check_index]["episode_submitted"] = is_successfully_submitted(episode)
         other_submitted = episode.patient.episode_set.filter(
             category_name=CovidTriageEpisode.display_name,
             stage=CovidTriageEpisode.SUBMITTED

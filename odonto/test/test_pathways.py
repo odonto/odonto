@@ -10,6 +10,7 @@ from odonto import episode_categories
 from odonto import pathways
 from odonto.odonto_submissions import models as submission_models
 
+
 class GetSubmissionStateTestCase(OpalTestCase):
     def setUp(self):
         _, self.episode = self.new_patient_and_episode_please()
@@ -18,16 +19,17 @@ class GetSubmissionStateTestCase(OpalTestCase):
         self.episode.submission_set.create(
             state=submission_models.Submission.SUCCESS
         )
-        self.assertTrue(pathways.is_submitted(self.episode))
+        self.assertTrue(pathways.is_successfully_submitted(self.episode))
 
     def test_is_submitted_failed(self):
         self.episode.submission_set.create(
             state=submission_models.Submission.FAILED_TO_SEND
         )
-        self.assertFalse(pathways.is_submitted(self.episode))
+        self.assertFalse(pathways.is_successfully_submitted(self.episode))
 
     def test_is_submitted_none(self):
-        self.assertFalse(pathways.is_submitted(self.episode))
+        self.assertFalse(pathways.is_successfully_submitted(self.episode))
+
 
 class AddPatientPathwayTestCase(OpalTestCase):
     def test_save(self):
@@ -248,10 +250,9 @@ class SubmitFP17PathwayTestCase(OpalTestCase):
             }]
         )
 
-
     def test_episode_submitted(self):
         self.episode.submission_set.create(
-            state="SUCCESS"
+            state=submission_models.Submission.SUCCESS
         )
         result = self.client.get(self.url).json()['steps'][-1]
         self.assertTrue(result["episode_submitted"])
@@ -410,7 +411,7 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
 
     def test_episode_submitted(self):
         self.episode.submission_set.create(
-            state="SUCCESS"
+            state=submission_models.Submission.SUCCESS
         )
         result = self.client.get(self.url).json()['steps'][-1]
         self.assertTrue(result["episode_submitted"])
