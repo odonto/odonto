@@ -2,9 +2,15 @@ describe('ExemptionsAndRemissionsValidator', function() {
   "use strict";
   var ExemptionsAndRemissionsValidator;
   var editing;
-  var expectedError = {
+  var noExemptionOrChargeError = {
     fp17_exemptions: {
       step_error: "Please select an exemption or add the charge"
+    }
+  }
+
+  var partialError = {
+    fp17_exemptions: {
+      step_error: "A charge is required if there is only a partial exemption"
     }
   }
 
@@ -22,7 +28,12 @@ describe('ExemptionsAndRemissionsValidator', function() {
   });
 
   it('should error if there is no exemption charge or free repair', function(){
-    expect(ExemptionsAndRemissionsValidator(editing)).toEqual(expectedError);
+    expect(ExemptionsAndRemissionsValidator(editing)).toEqual(noExemptionOrChargeError);
+  });
+
+  it('should show a different error if there is a partial exemption', function(){
+    editing.fp17_exemptions.partial_remission_hc3_cert = true
+    expect(ExemptionsAndRemissionsValidator(editing)).toEqual(partialError);
   });
 
   it('should not error if there is an exemption', function(){

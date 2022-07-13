@@ -8,10 +8,11 @@ def annotate(bcds1):
     bcds1.patient.forename = "SALLY"
     bcds1.patient.address = ["1 HIGH STREET"]
     bcds1.patient.sex = 'F'
+    bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(1958, 1, 23)
 
-    bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
-    bcds1.date_of_completion = datetime.date(2017, 4, 1)
+    bcds1.date_of_acceptance = datetime.date(2022, 4, 1)
+    bcds1.date_of_completion = datetime.date(2022, 4, 1)
 
     bcds1.patient_charge_pence = 2060
 
@@ -53,7 +54,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17incompletetreatment_set.update(
-        date_of_acceptance=datetime.date(2017, 4, 1),
-        completion_or_last_visit=datetime.date(2017, 4, 1)
+        date_of_acceptance=datetime.date(2022, 4, 1),
+        completion_or_last_visit=datetime.date(2022, 4, 1)
     )
     translate_to_bdcs1(bcds1, episode)

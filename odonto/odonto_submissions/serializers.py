@@ -23,6 +23,37 @@ class SerializerValidationError(Exception):
     pass
 
 
+def is_nhs_number_valid(nhs_number):
+    """
+    The NHS number is a ten digit number one digit is
+    check sum this validates whether the nhs number
+    is true.
+    """
+    if not nhs_number:
+        return False
+    nhs_number = nhs_number.replace(" ", "")
+    if not nhs_number.isnumeric():
+        return False
+        return "0" * 10
+    if not len(nhs_number) == 10:
+        return False
+    # https://www.datadictionary.nhs.uk/attributes/nhs_number.html
+    # step 1, for the first 9 numbers multiple by 11 - idx,
+    # step 2, sum them together
+    # step 3, mod the result by 11
+    # step 4, if the modded result is 0, then it becomes 11
+    # step 5, subtract the result from 11
+    # step 6, return result == nhs_number[9]
+    weighted_number = [
+        int(nhs_num) * (10 - idx) for idx, nhs_num in enumerate(nhs_number[:9])
+    ]
+    modded = sum(weighted_number) % 11
+    if modded == 0:
+        modded = 11
+    check_digit = 11 - modded
+    return int(nhs_number[-1]) == check_digit
+
+
 class TreatmentSerializer(object):
     message = Treatment
     TREATMENT_MAPPINGS = None
@@ -46,6 +77,20 @@ class TreatmentSerializer(object):
         field = self.get_field(name)
         return isinstance(field, django_models.IntegerField)
 
+    def get_treatment_value_for_field(self, field_name, treatment):
+        """
+        if the model value for the field is an integer and not none return
+        treatment(model_value)
+
+        if the model value is a boolean and True return treatment
+        """
+        value = getattr(self.model_instance, field_name)
+        if self.is_integer(field_name):
+            if value is not None:
+                return treatment(value)
+        elif value:
+            return treatment
+
     def to_messages(self):
         """
         Translates fields to messages.
@@ -59,12 +104,9 @@ class TreatmentSerializer(object):
         treatments = []
 
         for k, v in self.TREATMENT_MAPPINGS.items():
-            value = getattr(self.model_instance, k)
-            if self.is_integer(k):
-                if value is not None:
-                    treatments.append(v(value))
-            elif value:
-                treatments.append(v)
+            treatment = self.get_treatment_value_for_field(k, v)
+            if treatment:
+                treatments.append(treatment)
         return treatments
 
 
@@ -160,13 +202,6 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("missing_teeth_deciduous", t.MISSING_DECIDUOUS),
             ("filled_teeth_permanent", t.FILLED_PERMANENT),
             ("filled_teeth_deciduous", t.FILLED_TEETH_DECIDUOUS),
-            ("pre_formed_crowns", t.PREFORMED_CROWNS),
-            (
-                "advanced_perio_root_surface_debridement",
-                t.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT
-            ),
-            ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
-            ("phased_treatment", t.PHASED_TREATMENT),
         ]
     )
 
@@ -185,10 +220,29 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                     )
                 )
 
-        if self.model_instance.custom_made_occlusal_appliance == self.model_instance.HARD:
-            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
-        elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
-            treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
+        # Compass raises an error if it receives the below from
+        # episodes with dates of acceptance prior to 1/12/21
+        # before 1/12/21
+        if date_of_acceptance and date_of_acceptance >= datetime.date(2021, 12, 1):
+            after_1_12_21 = [
+                ("pre_formed_crowns", t.PREFORMED_CROWNS),
+                (
+                    "advanced_perio_root_surface_debridement",
+                    t.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT
+                ),
+                ("denture_additions_reline_rebase", t.DENTURE_ADDITIONS_RELINE_REBASE),
+                ("phased_treatment", t.PHASED_TREATMENT),
+            ]
+            for our_field, treatment_obj in after_1_12_21:
+                treatment = self.get_treatment_value_for_field(
+                    our_field, treatment_obj
+                )
+                if treatment:
+                    treatments.append(treatment)
+            if self.model_instance.custom_made_occlusal_appliance == self.model_instance.HARD:
+                treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
+            elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
+                treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
         return treatments
 
 
@@ -267,13 +321,7 @@ class OrthodonticDataSetTranslator(TreatmentSerializer):
         "aerosol_generating_procedures": t.AEROSOL_GENERATING_PROCEDURE,
     }
 
-    def to_messages(self):
-        messages = super().to_messages()
-        if self.model_instance.treatment_type == models.OrthodonticDataSet.PROPOSED:
-            messages.append(t.PROPOSED_TREATMENT)
-        elif self.model_instance.treatment_type == models.OrthodonticDataSet.COMPLETED:
-            messages.append(t.COMPLETED_TREATMENT)
-        return messages
+
 
 class ExtractionChartTranslator(TreatmentSerializer):
     model = models.ExtractionChart
@@ -316,7 +364,6 @@ class ExtractionChartTranslator(TreatmentSerializer):
         if teeth:
             result.append(t.ORTHODONTIC_EXTRACTIONS(teeth))
         return result
-
 
 
 class OrthodonticAssessmentTranslator(TreatmentSerializer):
@@ -404,6 +451,8 @@ appliance fitted"'
 
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
             result.append(t.ASSESS_AND_APPLIANCE_FITTED)
+            # assess and appliance fitted must be accompanied by proposed treatment
+            result.append(t.PROPOSED_TREATMENT)
 
         if self.model_instance.date_of_referral:
             dt = self.model_instance.date_of_referral
@@ -448,14 +497,18 @@ class OrthodonticTreatmentTranslator(TreatmentSerializer):
         if self.model_instance.replacement:
             result.append(t.REGULATION_11_REPLACEMENT_APPLIANCE)
         elif self.model_instance.completion_type == self.model.PATIENT_FAILED_TO_RETURN:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_FAILED_TO_RETURN)
         elif self.model_instance.completion_type == self.model.PATIENT_REQUESTED:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_ABANDONED)
             result.append(t.PATIENT_REQUESTED)
         elif self.model_instance.completion_type == self.model.TREATMENT_DISCONTINUED:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_DISCONTINUED)
         elif self.model_instance.completion_type == self.model.TREATMENT_COMPLETED:
+            result.append(t.COMPLETED_TREATMENT)
             result.append(t.TREATMENT_COMPLETED)
 
         return result
@@ -626,6 +679,23 @@ class DemographicsTranslator(TreatmentSerializer):
     def forename(self):
         return clean_non_alphanumeric(self.model_instance.first_name).upper()
 
+    def nhs_number(self):
+        """
+        Returns the nhs number of a patient if it is a number and ten digits long
+        """
+        # previously they did not require an NHS number, now for some forms they do
+        # our users have generally been good at putting one in anyway however
+        # we were not validating the field because we did not send it down as it was not
+        # required.
+        # now we will send it down but only if it is correctly formed and valid.
+        # the client side will validate it but this was not always the case.
+        #
+        # the docs say that if it is not known it is still required but they
+        # just expect 10 zeros
+        if is_nhs_number_valid(self.model_instance.nhs_number):
+            return self.model_instance.nhs_number.replace(" ", "")
+        return "0" * 10
+
     def surname(self):
         return clean_non_alphanumeric(self.model_instance.surname).upper()
 
@@ -776,6 +846,8 @@ def translate_to_fp17o(bcds1, episode):
     if post_code:
         bcds1.patient.postcode = post_code
 
+    bcds1.patient.nhs_number = demographics_translator.nhs_number()
+
     bcds1.date_of_acceptance = get_fp17o_date_of_acceptance(episode)
 
     orthodontic_treatment = episode.orthodontictreatment_set.get()
@@ -814,7 +886,6 @@ def translate_to_fp17o(bcds1, episode):
         elif demographics.patient_declined_phone:
             bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
 
-
     fp17_exemption = episode.fp17exemptions_set.get()
     if fp17_exemption.commissioner_approval:
         bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
@@ -843,6 +914,8 @@ def translate_to_fp17(bcds1, episode):
 
     if post_code:
         bcds1.patient.postcode = post_code
+
+    bcds1.patient.nhs_number = demographics_translator.nhs_number()
 
     incomplete_treatment = episode.fp17incompletetreatment_set.get()
     bcds1.date_of_acceptance = incomplete_treatment.date_of_acceptance
@@ -898,6 +971,7 @@ def translate_to_covid_19(bcds1, episode):
     bcds1.patient.date_of_birth = demographics.date_of_birth
     bcds1.patient.address = demographics_translator.address()
     bcds1.patient.sex = demographics_translator.sex()
+    bcds1.patient.nhs_number = demographics_translator.nhs_number()
     post_code = demographics_translator.post_code()
 
     if post_code:

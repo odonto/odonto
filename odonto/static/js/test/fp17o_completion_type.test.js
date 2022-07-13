@@ -55,31 +55,6 @@ describe('Fp17OCompletionType', function() {
     });
   });
 
-  describe("There must be a completion type if treatment type is completed", function(){
-    it('should error if treatment type is completed but there is no completion type', function(){
-      editing.orthodontic_treatment.completion_type = "";
-      editing.orthodontic_data_set.treatment_type = "Completed/Abandoned/Discontinued Treatment";
-      var expected = {
-        orthodontic_treatment: {
-          completion_type: "Completion type is required when treatment type is 'Completed/Abandoned/Discontinued Treatment'"
-        }
-      }
-      expect(Fp17OCompletionType(editing, step)).toEqual(expected);
-    });
-
-    it('should not error if treatment type is not completed', function(){
-      editing.orthodontic_treatment.completion_type = "";
-      editing.orthodontic_data_set.treatment_type = "Proposed";
-      expect(Fp17OCompletionType(editing, step)).toBe(undefined);
-    });
-
-    it('should not error if there is a treatment type and completion type is completed', function(){
-      editing.orthodontic_treatment.completion_type = "Treatment completed";
-      editing.orthodontic_data_set.treatment_type = "Completed/Abandoned/Discontinued Treatment";
-      expect(Fp17OCompletionType(editing, step)).toBe(undefined);
-    });
-  });
-
   describe('Sequential episodes cannot also be treatment completed', function(){
     var day1 = moment().subtract(3, "days");
     var day2 = moment().subtract(2, "days");
