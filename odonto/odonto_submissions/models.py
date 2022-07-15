@@ -279,9 +279,6 @@ class Submission(models.Model):
     class Meta:
         ordering = ('-submission_count',)
         get_latest_by = 'submission_count'
-        unique_together = (
-            ('episode', 'submission_count'),
-        )
 
     def __str__(self):
         return "<Submission pk={0.pk} raw_xml={0.raw_xml!r} >".format(self)
@@ -297,6 +294,9 @@ class Submission(models.Model):
         if latest_submission is None:
             submission_count = 1
             submission_id = episode.id
+        elif replace:
+            submission_count = latest_submission.submission_count
+            submission_id = latest_submission.get_submission_id()
         else:
             submission_count = latest_submission.submission_count + 1
             submission_id = latest_submission.get_submission_id()
