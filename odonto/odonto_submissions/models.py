@@ -237,11 +237,24 @@ class Submission(models.Model):
         (MANUALLY_PROCESSED, MANUALLY_PROCESSED,),
     )
 
+    NEW = "New"
+    REPLACE = "Replace"
+    DELETE = "Delete"
+
+    SUBMISSION_TYPE = (
+        (NEW, NEW),
+        (REPLACE, REPLACE),
+        (DELETE, DELETE),
+    )
+
     raw_xml = models.TextField()
     created = models.DateTimeField(default=timezone.now)
     submission_count = models.IntegerField(default=1)
     state = models.CharField(
         default="", choices=STATUS, max_length=256
+    )
+    submission_type = models.CharField(
+        default=NEW, choices=SUBMISSION_TYPE, max_length=256
     )
 
     # The response tha we receive immediately after we send it
@@ -273,9 +286,8 @@ class Submission(models.Model):
     def __str__(self):
         return "<Submission pk={0.pk} raw_xml={0.raw_xml!r} >".format(self)
 
-
     @classmethod
-    def create(cls, episode):
+    def create(cls, episode, replace=False, delete=False):
         latest_submission = episode.submission_set.order_by(
             "-submission_count"
         ).first()
@@ -293,17 +305,25 @@ class Submission(models.Model):
             episode,
             submission_id,
             submission_count,
-            transmission.transmission_id
+            transmission.transmission_id,
+            replace=replace,
+            delete=delete
         )
+        submission_type = cls.NEW
+        if replace:
+            submission_type = cls.REPLACE
+        elif delete:
+            submission_type = cls.DELETE
         return cls.objects.create(
             raw_xml=xml,
             submission_count=submission_count,
             episode=episode,
-            transmission=transmission
+            transmission=transmission,
+            submission_type=submission_type
         )
 
     @classmethod
-    def send(cls, episode, force=False):
+    def send(cls, episode, force=False, replace=False, delete=False):
         """
         Creates a new submission and sends it down stream.
 
@@ -343,7 +363,7 @@ to compass for submission {} not sending"
                 )
                 return
 
-        new_submission = cls.create(episode)
+        new_submission = cls.create(episode, replace=replace, delete=delete)
 
         try:
             new_submission.request_response = dpb_api.send_message(

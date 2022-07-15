@@ -578,6 +578,14 @@ class OrthodonticDataSet(models.EpisodeSubrecord):
 
     TREATMENT_TYPES = enum(PROPOSED, COMPLETED)
 
+    # treatment type can be logically inferred from other fields.
+    #
+    # The docs say:
+    # PROPOSED "Must be accompanied by Assess/Appliance Fitted"
+    #
+    #
+    # COMPLETED "Must be accompanied by Treatment Abandoned (9161 1),
+    # Treatment Discontinued (9161 2) or Treatment Completed (9161 3)"
     treatment_type            = fields.CharField(
         choices=TREATMENT_TYPES, max_length=255, blank=True, null=True
     )

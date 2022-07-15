@@ -7,6 +7,9 @@
 {% block content %}
 {% now "Y" as current_year %}
 {% now "b" as current_month %}
+{% now "n" as com %}
+{# com is a string so convert it into an int for > or < %}
+{% with current_int_month=com|add:"0" %}
   <div class="outer-container">
     <div class="container-fluid">
       <div class="row">
@@ -50,7 +53,11 @@
             <ul class="app-info">
               {% if request.user.profile.can_extract %}
               <li {% if request.resolver_match.url_name == "odonto-stats" %}class="active"{% endif %}>
-                <a href="{% url 'odonto-stats' %}">
+                {% if current_int_month|add:"0" > 3 %}
+                <a href="{% url 'odonto-stats' year=current_year %}">
+                {% else %}
+                <a href="{% url 'odonto-stats' year=current_year|add:'-1' %}">
+                {% endif %}
                   Stats
                 </a>
               </li>
@@ -91,4 +98,5 @@
       </div>
     </div>
   </div>
+{% endwith %}
 {% endblock %}

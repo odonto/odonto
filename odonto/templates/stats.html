@@ -3,11 +3,25 @@
 
 {% block odonto_viewport %}
 <div class="content-offset stats-page">
+  <div class="row">
+    <div class="col-md-5">
+      <h1>Stats for  {{ current }}</h1>
+    </div>
+    <div class="col-md-7 text-right view-switcher">
+      <div class="btn-group">
+        {% for year in menu_years %}
+        <a class="btn {% if view.kwargs.year == year %}btn-primary {% else %} btn-default {% endif %}" href="{% url 'odonto-stats' year=year %}">
+          {{ year }} - {{ year|add:"1" }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 
 
   {# Activity #}
   <h2>
-    Activity {{ current }}
+    Activity
   </h2>
   <div class="row">
     <div class="col-md-4 text-center">
@@ -60,7 +74,7 @@
 
 
   <h2 class="content-offset">
-    Compass Integration {{ current }}
+    Compass Integration
   </h2>
   {# Summary rectangles #}
   <div class="row">

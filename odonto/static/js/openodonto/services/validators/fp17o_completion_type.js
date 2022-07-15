@@ -25,9 +25,7 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(toMoment
     "use strict";
     var assessment = editing.orthodontic_assessment;
     var treatment = editing.orthodontic_treatment;
-    var treatmentType = editing.orthodontic_data_set.treatment_type
     var ASSESS_AND_REFUSE_TREATMENT = "Assess & refuse treatment"
-    var COMPLETED = "Completed/Abandoned/Discontinued Treatment"
 
 
     if(assessment.assessment === ASSESS_AND_REFUSE_TREATMENT){
@@ -40,18 +38,6 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(toMoment
       }
     }
 
-
-
-    if(!treatment.completion_type){
-      if(treatmentType === COMPLETED){
-        return {
-          "orthodontic_treatment": {
-            "completion_type": "Completion type is required when treatment type is '" + COMPLETED + "'"
-          }
-        }
-      }
-      return;
-    }
     var dateOfCompletion = treatment.date_of_completion;
     if(!dateOfCompletion){
       return;

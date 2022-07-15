@@ -7,6 +7,7 @@ angular.module('opal.controllers').controller(
     $timeout,
     $rootScope,
     FormValidation,
+    NHSNumberValidator,
     DateOfBirthRequired,
     AddressRequired,
     ApplianceGreaterThanAssessment,
@@ -34,6 +35,7 @@ angular.module('opal.controllers').controller(
   $rootScope.showSummary = null;
   var validators = [
     DateOfBirthRequired,
+    NHSNumberValidator,
     AddressRequired,
     CaseMixRequired,
     ApplianceGreaterThanAssessment,

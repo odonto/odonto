@@ -5,7 +5,7 @@
 </div>
 <div class="row">
   <div class="col-md-5">
-    {% charfield field="Demographics.nhs_number" label="NHS number" maxlength="10" style="vertical" required=True %}
+    {% charfield field="Demographics.nhs_number" label="NHS number" style="vertical" %}
   </div>
 </div>
 <div class="row">
@@ -75,4 +75,3 @@
     {% btn_checkbox field="Demographics.protected" change="editing.demographics.house_number_or_name=''; editing.demographics.street=''; editing.demographics.city_or_town=''; editing.demographics.county=''; editing.demographics.post_code=''" maxlength="32" %}
   </div>
 </div>
-

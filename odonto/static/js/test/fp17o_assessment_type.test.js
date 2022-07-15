@@ -17,8 +17,7 @@ describe('Fp17OAssessmentType', function() {
         },
         orthodontic_treatment: {
           completion_type: "Treatment completed"
-        },
-        orthodontic_data_set: {}
+        }
       };
       step = {
         other_assessments: []
@@ -93,56 +92,6 @@ describe('Fp17OAssessmentType', function() {
     it('should not error if there is a regulation', function(){
       editing.orthodontic_treatment.completion_type = "";
       editing.orthodontic_treatment.replacement = true;
-      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
-    });
-  });
-
-  describe('there cannot be an assessment and a treatment type of completed', function(){
-    it('should error if there is an assessment and a treatment type of completed', function(){
-      editing.orthodontic_data_set.treatment_type = "Completed / Abandoned / Discontinued Treatment"
-      editing.orthodontic_assessment.assessment = "Assess & appliance fitted";
-      var err = "An assessment type cannot be combined with a treatment type of Completed / Abandoned / Discontinued Treatment"
-      var expected = {
-        "orthodontic_assessment": {
-          "assessment": err
-        }
-      }
-      expect(Fp17OAssessmentType(editing, step)).toEqual(expected);
-    });
-
-    it('should not error if there is no assessment type and a treatment type of completed', function(){
-      editing.orthodontic_data_set.treatment_type = "Completed / Abandoned / Discontinued Treatment"
-      editing.orthodontic_assessment.assessment = null;
-      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
-    });
-
-    it('should not error if there is an assessment type and a no treatment type', function(){
-      editing.orthodontic_data_set.treatment_type = null
-      editing.orthodontic_assessment.assessment = null;
-      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
-    });
-  });
-
-  describe('treatment type is proposed but assessment type is not assess and appliance', function(){
-    it('should error if assessment is not assess and appliance fitted but treatment type is proposed', function(){
-      editing.orthodontic_data_set.treatment_type = "Proposed"
-      editing.orthodontic_assessment.assessment = "Assessment & Review";
-      expect(Fp17OAssessmentType(editing, step)).toEqual({
-        orthodontic_assessment: {
-          assessment: "Treatment type 'Proposed' requires an assessment of 'Assess & appliance fitted'"
-        }
-      });
-    });
-
-    it('should not error if assessment type is assess and appliance fitted and treatment is proposed', function(){
-      editing.orthodontic_data_set.treatment_type = "Proposed"
-      editing.orthodontic_assessment.assessment = "Assess & appliance fitted";
-      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
-    })
-
-    it('should not error if assessment is not proposed', function(){
-      editing.orthodontic_data_set.treatment_type = undefined;
-      editing.orthodontic_assessment.assessment = "Assessment & Review";
       expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
   });

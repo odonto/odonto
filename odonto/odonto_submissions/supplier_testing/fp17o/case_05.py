@@ -10,6 +10,7 @@ def annotate(bcds1):
     bcds1.patient.forename = "WILLIAM"
     bcds1.patient.address = ["35 HIGH STREET"]
     bcds1.patient.sex = 'M'
+    bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(2004, 10, 15)
 
     bcds1.date_of_acceptance = datetime.date(2019, 10, 12)
@@ -21,6 +22,7 @@ def annotate(bcds1):
     bcds1.treatments = [
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.ASSESS_AND_APPLIANCE_FITTED,
+        treatments.PROPOSED_TREATMENT,
         treatments.DAY_OF_REFERRAL(11),
         treatments.MONTH_OF_REFERRAL(10),
         treatments.YEAR_OF_REFERRAL(19),
@@ -68,4 +70,3 @@ def from_model(bcds1, patient, episode):
         ur_2=True
     )
     translate_to_bdcs1(bcds1, episode)
-
