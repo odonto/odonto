@@ -86,7 +86,7 @@ class TreatmentSerializer(object):
         """
         value = getattr(self.model_instance, field_name)
         if self.is_integer(field_name):
-            if value is not None:
+            if value is not None and not value == 0:
                 return treatment(value)
         elif value:
             return treatment
