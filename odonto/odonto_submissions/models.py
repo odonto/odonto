@@ -346,7 +346,7 @@ from compass for submission {} not sending"
                 cls.SENT, latest_submission.id
             ))
 
-        if latest_submission and latest_submission.state == cls.SUCCESS:
+        if latest_submission and not replace and not delete and latest_submission.state == cls.SUCCESS:
             ex = "We have a submission with state {} ie successfully submitted \
 to compass for submission {} not sending"
             raise MessageSendingException(ex.format(
