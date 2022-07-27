@@ -140,8 +140,12 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
       }
     }
     else if(treatmentsOfBand3.length && treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
+      var requires = "require"
+      if(treatmentsOfBand3.length === 1){
+        requires = "requires"
+      }
       return getErr(
-        getClinicDataSetTitles(treatmentsOfBand3).join(",") + " requires a band 3"
+        getClinicDataSetTitles(treatmentsOfBand3).join(", ") + " " + requires + " a band 3"
       )
     }
 
@@ -158,8 +162,12 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
     }
     else if(treatment_category !== URGENT_TREATMENT && treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
       if(treatmentsOfBand2.length && !treatmentsOfBand3.length){
+        var requires = "require"
+        if(treatmentsOfBand2.length === 1){
+          requires = "requires"
+        }
         return getErr(
-          getClinicDataSetTitles(treatmentsOfBand2).join(",") + " requires a band 2"
+          getClinicDataSetTitles(treatmentsOfBand2).join(", ") + " " + requires + " a band 2"
         )
       }
     }
@@ -174,8 +182,12 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
       treatment_category !== URGENT_TREATMENT &&
       treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
       if(treatmentsOfBand1.length && !treatmentsOfBand2.length && !treatmentsOfBand3.length){
+        var requires = "require"
+        if(treatmentsOfBand1.length === 1){
+          requires = "requires"
+        }
         return getErr(
-          getClinicDataSetTitles(treatmentsOfBand1).join(", ") + " requires a band 1"
+          getClinicDataSetTitles(treatmentsOfBand1).join(", ") + " " + requires + " a band 1"
         )
       }
     }
