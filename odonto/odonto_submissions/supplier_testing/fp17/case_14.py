@@ -8,6 +8,7 @@ def annotate(bcds1):
     bcds1.patient.forename = "RITA"
     bcds1.patient.address = ["14 HIGH STREET"]
     bcds1.patient.sex = 'F'
+    bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(1940, 6, 5)
 
     bcds1.date_of_acceptance = datetime.date(2017, 4, 1)

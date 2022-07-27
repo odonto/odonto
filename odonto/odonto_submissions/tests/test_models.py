@@ -123,6 +123,61 @@ to compass for submission {} not sending"
             submission.state, models.Submission.FAILED_TO_SEND
         )
 
+    def test_send_replace(
+        self, translate_episode_to_xml, send_message
+    ):
+        send_message.return_value = "some response"
+        translate_episode_to_xml.return_value = "some_xml"
+        sent_submission = models.Submission.send(self.episode, replace=True)
+        # refetch the submission to make sure its saved
+        submission = models.Submission.objects.get(id=sent_submission.id)
+        self.assertEqual(
+            submission.request_response, "some response"
+        )
+        self.assertEqual(
+            submission.raw_xml, "some_xml"
+        )
+        self.assertEqual(
+            submission.state, models.Submission.SENT
+        )
+        self.assertEqual(
+            submission.submission_type, models.Submission.REPLACE
+        )
+        self.assertTrue(
+            translate_episode_to_xml.call_args[1]["replace"]
+        )
+        self.assertFalse(
+            translate_episode_to_xml.call_args[1]["delete"]
+        )
+
+
+    def test_send_delete(
+        self, translate_episode_to_xml, send_message
+    ):
+        send_message.return_value = "some response"
+        translate_episode_to_xml.return_value = "some_xml"
+        sent_submission = models.Submission.send(self.episode, delete=True)
+        # refetch the submission to make sure its saved
+        submission = models.Submission.objects.get(id=sent_submission.id)
+        self.assertEqual(
+            submission.request_response, "some response"
+        )
+        self.assertEqual(
+            submission.raw_xml, "some_xml"
+        )
+        self.assertEqual(
+            submission.state, models.Submission.SENT
+        )
+        self.assertEqual(
+            submission.submission_type, models.Submission.DELETE
+        )
+        self.assertFalse(
+            translate_episode_to_xml.call_args[1]["replace"]
+        )
+        self.assertTrue(
+            translate_episode_to_xml.call_args[1]["delete"]
+        )
+
     def test_episode_claim_id_for_second_submission(
         self, translate_episode_to_xml, send_message
     ):

@@ -1,28 +1,26 @@
+"""
+Tests that the nhs number gets sent down when available for FP17s
+"""
 import datetime
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
-from fp17 import treatments, exemptions
+from fp17 import treatments
 
 
 def annotate(bcds1):
-    bcds1.patient.surname = "CARSTAIRS"
-    bcds1.patient.forename = "EMMA"
-    bcds1.patient.address = ["38 HIGH STREET"]
+    bcds1.patient.surname = "BARLASTON"
+    bcds1.patient.forename = "SALLY"
+    bcds1.patient.address = ["1 HIGH STREET"]
     bcds1.patient.sex = 'F'
-    bcds1.patient.nhs_number = '0000000000'
-    bcds1.patient.date_of_birth = datetime.date(1990, 6, 21)
-
+    bcds1.patient.date_of_birth = datetime.date(1958, 1, 23)
+    bcds1.patient.nhs_number = "7110493547"
     bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
     bcds1.date_of_completion = datetime.date(2017, 4, 1)
 
-    # "Prisoner"
-    bcds1.exemption_remission = {
-        'code': exemptions.PRISONER,
-    }
+    bcds1.patient_charge_pence = 2060
 
-    # Treatments: "None"
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(1),
-        treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
+        treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
     ]
 
     return bcds1
@@ -30,21 +28,21 @@ def annotate(bcds1):
 
 def from_model(bcds1, patient, episode):
     demographics = patient.demographics()
-    demographics.surname = "CARSTAIRS"
-    demographics.first_name = "EMMA"
-    demographics.house_number_or_name = "38"
+    demographics.surname = "Barlaston"
+    demographics.first_name = "Sally"
+    demographics.house_number_or_name = "1"
     demographics.street = "HIGH STREET"
     demographics.sex = "Female"
-    demographics.date_of_birth = datetime.date(1990, 6, 21)
-    demographics.ethnicity = "Patient declined"
+    demographics.date_of_birth = datetime.date(1958, 1, 23)
+    demographics.ethnicity = "White british"
+    demographics.hospital_number = "0123456789"
+    demographics.nhs_number = "711 049 3547"
     demographics.save()
-
     episode.fp17treatmentcategory_set.update(
         treatment_category="Band 1",
     )
-
     episode.fp17exemptions_set.update(
-        prisoner=True
+        patient_charge_collected="20.60"
     )
 
     episode.fp17incompletetreatment_set.update(

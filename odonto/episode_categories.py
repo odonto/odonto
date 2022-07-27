@@ -42,6 +42,10 @@ class AbstractOdontoCategory(object):
             i for i in submissions if i.state in successful_submission_states
         ]
         if len(successful_submissions):
+            submission = successful_submissions[-1]
+            # if the latest submission is a delete, then return None
+            if submission.submission_type == submission.DELETE:
+                return None
             return successful_submissions[-1]
 
         if submissions:

@@ -10,6 +10,7 @@ def annotate(bcds1):
     bcds1.patient.forename = "WILLIAM"
     bcds1.patient.address = ["35 HIGH STREET"]
     bcds1.patient.sex = 'M'
+    bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(2005, 1, 24)
 
     bcds1.date_of_acceptance = datetime.date(2019, 10, 12)
@@ -22,14 +23,11 @@ def annotate(bcds1):
     bcds1.treatments = [
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.TREATMENT_ABANDONED,
+        treatments.COMPLETED_TREATMENT,
         treatments.PATIENT_FAILED_TO_RETURN,
         treatments.RADIOGRAPHS(1),
         treatments.FIXED_UPPER_APPLIANCE,
         treatments.IOTN(0),
-        treatments.DAY_OF_REFERRAL(9),
-        treatments.MONTH_OF_REFERRAL(10),
-        treatments.YEAR_OF_REFERRAL(19),
-        treatments.ASSESS_AND_REVIEW
     ]
 
     if settings.ALWAYS_DECLINE_EMAIL_PHONE:
@@ -55,12 +53,6 @@ def from_model(bcds1, patient, episode):
     episode.fp17exemptions_set.update(
         patient_under_18=True,
         evidence_of_exception_or_remission_seen=True
-    )
-
-    episode.orthodonticassessment_set.update(
-        assessment=models.OrthodonticAssessment.ASSESSMENT_AND_REVIEW,
-        date_of_referral=datetime.date(2019, 10, 9),
-        date_of_assessment=datetime.date(2019, 10, 12),
     )
     episode.orthodonticdataset_set.update(
         fixed_upper_appliance=True,

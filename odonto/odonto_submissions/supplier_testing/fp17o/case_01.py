@@ -11,6 +11,7 @@ def annotate(bcds1):
     bcds1.patient.address = ["35 HIGH STREET"]
 
     bcds1.patient.sex = 'M'
+    bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(1974, 10, 15)
 
     bcds1.date_of_acceptance = datetime.date(2019, 10, 12)
@@ -20,7 +21,6 @@ def annotate(bcds1):
     }
 
     bcds1.treatments = [
-        treatments.PROPOSED_TREATMENT,
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
         treatments.ASSESS_AND_REVIEW,
         treatments.COMMISSIONER_APPROVAL,
@@ -66,7 +66,6 @@ def from_model(bcds1, patient, episode):
     episode.orthodonticdataset_set.update(
         radiograph=3,
         aerosol_generating_procedures=2,
-        treatment_type=models.OrthodonticDataSet.PROPOSED
     )
 
     episode.extractionchart_set.update(

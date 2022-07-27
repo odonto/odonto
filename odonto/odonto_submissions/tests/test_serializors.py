@@ -140,12 +140,12 @@ class SerializerTestCase(OpalTestCase):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
         covid_19_category = episode_categories.CovidTriageEpisode.display_name
-        for case_number in range(1, 55):
+        for case_number in range(1, 56):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 7):
+        for case_number in range(1, 8):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -174,6 +174,36 @@ class Fp17TreatmentCategorySerializerTestCase(OpalTestCase):
     def test_without_incomplete_treatment(self):
         messages = serializers.Fp17IncompleteTreatmentSerializer(self.episode).to_messages()
         self.assertEqual(messages, [])
+
+
+class IsNhsNumberValidTestCase(OpalTestCase):
+    def test_nhs_number_is_none(self):
+        self.assertFalse(serializers.is_nhs_number_valid(None))
+
+    def test_nhs_number_is_empty(self):
+        self.assertFalse(serializers.is_nhs_number_valid(""))
+
+    def test_nhs_number_is_too_short(self):
+        self.assertFalse(serializers.is_nhs_number_valid("123"))
+
+    def test_nhs_number_contains_letter(self):
+        self.assertFalse(serializers.is_nhs_number_valid("012345678F"))
+
+    def test_valid(self):
+        self.assertTrue(serializers.is_nhs_number_valid("687 234 3060"))
+        self.assertTrue(serializers.is_nhs_number_valid("975 155 7305"))
+        self.assertTrue(serializers.is_nhs_number_valid("045 543 6029"))
+        self.assertTrue(serializers.is_nhs_number_valid("711 049 3547"))
+        self.assertTrue(serializers.is_nhs_number_valid("603 725 5857"))
+        self.assertTrue(serializers.is_nhs_number_valid("942 150 4356"))
+
+    def test_invalid(self):
+        self.assertFalse(serializers.is_nhs_number_valid("687 234 3061"))
+        self.assertFalse(serializers.is_nhs_number_valid("975 155 7306"))
+        self.assertFalse(serializers.is_nhs_number_valid("045 543 6031"))
+        self.assertFalse(serializers.is_nhs_number_valid("711 049 3548"))
+        self.assertFalse(serializers.is_nhs_number_valid("603 725 5858"))
+        self.assertFalse(serializers.is_nhs_number_valid("942 150 4357"))
 
 
 class DemographicsTranslatorTestCase(OpalTestCase):
@@ -271,6 +301,7 @@ class DemographicsTranslatorTestCase(OpalTestCase):
         )
 
 
+
 class Fp17TreatmentCategoryTestCase(OpalTestCase):
     def setUp(self):
         patient, self.episode = self.new_patient_and_episode_please()
@@ -298,6 +329,7 @@ class Fp17TreatmentCategoryTestCase(OpalTestCase):
         serializer = serializers.Fp17TreatmentCategorySerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.TREATMENT_CATEGORY(1)])
 
+
 class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
     def setUp(self):
         _, self.episode = self.new_patient_and_episode_please()
@@ -320,7 +352,6 @@ class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
         serializer = serializers.Fp17ClinicalDataSetSerializer(self.episode)
         self.assertEqual(serializer.to_messages(), [treatments.ANTIBIOTIC_ITEMS(3)])
 
-
     def test_aerosol_after(self):
         self.data_set.antibiotic_items_prescribed = 3
         self.data_set.aerosol_generating_procedures = 4
@@ -338,33 +369,6 @@ class Fp17ClinicalDataSetSerializerTestCase(OpalTestCase):
             ]
         )
 
-
-class OrthodonticDataSetTranslatorTestCase(OpalTestCase):
-    def setUp(self):
-        _, self.episode = self.new_patient_and_episode_please()
-        self.data_set = self.episode.orthodonticdataset_set.get()
-
-    def test_to_messages_proposed(self):
-        self.data_set.treatment_type = models.OrthodonticDataSet.PROPOSED
-        self.data_set.save()
-        self.assertEqual(
-            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
-            [treatments.TREATMENT_TYPE(1)]
-        )
-
-    def test_to_messages_completed(self):
-        self.data_set.treatment_type = models.OrthodonticDataSet.COMPLETED
-        self.data_set.save()
-        self.assertEqual(
-            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
-            [treatments.TREATMENT_TYPE(2)]
-        )
-
-    def test_to_messages_none(self):
-        self.assertEqual(
-            serializers.OrthodonticDataSetTranslator(self.episode).to_messages(),
-            []
-        )
 
 class ExtractionChartTranslatorTestCase(OpalTestCase):
     def test_get_teeth_field_to_code_mapping(self):
@@ -454,8 +458,13 @@ class OrthodonticTreatmentTranslatorTestCase(OpalTestCase):
         self.treatment.save()
         self.assertEqual(
             serializers.OrthodonticTreatmentTranslator(self.episode).to_messages(),
-            [treatments.TREATMENT_ABANDONED, treatments.PATIENT_FAILED_TO_RETURN]
+            [
+                treatments.COMPLETED_TREATMENT,
+                treatments.TREATMENT_ABANDONED,
+                treatments.PATIENT_FAILED_TO_RETURN
+            ]
         )
+
 
 class CovidStatusTranslatorTestCase(OpalTestCase):
     def setUp(self):
@@ -557,11 +566,11 @@ class GetEnvelopeTestCase(OpalTestCase):
         )
 
 
+@override_settings(
+    FP17_CONTRACT_NUMBER="FP17_CONTRACT_NUMBER",
+)
+@mock.patch("odonto.odonto_submissions.serializers.translate_to_bdcs1")
 class GetBCDS1TestCase(OpalTestCase):
-    @override_settings(
-        FP17_CONTRACT_NUMBER="FP17_CONTRACT_NUMBER",
-    )
-    @mock.patch("odonto.odonto_submissions.serializers.translate_to_bdcs1")
     def test_get_bcds1(self, translate_to_bdcs1):
         _, episode = self.new_patient_and_episode_please()
         episode.category_name = episode_categories.FP17Episode.display_name
@@ -588,3 +597,45 @@ class GetBCDS1TestCase(OpalTestCase):
         self.assertEqual(bcds1.dpb_pin, "2222")
         self.assertIsNotNone(bcds1.patient)
         self.assertTrue(translate_to_bdcs1.called)
+
+    def test_replace_bcds1(self, translate_to_bdcs1):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = episode_categories.FP17Episode.display_name
+        episode.save()
+        episode.fp17dentalcareprovider_set.get()
+        episode.fp17dentalcareprovider_set.update(
+            provider_location_number='Morpeth NHS Centre',
+            performer="Susan Winstanley"
+        )
+        models.PerformerNumber.objects.create(
+            user=self.user,
+            number="111",
+            dpb_pin="2222"
+        )
+        self.user.first_name = "Susan"
+        self.user.last_name = "Winstanley"
+        self.user.save()
+
+        bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT", replace=True)
+        self.assertEqual(bcds1.schedule_query, message.SCHEDULE_QUERY_FALSE)
+
+    def test_delete_bcds1(self, translate_to_bdcs1):
+        _, episode = self.new_patient_and_episode_please()
+        episode.category_name = episode_categories.FP17Episode.display_name
+        episode.save()
+        episode.fp17dentalcareprovider_set.get()
+        episode.fp17dentalcareprovider_set.update(
+            provider_location_number='Morpeth NHS Centre',
+            performer="Susan Winstanley"
+        )
+        models.PerformerNumber.objects.create(
+            user=self.user,
+            number="111",
+            dpb_pin="2222"
+        )
+        self.user.first_name = "Susan"
+        self.user.last_name = "Winstanley"
+        self.user.save()
+
+        bcds1 = serializers.get_bcds1(episode, "REF_NUM", "SUB_COUNT", delete=True)
+        self.assertEqual(bcds1.schedule_query, message.SCHEDULE_QUERY_DELETE)
