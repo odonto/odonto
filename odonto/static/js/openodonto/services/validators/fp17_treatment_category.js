@@ -159,7 +159,7 @@ angular.module('opal.services').factory('Fp17TreatmentCategory', function(toMome
     else if(treatment_category !== URGENT_TREATMENT && treatment_category !== REGULATION_11_REPLACEMENT_APPLIANCE){
       if(treatmentsOfBand2.length && !treatmentsOfBand3.length){
         return getErr(
-          getClinicDataSetTitles(treatmentsOfBand2).join(",") + " requires a band 2"
+          getClinicDataSetTitles(treatmentsOfBand2).join(", ") + " requires a band 2"
         )
       }
     }
