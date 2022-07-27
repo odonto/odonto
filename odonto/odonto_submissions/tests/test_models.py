@@ -150,12 +150,85 @@ to compass for submission {} not sending"
             translate_episode_to_xml.call_args[1]["delete"]
         )
 
+    @mock.patch("odonto.odonto_submissions.models.has_changed")
+    def test_send_replace_successful(
+        self, has_changed, translate_episode_to_xml, send_message
+    ):
+        """
+        We should be able to send down an episode with replace (ie updating it)
+        even if it has been successfully submitted
+        """
+        send_message.return_value = "some response"
+        translate_episode_to_xml.return_value = "some_xml"
+        has_changed.return_value = True
+        self.episode.submission_set.create(
+            state=models.Submission.SUCCESS
+        )
+
+        sent_submission = models.Submission.send(self.episode, replace=True)
+        # refetch the submission to make sure its saved
+        submission = models.Submission.objects.get(id=sent_submission.id)
+        self.assertEqual(
+            submission.request_response, "some response"
+        )
+        self.assertEqual(
+            submission.raw_xml, "some_xml"
+        )
+        self.assertEqual(
+            submission.state, models.Submission.SENT
+        )
+        self.assertEqual(
+            submission.submission_type, models.Submission.REPLACE
+        )
+        self.assertTrue(
+            translate_episode_to_xml.call_args[1]["replace"]
+        )
+        self.assertFalse(
+            translate_episode_to_xml.call_args[1]["delete"]
+        )
 
     def test_send_delete(
         self, translate_episode_to_xml, send_message
     ):
         send_message.return_value = "some response"
         translate_episode_to_xml.return_value = "some_xml"
+        sent_submission = models.Submission.send(self.episode, delete=True)
+        # refetch the submission to make sure its saved
+        submission = models.Submission.objects.get(id=sent_submission.id)
+        self.assertEqual(
+            submission.request_response, "some response"
+        )
+        self.assertEqual(
+            submission.raw_xml, "some_xml"
+        )
+        self.assertEqual(
+            submission.state, models.Submission.SENT
+        )
+        self.assertEqual(
+            submission.submission_type, models.Submission.DELETE
+        )
+        self.assertFalse(
+            translate_episode_to_xml.call_args[1]["replace"]
+        )
+        self.assertTrue(
+            translate_episode_to_xml.call_args[1]["delete"]
+        )
+
+    @mock.patch("odonto.odonto_submissions.models.has_changed")
+    def test_send_delete_successful(
+        self, has_changed, translate_episode_to_xml, send_message
+    ):
+        """
+        We should be able to send down an episode with delete
+        even if it has been successfully submitted
+        """
+        send_message.return_value = "some response"
+        translate_episode_to_xml.return_value = "some_xml"
+        has_changed.return_value = True
+        self.episode.submission_set.create(
+            state=models.Submission.SUCCESS
+        )
+
         sent_submission = models.Submission.send(self.episode, delete=True)
         # refetch the submission to make sure its saved
         submission = models.Submission.objects.get(id=sent_submission.id)
