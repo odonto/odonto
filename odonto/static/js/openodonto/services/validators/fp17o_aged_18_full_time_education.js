@@ -6,6 +6,12 @@ angular.module('opal.services').factory('Fp17OAged18InFullTimeEducation', functi
   * and make sure the patient was 18 at time of treatment
   */
   return function(editing){
+    // completion types do not need to validate age.
+    if(editing.orthodontic_treatment.completion_type){
+      return;
+    }
+
+
     if(!editing.fp17_exemptions.aged_18_in_full_time_education){
       return;
     }
