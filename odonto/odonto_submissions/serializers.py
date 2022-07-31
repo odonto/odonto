@@ -451,8 +451,9 @@ appliance fitted"'
 
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
             result.append(t.ASSESS_AND_APPLIANCE_FITTED)
-            # assess and appliance fitted must be accompanied by proposed treatment
-            result.append(t.PROPOSED_TREATMENT)
+            # assess and appliance fitted must be accompanied by proposed treatment after 1/4/2019
+            if self.model_instance.date_of_assessment and self.model_instance.date_of_assessment >= datetime.date(2019, 4, 1):
+                result.append(t.PROPOSED_TREATMENT)
 
         if self.model_instance.date_of_referral:
             dt = self.model_instance.date_of_referral
