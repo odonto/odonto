@@ -42,6 +42,14 @@ describe('Fp17OAged18InFullTimeEducation', function() {
     expect(Fp17OAged18InFullTimeEducation(editing)).toEqual(expected);
   });
 
+  it('should not error if the exemption is not clicked and the patient is under 18 if it is a completion claim', function(){
+    editing.demographics.date_of_birth = new Date(20160, 1, 1);
+    editing.orthodontic_assessment.date_of_referral = new Date(2019, 1, 1);
+    editing.orthodontic_treatment.completion_type = "Treatment completed";
+    editing.fp17_exemptions.patient_under_18 = false;
+    expect(Fp17OAged18InFullTimeEducation(editing)).toBe(undefined);
+  });
+
   it('should not error if the exemption is not clicked', function(){
     editing.demographics.date_of_birth = new Date(2000, 1, 1);
     editing.orthodontic_assessment.date_of_referral = new Date(2019, 1, 2);

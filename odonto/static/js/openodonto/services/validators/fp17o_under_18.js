@@ -8,6 +8,11 @@ angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter)
   * that will also be rejected by Compass
   */
   return function(editing){
+    // completion types do not need to validate age.
+    if(editing.orthodontic_treatment.completion_type){
+      return;
+    }
+
     if(editing.demographics.date_of_birth){
       var otherDate = editing.orthodontic_assessment.date_of_referral;
       otherDate = otherDate || editing.orthodontic_assessment.date_of_assessment;
