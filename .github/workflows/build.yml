@@ -38,7 +38,6 @@ jobs:
       - name: Install opal with workflows
         run: pip install -e git+https://github.com/openhealthcare/opal@work-flows#egg=opal
       - run: gem install coveralls-lcov
-      - run: gem install rake
       - name: run tests
         run: opal test --coverage
       - name: flake8
