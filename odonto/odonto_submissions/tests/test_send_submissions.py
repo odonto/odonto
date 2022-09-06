@@ -2,7 +2,7 @@ import datetime
 from unittest.mock import patch
 from django.test import override_settings
 from opal.core.test import OpalTestCase
-from opal.models import Episode
+from opal.models import Episode, Ethnicity
 from odonto.odonto_submissions import models
 from odonto.episode_categories import FP17Episode, FP17OEpisode
 from odonto.odonto_submissions.management.commands import send_submissions
@@ -20,6 +20,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
     has been sent downstream
     """
     def setUp(self):
+        Ethnicity.objects.create(name="Other mixed background")
         self.cmd = send_submissions.Command()
         self.patient, self.episode = self.new_patient_and_episode_please()
         self.episode.stage = "Submitted"
@@ -45,7 +46,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
     def test_success_fp17o(self, logger, render_to_string, send_submission, send_email):
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
-        self.patient.demographics_set.update(ethnicity_fk_id=1)
+        self.patient.demographics_set.update(ethnicity_fk_id=Ethnicity.objects.first().id)
         self.episode.orthodonticassessment_set.update(
             date_of_referral=self.yesterday, date_of_assessment=self.today
         )
@@ -57,7 +58,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         send_submission.side_effect = ValueError("boom")
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
-        self.patient.demographics_set.update(ethnicity_fk_id=1)
+        self.patient.demographics_set.update(ethnicity_fk_id=Ethnicity.objects.first().id)
         self.episode.orthodonticassessment_set.update(
             date_of_referral=self.yesterday, date_of_assessment=self.today
         )
@@ -92,8 +93,9 @@ class SendSubmissionGetQSTestCase(OpalTestCase):
         self.fp17o_episode.stage = FP17OEpisode.SUBMITTED
         self.fp17o_episode.category_name = FP17OEpisode.display_name
         self.fp17o_episode.save()
+        Ethnicity.objects.create(name="Other mixed background")
         self.fp17o_episode.patient.demographics_set.update(
-            ethnicity_fk_id=1
+            ethnicity_fk_id=Ethnicity.objects.first().id
         )
         self.fp17o_episode.orthodonticassessment_set.update(
             date_of_assessment=today,
