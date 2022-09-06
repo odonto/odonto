@@ -878,12 +878,6 @@ class CaseMix(models.EpisodeSubrecord):
         verbose_name="Legal and ethical barriers to care"
     )
 
-    def max_code(self):
-        val = 0
-        code = "0"
-        for field, mapping in self.CASE_MIX_FIELDS.items():
-            val = getattr(self, field)
-
     def score(self, field):
         val = getattr(self, field)
         if val is not None:
