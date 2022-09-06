@@ -2,7 +2,6 @@ import datetime
 import xml.etree.ElementTree as ET
 from django.db import models
 from django.utils import timezone
-from django.conf import settings
 from opal.models import Episode
 from odonto.odonto_submissions import dpb_api, logger, serializers
 from odonto.odonto_submissions.exceptions import MessageSendingException

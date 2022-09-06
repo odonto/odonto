@@ -1,5 +1,4 @@
 import datetime
-import decimal
 from odonto.odonto_submissions.serializers import translate_to_bdcs1
 
 from fp17 import treatments

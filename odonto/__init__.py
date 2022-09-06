@@ -1,7 +1,7 @@
 """
 odonto - Our Opal Application
 """
-from opal.core import application, menus
+from opal.core import application
 from odonto import episode_categories
 
 

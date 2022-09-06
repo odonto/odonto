@@ -1,7 +1,5 @@
 from opal.core.api import LoginRequiredViewset
 from opal.core import subrecords
-from django.conf import settings
-from django.utils.module_loading import import_string
 from django.http import HttpResponseBadRequest
 from opal.core.views import json_response
 

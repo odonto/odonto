@@ -1,5 +1,4 @@
 import os
-import inspect
 import cerberus
 import datetime
 import xmlschema

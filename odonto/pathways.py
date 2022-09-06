@@ -2,9 +2,7 @@
 Pathways for Odonto
 """
 import logging
-import datetime
 from django.db import transaction
-from django.db.models.query import prefetch_related_objects
 from opal.core import pathway
 from odonto import models
 from odonto.odonto_submissions import models as submission_models

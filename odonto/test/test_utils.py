@@ -1,6 +1,6 @@
 from unittest import mock
 from opal.core.test import OpalTestCase
-from odonto import utils
+
 
 @mock.patch('odonto.utils.datetime')
 class CurrentTaxYearTestCase(OpalTestCase):
