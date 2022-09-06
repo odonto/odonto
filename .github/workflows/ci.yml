@@ -39,8 +39,6 @@ jobs:
       - run: gem install coveralls-lcov
       - name: run tests
         run: opal test --coverage
-      - name: flake8
-        run: flake8
       - name: combine coveralls
         run: find coverage -name "lcov.info" -exec coveralls-lcov -v -n {} \; > coverage/coverage.json
       - run: coveralls --merge=coverage/coverage.json
