@@ -1,14 +1,8 @@
-import json
 import traceback
 from datetime import date
 from django.core.management.base import BaseCommand
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-from django.conf import settings
 from odonto.odonto_submissions import models
 from odonto.episode_categories import FP17Episode, FP17OEpisode
-from opal.models import Episode
 from odonto.odonto_submissions import logger
 
 SEND_ALL_AFTER_DATE = date(2020, 4, 1)
@@ -55,4 +49,3 @@ class Command(BaseCommand):
             self.send_submission(
                 episode
             )
-

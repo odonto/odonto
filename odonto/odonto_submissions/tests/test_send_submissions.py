@@ -1,6 +1,5 @@
 import datetime
 from unittest.mock import patch
-from django.test import override_settings
 from opal.core.test import OpalTestCase
 from opal.models import Episode, Ethnicity
 from odonto.odonto_submissions import models
@@ -10,9 +9,7 @@ from odonto.odonto_submissions.management.commands import send_submissions
 BASE_STR = "odonto.odonto_submissions.management.commands.send_submissions"
 
 
-@patch(BASE_STR + ".send_mail")
 @patch(BASE_STR + ".models.Submission.send")
-@patch(BASE_STR + ".render_to_string")
 @patch(BASE_STR + ".logger")
 class SendSubmissionEmailTestCase(OpalTestCase):
     """
@@ -28,12 +25,12 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         self.today = datetime.date.today()
         self.yesterday = self.today - datetime.timedelta(1)
 
-    def test_success_fp17(self, logger, render_to_string, send_submission, send_email):
+    def test_success_fp17(self, logger, send_submission):
         Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
         send_submission.assert_called_once_with(self.episode)
 
-    def test_fail_fp17(self, logger, render_to_string, send_submission, send_email):
+    def test_fail_fp17(self, logger, send_submission):
         send_submission.side_effect = ValueError("boom")
         Episode.objects.update(category_name=FP17Episode.display_name)
         self.cmd.handle()
@@ -43,7 +40,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
             f"Sending failed for Episode {self.episode.id} with boom"
         )
 
-    def test_success_fp17o(self, logger, render_to_string, send_submission, send_email):
+    def test_success_fp17o(self, logger, send_submission):
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
         self.patient.demographics_set.update(ethnicity_fk_id=Ethnicity.objects.first().id)
@@ -54,7 +51,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
         self.cmd.handle()
         send_submission.assert_called_once_with(self.episode)
 
-    def test_fail_fp17o(self, logger, render_to_string, send_submission, send_email):
+    def test_fail_fp17o(self, logger, send_submission):
         send_submission.side_effect = ValueError("boom")
         self.episode.category_name = FP17OEpisode.display_name
         self.episode.save()
@@ -69,7 +66,7 @@ class SendSubmissionEmailTestCase(OpalTestCase):
             f"Sending failed for Episode {self.episode.id} with boom"
         )
 
-    def test_none(self, logger, render_to_string, send_submission, send_email):
+    def test_none(self, logger, send_submission):
         Episode.objects.all().delete()
         self.assertFalse(send_submission.called)
 

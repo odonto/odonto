@@ -4,7 +4,6 @@ submissions processed so far from Compass.
 
 Then send an email with the current summary of the status quo so far.
 """
-import json
 import traceback
 import datetime
 from django.core.management.base import BaseCommand
@@ -13,7 +12,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from opal.models import Episode
-from opal.core.serialization import OpalSerializer
 from odonto.odonto_submissions.models import (
     Response, Submission, EpisodesBeingInvestigated
 )
@@ -144,4 +142,3 @@ class Command(BaseCommand):
             logger.info(f"Sending failed to get responses with {e}")
             logger.info(traceback.format_exc())
             logger.error('Failed to get responses')
-

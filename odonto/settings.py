@@ -1,6 +1,5 @@
 # Django settings for odonto project.
 import os
-import sys
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -360,6 +359,6 @@ ALWAYS_DECLINE_EMAIL_PHONE = True
 SHOW_RECORD_PANELS = False
 
 try:
-    from odonto.local_settings import *
+    from odonto.local_settings import *  # NOQA: F401
 except ImportError:
     pass
