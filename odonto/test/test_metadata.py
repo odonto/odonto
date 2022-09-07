@@ -6,8 +6,8 @@ from opal.core.test import OpalTestCase
 
 from odonto import metadata
 
-class PerformerNumberTestCase(OpalTestCase):
 
+class PerformerNumberTestCase(OpalTestCase):
     def test_to_dict(self):
         user = User.objects.create(username='no', first_name='Donald', last_name='Harrison')
         user.performernumber_set.create()
@@ -20,3 +20,4 @@ class PerformerNumberTestCase(OpalTestCase):
                 'performer_list': ['Donald Harrison']
             }
         }
+        self.assertEqual(as_dict, expected)
