@@ -25,7 +25,7 @@ angular.module('opal.services').factory('Fp17NumberOfMonths', function(Validator
 		if(!editing.fp17_recall.number_of_months && editing.fp17_recall.number_of_months !== 0){
 			return {
 				fp17_recall: {
-					number_of_months: "Adult bands 1, 2 and 3 require a Recall interval"
+					number_of_months: "Adult bands 1, 2 and 3 require a recall interval"
 				}
 			}
 		}

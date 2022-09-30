@@ -24,7 +24,7 @@ describe('Fp17NumberOfMonths', function() {
 		editing.fp17_treatment_category.treatment_category = "Band 1";
 		var expected = {
 			fp17_recall: {
-				number_of_months: "Adult bands 1, 2 and 3 require a Recall interval"
+				number_of_months: "Adult bands 1, 2 and 3 require a recall interval"
 			}
 		}
 		expect(Fp17NumberOfMonths(editing)).toEqual(expected);
