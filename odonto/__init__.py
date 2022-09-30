@@ -22,6 +22,7 @@ class Application(application.OpalApplication):
         'js/openodonto/controllers/casemix_helper.controller.js',
         'js/openodonto/controllers/delete_form.controller.js',
         'js/openodonto/services/date_conflict_check.js',
+        'js/openodonto/services/validator_utils.js',
         'js/openodonto/services/validators/exemptions_and_remissions.js',
         'js/openodonto/services/validators/case_mix_required.js',
         'js/openodonto/services/validators/provider_location_number_required.js',
