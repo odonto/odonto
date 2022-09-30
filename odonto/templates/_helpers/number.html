@@ -5,10 +5,11 @@
   <label class="control-label">
     {% if icon %}<i class="{{icon}}"></i> {% endif %}
     {{ label }}
-  </label> <div ng-class="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required"{% ifequal style "horizontal" %}
-       class="col-sm-{% if unit %}2{% else %}8{% endif %}"
-       {% endifequal %}
-       >
+  </label>
+  <div ng-class="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required"{% ifequal style "horizontal" %}
+    class="col-sm-{% if unit %}2{% else %}8{% endif %}"
+    {% endifequal %}
+  >
 
 	<input class="form-control" type="{{ element_type }}" ng-model="{{ model }}"
            autocomplete="off"
@@ -32,6 +33,9 @@
            min="{{ min }}"
            {% endif %}
            />
+    {% if unit %}
+    <label class="control-label"><small>({{ unit }})</small></label>
+    {% endif %}
     {% if maxlength %}
         <span class="help-block" ng-show="({{ formname }}.$submitted || {{ formname }}[{{ element_name }}].$invalid) && {{ formname }}[{{ element_name }}].$error.maxlength">
           Maximum length is {{ maxlength }}
@@ -56,7 +60,5 @@
       [[ errors['{{ model_api_name }}']['{{ field_name }}'] ]]
     </span>
   </div>
-  {% if unit %}
-  <label class="control-label"><small>({{ unit }})</small></label>
-  {% endif %}
+
 </div>
