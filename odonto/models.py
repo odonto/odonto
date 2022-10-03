@@ -376,7 +376,7 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         HARD, SOFT
     )
 
-    BE_SCORE_CHOICES = enum(
+    BPE_SCORE_CHOICES = enum(
         "0",
         "1",
         "2",
@@ -532,7 +532,7 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         blank=True,
         null=True,
         max_length=256,
-        choices=BE_SCORE_CHOICES,
+        choices=BPE_SCORE_CHOICES,
         verbose_name="Highest BPE Sextant Score"
     )
 
