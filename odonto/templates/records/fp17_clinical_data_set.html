@@ -34,12 +34,28 @@
           [[ item.radiographs_taken ]]
         </td>
       </tr>
-      <tr>
+      <tr ng-show="item.endodontic_treatment && item.endodontic_treatment !== 0">
         <td>
           Endodontic treatment
         </td>
         <td>
           [[ item.endodontic_treatment ]]
+        </td>
+      </tr>
+      <tr ng-hide="item.endodontic_treatment && item.endodontic_treatment !== 0">
+        <td>
+          Molar endodontic treatment
+        </td>
+        <td>
+          [[ item.molar_endodontic_treatment ]]
+        </td>
+      </tr>
+      <tr ng-hide="item.endodontic_treatment && item.endodontic_treatment !== 0">
+        <td>
+          Non-molar endodontic treatment
+        </td>
+        <td>
+          [[ item.non_molar_endodontic_treatment ]]
         </td>
       </tr>
       <tr>

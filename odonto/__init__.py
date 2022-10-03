@@ -36,6 +36,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17_further_treatment.js',
         'js/openodonto/services/validators/fp17o_under_18.js',
         'js/openodonto/services/validators/fp17_under_18.js',
+        'js/openodonto/services/validators/fp17_number_of_months.js',
         'js/openodonto/services/validators/fp17_male_mother.js',
         'js/openodonto/services/validators/fp17_free_repair_replacement.js',
         'js/openodonto/services/validators/fp17_highest_bpe_sextant_score.js',
