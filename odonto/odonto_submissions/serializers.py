@@ -207,6 +207,20 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
         ]
     )
 
+    BPE_MAPPING = {
+        "0": 0,
+        "1": 2,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "-": 5,
+        "0 with furcation": 10,
+        "1 with furcation": 11,
+        "2 with furcation": 12,
+        "3 with furcation": 13,
+        "4 with furcation": 14,
+    }
+
     def to_messages(self):
         treatments = super().to_messages()
         # only include aerosols when date of acceptance is after the
@@ -245,6 +259,10 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
             elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
+        if self.model_instance.highest_bpe_score is not None:
+            treatments.append(t.HIGHEST_BPE_SEXTANT_SCORE(
+                self.BPE_MAPPING[self.model_instance.highest_bpe_score]
+            ))
         return treatments
 
 

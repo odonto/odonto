@@ -376,6 +376,21 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         HARD, SOFT
     )
 
+    BE_SCORE_CHOICES = enum(
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "-",
+        "0 with furcation",
+        "1 with furcation",
+        "2 with furcation",
+        "3 with furcation",
+        "4 with furcation",
+    )
+
     scale_and_polish = fields.BooleanField(
         default=False,
         verbose_name="Scale and polish"
@@ -512,6 +527,13 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     )
     phased_treatment = fields.BooleanField(
         default=False, verbose_name="Phased treatment"
+    )
+    highest_bpe_score = fields.CharField(
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=BE_SCORE_CHOICES,
+        verbose_name="Highest BPE Sextant Score"
     )
 
     class Meta:

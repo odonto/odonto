@@ -1,3 +1,4 @@
+{% load forms %}
 {% load odonto_forms %}
 <div class="row">
   <div class="col-md-3">
@@ -123,5 +124,11 @@
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="Fp17ClinicalDataSet.phased_treatment" %}
+  </div>
+</div>
+
+<div class="row content-offset-20">
+  <div class="col-md-3">
+    {% odonto_select field="Fp17ClinicalDataSet.highest_bpe_score" style="vertical" %}
   </div>
 </div>

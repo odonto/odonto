@@ -184,6 +184,15 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
         super().__init__(code=9325, instance_count=num_teeth)
 
 
+class HIGHEST_BPE_SEXTANT_SCORE(Treatment):
+    """
+    BPE is a basic screening tool which can help dentists and dental
+    hygienists determine a patient’s oral and dental needs
+    """
+    def __init__(self, score):
+        super().__init__(code=9378, instance_count=score)
+
+
 SCALE_AND_POLISH = Treatment(code=9301)
 FLUORIDE_VARNISH = Treatment(code=9302)
 
