@@ -561,7 +561,6 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         default=False,
         verbose_name="Best practice prevention according to Delivering Better Oral Health offered"
     )
-
     decayed_teeth_permanent = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Decayed teeth permanent"
@@ -569,6 +568,10 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     decayed_teeth_deciduous = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Decayed teeth deciduous"
+    )
+    untreated_decayed_teeth = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Untreated decayed teeth"
     )
     missing_teeth_permanent = fields.IntegerField(
         blank=True, null=True,
