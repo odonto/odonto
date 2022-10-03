@@ -243,6 +243,10 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
             elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
+        # We do untreated decay this way as by the default field serialization we
+        # do not serialize 0s. With untreated decayed teeth, they want a value of 0
+        if self.model_instance.untreated_decayed_teeth is not None:
+            treatments.append(t.UNTREATED_DECAYED(self.model_instance.untreated_decayed_teeth))
         return treatments
 
 
