@@ -393,10 +393,23 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         verbose_name="Radiographs taken"
     )
 
+    # This field has been replaced by Molar Endodontics and
+    # Non-Molar Endodontics
     endodontic_treatment = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Endontic treatment"
     )
+
+    molar_endodontic_treatment = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Molar endodontics"
+    )
+
+    non_molar_endodontic_treatment = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Non-molar endodontics"
+    )
+
     permanent_fillings = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Permanent fillings"
