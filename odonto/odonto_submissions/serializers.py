@@ -176,6 +176,8 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             ("fissure_sealants", t.FISSURE_SEALANTS),
             ("radiographs_taken", t.RADIOGRAPHS),
             ("endodontic_treatment", t.ENDODONTIC_TREATMENT),
+            ("molar_endodontic_treatment", t.MOLAR_ENDONTIC_TREATMENT),
+            ("non_molar_endodontic_treatment", t.NON_MOLAR_ENDONTIC_TREATMENT),
             (
                 "permanent_fillings",
                 t.PERMANENT_FILLINGS,
