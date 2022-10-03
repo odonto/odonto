@@ -38,6 +38,7 @@ class Application(application.OpalApplication):
         'js/openodonto/services/validators/fp17_under_18.js',
         'js/openodonto/services/validators/fp17_male_mother.js',
         'js/openodonto/services/validators/fp17_free_repair_replacement.js',
+        'js/openodonto/services/validators/fp17_untreated_decayed_teeth.js',
         'js/openodonto/services/validators/fp17o_commissioner_approval.js',
         'js/openodonto/services/validators/fp17o_date_of_referral.js',
         'js/openodonto/services/validators/fp17o_date_of_assessment.js',
