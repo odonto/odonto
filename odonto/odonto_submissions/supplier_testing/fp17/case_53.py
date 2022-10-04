@@ -23,7 +23,8 @@ def annotate(bcds1):
         treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
         treatments.ADVANCED_PERIO_ROOT_SURFACE_DEBRIDEMENT(2),
-        treatments.PREFORMED_CROWNS(3)
+        treatments.PREFORMED_CROWNS(3),
+        treatments.HIGHEST_BPE_SEXTANT_SCORE(0)
     ]
 
     return bcds1
@@ -46,7 +47,8 @@ def from_model(bcds1, patient, episode):
     episode.fp17clinicaldataset_set.update(
         examination=True,
         advanced_perio_root_surface_debridement=2,
-        pre_formed_crowns=3
+        pre_formed_crowns=3,
+        highest_bpe_score="0"
     )
 
     episode.fp17exemptions_set.update(
