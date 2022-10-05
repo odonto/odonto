@@ -8,6 +8,11 @@ import datetime
 from .bcds1 import Treatment
 
 
+class DCP_TYPE(Treatment):
+    def __init__(self, dcp_type):
+        super().__init__(code=9178, instance_count=dcp_type)
+
+
 class FLEXIBLE_COMMISSIONING_FLAG(Treatment):
     def __init__(self, commissioning_flag):
         super().__init__(code=9181, instance_count=commissioning_flag)

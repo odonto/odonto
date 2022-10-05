@@ -123,7 +123,6 @@ class Demographics(models.Demographics):
                 (date.month, date.day) < (born.month, born.day)
             )
 
-
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:
         verbose_name = "Patient information"
@@ -198,6 +197,11 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
         for user in User.objects.all():
             if user.get_full_name() == self.performer:
                 return user.performernumber_set.first()
+
+    def get_other_dental_professional(self):
+        for user in User.objects.all():
+            if user.get_full_name() == self.associated_dcp:
+                return user.otherdentalprofessional_set.first()
 
     class Meta:
         verbose_name = "Performer name and clinic"

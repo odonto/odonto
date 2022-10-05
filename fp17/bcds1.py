@@ -257,6 +257,18 @@ class BCDS1(Message):
                 'regex': r'^\d*$',
             },
 
+            # GDC Number
+            # The General Dental Council's Dental Care Professional number.
+            #
+            # A number assigned to non dentist dental care professionals
+            # who may have worked on the FP17
+            'gdc_number': {
+                'type': 'string',
+                'minlength': 10,
+                'maxlength': 10,
+                'regex': r'^\d*$',
+            },
+
             # Contract number
             #
             # The provider's unique contract number.
@@ -524,6 +536,8 @@ class BCDS1(Message):
         root.attrib['clrn'] = '{:06d}'.format(x['message_reference_number'])
         root.attrib['perf'] = str(x['performer_number'])
         root.attrib['pin'] = str(x['dpb_pin'])
+        if "gdc_number" in x:
+            root.attrib['gdcno'] = str(x['gdc_number'])
         root.attrib['cno'] = str(x['contract_number'])
         root.attrib['loc'] = '{:06d}'.format(x['location'])
         root.attrib['resct'] = '{:02d}'.format(x['resubmission_count'])
