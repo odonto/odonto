@@ -118,14 +118,27 @@ class TREATMENT_TYPE(Treatment):
 PROPOSED_TREATMENT = TREATMENT_TYPE(instance_count=1)
 COMPLETED_TREATMENT = TREATMENT_TYPE(instance_count=2)
 
+
 class RADIOGRAPHS(Treatment):
     def __init__(self, num_radiographs):
         super().__init__(code=9304, instance_count=num_radiographs)
 
 
+# Endontic treatment is replced in CCN50 by molar endontic
+# treatment and non-molar endontic treatment
 class ENDODONTIC_TREATMENT(Treatment):
     def __init__(self, num_teeth):
         super().__init__(code=9305, instance_count=num_teeth)
+
+
+class MOLAR_ENDONTIC_TREATMENT(Treatment):
+    def __init__(self, num_teeth):
+        super().__init__(code=9370, instance_count=num_teeth)
+
+
+class NON_MOLAR_ENDONTIC_TREATMENT(Treatment):
+    def __init__(self, num_teeth):
+        super().__init__(code=9371, instance_count=num_teeth)
 
 
 class PERMANENT_FILLINGS(Treatment):
@@ -169,6 +182,15 @@ class FILLED_TEETH_DECIDUOUS(Treatment):
 
     def __init__(self, num_teeth):
         super().__init__(code=9325, instance_count=num_teeth)
+
+
+class HIGHEST_BPE_SEXTANT_SCORE(Treatment):
+    """
+    BPE is a basic screening tool which can help dentists and dental
+    hygienists determine a patient’s oral and dental needs
+    """
+    def __init__(self, score):
+        super().__init__(code=9378, instance_count=score)
 
 
 SCALE_AND_POLISH = Treatment(code=9301)
