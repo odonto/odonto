@@ -14,6 +14,7 @@ describe('ExemptionsAndRemissionsValidator', function() {
     }
   }
 
+  beforeEach(module('opal.filters'));
   beforeEach(module('opal.services'));
 
   beforeEach(function(){
