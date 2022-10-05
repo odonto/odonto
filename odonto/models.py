@@ -714,17 +714,20 @@ class ExtractionChart(models.EpisodeSubrecord):
                 if getattr(self, tooth_field) == True:
                     return True
 
+
 class OrthodonticAssessment(models.EpisodeSubrecord):
     _is_singleton = True
 
     ASSESSMENT_AND_REVIEW = "Assessment & review"
     ASSESS_AND_REFUSE_TREATMENT = "Assess & refuse treatment"
     ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted"
+    ASSESSMENT_AND_DEBOND = "Assessment and Debond – Overseas Patient"
 
     ASSESSMENT_CHOICES = (
         (ASSESSMENT_AND_REVIEW, ASSESSMENT_AND_REVIEW,),
         (ASSESS_AND_REFUSE_TREATMENT, ASSESS_AND_REFUSE_TREATMENT,),
         (ASSESS_AND_APPLIANCE_FITTED, ASSESS_AND_APPLIANCE_FITTED,),
+        (ASSESSMENT_AND_DEBOND, ASSESSMENT_AND_DEBOND,),
     )
     IOTN_NOT_APPLICABLE = "N/A"
 
