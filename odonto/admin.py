@@ -52,6 +52,10 @@ class PerformerNumberAdmin(VersionAdmin):
     list_display = ('user', 'number', 'dpb_pin')
 
 
+class OtherDentalProfessionalAdmin(VersionAdmin):
+    list_display = ('user', 'gdc_number', 'dcp_type')
+
+
 user_admin_list_display = list(UserProfileAdmin.list_display)
 user_admin_list_display += ["performer_number", "dpb_pin"]
 
@@ -77,5 +81,6 @@ class OdontoUserAdmin(UserProfileAdmin):
 admin.site.unregister(models.Demographics)
 admin.site.register(models.Demographics, DemographicsAdmin)
 admin.site.register(models.PerformerNumber, PerformerNumberAdmin)
+admin.site.register(models.OtherDentalProfessional, OtherDentalProfessionalAdmin)
 admin.site.unregister(User)
 admin.site.register(User, OdontoUserAdmin)
