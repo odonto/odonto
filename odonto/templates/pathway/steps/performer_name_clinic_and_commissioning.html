@@ -1,2 +1,17 @@
-{% include models.Fp17DentalCareProvider.get_form_template %}
-{% include models.Fp17Commissioning.get_form_template %}
+{% load odonto_forms %}
+<div class="row">
+  <div class="col-md-5">
+    {% odonto_select field="Fp17DentalCareProvider.performer" required=True style="vertical" lookuplist="metadata.performer.performer_list" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
+    {% odonto_select field="Fp17DentalCareProvider.provider_location_number" style="vertical" %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    {% odonto_select field="Fp17Commissioning.flexible_commissioning" style="vertical" %}
+  </div>
+  <div ng-show="metadata.performer.other_dcp_list.length" class="col-md-5 col-md-offset-1">
+    {% odonto_select field="Fp17DentalCareProvider.associated_dcp" style="vertical" lookuplist="metadata.performer.other_dcp_list" %}
+  </div>
+</div>

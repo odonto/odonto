@@ -2,6 +2,7 @@
 Odonto models.
 """
 import datetime
+from unittest.util import _MAX_LENGTH
 from django.db.models import fields
 from django.contrib.auth.models import User
 from django.db import models as djangomodels
@@ -122,7 +123,6 @@ class Demographics(models.Demographics):
                 (date.month, date.day) < (born.month, born.day)
             )
 
-
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:
         verbose_name = "Patient information"
@@ -182,14 +182,51 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     performer = fields.CharField(
         max_length=255, blank=True, null=True
     )
+    # As part of CCN49 there are changes coming to allow
+    # non-dentist dental care practictioners to submit
+    # fp17s.
+
+    # At present only dentists can submit it but we should
+    # include the associated dcp.
+    associated_dcp = fields.CharField(
+        blank=True, null=True, max_length=256,
+        verbose_name="Associated dental professional"
+    )
 
     def get_performer_obj(self):
         for user in User.objects.all():
             if user.get_full_name() == self.performer:
                 return user.performernumber_set.first()
 
+    def get_other_dental_professional(self):
+        for user in User.objects.all():
+            if user.get_full_name() == self.associated_dcp:
+                return user.otherdentalprofessional_set.first()
+
     class Meta:
         verbose_name = "Performer name and clinic"
+
+
+class OtherDentalProfessional(djangomodels.Model):
+    """
+    This connects a non dentist professional
+    to their GDC number and their role.
+    """
+    DCP_TYPES = enum(
+        'Therapist',
+        'Hygienist',
+        'Dental Nurse',
+        'Clinical Technician'
+    )
+    user = djangomodels.ForeignKey(
+        models.User, on_delete=djangomodels.CASCADE
+    )
+    # A 10 digit number from the general dental counsel
+    gdc_number = fields.CharField(max_length=256)
+    dcp_type = fields.CharField(choices=DCP_TYPES, max_length=256)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.gdc_number} - {self.dcp_type}"
 
 
 class Fp17Commissioning(models.EpisodeSubrecord):

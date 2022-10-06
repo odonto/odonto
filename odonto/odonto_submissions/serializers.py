@@ -947,6 +947,22 @@ def translate_to_fp17(bcds1, episode):
     bcds1.date_of_completion = incomplete_treatment.completion_or_last_visit
     bcds1.treatments = []
 
+    if episode.category_name == episode_categories.FP17Episode.display_name:
+        if bcds1.date_of_acceptance >= datetime.date(2022, 10, 1):
+            dental_care_provider = episode.fp17dentalcareprovider_set.get()
+            other_dental_professional = dental_care_provider.get_other_dental_professional()
+            if other_dental_professional:
+                bcds1.gdc_number = other_dental_professional.gdc_number
+                dcp_lookup = {
+                    "Therapist": 1,
+                    "Hygienist": 2,
+                    "Dental Nurse": 3,
+                    "Clinical Technician": 4,
+                }
+                bcds1.treatments.append(
+                    t.DCP_TYPE(dcp_lookup[other_dental_professional.dcp_type])
+                )
+
     translators = [
         Fp17CommissioningSerializer,
         Fp17IncompleteTreatmentSerializer,
