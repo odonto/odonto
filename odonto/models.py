@@ -335,6 +335,23 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
 
     BAND_1 = "Band 1"
     BAND_2 = "Band 2"
+
+    # CCN52 changes applicable after 21/11/22
+    # Band 2 A is all claims not part of B or C
+    BAND_2_A = "Band 2 A"
+    # Band 2 B is
+    # """
+    # involving either Non-Molar Endodontics to permanent
+    # teeth or a combined total of three or more teeth
+    # requiring permanent fillings or extraction
+    # """"
+    BAND_2_B = "Band 2 B"
+    # Band 2 C is
+    # """
+    # courses of treatment involving Molar Endodontics on
+    # permanent teeth. 7 UDA will be awarded
+    # """"
+    BAND_2_C = "Band 2 C"
     BAND_3 = "Band 3"
     URGENT_TREATMENT = "Urgent treatment"
     REGULATION_11_REPLACEMENT_APPLIANCE = "Regulation 11 replacement appliance"
@@ -362,6 +379,34 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
         choices=TREATMENT_CATEGORIES,
         verbose_name="Treatment category"
     )
+
+    def calculate_band_2_subdivision(self):
+        # As part of CCN51 band 2 is subdivided into a/b/c
+        # this subdivision is a function of the claim
+        # so we don't need to expose this to the user.
+        # It is used for calculating UDAs however.
+        if not self.treatment_category == self.BAND_2:
+            raise ValueError(
+                'This method is only for band 2 treatments'
+            )
+
+        # These changes only go live on 21/11/22
+        if self.episode.category.get_sign_off_date() < datetime.date(2022, 11, 21):
+            return self.BAND_2
+
+        clinical_data_set = self.episode.fp17clinicaldataset_set.all()[0]
+        if clinical_data_set.molar_endodontic_treatment:
+            return self.BAND_2_C
+
+        if clinical_data_set.non_molar_endodontic_treatment:
+            return self.BAND_2_B
+
+        permanent_fillings = clinical_data_set.permanent_fillings or 0
+        extractions = clinical_data_set.extractions or 0
+        if (permanent_fillings + extractions) > 2:
+            return self.BAND_2_B
+
+        return self.BAND_2_A
 
     class Meta:
         verbose_name = "Treatment category"

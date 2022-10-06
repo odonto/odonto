@@ -3,6 +3,7 @@ import datetime
 from unittest import mock
 from django.contrib.auth.models import User
 from opal.core.test import OpalTestCase
+from odonto import episode_categories
 
 
 class GetPerformerObjectTestCase(OpalTestCase):
@@ -189,4 +190,87 @@ class DemographicsTestCase(OpalTestCase):
         self.assertEqual(
             self.demographics.get_age(datetime.date(2009, 12, 10)),
             19
+        )
+
+
+class Fp17TreatmentCategoryTestCase(OpalTestCase):
+    def setUp(self):
+        _, self.episode = self.new_patient_and_episode_please()
+        self.episode.category_name = episode_categories.FP17Episode.display_name
+        self.episode.save()
+        self.treatment_category_obj = self.episode.fp17treatmentcategory_set.get()
+        self.treatment_category_obj.treatment_category = self.treatment_category_obj.BAND_2
+        self.episode.fp17incompletetreatment_set.update(
+          completion_or_last_visit=datetime.date(2022, 11, 22)
+        )
+        self.clinical_data_set = self.episode.fp17clinicaldataset_set.get()
+
+    def test_band_2_subdivision_non_band_2(self):
+        self.treatment_category_obj.treatment_category = self.treatment_category_obj.BAND_1
+        with self.assertRaises(ValueError):
+            self.treatment_category_obj.calculate_band_2_subdivision()
+
+    def test_band_2_subdivision_before_start_date(self):
+        self.episode.fp17incompletetreatment_set.update(
+          completion_or_last_visit=datetime.date(2022, 10, 2)
+        )
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2
+        )
+
+    def test_molar_endodontic_treatment(self):
+        self.clinical_data_set.molar_endodontic_treatment = 1
+        self.clinical_data_set.save()
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_C
+        )
+
+    def test_non_molar_endodontic_treatment(self):
+        self.clinical_data_set.molar_endodontic_treatment = 1
+        self.clinical_data_set.save()
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_C
+        )
+
+    def test_permanent_fillings_and_extracts(self):
+        # test with none attributes in permanent fillings or extractions
+        self.clinical_data_set.permanent_fillings = 3
+        self.clinical_data_set.save()
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_B
+        )
+        self.clinical_data_set.permanent_fillings = None
+        self.clinical_data_set.extractions = 3
+        self.clinical_data_set.save()
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_B
+        )
+
+        # test that they add up over 3
+        self.clinical_data_set.permanent_fillings = 2
+        self.clinical_data_set.extractions = 1
+        self.clinical_data_set.save()
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_B
+        )
+
+        # test that otherwise its a band 2 a
+        self.clinical_data_set.permanent_fillings = 1
+        self.clinical_data_set.extractions = 1
+        self.clinical_data_set.save()
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_A
+        )
+
+    def test_band_2_A(self):
+        self.assertEqual(
+            self.treatment_category_obj.calculate_band_2_subdivision(),
+            self.treatment_category_obj.BAND_2_A
         )
