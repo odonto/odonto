@@ -442,6 +442,7 @@ class ORTHODONTIC_EXTRACTIONS(Treatment):
 ASSESS_AND_REVIEW = Treatment(code=9012)
 ASSESS_AND_REFUSE = Treatment(code=9013)
 ASSESS_AND_APPLIANCE_FITTED = Treatment(code=9014)
+ASSESSMENT_AND_DEBOND = Treatment(code=9016)
 
 
 class IOTN(Treatment):

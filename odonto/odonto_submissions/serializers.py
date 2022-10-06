@@ -469,6 +469,9 @@ appliance fitted"'
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_REFUSE_TREATMENT:
             result.append(t.ASSESS_AND_REFUSE)
 
+        if self.model_instance.assessment == self.model_instance.ASSESSMENT_AND_DEBOND:
+            result.append(t.ASSESSMENT_AND_DEBOND)
+
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
             result.append(t.ASSESS_AND_APPLIANCE_FITTED)
             # assess and appliance fitted must be accompanied by proposed treatment after 1/4/2019
