@@ -333,6 +333,8 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
             uoa = 1
         elif assessment.assessment == assessment.ASSESS_AND_REFUSE_TREATMENT:
             uoa = 1
+        elif assessment.assessment == assessment.ASSESSMENT_AND_DEBOND:
+            uoa = 1
         elif assessment.assessment == assessment.ASSESS_AND_APPLIANCE_FITTED:
             uoa = 1
             assessment_date = assessment.date_of_assessment
