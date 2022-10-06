@@ -229,6 +229,9 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
         treatment_map = {
             models.Fp17TreatmentCategory.BAND_1: 1,
             models.Fp17TreatmentCategory.BAND_2: 3,
+            models.Fp17TreatmentCategory.BAND_2_A: 3,
+            models.Fp17TreatmentCategory.BAND_2_B: 5,
+            models.Fp17TreatmentCategory.BAND_2_C: 7,
             models.Fp17TreatmentCategory.BAND_3: 12,
             models.Fp17TreatmentCategory.URGENT_TREATMENT: 1.2,
             models.Fp17TreatmentCategory.REGULATION_11_REPLACEMENT_APPLIANCE: 12,
