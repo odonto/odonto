@@ -4,7 +4,12 @@
      >
   <label class="control-label">
     {% if icon %}<i class="{{icon}}"></i> {% endif %}
+    {% if line_break %}
+    {{ top_label }}<br />
+    {{ bottom_label }}
+    {% else %}
     {{ label }}
+    {% endif %}
   </label>
   <div ng-class="{{ formname }}.$submitted && {{ formname }}[{{ element_name }}].$error.required"{% ifequal style "horizontal" %}
     class="col-sm-{% if unit %}2{% else %}8{% endif %}"
