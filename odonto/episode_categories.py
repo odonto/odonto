@@ -226,6 +226,9 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
         # urgent treatment is band 4
         from odonto import models
         treatment_category = self.episode.fp17treatmentcategory_set.all()[0]
+        category = treatment_category.treatment_category
+        if category == models.Fp17TreatmentCategory.BAND_2:
+            category = treatment_category.calculate_band_2_subdivision()
         treatment_map = {
             models.Fp17TreatmentCategory.BAND_1: 1,
             models.Fp17TreatmentCategory.BAND_2: 3,
@@ -237,7 +240,7 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
             models.Fp17TreatmentCategory.REGULATION_11_REPLACEMENT_APPLIANCE: 12,
         }
 
-        return treatment_map.get(treatment_category.treatment_category)
+        return treatment_map.get(category)
 
 
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
