@@ -8,59 +8,55 @@
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="Fp17Exemptions.aged_18_in_full_time_education" %}
   </div>
-  <div ng-show="episode.category_name === 'FP17O'" class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="Fp17Exemptions.commissioner_approval" %}
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.universal_credit" %}
   </div>
 </div>
-<div class="row">
+<div class="row content-offset-10">
+  <div class="col-md-3">
+    {% btn_checkbox field="Fp17Exemptions.income_support" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.income_related_employment_and_support_allowance" %}
+  </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.income_based_jobseekers_allowance" %}
+  </div>
+</div>
+<div class="row content-offset-10">
   <div class="col-md-3">
     {% btn_checkbox field="Fp17Exemptions.full_remission_hc2_cert" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="Fp17Exemptions.partial_remission_hc3_cert" %}
   </div>
+  <div class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.nhs_tax_credit_exemption" %}
+  </div>
 </div>
-<div class="row">
+<div class="row content-offset-10">
   <div class="col-md-3">
     {% btn_checkbox field="Fp17Exemptions.expectant_mother" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
     {% btn_checkbox field="Fp17Exemptions.nursing_mother" %}
   </div>
-</div>
-<div class="row">
-  <div class="col-md-3">
-    {% btn_checkbox field="Fp17Exemptions.income_support" %}
-  </div>
   <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="Fp17Exemptions.nhs_tax_credit_exemption" %}
-  </div>
-  <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="Fp17Exemptions.income_based_jobseekers_allowance" %}
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-3">
     {% btn_checkbox field="Fp17Exemptions.pension_credit_guarantee_credit" %}
   </div>
-  <div class="col-md-3 col-md-offset-1">
+</div>
+<div class="row content-offset-10">
+  <div class="col-md-3">
     {% btn_checkbox field="Fp17Exemptions.prisoner" %}
   </div>
   <div class="col-md-3 col-md-offset-1">
-    {% btn_checkbox field="Fp17Exemptions.income_related_employment_and_support_allowance" %}
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-3">
-    {% btn_checkbox field="Fp17Exemptions.universal_credit" %}
-  </div>
-</div>
-<div class="row content-offset-20">
-  <div class="col-md-3">
     {% btn_checkbox field="Fp17Exemptions.evidence_of_exception_or_remission_seen" %}
   </div>
+  <div ng-show="episode.category_name === 'FP17O'" class="col-md-3 col-md-offset-1">
+    {% btn_checkbox field="Fp17Exemptions.commissioner_approval" %}
+  </div>
 </div>
-<div class="row">
+<div class="row content-offset-10">
   <div class="col-md-5">
     {% number field="Fp17Exemptions.patient_charge_collected" style="vertical" min="0" %}
   </div>
