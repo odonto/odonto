@@ -1,6 +1,5 @@
 # Django settings for odonto project.
 import os
-import sys
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -162,7 +161,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'axes',
     'reversion',
     'rest_framework',
     'rest_framework.authtoken',
@@ -361,6 +359,6 @@ ALWAYS_DECLINE_EMAIL_PHONE = True
 SHOW_RECORD_PANELS = False
 
 try:
-    from odonto.local_settings import *
+    from odonto.local_settings import *  # NOQA: F401
 except ImportError:
     pass

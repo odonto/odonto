@@ -1,13 +1,11 @@
 from opal.core.api import LoginRequiredViewset
 from opal.core import subrecords
-from django.conf import settings
-from django.utils.module_loading import import_string
 from django.http import HttpResponseBadRequest
 from opal.core.views import json_response
 
 
 class DemographicsSearch(LoginRequiredViewset):
-    base_name = 'demographics-search'
+    basename = 'demographics-search'
     PATIENT_FOUND_IN_APPLICATION = "patient_found_in_application"
     PATIENT_NOT_FOUND = "patient_not_found"
 

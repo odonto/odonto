@@ -1,5 +1,4 @@
 import datetime
-from importlib import reload
 from django.test import override_settings
 from unittest import mock
 from opal.core.test import OpalTestCase

@@ -1,7 +1,6 @@
 import datetime
 from django.utils import timezone
 from collections import defaultdict
-from django.conf import settings
 from opal.core import episodes
 
 
