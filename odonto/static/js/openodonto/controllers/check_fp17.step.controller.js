@@ -21,7 +21,8 @@ angular.module('opal.controllers').controller(
     Fp17Aged18InFullTimeEducation,
     Fp17FreeRepaireReplacement,
     Fp17NumberOfMonths,
-    Fp17HighestBpeSextantScore
+    Fp17HighestBpeSextantScore,
+    Fp17UntreatedDecayedTeeth
 ){
   "use strict";
   $rootScope.isFormValid = null;
@@ -42,7 +43,8 @@ angular.module('opal.controllers').controller(
     Fp17Aged18InFullTimeEducation,
     Fp17FreeRepaireReplacement,
     Fp17NumberOfMonths,
-    Fp17HighestBpeSextantScore
+    Fp17HighestBpeSextantScore,
+    Fp17UntreatedDecayedTeeth
   ];
 
   var validate = function(){
