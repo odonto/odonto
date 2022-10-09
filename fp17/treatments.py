@@ -256,6 +256,16 @@ class DECAYED_PERMANENT(Treatment):
         super().__init__(code=9320, instance_count=num_teeth)
 
 
+class UNTREATED_DECAYED(Treatment):
+    """
+    The number of decayed permanent and deciduous teeth at the start
+    of a course of treatment.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9379, instance_count=num_teeth)
+
+
 class MISSING_PERMANENT(Treatment):
     """
     Permanent teeth charted as missing including those replaced by bridge

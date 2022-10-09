@@ -20,6 +20,7 @@ angular.module('opal.controllers').controller(
     Fp17DateOfAcceptance,
     Fp17Aged18InFullTimeEducation,
     Fp17FreeRepaireReplacement,
+    Fp17UntreatedDecayedTeeth
     Fp17HighestBpeSextantScore,
     Fp17NumberOfMonths
 ){
@@ -41,6 +42,7 @@ angular.module('opal.controllers').controller(
     Fp17FurtherTreatment,
     Fp17Aged18InFullTimeEducation,
     Fp17FreeRepaireReplacement,
+    Fp17UntreatedDecayedTeeth
     Fp17HighestBpeSextantScore,
     Fp17NumberOfMonths
   ];
