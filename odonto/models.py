@@ -376,6 +376,21 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         HARD, SOFT
     )
 
+    BPE_SCORE_CHOICES = enum(
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "-",
+        "0 with furcation",
+        "1 with furcation",
+        "2 with furcation",
+        "3 with furcation",
+        "4 with furcation",
+    )
+
     scale_and_polish = fields.BooleanField(
         default=False,
         verbose_name="Scale and polish"
@@ -393,10 +408,23 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         verbose_name="Radiographs taken"
     )
 
+    # This field has been replaced by Molar Endodontics and
+    # Non-Molar Endodontics
     endodontic_treatment = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Endontic treatment"
     )
+
+    molar_endodontic_treatment = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Molar endodontics"
+    )
+
+    non_molar_endodontic_treatment = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Non-molar endodontics"
+    )
+
     permanent_fillings = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Permanent fillings"
@@ -502,6 +530,13 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     )
     phased_treatment = fields.BooleanField(
         default=False, verbose_name="Phased treatment"
+    )
+    highest_bpe_score = fields.CharField(
+        blank=True,
+        null=True,
+        max_length=256,
+        choices=BPE_SCORE_CHOICES,
+        verbose_name="Highest BPE Sextant Score"
     )
 
     class Meta:

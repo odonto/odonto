@@ -24,7 +24,8 @@ def annotate(bcds1):
         treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
         treatments.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE,
-        treatments.DENTURE_ADDITIONS_RELINE_REBASE
+        treatments.DENTURE_ADDITIONS_RELINE_REBASE,
+        treatments.HIGHEST_BPE_SEXTANT_SCORE(13)
     ]
 
     return bcds1
@@ -47,7 +48,8 @@ def from_model(bcds1, patient, episode):
     episode.fp17clinicaldataset_set.update(
         examination=True,
         denture_additions_reline_rebase=True,
-        custom_made_occlusal_appliance=Fp17ClinicalDataSet.HARD
+        custom_made_occlusal_appliance=Fp17ClinicalDataSet.HARD,
+        highest_bpe_score="3 with furcation"
     )
 
     episode.fp17exemptions_set.update(
