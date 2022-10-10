@@ -319,7 +319,7 @@ DEFAULT_DOMAIN = 'http://openodonto.com/'
 # Begins OPAL Settings you should edit !
 
 OPAL_BRAND_NAME = 'Open Odonto'
-VERSION_NUMBER = '0.59.2'
+VERSION_NUMBER = '0.59.3'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
