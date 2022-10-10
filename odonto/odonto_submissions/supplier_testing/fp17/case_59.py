@@ -52,8 +52,8 @@ def from_model(bcds1, patient, episode):
         non_molar_endodontic_treatment=1
     )
     user = User.objects.create(
-        username="jane_smith",
-        first_name="Jane",
+        username="wayne_smith",
+        first_name="wayne",
         last_name="Smith"
     )
 

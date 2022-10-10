@@ -57,6 +57,13 @@ def btn_radio(*args, **kwargs):
 
 def extract_numeric_args(kwargs):
     ctx = get_odonto_common_args(kwargs)
+    # the line break argument will add a line break after
+    # {{ line break }} words, e.g. label hello there line_break=1
+    # becomes hello<br/>there
+    ctx["line_break"] = kwargs.get("line_break")
+    if ctx["line_break"]:
+        ctx["top_label"] = " ".join(ctx["label"].split(" ")[:ctx["line_break"]])
+        ctx["bottom_label"] = " ".join(ctx["label"].split(" ")[ctx["line_break"]:])
     numeric_args = [
         "min", "max"
     ]

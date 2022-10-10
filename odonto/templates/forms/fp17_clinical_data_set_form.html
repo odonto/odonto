@@ -11,7 +11,7 @@
     {% btn_checkbox field="Fp17ClinicalDataSet.other_treatment" %}
   </div>
 </div>
-<div class="row content-offset-20">
+<div class="row content-offset-10">
   <div class="col-md-3">
     {% btn_checkbox field="Fp17ClinicalDataSet.scale_and_polish" %}
   </div>
@@ -19,108 +19,114 @@
     {% btn_checkbox field="Fp17ClinicalDataSet.best_practice_prevention" field_size=11 unit="number" style="vertical" %}
   </div>
 </div>
-<div class="row content-offset-20">
-  <div class="col-md-1">
-    {% teeth field="Fp17ClinicalDataSet.fissure_sealants" %}
+<div class="row content-offset-10">
+  <div class="col-md-2">
+    {% teeth field="Fp17ClinicalDataSet.fissure_sealants" line_break=1 %}
   </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% number field="Fp17ClinicalDataSet.radiographs_taken" min="0" maxlength="2" unit="number" %}
+  <div class="col-md-2 col-md-offset-1">
+    {% number field="Fp17ClinicalDataSet.radiographs_taken" min="0" maxlength="2" unit="number" line_break=1 %}
   </div>
 
   {# Prior to CCN50 we stored endodontic treatment, now we must store molar/non endodontics #}
-  <div ng-show="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-1 col-md-offset-1">
+  <div ng-show="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-2 col-md-offset-1">
     {% number field="Fp17ClinicalDataSet.endodontic_treatment"  min="0" max="32" %}
   </div>
-  <div ng-hide="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-1 col-md-offset-1">
-    {% number field="Fp17ClinicalDataSet.molar_endodontic_treatment"  min="0" max="32" %}
+  <div ng-hide="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-2 col-md-offset-1">
+    {% number field="Fp17ClinicalDataSet.molar_endodontic_treatment" line_break=1 min="0" max="32" %}
   </div>
-  <div ng-hide="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-1 col-md-offset-1">
-    {% number field="Fp17ClinicalDataSet.non_molar_endodontic_treatment"  min="0" max="32" %}
-  </div>
-</div>
-<div class="row content-offset-20">
-  <div class="col-md-1">
-    {% teeth field="Fp17ClinicalDataSet.veneers_applied" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.bridges_fitted" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.crowns_provided" %}
+  <div ng-hide="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-2 col-md-offset-1">
+    {% number field="Fp17ClinicalDataSet.non_molar_endodontic_treatment" line_break=1 min="0" max="32" %}
   </div>
 </div>
 
-<div class="row content-offset-20">
-  <div class="col-md-1">
-    {% teeth field="Fp17ClinicalDataSet.upper_denture_acrylic" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.lower_denture_acrylic" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.lower_denture_metal" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.upper_denture_metal" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% number field="Fp17ClinicalDataSet.antibiotic_items_prescribed" min="0" maxlength="2" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% number field="Fp17ClinicalDataSet.aerosol_generating_procedures" min="0" maxlength="2" %}
-  </div>
-</div>
-
-<div class="row content-offset-20">
-  <div class="col-md-1">
-    {% teeth field="Fp17ClinicalDataSet.extractions" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.inlays" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
+<div class="row content-offset-10">
+  <div class="col-md-2">
     {% teeth field="Fp17ClinicalDataSet.permanent_fillings" %}
   </div>
-  <div class="col-md-1 col-md-offset-1">
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.extractions" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.crowns_provided" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
     {% teeth field="Fp17ClinicalDataSet.pre_formed_crowns" %}
   </div>
 </div>
-<div class="row content-offset-20">
-  <div class="col-md-3">
-    {% number field="Fp17ClinicalDataSet.advanced_perio_root_surface_debridement" min="1" max="6" unit="sextant" %}
+
+<div class="row content-offset-10">
+  <div class="col-md-2">
+    {% teeth field="Fp17ClinicalDataSet.upper_denture_acrylic" %}
   </div>
-  <div class="col-md-3 col-md-offset-1">
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.lower_denture_acrylic" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.lower_denture_metal" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.upper_denture_metal" %}
+  </div>
+</div>
+
+
+
+<div class="row content-offset-10">
+  <div class="col-md-2">
+    {% teeth field="Fp17ClinicalDataSet.veneers_applied" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.inlays" %}
+  </div>
+  <div class="col-md-5 col-md-offset-1">
     {% number label="Referral for Advanced Mandatory Services (AMS)" field="Fp17ClinicalDataSet.referral_for_advanced_mandatory_services_band" unit="band" min="1" max="3" %}
   </div>
 </div>
 
-<div class="row content-offset-20">
-  <div class="col-md-1">
-    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_permanent" max="32" %}
+<div class="row content-offset-10">
+  <div class="col-md-2">
+    {% number field="Fp17ClinicalDataSet.antibiotic_items_prescribed" min="0" maxlength="2" %}
   </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_deciduous" max="20" %}
+  <div class="col-md-2 col-md-offset-1">
+    {% number field="Fp17ClinicalDataSet.aerosol_generating_procedures" min="0" maxlength="2" %}
   </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.untreated_decayed_teeth" max="32" %}
+  <div class="col-md-2 col-md-offset-1">
+    {% number field="Fp17ClinicalDataSet.advanced_perio_root_surface_debridement" min="1" max="6" unit="sextant" %}
   </div>
-</div>
-<div class="row content-offset-20">
-  <div class="col-md-1">
-    {% teeth field="Fp17ClinicalDataSet.filled_teeth_permanent" max="32" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.filled_teeth_deciduous" max="20" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.missing_teeth_permanent" max="32" %}
-  </div>
-  <div class="col-md-1 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.missing_teeth_deciduous" max="12" %}
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.bridges_fitted" line_break=1 %}
   </div>
 </div>
 
-<div class="row content-offset-20">
+<div class="row content-offset-10">
+  <div class="col-md-2">
+    {% teeth field="Fp17ClinicalDataSet.missing_teeth_permanent" max="32" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.missing_teeth_deciduous" max="12" %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.filled_teeth_permanent" max="32" line_break=1 %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.filled_teeth_deciduous" max="20" line_break=1  %}
+  </div>
+</div>
+
+<div class="row content-offset-10">
+  <div class="col-md-2">
+    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_permanent" max="32" line_break=1 %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_deciduous" max="20" line_break=1 %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.untreated_decayed_teeth" max="32" %}
+  </div>
+</div>
+
+
+<div class="row content-offset-10">
   <div class="col-md-3">
     {% btn_radio field="Fp17ClinicalDataSet.custom_made_occlusal_appliance" %}
   </div>
@@ -132,7 +138,7 @@
   </div>
 </div>
 
-<div class="row content-offset-20">
+<div class="row content-offset-10">
   <div class="col-md-3">
     {% odonto_select field="Fp17ClinicalDataSet.highest_bpe_score" style="vertical" %}
   </div>
