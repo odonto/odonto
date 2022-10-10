@@ -15,10 +15,6 @@ def annotate(bcds1):
     bcds1.date_of_acceptance = datetime.date(2019, 10, 12)
     bcds1.date_of_completion = datetime.date(2019, 10, 12)
 
-    bcds1.exemption_remission = {
-        'code': exemptions.PATIENT_UNDER_18.EVIDENCE_SEEN
-    }
-
     bcds1.treatments = [
         treatments.COMPLETED_TREATMENT,
         treatments.EMAIL_DECLINED,
