@@ -29,6 +29,7 @@ def annotate(bcds1):
         treatments.PERMANENT_FILLINGS(3),
         treatments.RECALL_INTERVAL(24),
         treatments.DECAYED_DECIDUOUS(4),
+        treatments.UNTREATED_DECAYED(4),
         treatments.ETHNIC_ORIGIN_12_BLACK_OR_BLACK_BRITISH_CARIBBEAN,
     ]
 
@@ -64,7 +65,8 @@ def from_model(bcds1, patient, episode):
         scale_and_polish=True,
         radiographs_taken=1,
         permanent_fillings=3,
-        decayed_teeth_deciduous=4
+        decayed_teeth_deciduous=4,
+        untreated_decayed_teeth=4,
     )
 
     episode.fp17incompletetreatment_set.update(

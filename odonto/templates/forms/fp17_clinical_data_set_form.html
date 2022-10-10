@@ -100,10 +100,10 @@
 
 <div class="row content-offset-10">
   <div class="col-md-2">
-    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_permanent" max="32" line_break=1 %}
+    {% teeth field="Fp17ClinicalDataSet.missing_teeth_permanent" max="32" %}
   </div>
   <div class="col-md-2 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_deciduous" max="20" line_break=1 %}
+    {% teeth field="Fp17ClinicalDataSet.missing_teeth_deciduous" max="12" %}
   </div>
   <div class="col-md-2 col-md-offset-1">
     {% teeth field="Fp17ClinicalDataSet.filled_teeth_permanent" max="32" line_break=1 %}
@@ -112,14 +112,19 @@
     {% teeth field="Fp17ClinicalDataSet.filled_teeth_deciduous" max="20" line_break=1  %}
   </div>
 </div>
+
 <div class="row content-offset-10">
   <div class="col-md-2">
-    {% teeth field="Fp17ClinicalDataSet.missing_teeth_permanent" max="32" %}
+    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_permanent" max="32" line_break=1 %}
   </div>
   <div class="col-md-2 col-md-offset-1">
-    {% teeth field="Fp17ClinicalDataSet.missing_teeth_deciduous" max="12" %}
+    {% teeth field="Fp17ClinicalDataSet.decayed_teeth_deciduous" max="20" line_break=1 %}
+  </div>
+  <div class="col-md-2 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.untreated_decayed_teeth" max="32" %}
   </div>
 </div>
+
 
 <div class="row content-offset-10">
   <div class="col-md-3">

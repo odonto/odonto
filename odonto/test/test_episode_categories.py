@@ -215,6 +215,9 @@ translate_episode_to_xml"
         treatment_category = episode.fp17treatmentcategory_set.get()
         treatment_category.treatment_category = treatment_category.BAND_1
         treatment_category.save()
+        episode.fp17incompletetreatment_set.update(
+            completion_or_last_visit=datetime.date(2021, 12, 1)
+        )
 
         self.assertEqual(episode.category.uda(), 1)
         treatment_category.treatment_category = treatment_category.BAND_2
@@ -419,4 +422,3 @@ class FP17OEpisodeTestCase(OpalTestCase):
         self.assertEqual(
             episode.category.uoa(), 4
         )
-
