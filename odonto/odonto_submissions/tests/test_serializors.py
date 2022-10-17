@@ -1,5 +1,6 @@
 from unittest import mock
 import datetime
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 from django.utils.module_loading import import_string
@@ -140,12 +141,12 @@ class SerializerTestCase(OpalTestCase):
         fp17_category = episode_categories.FP17Episode.display_name
         fp17o_category = episode_categories.FP17OEpisode.display_name
         covid_19_category = episode_categories.CovidTriageEpisode.display_name
-        for case_number in range(1, 59):
+        for case_number in range(1, 60):
             new = from_model(case_number, fp17_category)
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 8):
+        for case_number in range(1, 9):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
@@ -299,7 +300,6 @@ class DemographicsTranslatorTestCase(OpalTestCase):
             translator.post_code(),
             translator.NORTHUMBRIA["post_code"]
         )
-
 
 
 class Fp17TreatmentCategoryTestCase(OpalTestCase):

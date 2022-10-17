@@ -15,13 +15,15 @@ def annotate(bcds1):
     bcds1.patient.sex = 'F'
     bcds1.patient.date_of_birth = datetime.date(1958, 1, 23)
     bcds1.patient.nhs_number = "7110493547"
-    bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
-    bcds1.date_of_completion = datetime.date(2017, 4, 1)
+    bcds1.date_of_acceptance = datetime.date(2022, 10, 2)
+    bcds1.date_of_completion = datetime.date(2022, 10, 2)
+    bcds1.gdc_number = "1234567890"
 
     bcds1.treatments = [
         treatments.TREATMENT_CATEGORY(1),
         treatments.NON_MOLAR_ENDONTIC_TREATMENT(1),
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
+        treatments.DCP_TYPE(3)
     ]
 
     return bcds1
@@ -43,20 +45,18 @@ def from_model(bcds1, patient, episode):
         treatment_category="Band 1",
     )
     episode.fp17incompletetreatment_set.update(
-        date_of_acceptance=datetime.date(2017, 4, 1),
-        completion_or_last_visit=datetime.date(2017, 4, 1)
+        date_of_acceptance=datetime.date(2022, 10, 2),
+        completion_or_last_visit=datetime.date(2022, 10, 2)
     )
     episode.fp17clinicaldataset_set.update(
         non_molar_endodontic_treatment=1
     )
     user = User.objects.create(
-        username="jane_smith",
-        first_name="Jane",
+        username="sandra_smith",
+        first_name="Sandra",
         last_name="Smith"
     )
 
-    # The below should have no effect because the
-    # date of acceptance is prior to 1/10/2022
     episode.fp17dentalcareprovider_set.update(
         associated_dcp=user.get_full_name()
     )

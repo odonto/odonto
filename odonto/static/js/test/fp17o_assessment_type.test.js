@@ -163,6 +163,70 @@ describe('Fp17OAssessmentType', function() {
       }
       expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
     });
-
   });
+
+  describe('Assessment and debound', function(){
+    var err;
+    beforeEach(function(){
+      editing.orthodontic_assessment = {
+          date_of_assessment: moment('2022-11-02', 'YYYY-MM-DD'),
+          assessment: "Assessment and Debond – Overseas Patient"
+      };
+
+      editing.fp17_exemptions = {
+        expectant_mother: true
+      };
+
+      step = {
+        other_assessments: []
+      }
+      err = {
+        orthodontic_assessment: {
+          assessment: null
+        }
+      }
+    });
+    it('should error if it has a date of assessment before 1/10/2022', function(){
+      editing.orthodontic_assessment.date_of_assessment = moment('2022-09-30', 'YYYY-MM-DD')
+      var ex = "Assessment and Debond – Overseas Patient cannot be used before 1/10/2022"
+      err.orthodontic_assessment.assessment = ex
+      expect(Fp17OAssessmentType(editing, step)).toEqual(err);
+    });
+
+    it('should error if there is not a valid exemption', function(){
+      editing.fp17_exemptions = {}
+      var ex = "Assessment and Debond – Overseas Patient requires at least one exemption"
+      err.orthodontic_assessment.assessment = ex
+      expect(Fp17OAssessmentType(editing, step)).toEqual(err);
+    });
+
+    it('should error if there is a prior orthodontic claim', function(){
+      step = {
+        other_assessments: [{
+          date: moment('2022-10-02', 'YYYY-MM-DD')
+        }]
+      }
+      var ex = "Assessment and Debond – Overseas Patient cannot be used if the patient has a previous orthodontic claim"
+      err.orthodontic_assessment.assessment = ex
+      expect(Fp17OAssessmentType(editing, step)).toEqual(err);
+    });
+
+    it('should not error if there is a subsequent claim', function(){
+      step = {
+        other_assessments: [{
+          date: moment('2022-12-02', 'YYYY-MM-DD')
+        }]
+      }
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
+    it('should not error if it is on 1/10/2022', function(){
+      editing.orthodontic_assessment.date_of_assessment = moment('2022-10-01', 'YYYY-MM-DD');
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+
+    it('should not error if there is an exemption, its after 1/10/2022 and there are no other claims', function(){
+      expect(Fp17OAssessmentType(editing, step)).toBe(undefined);
+    });
+  })
 });

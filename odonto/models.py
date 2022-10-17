@@ -2,6 +2,7 @@
 Odonto models.
 """
 import datetime
+from unittest.util import _MAX_LENGTH
 from django.db.models import fields
 from django.contrib.auth.models import User
 from django.db import models as djangomodels
@@ -122,7 +123,6 @@ class Demographics(models.Demographics):
                 (date.month, date.day) < (born.month, born.day)
             )
 
-
     # post_code = fields.CharField(max_length=255)  # => opal.Demographics.post_code
     class Meta:
         verbose_name = "Patient information"
@@ -182,14 +182,51 @@ class Fp17DentalCareProvider(models.EpisodeSubrecord):
     performer = fields.CharField(
         max_length=255, blank=True, null=True
     )
+    # As part of CCN49 there are changes coming to allow
+    # non-dentist dental care practictioners to submit
+    # fp17s.
+
+    # At present only dentists can submit it but we should
+    # include the associated dcp.
+    associated_dcp = fields.CharField(
+        blank=True, null=True, max_length=256,
+        verbose_name="Associated dental professional"
+    )
 
     def get_performer_obj(self):
         for user in User.objects.all():
             if user.get_full_name() == self.performer:
                 return user.performernumber_set.first()
 
+    def get_other_dental_professional(self):
+        for user in User.objects.all():
+            if user.get_full_name() == self.associated_dcp:
+                return user.otherdentalprofessional_set.first()
+
     class Meta:
         verbose_name = "Performer name and clinic"
+
+
+class OtherDentalProfessional(djangomodels.Model):
+    """
+    This connects a non dentist professional
+    to their GDC number and their role.
+    """
+    DCP_TYPES = enum(
+        'Therapist',
+        'Hygienist',
+        'Dental Nurse',
+        'Clinical Technician'
+    )
+    user = djangomodels.ForeignKey(
+        models.User, on_delete=djangomodels.CASCADE
+    )
+    # A 10 digit number from the general dental counsel
+    gdc_number = fields.CharField(max_length=256)
+    dcp_type = fields.CharField(choices=DCP_TYPES, max_length=256)
+
+    def __str__(self):
+        return f"{self.user.username}: {self.gdc_number} - {self.dcp_type}"
 
 
 class Fp17Commissioning(models.EpisodeSubrecord):
@@ -335,6 +372,23 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
 
     BAND_1 = "Band 1"
     BAND_2 = "Band 2"
+
+    # CCN52 changes applicable after 21/11/22
+    # Band 2 A is all claims not part of B or C
+    BAND_2_A = "Band 2 A"
+    # Band 2 B is
+    # """
+    # involving either Non-Molar Endodontics to permanent
+    # teeth or a combined total of three or more teeth
+    # requiring permanent fillings or extraction
+    # """"
+    BAND_2_B = "Band 2 B"
+    # Band 2 C is
+    # """
+    # courses of treatment involving Molar Endodontics on
+    # permanent teeth. 7 UDA will be awarded
+    # """"
+    BAND_2_C = "Band 2 C"
     BAND_3 = "Band 3"
     URGENT_TREATMENT = "Urgent treatment"
     REGULATION_11_REPLACEMENT_APPLIANCE = "Regulation 11 replacement appliance"
@@ -362,6 +416,34 @@ class Fp17TreatmentCategory(models.EpisodeSubrecord):
         choices=TREATMENT_CATEGORIES,
         verbose_name="Treatment category"
     )
+
+    def calculate_band_2_subdivision(self):
+        # As part of CCN51 band 2 is subdivided into a/b/c
+        # this subdivision is a function of the claim
+        # so we don't need to expose this to the user.
+        # It is used for calculating UDAs however.
+        if not self.treatment_category == self.BAND_2:
+            raise ValueError(
+                'This method is only for band 2 treatments'
+            )
+
+        # These changes only go live on 21/11/22
+        if self.episode.category.get_sign_off_date() < datetime.date(2022, 11, 21):
+            return self.BAND_2
+
+        clinical_data_set = self.episode.fp17clinicaldataset_set.all()[0]
+        if clinical_data_set.molar_endodontic_treatment:
+            return self.BAND_2_C
+
+        if clinical_data_set.non_molar_endodontic_treatment:
+            return self.BAND_2_B
+
+        permanent_fillings = clinical_data_set.permanent_fillings or 0
+        extractions = clinical_data_set.extractions or 0
+        if (permanent_fillings + extractions) > 2:
+            return self.BAND_2_B
+
+        return self.BAND_2_A
 
     class Meta:
         verbose_name = "Treatment category"
@@ -479,7 +561,6 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         default=False,
         verbose_name="Best practice prevention according to Delivering Better Oral Health offered"
     )
-
     decayed_teeth_permanent = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Decayed teeth permanent"
@@ -487,6 +568,10 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
     decayed_teeth_deciduous = fields.IntegerField(
         blank=True, null=True,
         verbose_name="Decayed teeth deciduous"
+    )
+    untreated_decayed_teeth = fields.IntegerField(
+        blank=True, null=True,
+        verbose_name="Untreated decayed teeth"
     )
     missing_teeth_permanent = fields.IntegerField(
         blank=True, null=True,
@@ -714,17 +799,20 @@ class ExtractionChart(models.EpisodeSubrecord):
                 if getattr(self, tooth_field) == True:
                     return True
 
+
 class OrthodonticAssessment(models.EpisodeSubrecord):
     _is_singleton = True
 
     ASSESSMENT_AND_REVIEW = "Assessment & review"
     ASSESS_AND_REFUSE_TREATMENT = "Assess & refuse treatment"
     ASSESS_AND_APPLIANCE_FITTED = "Assess & appliance fitted"
+    ASSESSMENT_AND_DEBOND = "Assessment and Debond – Overseas Patient"
 
     ASSESSMENT_CHOICES = (
         (ASSESSMENT_AND_REVIEW, ASSESSMENT_AND_REVIEW,),
         (ASSESS_AND_REFUSE_TREATMENT, ASSESS_AND_REFUSE_TREATMENT,),
         (ASSESS_AND_APPLIANCE_FITTED, ASSESS_AND_APPLIANCE_FITTED,),
+        (ASSESSMENT_AND_DEBOND, ASSESSMENT_AND_DEBOND,),
     )
     IOTN_NOT_APPLICABLE = "N/A"
 

@@ -48,4 +48,16 @@ describe('ValidatorUtils', function() {
 			expect(ValidatorUtils.eighteen_or_over(editing, otherDate)).toBe(false);
 		});
 	});
+
+	describe('hasExemption', function(){
+		it('should return true if the patient has an exemption', function(){
+			editing.fp17_exemptions = {patient_under_18: true};
+			expect(ValidatorUtils.hasExemption(editing)).toBe(true);
+		});
+
+		it('should return false if the patient does not have an exemption', function(){
+			editing.fp17_exemptions = {};
+			expect(ValidatorUtils.hasExemption(editing)).toBe(false);
+		});
+	});
 });

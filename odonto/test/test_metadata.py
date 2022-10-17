@@ -17,6 +17,7 @@ class PerformerNumberTestCase(OpalTestCase):
         expected = {
             'performer': {
                 'current_user': None,
+                'other_dcp_list': [],
                 'performer_list': ['Donald Harrison']
             }
         }

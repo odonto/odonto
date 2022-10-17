@@ -8,6 +8,11 @@ import datetime
 from .bcds1 import Treatment
 
 
+class DCP_TYPE(Treatment):
+    def __init__(self, dcp_type):
+        super().__init__(code=9178, instance_count=dcp_type)
+
+
 class FLEXIBLE_COMMISSIONING_FLAG(Treatment):
     def __init__(self, commissioning_flag):
         super().__init__(code=9181, instance_count=commissioning_flag)
@@ -256,6 +261,16 @@ class DECAYED_PERMANENT(Treatment):
         super().__init__(code=9320, instance_count=num_teeth)
 
 
+class UNTREATED_DECAYED(Treatment):
+    """
+    The number of decayed permanent and deciduous teeth at the start
+    of a course of treatment.
+    """
+
+    def __init__(self, num_teeth):
+        super().__init__(code=9379, instance_count=num_teeth)
+
+
 class MISSING_PERMANENT(Treatment):
     """
     Permanent teeth charted as missing including those replaced by bridge
@@ -437,6 +452,7 @@ class ORTHODONTIC_EXTRACTIONS(Treatment):
 ASSESS_AND_REVIEW = Treatment(code=9012)
 ASSESS_AND_REFUSE = Treatment(code=9013)
 ASSESS_AND_APPLIANCE_FITTED = Treatment(code=9014)
+ASSESSMENT_AND_DEBOND = Treatment(code=9016)
 
 
 class IOTN(Treatment):

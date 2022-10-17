@@ -263,6 +263,10 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
             treatments.append(t.HIGHEST_BPE_SEXTANT_SCORE(
                 self.BPE_MAPPING[self.model_instance.highest_bpe_score]
             ))
+        # We do untreated decay this way as by the default field serialization we
+        # do not serialize 0s. With untreated decayed teeth, they want a value of 0
+        if self.model_instance.untreated_decayed_teeth is not None:
+            treatments.append(t.UNTREATED_DECAYED(self.model_instance.untreated_decayed_teeth))
         return treatments
 
 
@@ -468,6 +472,9 @@ appliance fitted"'
 
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_REFUSE_TREATMENT:
             result.append(t.ASSESS_AND_REFUSE)
+
+        if self.model_instance.assessment == self.model_instance.ASSESSMENT_AND_DEBOND:
+            result.append(t.ASSESSMENT_AND_DEBOND)
 
         if self.model_instance.assessment == self.model_instance.ASSESS_AND_APPLIANCE_FITTED:
             result.append(t.ASSESS_AND_APPLIANCE_FITTED)
@@ -946,6 +953,22 @@ def translate_to_fp17(bcds1, episode):
 
     bcds1.date_of_completion = incomplete_treatment.completion_or_last_visit
     bcds1.treatments = []
+
+    if episode.category_name == episode_categories.FP17Episode.display_name:
+        if bcds1.date_of_acceptance >= datetime.date(2022, 10, 1):
+            dental_care_provider = episode.fp17dentalcareprovider_set.get()
+            other_dental_professional = dental_care_provider.get_other_dental_professional()
+            if other_dental_professional:
+                bcds1.gdc_number = other_dental_professional.gdc_number
+                dcp_lookup = {
+                    "Therapist": 1,
+                    "Hygienist": 2,
+                    "Dental Nurse": 3,
+                    "Clinical Technician": 4,
+                }
+                bcds1.treatments.append(
+                    t.DCP_TYPE(dcp_lookup[other_dental_professional.dcp_type])
+                )
 
     translators = [
         Fp17CommissioningSerializer,

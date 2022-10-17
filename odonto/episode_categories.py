@@ -225,15 +225,21 @@ class FP17Episode(episodes.EpisodeCategory, AbstractOdontoCategory):
         # urgent treatment is band 4
         from odonto import models
         treatment_category = self.episode.fp17treatmentcategory_set.all()[0]
+        category = treatment_category.treatment_category
+        if category == models.Fp17TreatmentCategory.BAND_2:
+            category = treatment_category.calculate_band_2_subdivision()
         treatment_map = {
             models.Fp17TreatmentCategory.BAND_1: 1,
             models.Fp17TreatmentCategory.BAND_2: 3,
+            models.Fp17TreatmentCategory.BAND_2_A: 3,
+            models.Fp17TreatmentCategory.BAND_2_B: 5,
+            models.Fp17TreatmentCategory.BAND_2_C: 7,
             models.Fp17TreatmentCategory.BAND_3: 12,
             models.Fp17TreatmentCategory.URGENT_TREATMENT: 1.2,
             models.Fp17TreatmentCategory.REGULATION_11_REPLACEMENT_APPLIANCE: 12,
         }
 
-        return treatment_map.get(treatment_category.treatment_category)
+        return treatment_map.get(category)
 
 
 class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
@@ -331,6 +337,8 @@ class FP17OEpisode(episodes.EpisodeCategory, AbstractOdontoCategory):
         if assessment.assessment == assessment.ASSESSMENT_AND_REVIEW:
             uoa = 1
         elif assessment.assessment == assessment.ASSESS_AND_REFUSE_TREATMENT:
+            uoa = 1
+        elif assessment.assessment == assessment.ASSESSMENT_AND_DEBOND:
             uoa = 1
         elif assessment.assessment == assessment.ASSESS_AND_APPLIANCE_FITTED:
             uoa = 1

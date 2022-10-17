@@ -29,13 +29,13 @@
 
   {# Prior to CCN50 we stored endodontic treatment, now we must store molar/non endodontics #}
   <div ng-show="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-1 col-md-offset-1">
-    {% charfield field="Fp17ClinicalDataSet.endodontic_treatment" %}
+    {% number field="Fp17ClinicalDataSet.endodontic_treatment"  min="0" max="32" %}
   </div>
   <div ng-hide="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-1 col-md-offset-1">
-    {% charfield field="Fp17ClinicalDataSet.molar_endodontic_treatment" %}
+    {% number field="Fp17ClinicalDataSet.molar_endodontic_treatment"  min="0" max="32" %}
   </div>
   <div ng-hide="editing.fp17_clinical_data_set.endodontic_treatment || editing.fp17_clinical_data_set.endodontic_treatment === 0" class="col-md-1 col-md-offset-1">
-    {% charfield field="Fp17ClinicalDataSet.non_molar_endodontic_treatment" %}
+    {% number field="Fp17ClinicalDataSet.non_molar_endodontic_treatment"  min="0" max="32" %}
   </div>
 </div>
 <div class="row content-offset-20">
@@ -102,6 +102,11 @@
     {% teeth field="Fp17ClinicalDataSet.decayed_teeth_deciduous" max="20" %}
   </div>
   <div class="col-md-1 col-md-offset-1">
+    {% teeth field="Fp17ClinicalDataSet.untreated_decayed_teeth" max="32" %}
+  </div>
+</div>
+<div class="row content-offset-20">
+  <div class="col-md-1">
     {% teeth field="Fp17ClinicalDataSet.filled_teeth_permanent" max="32" %}
   </div>
   <div class="col-md-1 col-md-offset-1">
