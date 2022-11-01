@@ -917,11 +917,21 @@ def translate_to_fp17o(bcds1, episode):
     fp17_exemption = episode.fp17exemptions_set.get()
     if fp17_exemption.commissioner_approval:
         bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
+
+    # Compass will reject invalid exemptions on completion types
+    # however they have explicitly stated that we should strip
+    # out all exemptions as completions don't generate UOAs
+    # and therefore charges have no meaning.
+    #
+    # Their email states
+    # "Everything can be stripped including Commissioner Approval as it  is
+    # only relevant for assessment claims"
     exemption_translator = ExceptionSerializer(fp17_exemption)
-    exemptions = exemption_translator.exemptions()
+    if not orthodontic_treatment.completion_type:
+        exemptions = exemption_translator.exemptions()
+        if exemptions:
+            bcds1.exemption_remission = exemptions
     charge = exemption_translator.charge()
-    if exemptions:
-        bcds1.exemption_remission = exemptions
     if charge:
         bcds1.patient_charge_pence = charge
     return bcds1
