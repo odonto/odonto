@@ -23,7 +23,6 @@ def annotate(bcds1):
         treatments.TREATMENT_CATEGORY(1),
         treatments.EXAMINATION,
         treatments.ETHNIC_ORIGIN_1_WHITE_BRITISH,
-        treatments.HIGHEST_BPE_SEXTANT_SCORE(5)
     ]
 
     return bcds1

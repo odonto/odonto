@@ -11,8 +11,8 @@ def annotate(bcds1):
     bcds1.patient.nhs_number = '0000000000'
     bcds1.patient.date_of_birth = datetime.date(1998, 11, 30)
 
-    bcds1.date_of_acceptance = datetime.date(2017, 4, 1)
-    bcds1.date_of_completion = datetime.date(2017, 4, 10)
+    bcds1.date_of_acceptance = datetime.date(2022, 10, 1)
+    bcds1.date_of_completion = datetime.date(2022, 10, 3)
 
     # "18 in full time education"
     bcds1.exemption_remission = {
@@ -70,7 +70,7 @@ def from_model(bcds1, patient, episode):
     )
 
     episode.fp17incompletetreatment_set.update(
-        date_of_acceptance=datetime.date(2017, 4, 1),
-        completion_or_last_visit=datetime.date(2017, 4, 10)
+        date_of_acceptance=datetime.date(2022, 10, 1),
+        completion_or_last_visit=datetime.date(2022, 10, 3)
     )
     translate_to_bdcs1(bcds1, episode)

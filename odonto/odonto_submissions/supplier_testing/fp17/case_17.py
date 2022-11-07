@@ -28,7 +28,7 @@ def annotate(bcds1):
         treatments.REGULATION_11_APPLIANCE,
         treatments.UPPER_DENTURE_METAL(10),
         treatments.LOWER_DENTURE_METAL(6),
-        treatments.UNTREATED_DECAYED(0),
+        # treatments.UNTREATED_DECAYED(0),
         treatments.ETHNIC_ORIGIN_PATIENT_DECLINED,
     ]
 

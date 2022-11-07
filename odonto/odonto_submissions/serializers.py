@@ -259,14 +259,16 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_HARD_BITE)
             elif self.model_instance.custom_made_occlusal_appliance == self.model_instance.SOFT:
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
-        if self.model_instance.highest_bpe_score is not None:
-            treatments.append(t.HIGHEST_BPE_SEXTANT_SCORE(
-                self.BPE_MAPPING[self.model_instance.highest_bpe_score]
-            ))
-        # We do untreated decay this way as by the default field serialization we
-        # do not serialize 0s. With untreated decayed teeth, they want a value of 0
-        if self.model_instance.untreated_decayed_teeth is not None:
-            treatments.append(t.UNTREATED_DECAYED(self.model_instance.untreated_decayed_teeth))
+        # highest bpe score and untreated teeth are only used after 1/10/2022
+        if date_of_acceptance and date_of_acceptance >= datetime.date(2022, 10, 1):
+            if self.model_instance.highest_bpe_score is not None:
+                treatments.append(t.HIGHEST_BPE_SEXTANT_SCORE(
+                    self.BPE_MAPPING[self.model_instance.highest_bpe_score]
+                ))
+            # We do untreated decay this way as by the default field serialization we
+            # do not serialize 0s. With untreated decayed teeth, they want a value of 0
+            if self.model_instance.untreated_decayed_teeth is not None:
+                treatments.append(t.UNTREATED_DECAYED(self.model_instance.untreated_decayed_teeth))
         return treatments
 
 
