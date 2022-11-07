@@ -214,11 +214,6 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
         "3": 3,
         "4": 4,
         "-": 5,
-        "0 with furcation": 10,
-        "1 with furcation": 11,
-        "2 with furcation": 12,
-        "3 with furcation": 13,
-        "4 with furcation": 14,
     }
 
     def to_messages(self):
