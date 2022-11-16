@@ -466,11 +466,6 @@ class Fp17ClinicalDataSet(models.EpisodeSubrecord):
         "4",
         "5",
         "-",
-        "0 with furcation",
-        "1 with furcation",
-        "2 with furcation",
-        "3 with furcation",
-        "4 with furcation",
     )
 
     scale_and_polish = fields.BooleanField(
