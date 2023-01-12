@@ -55,7 +55,15 @@ angular.module('opal.services').factory('Fp17OCompletionType', function(toMoment
     });
 
     if(!dateAndCompletionType.length){
-      return
+      return;
+    }
+
+    /*
+    * Regulation 11 is replacement of a retainer when the patient has to pay.
+    * There should not be a connection to the completion.
+    */
+    if(editing.orthodontic_treatment.replacement){
+      return;
     }
 
     var previous = null;

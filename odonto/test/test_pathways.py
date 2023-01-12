@@ -294,6 +294,17 @@ class SubmitFP17OPathwayTestCase(OpalTestCase):
             )
         )
 
+    def test_get_overlapping_dates_ignores_replacements(self):
+        self.other_episode.orthodontictreatment_set.update(
+            date_of_completion=self.date_1,
+            replacement=True
+        )
+        result = self.client.get(self.url)
+        self.assertEqual(
+            result.json()['steps'][-1]["overlapping_dates"],
+            []
+        )
+
     def test_with_overlapping_dates_singular(self):
         self.other_episode.orthodonticassessment_set.update(
             date_of_assessment=self.date_1
