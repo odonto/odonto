@@ -21,7 +21,8 @@ angular.module('opal.services').factory('TreatmentIOTN', function(){
       }
     }
 
-    if(completionType){
+    // regulation 11 treatments do not require and IOTN
+    if(completionType && !treatment.replacement){
       if(completionType !== TREATMENT_COMPLETED){
         if(!treatment.iotn){
           return {
@@ -38,7 +39,7 @@ angular.module('opal.services').factory('TreatmentIOTN', function(){
               iotn: "'Treatment completed' requires an IOTN of 1-5"
             }
           }
-        }
+          }
       }
     }
   }
