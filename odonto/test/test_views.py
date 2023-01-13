@@ -91,8 +91,10 @@ class GetContextDataStatsTestCase(OpalTestCase):
 
     @mock.patch('odonto.views.Stats.date_range')
     @mock.patch('odonto.views.Stats.previous_date_range')
-    def test_single_current_fp17_episode(self, previous_date_range, date_range):
-        self.maxDiff = None
+    @mock.patch('odonto.views.date')
+    def test_single_current_fp17_episode(self, date_fn, previous_date_range, date_range):
+        date_fn.today.return_value = datetime.date(2022, 10, 1)
+        date_fn.side_effect = lambda *args, **kw: datetime.date(*args, **kw)
         date_range.__get__ = mock.Mock(return_value=self.current_financial_year)
         previous_date_range.__get__ = mock.Mock(return_value=self.previous_financial_year)
         episode = self.new_fp17_episode()
@@ -137,7 +139,10 @@ class GetContextDataStatsTestCase(OpalTestCase):
 
     @mock.patch('odonto.views.Stats.date_range')
     @mock.patch('odonto.views.Stats.previous_date_range')
-    def test_single_current_fp17o_episode(self, previous_date_range, date_range):
+    @mock.patch('odonto.views.date')
+    def test_single_current_fp17o_episode(self, date_fn, previous_date_range, date_range):
+        date_fn.today.return_value = datetime.date(2022, 10, 1)
+        date_fn.side_effect = lambda *args, **kw: datetime.date(*args, **kw)
         date_range.__get__ = mock.Mock(return_value=self.current_financial_year)
         previous_date_range.__get__ = mock.Mock(return_value=self.previous_financial_year)
         episode = self.new_fp17o_episode()
