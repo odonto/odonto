@@ -1,5 +1,6 @@
 # Django settings for odonto project.
 import os
+import sys
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -372,3 +373,9 @@ try:
     from odonto.local_settings import *  # NOQA: F401
 except ImportError:
     pass
+
+if 'test' in sys.argv:
+    try:
+        from odonto.local_test_settings import *   # NOQA: F401
+    except ImportError:
+        pass

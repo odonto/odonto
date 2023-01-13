@@ -13,6 +13,7 @@ htmlcov
 libpeerconnection.log
 .sass-cache
 odonto/local_settings.py
+odonto/local_test_settings.py
 *sqlite*
 .vscode
 .DS_Store
