@@ -912,8 +912,7 @@ def translate_to_fp17o(bcds1, episode):
             bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
 
     fp17_exemption = episode.fp17exemptions_set.get()
-    if fp17_exemption.commissioner_approval:
-        bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
+
 
     # Compass will reject invalid exemptions on completion types
     # however they have explicitly stated that we should strip
@@ -925,6 +924,8 @@ def translate_to_fp17o(bcds1, episode):
     # only relevant for assessment claims"
     exemption_translator = ExceptionSerializer(fp17_exemption)
     if not orthodontic_treatment.completion_type:
+        if fp17_exemption.commissioner_approval:
+            bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
         exemptions = exemption_translator.exemptions()
         if exemptions:
             bcds1.exemption_remission = exemptions

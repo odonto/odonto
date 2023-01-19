@@ -146,7 +146,7 @@ class SerializerTestCase(OpalTestCase):
             old = from_message(case_number, fp17_category)
             self.assertTrue(equal(old, new))
 
-        for case_number in range(1, 9):
+        for case_number in range(1, 10):
             new = from_model(case_number, fp17o_category)
             old = from_message(case_number, fp17o_category)
             self.assertTrue(equal(old, new))
