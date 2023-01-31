@@ -966,7 +966,7 @@ def translate_to_fp17(bcds1, episode):
             dental_care_provider = episode.fp17dentalcareprovider_set.get()
             other_dental_professional = dental_care_provider.get_other_dental_professional()
             if other_dental_professional:
-                bcds1.gdc_number = other_dental_professional.gdc_number
+                bcds1.gdc_number = other_dental_professional.gdc_number.zfill(10)
                 dcp_lookup = {
                     "Therapist": 1,
                     "Hygienist": 2,
