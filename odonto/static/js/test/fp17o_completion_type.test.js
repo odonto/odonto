@@ -97,6 +97,17 @@ describe('Fp17OCompletionType', function() {
       expect(Fp17OCompletionType(editing, step)).toBe(undefined);;
     });
 
+    it('should not error if it is a regulation 11 replacement episode', function(){
+      step.overlapping_dates = [{
+        "dates": [day2, day3],
+        "completion_type": "Treatment completed"
+      }]
+      editing.orthodontic_treatment.completion_type = "Treatment completed";
+      editing.orthodontic_treatment.date_of_completion = day1;
+      editing.orthodontic_treatment.replacement = true;
+      expect(Fp17OCompletionType(editing, step)).toBe(undefined);;
+    });
+
     it('should error if the next episode has a completion type', function(){
       step.overlapping_dates = [{
         "dates": [day2, day3],
