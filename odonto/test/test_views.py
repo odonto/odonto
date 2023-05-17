@@ -51,8 +51,11 @@ class GetContextDataStatsTestCase(OpalTestCase):
         return episode
 
     def expected(self):
+        today = datetime.date.today()
+        last_four_years = [today.year -i for i in range(0, 4)]
+        last_four_years.reverse()
         return {
-            'menu_years': [2019, 2020, 2021, 2022],
+            'menu_years': last_four_years,
             'current': '2019-2020',
             'previous': '2018-2019',
             "state_counts": {
