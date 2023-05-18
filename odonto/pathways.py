@@ -369,6 +369,11 @@ class SubmitFP17OPathway(OdontoPagePathway):
         for episode in other_episodes:
             assessment = episode.orthodonticassessment_set.all()[0]
             completion = episode.orthodontictreatment_set.all()[0]
+            # regulation 11 replacements exist outside the normal flow
+            # of episodes. E.g. you can have a completion episode
+            # and then a regularion 11 replacement.
+            if completion.replacement:
+                continue
             date_of_assessment = assessment.date_of_assessment
             date_of_appliance_fitted = assessment.date_of_appliance_fitted
             date_of_completion = completion.date_of_completion

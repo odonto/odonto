@@ -256,7 +256,7 @@ class Fp17ClinicalDataSetSerializer(TreatmentSerializer):
                 treatments.append(t.CUSTOM_MADE_OCCLUSAL_APPLIANCE_SOFT_BITE)
         # highest bpe score and untreated teeth are only used after 1/10/2022
         if date_of_acceptance and date_of_acceptance >= datetime.date(2022, 10, 1):
-            if self.model_instance.highest_bpe_score is not None:
+            if self.model_instance.highest_bpe_score:
                 treatments.append(t.HIGHEST_BPE_SEXTANT_SCORE(
                     self.BPE_MAPPING[self.model_instance.highest_bpe_score]
                 ))
@@ -912,8 +912,7 @@ def translate_to_fp17o(bcds1, episode):
             bcds1.treatments.append(t.PHONE_NUMBER_DECLINED)
 
     fp17_exemption = episode.fp17exemptions_set.get()
-    if fp17_exemption.commissioner_approval:
-        bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
+
 
     # Compass will reject invalid exemptions on completion types
     # however they have explicitly stated that we should strip
@@ -925,6 +924,8 @@ def translate_to_fp17o(bcds1, episode):
     # only relevant for assessment claims"
     exemption_translator = ExceptionSerializer(fp17_exemption)
     if not orthodontic_treatment.completion_type:
+        if fp17_exemption.commissioner_approval:
+            bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
         exemptions = exemption_translator.exemptions()
         if exemptions:
             bcds1.exemption_remission = exemptions
@@ -966,7 +967,7 @@ def translate_to_fp17(bcds1, episode):
             dental_care_provider = episode.fp17dentalcareprovider_set.get()
             other_dental_professional = dental_care_provider.get_other_dental_professional()
             if other_dental_professional:
-                bcds1.gdc_number = other_dental_professional.gdc_number
+                bcds1.gdc_number = other_dental_professional.gdc_number.zfill(10)
                 dcp_lookup = {
                     "Therapist": 1,
                     "Hygienist": 2,

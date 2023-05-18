@@ -65,6 +65,12 @@ describe('TreatmentIOTN', function() {
   });
 
   describe('Treatment completed requires an IOTN of 1-5', function(){
+    it('should not error if completion type is treatment completed and a replacement', function(){
+      editing.orthodontic_treatment.replacement = true;
+      editing.orthodontic_treatment.completion_type = "Treatment completed";
+      expect(TreatmentIOTN(editing)).toBe(undefined);
+    });
+
     it('should not error if completion type is treatment completed and IOTN is 1', function(){
       editing.orthodontic_treatment.iotn = "1";
       editing.orthodontic_treatment.completion_type = "Treatment completed";

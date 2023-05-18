@@ -1,7 +1,7 @@
 """
 Odonto views
 """
-import datetime
+from datetime import datetime, date, timedelta
 import json
 import csv
 import dateutil.relativedelta
@@ -58,12 +58,12 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
         result = result.prefetch_related('fp17dentalcareprovider_set')
         return sorted(
             result,
-            key=lambda x: x.category.get_sign_off_date() or datetime.date.min
+            key=lambda x: x.category.get_sign_off_date() or date.min
         )
 
     def unsubmitted_by_user_and_range(self, unsubmitted):
-        today = datetime.date.today()
-        six_weeks_ago = today - datetime.timedelta(42)
+        today = date.today()
+        six_weeks_ago = today - timedelta(42)
         two_months_ago = today - dateutil.relativedelta.relativedelta(
             months=2
         )
@@ -101,7 +101,7 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx["six_weeks_ago"] = datetime.date.today() - datetime.timedelta(42)
+        ctx["six_weeks_ago"] = date.today() - timedelta(42)
         ctx["unsubmitted"] = self.get_unsubmitted()
         ctx["performer_to_period_to_count"] = self.unsubmitted_by_user_and_range(
             ctx["unsubmitted"]
@@ -130,7 +130,7 @@ class ViewFP17ODetailView(LoginRequiredMixin, DetailView):
 
 class CaseMix(LoginRequiredMixin, View):
     # only look patients after the rollout
-    CASE_MIX_ROLLOUT = datetime.date(2020, 11, 1)
+    CASE_MIX_ROLLOUT = date(2020, 11, 1)
 
     def get_qs(self):
         return Episode.objects.filter(
@@ -238,8 +238,8 @@ class Stats(LoginRequiredMixin, TemplateView):
 
     def get_range_for_year(self, year):
         return (
-            datetime.date(year, 4, 1),
-            datetime.date(year + 1, 4, 1),
+            date(year, 4, 1),
+            date(year + 1, 4, 1),
         )
 
     @cached_property
@@ -291,7 +291,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         for i in range(0, 12):
             date_range = (
                 start_date + relativedelta(months=i),
-                start_date + relativedelta(months=i+1) - datetime.timedelta(1)
+                start_date + relativedelta(months=i+1) - timedelta(1)
             )
             yield date_range
 
@@ -423,7 +423,7 @@ class Stats(LoginRequiredMixin, TemplateView):
         )
         current = f"{self.date_range[0].year}-{self.date_range[1].year}"
         previous = f"{self.previous_date_range[0].year}-{self.previous_date_range[1].year}"
-        today = datetime.date.today()
+        today = date.today()
         menu_years = sorted([today.year - i for i in range(4)])
 
         ctx.update({
@@ -452,10 +452,10 @@ class PatientCharges(LoginRequiredMixin, ListView):
         current_month = some_dt.month
         current_year = some_dt.year
         if current_month + 1 > 12:
-            return datetime.date(
+            return date(
                 current_year+1, 1, 1
             )
-        return datetime.date(
+        return date(
             current_year, current_month+1, 1
         )
 
@@ -463,10 +463,10 @@ class PatientCharges(LoginRequiredMixin, ListView):
         current_month = some_dt.month
         current_year = some_dt.year
         if current_month - 1 == 0:
-            return datetime.date(
+            return date(
                 current_year-1, 12, 1
             )
-        return datetime.date(
+        return date(
             current_year, current_month-1, 1
         )
 
@@ -479,9 +479,9 @@ class PatientCharges(LoginRequiredMixin, ListView):
         the date the user is looking at plus
         the next 3 months
         """
-        today = datetime.date.today()
+        today = date.today()
         current_menu_dates = [
-            datetime.date(
+            date(
                 today.year, today.month, 1
             )
         ]
@@ -505,7 +505,7 @@ class PatientCharges(LoginRequiredMixin, ListView):
 
     def next_menu_month(self):
         next_month = self.next_month(self.menu_dates()[-1])
-        if next_month < datetime.date.today():
+        if next_month < date.today():
             return next_month
 
     def get_date_range(self):
@@ -513,8 +513,8 @@ class PatientCharges(LoginRequiredMixin, ListView):
         Returns the daterange covered by the page as a
         tuple where the last date is exclusive
         """
-        month_num = datetime.datetime.strptime(self.kwargs["month"], '%b').month
-        month_start = datetime.date(
+        month_num = datetime.strptime(self.kwargs["month"], '%b').month
+        month_start = date(
             self.kwargs["year"],
             month_num,
             1
