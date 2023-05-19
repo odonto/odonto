@@ -72,4 +72,25 @@ describe('Fp17Under18', function() {
       expect(Fp17Under18(editing)).toBe(undefined);
     });
   });
+
+  describe('if a patient has the under 18 exemption it should error if their dob is older', function(){
+    it('should error if the exemption is not clicked', function(){
+      editing.demographics.date_of_birth = new Date(2015, 1, 1);
+      editing.fp17_incomplete_treatment.completion_or_last_visit = new Date(2019, 1, 1);
+      editing.fp17_exemptions.patient_under_18 = true;
+      expect(Fp17Under18(editing)).toBe(undefined);
+    });
+
+    it('should error if the date of birth is under 18 years ago', function(){
+      editing.demographics.date_of_birth = new Date(2015, 1, 1);
+      editing.fp17_incomplete_treatment.completion_or_last_visit = new Date(2019, 1, 1);
+      var expected = {
+        fp17_exemptions: {
+          patient_under_18: "This patient is under 18"
+        }
+      }
+      expect(Fp17Under18(editing)).toEqual(expected);
+    });
+
+  });
 });
