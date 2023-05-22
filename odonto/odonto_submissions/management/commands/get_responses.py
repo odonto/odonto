@@ -131,13 +131,13 @@ class Command(BaseCommand):
             settings.ADMINS,
             html_message=html_message,
         )
-        clean_episodes_being_investigated()
 
     def handle(self, *args, **options):
         try:
             response = Response.get()
             response.update_submissions()
             self.send_email(response)
+            clean_episodes_being_investigated()
         except Exception as e:
             logger.info(f"Sending failed to get responses with {e}")
             logger.info(traceback.format_exc())
