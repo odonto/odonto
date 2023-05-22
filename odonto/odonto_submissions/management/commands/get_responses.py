@@ -53,10 +53,7 @@ def clean_episodes_being_investigated():
 
 
 class Command(BaseCommand):
-    def filter_by_tax_year(self, episode_category):
-        episodes = Episode.objects.filter(
-            category_name=episode_category.display_name
-        )
+    def filter_by_tax_year(self, episodes):
         start_of_tax_year = get_current_financial_year()[0]
         episode_ids = set()
         for episode in episodes:
@@ -90,7 +87,7 @@ class Command(BaseCommand):
         }
 
         context["summary"]["FP17 current tax year"] = FP17Episode.summary(
-            self.filter_by_tax_year(FP17Episode)
+            self.filter_by_tax_year(Episode.objects.filter(category_name=FP17Episode.display_name))
         )
         error_states = [AbstractOdontoCategory.NEEDS_INVESTIGATION, Submission.REJECTED_BY_COMPASS]
         warning = False
@@ -103,7 +100,7 @@ class Command(BaseCommand):
                 warning = True
 
         context["summary"]["FP17O current tax year"] = FP17OEpisode.summary(
-            self.filter_by_tax_year(FP17OEpisode)
+            self.filter_by_tax_year(Episode.objects.filter(category_name=FP17OEpisode.display_name))
         )
         for error_state in error_states:
             if error_state in context["summary"]["FP17O current tax year"]:
