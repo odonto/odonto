@@ -62,6 +62,23 @@ class Command(BaseCommand):
                 episode_ids.add(episode.id)
         return episodes.filter(id__in=episode_ids)
 
+    def get_oldest_rejection(self, qs):
+        FAILURE_STATES = [
+            Submission.FAILED_TO_SEND, Submission.REJECTED_BY_COMPASS
+        ]
+        rejected = qs.filter(submission__state__in=FAILURE_STATES)
+        rejected_dates = [
+            i.category.get_sign_off_date() for i in rejected if i.category.submission().state in FAILURE_STATES
+        ]
+        rejected_dates = [i for i in rejected_dates if i is not None]
+        if len(rejected_dates) > 1:
+            return min(rejected_dates)
+        elif len(rejected_dates) == 1:
+            return rejected_dates[0]
+        else:
+            return None
+
+
     def send_email(self, response):
         """
         Sends an email with a context dict where...
@@ -86,8 +103,9 @@ class Command(BaseCommand):
             "FP17O Rejected": rejected.filter(episode__category_name=fp17o_category).count(),
         }
 
+        fp17_episodes_for_tax_year = self.filter_by_tax_year(Episode.objects.filter(category_name=FP17Episode.display_name))
         context["summary"]["FP17 current tax year"] = FP17Episode.summary(
-            self.filter_by_tax_year(Episode.objects.filter(category_name=FP17Episode.display_name))
+            fp17_episodes_for_tax_year
         )
         error_states = [AbstractOdontoCategory.NEEDS_INVESTIGATION, Submission.REJECTED_BY_COMPASS]
 
@@ -96,20 +114,23 @@ class Command(BaseCommand):
                 context["summary"]["FP17 current tax year"][error_state] = WarningField(
                     context["summary"]["FP17 current tax year"][error_state]
                 )
-
+        fp17O_episodes_for_tax_year = self.filter_by_tax_year(Episode.objects.filter(category_name=FP17OEpisode.display_name))
         context["summary"]["FP17O current tax year"] = FP17OEpisode.summary(
-            self.filter_by_tax_year(Episode.objects.filter(category_name=FP17OEpisode.display_name))
+            fp17O_episodes_for_tax_year
         )
         for error_state in error_states:
             if error_state in context["summary"]["FP17O current tax year"]:
                 context["summary"]["FP17O current tax year"][error_state] = WarningField(
                     context["summary"]["FP17O current tax year"][error_state]
                 )
-
         context["summary"]["FP17 all time"] = FP17Episode.summary()
         context["summary"]["FP17O all time"] = FP17OEpisode.summary()
         today = datetime.date.today()
-        title = f"Odonto response information for {today}, NEEDS INVESTIGATION"
+        oldest_fp17_date = self.get_oldest_rejection(fp17_episodes_for_tax_year) or datetime.datetime.max.date()
+        oldest_fp17o_date = self.get_oldest_rejection(fp17O_episodes_for_tax_year) or datetime.datetime.max.date()
+        old_rejection = min(oldest_fp17_date, oldest_fp17o_date)
+        days_ago = today - old_rejection
+        title = f"Odonto: Breaks need to be resolved in {60 - days_ago.days} day(s), NEEDS INVESTIGATION"
         context["title"] = title
         html_message = render_to_string("emails/response_summary.html", context)
         plain_message = strip_tags(html_message)

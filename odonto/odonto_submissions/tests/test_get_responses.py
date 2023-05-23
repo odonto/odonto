@@ -108,9 +108,10 @@ translate_episode_to_xml"
             ctx["summary"]["FP17O all time"],
             expected_fp17o
         )
-
-        self.assertTrue(ctx["title"].startswith("Odonto response information for"))
-        self.assertTrue(ctx["title"].endswith("NEEDS INVESTIGATION"))
+        self.assertEqual(
+            ctx["title"],
+            "Odonto: Breaks need to be resolved in 60 day(s), NEEDS INVESTIGATION"
+        )
 
     def test_clean_episodes_episode_succeeded(self, logger, render_to_string, response_get, send_mail):
         episode = self.get_episode()
