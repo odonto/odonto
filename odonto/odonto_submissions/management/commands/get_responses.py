@@ -90,14 +90,12 @@ class Command(BaseCommand):
             self.filter_by_tax_year(Episode.objects.filter(category_name=FP17Episode.display_name))
         )
         error_states = [AbstractOdontoCategory.NEEDS_INVESTIGATION, Submission.REJECTED_BY_COMPASS]
-        warning = False
 
         for error_state in error_states:
             if error_state in context["summary"]["FP17 current tax year"]:
                 context["summary"]["FP17 current tax year"][error_state] = WarningField(
                     context["summary"]["FP17 current tax year"][error_state]
                 )
-                warning = True
 
         context["summary"]["FP17O current tax year"] = FP17OEpisode.summary(
             self.filter_by_tax_year(Episode.objects.filter(category_name=FP17OEpisode.display_name))
@@ -107,15 +105,11 @@ class Command(BaseCommand):
                 context["summary"]["FP17O current tax year"][error_state] = WarningField(
                     context["summary"]["FP17O current tax year"][error_state]
                 )
-                warning = True
 
         context["summary"]["FP17 all time"] = FP17Episode.summary()
         context["summary"]["FP17O all time"] = FP17OEpisode.summary()
         today = datetime.date.today()
-        if warning:
-            title = f"Odonto response information for {today}, NEEDS INVESTIGATION"
-        else:
-            title = f"Odonto response information for {today}"
+        title = f"Odonto response information for {today}, NEEDS INVESTIGATION"
         context["title"] = title
         html_message = render_to_string("emails/response_summary.html", context)
         plain_message = strip_tags(html_message)
@@ -129,11 +123,26 @@ class Command(BaseCommand):
             html_message=html_message,
         )
 
+    def has_current_tax_year_rejections_or_failed(self):
+        """
+        Returns True if we have episodes from the current tax year
+        that have been rejected or failed to send.
+        """
+        failed_episodes = Episode.objects.filter(
+            submission__state__in=[
+                Submission.REJECTED_BY_COMPASS, Submission.FAILED_TO_SEND
+            ]
+        )
+        if self.filter_by_tax_year(failed_episodes).exists():
+            return True
+        return False
+
     def handle(self, *args, **options):
         try:
             response = Response.get()
             response.update_submissions()
-            self.send_email(response)
+            if self.has_current_tax_year_rejections_or_failed():
+                self.send_email(response)
             clean_episodes_being_investigated()
         except Exception as e:
             logger.info(f"Sending failed to get responses with {e}")
