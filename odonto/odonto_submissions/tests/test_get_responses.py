@@ -47,15 +47,7 @@ translate_episode_to_xml"
         response.get_successfull_submissions.return_value = Submission.objects.all()
         response.get_rejected_submissions.return_value = {}
         self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        expected_summary = {
-            "FP17 Success": 0,
-            "FP17 Rejected": 0,
-            "FP17O Success": 0,
-            "FP17O Rejected": 0,
-        }
-        self.assertEqual(ctx["summary"]["Latest response"], expected_summary)
-        self.assertTrue(ctx["title"].startswith("Odonto response information for"))
+        self.assertFalse(send_mail.called)
 
     def test_with_success(self, logger, render_to_string, response_get, send_mail):
         episode = self.get_episode()
@@ -64,46 +56,7 @@ translate_episode_to_xml"
         response.get_successfull_submissions.return_value = Submission.objects.all()
         response.get_rejected_submissions.return_value = {}
         self.cmd.handle()
-        ctx = render_to_string.call_args[0][1]
-        expected_summary = {
-            "FP17 Success": 1,
-            "FP17 Rejected": 0,
-            "FP17O Success": 0,
-            "FP17O Rejected": 0,
-        }
-        self.assertEqual(ctx["summary"]["Latest response"], expected_summary)
-
-        expected_fp17 = {
-            'Oldest unsent': None,
-            'Open': 0,
-            'Success': 1
-        }
-        self.assertEqual(
-            ctx["summary"]["FP17 current tax year"],
-            expected_fp17
-        )
-
-        expected_fp17o = {
-            'Open': 0,
-            'Oldest unsent': None
-        }
-        self.assertEqual(
-            ctx["summary"]["FP17O current tax year"],
-            expected_fp17o
-        )
-
-        self.assertEqual(
-            ctx["summary"]["FP17 all time"],
-            expected_fp17
-        )
-
-        self.assertEqual(
-            ctx["summary"]["FP17O all time"],
-            expected_fp17o
-        )
-
-        self.assertTrue(ctx["title"].startswith("Odonto response information for"))
-        self.assertFalse(ctx["title"].endswith("NEEDS INVESTIGATION"))
+        self.assertFalse(send_mail.called)
 
     def test_with_rejection(self, logger, render_to_string, response_get, send_mail):
         episode = self.get_episode()
@@ -155,9 +108,10 @@ translate_episode_to_xml"
             ctx["summary"]["FP17O all time"],
             expected_fp17o
         )
-
-        self.assertTrue(ctx["title"].startswith("Odonto response information for"))
-        self.assertTrue(ctx["title"].endswith("NEEDS INVESTIGATION"))
+        self.assertEqual(
+            ctx["title"],
+            "Odonto: Breaks need to be resolved in 60 day(s), NEEDS INVESTIGATION"
+        )
 
     def test_clean_episodes_episode_succeeded(self, logger, render_to_string, response_get, send_mail):
         episode = self.get_episode()

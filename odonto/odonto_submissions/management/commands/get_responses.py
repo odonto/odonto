@@ -53,10 +53,7 @@ def clean_episodes_being_investigated():
 
 
 class Command(BaseCommand):
-    def filter_by_tax_year(self, episode_category):
-        episodes = Episode.objects.filter(
-            category_name=episode_category.display_name
-        )
+    def filter_by_tax_year(self, episodes):
         start_of_tax_year = get_current_financial_year()[0]
         episode_ids = set()
         for episode in episodes:
@@ -64,6 +61,23 @@ class Command(BaseCommand):
             if sign_off_date and sign_off_date >= start_of_tax_year:
                 episode_ids.add(episode.id)
         return episodes.filter(id__in=episode_ids)
+
+    def get_oldest_rejection(self, qs):
+        FAILURE_STATES = [
+            Submission.FAILED_TO_SEND, Submission.REJECTED_BY_COMPASS
+        ]
+        rejected = qs.filter(submission__state__in=FAILURE_STATES)
+        rejected_dates = [
+            i.category.get_sign_off_date() for i in rejected if i.category.submission().state in FAILURE_STATES
+        ]
+        rejected_dates = [i for i in rejected_dates if i is not None]
+        if len(rejected_dates) > 1:
+            return min(rejected_dates)
+        elif len(rejected_dates) == 1:
+            return rejected_dates[0]
+        else:
+            return None
+
 
     def send_email(self, response):
         """
@@ -89,36 +103,34 @@ class Command(BaseCommand):
             "FP17O Rejected": rejected.filter(episode__category_name=fp17o_category).count(),
         }
 
+        fp17_episodes_for_tax_year = self.filter_by_tax_year(Episode.objects.filter(category_name=FP17Episode.display_name))
         context["summary"]["FP17 current tax year"] = FP17Episode.summary(
-            self.filter_by_tax_year(FP17Episode)
+            fp17_episodes_for_tax_year
         )
         error_states = [AbstractOdontoCategory.NEEDS_INVESTIGATION, Submission.REJECTED_BY_COMPASS]
-        warning = False
 
         for error_state in error_states:
             if error_state in context["summary"]["FP17 current tax year"]:
                 context["summary"]["FP17 current tax year"][error_state] = WarningField(
                     context["summary"]["FP17 current tax year"][error_state]
                 )
-                warning = True
-
+        fp17O_episodes_for_tax_year = self.filter_by_tax_year(Episode.objects.filter(category_name=FP17OEpisode.display_name))
         context["summary"]["FP17O current tax year"] = FP17OEpisode.summary(
-            self.filter_by_tax_year(FP17OEpisode)
+            fp17O_episodes_for_tax_year
         )
         for error_state in error_states:
             if error_state in context["summary"]["FP17O current tax year"]:
                 context["summary"]["FP17O current tax year"][error_state] = WarningField(
                     context["summary"]["FP17O current tax year"][error_state]
                 )
-                warning = True
-
         context["summary"]["FP17 all time"] = FP17Episode.summary()
         context["summary"]["FP17O all time"] = FP17OEpisode.summary()
         today = datetime.date.today()
-        if warning:
-            title = f"Odonto response information for {today}, NEEDS INVESTIGATION"
-        else:
-            title = f"Odonto response information for {today}"
+        oldest_fp17_date = self.get_oldest_rejection(fp17_episodes_for_tax_year) or datetime.datetime.max.date()
+        oldest_fp17o_date = self.get_oldest_rejection(fp17O_episodes_for_tax_year) or datetime.datetime.max.date()
+        old_rejection = min(oldest_fp17_date, oldest_fp17o_date)
+        days_ago = today - old_rejection
+        title = f"Odonto: Breaks need to be resolved in {60 - days_ago.days} day(s), NEEDS INVESTIGATION"
         context["title"] = title
         html_message = render_to_string("emails/response_summary.html", context)
         plain_message = strip_tags(html_message)
@@ -131,13 +143,28 @@ class Command(BaseCommand):
             settings.ADMINS,
             html_message=html_message,
         )
-        clean_episodes_being_investigated()
+
+    def has_current_tax_year_rejections_or_failed(self):
+        """
+        Returns True if we have episodes from the current tax year
+        that have been rejected or failed to send.
+        """
+        failed_episodes = Episode.objects.filter(
+            submission__state__in=[
+                Submission.REJECTED_BY_COMPASS, Submission.FAILED_TO_SEND
+            ]
+        )
+        if self.filter_by_tax_year(failed_episodes).exists():
+            return True
+        return False
 
     def handle(self, *args, **options):
         try:
             response = Response.get()
             response.update_submissions()
-            self.send_email(response)
+            if self.has_current_tax_year_rejections_or_failed():
+                self.send_email(response)
+            clean_episodes_being_investigated()
         except Exception as e:
             logger.info(f"Sending failed to get responses with {e}")
             logger.info(traceback.format_exc())
