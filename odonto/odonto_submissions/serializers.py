@@ -285,9 +285,7 @@ class Fp17OtherDentalServiceTranslator(TreatmentSerializer):
     }
 
 
-
-
-class ExceptionSerializer(object):
+class ExemptionSerializer(object):
     """
     As of Processing rules 9.7 Paragraph 5.2.4 when there are more than
     one exemption they should be sent down in the following order (Descending)
@@ -305,6 +303,7 @@ class ExceptionSerializer(object):
     Prisoner
     HC3 Certificate
     """
+
     EXEMPTION_MAPPINGS = {
         "patient_under_18": e.PATIENT_UNDER_18, # 27, 28
         "expectant_mother": e.EXPECTANT_MOTHER,  # 3, 4
@@ -944,7 +943,7 @@ def translate_to_fp17o(bcds1, episode):
     # Their email states
     # "Everything can be stripped including Commissioner Approval as it  is
     # only relevant for assessment claims"
-    exemption_translator = ExceptionSerializer(fp17_exemption)
+    exemption_translator = ExemptionSerializer(fp17_exemption)
     if not orthodontic_treatment.completion_type:
         if fp17_exemption.commissioner_approval:
             bcds1.treatments.append(t.COMMISSIONER_APPROVAL)
@@ -1019,7 +1018,7 @@ def translate_to_fp17(bcds1, episode):
         bcds1.treatments.append(ethnicity_treatment)
 
     fp17_exemption = episode.fp17exemptions_set.get()
-    exemption_translator = ExceptionSerializer(fp17_exemption)
+    exemption_translator = ExemptionSerializer(fp17_exemption)
     exemptions = exemption_translator.exemptions()
     charge = exemption_translator.charge()
     if exemptions:

@@ -14,8 +14,7 @@ angular.module('opal.services').factory('Fp17oUnder18', function(toMomentFilter)
     }
 
     if(editing.demographics.date_of_birth){
-      var otherDate = editing.orthodontic_assessment.date_of_referral;
-      otherDate = otherDate || editing.orthodontic_assessment.date_of_assessment;
+      var otherDate = editing.orthodontic_assessment.date_of_assessment;
       otherDate = otherDate || editing.orthodontic_assessment.date_of_appliance_fitted;
       otherDate = otherDate || editing.orthodontic_treatment.date_of_completion;
 
