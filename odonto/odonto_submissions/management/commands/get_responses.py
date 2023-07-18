@@ -1,17 +1,19 @@
 """
-Get's the latest 'response' from which we can get the result of
+Gets the latest 'response' from which we can get the result of
 submissions processed so far from Compass.
 
 Then send an email with the current summary of the status quo so far.
 """
 import traceback
 import datetime
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from opal.models import Episode
+
 from odonto.odonto_submissions.models import (
     Response, Submission, EpisodesBeingInvestigated
 )
