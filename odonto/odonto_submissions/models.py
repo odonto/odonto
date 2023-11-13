@@ -211,6 +211,7 @@ class EpisodesBeingInvestigated(models.Model):
         on_delete=models.CASCADE
     )
     created = models.DateTimeField(default=timezone.now)
+    comment = models.TextField(blank=True, null=True)
 
 
 class Submission(models.Model):
