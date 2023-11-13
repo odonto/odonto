@@ -286,22 +286,41 @@ class Fp17OtherDentalServiceTranslator(TreatmentSerializer):
 
 
 class ExemptionSerializer(object):
+    """
+    As of Processing rules 9.7 Paragraph 5.2.4 when there are more than
+    one exemption they should be sent down in the following order (Descending)
+    Patient Under 18
+    Expectant Mother
+    Nursing Mother
+    Aged 18 in FTE
+    Universal Credit
+    HC2 Certificate
+    Income Support
+    Employment Support Allowance
+    Tax Credits -- we do not have this for some reason?
+    Job Seeker’s Allowance
+    Pension Credits
+    Prisoner
+    HC3 Certificate
+    """
+
     EXEMPTION_MAPPINGS = {
-        "patient_under_18": e.PATIENT_UNDER_18,
-        "full_remission_hc2_cert": e.FULL_REMISSION,
-        "partial_remission_hc3_cert": e.PARTIAL_REMISSION,
-        "expectant_mother": e.EXPECTANT_MOTHER,
-        "nursing_mother": e.NURSING_MOTHER,
-        "aged_18_in_full_time_education": e.AGED_18_IN_FULL_TIME_EDUCATION,
-        "income_support": e.INCOME_SUPPORT,
+        "patient_under_18": e.PATIENT_UNDER_18, # 27, 28
+        "expectant_mother": e.EXPECTANT_MOTHER,  # 3, 4
+        "nursing_mother": e.NURSING_MOTHER,  # 5, 6
+        "aged_18_in_full_time_education": e.AGED_18_IN_FULL_TIME_EDUCATION,  # 1, 2
+        "universal_credit": e.UNIVERSAL_CREDIT,  # 38, 39
+        "full_remission_hc2_cert": e.FULL_REMISSION,  # 13, 14
+        "income_support": e.INCOME_SUPPORT,  # 17, 18
+        "income_related_employment_and_support_allowance": e.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE,  # 83, 84
         # "nhs_tax_credit_exemption" TODO this does not exist
-        "income_based_jobseekers_allowance": e.JOBSEEKERS_ALLOWANCE,
-        "pension_credit_guarantee_credit": e.PENSION_CREDIT_GUARANTEE_CREDIT,
-        "prisoner": e.PRISONER,
-        "universal_credit": e.UNIVERSAL_CREDIT,
-        "income_related_employment_and_support_allowance": e.INCOME_RELATED_EMPLOYMENT_AND_SUPPORT_ALLOWANCE,
+        "income_based_jobseekers_allowance": e.JOBSEEKERS_ALLOWANCE,  # 25, 26
+        "pension_credit_guarantee_credit": e.PENSION_CREDIT_GUARANTEE_CREDIT,  # 33, 34
+        "prisoner": e.PRISONER,  # 35
+        "partial_remission_hc3_cert": e.PARTIAL_REMISSION,  # 15, 16
         # "patient_charge_collected" TODO this is not exist
     }
+
 
     def __init__(self, model_instance):
         self.model_instance = model_instance
@@ -319,7 +338,9 @@ class ExemptionSerializer(object):
                     result["code"] = v.EVIDENCE_SEEN
                 else:
                     result["code"] = v.NO_EVIDENCE_SEEN
-
+                # We should only have one exemption per patient in the order
+                # from the dictionary
+                break
         return result
 
     def charge(self):
