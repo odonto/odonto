@@ -61,10 +61,11 @@ sudo chmod 0777 /usr/lib/ohc/var
 sudo mkdir /usr/lib/ohc/etc
 sudo chmod 0777 /usr/lib/ohc/etc
 
-cp /home/ohc/odonto/deployment/config/gunicorn.conf /usr/lib/ohc/etc/
-cp /home/ohc/odonto/deployment/config/gunicorn_conf.py /usr/lib/ohc/etc/
-cp /home/ohc/odonto/deployment/config/nginx_site.conf /usr/lib/ohc/etc/
-cp /home/ohc/odonto/deployment/config/circusd.ini /usr/lib/ohc/etc/
+cp /home/ohc/odonto/deployment/config/gunicorn.conf \
+   /home/ohc/odonto/deployment/config/gunicorn_conf.py \
+   /home/ohc/odonto/deployment/config/nginx_site.conf \
+   /home/ohc/odonto/deployment/config/circusd.ini \
+   /home/ohc/odonto/deployment/config/circus.conf /usr/lib/ohc/etc/
 
 . /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv -a /usr/lib/ohc/odonto odonto
 
@@ -112,4 +113,5 @@ sudo service nginx restart
 #
 sudo rm /etc/circus/circusd.ini
 sudo ln -s /usr/lib/ohc/etc/circusd.ini /etc/circus/circusd.ini
+sudo ln -s /usr/lib/ohc/etc/circusd.ini /etc/init/circusd.conf
 sudo service circus restart

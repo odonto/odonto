@@ -27,3 +27,4 @@ pytz==2023.3
 -e git+https://github.com/openhealthcare/opal@v0.22.2-odonto#egg=opal
 
 -e git+https://github.com/openhealthcare/opal-passwordreset@v0.1#egg=opal_passwordreset
+circus==0.18.0
