@@ -16,7 +16,7 @@ sudo apt-get install -y \
 	 virtualenv\
 	 virtualenvwrapper\
 	 python3-dev\
-	 builnd-essential\
+	 build-essential\
 	 nginx
 
 
