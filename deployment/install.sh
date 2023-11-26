@@ -28,10 +28,12 @@ sudo apt-get install -y \
      postgresql-server-dev-15 \
      python3-psycopg
 
+cd /etc # Or bash will complain postgres can't be in the ohc home dir
 sudo -u postgres dropdb odonto
 sudo -u postgres dropuser ohc
 sudo -u postgres psql -c "CREATE USER ohc WITH PASSWORD 'Nope'"
 sudo -u postgres createdb odonto --owner=ohc
+cd /home/ohc/odonto/deployment
 sudo cp /home/ohc/odonto/deployment/config/pg_hba.conf /etc/postgresql/15/main/
 sudo service postgresql restart
 
@@ -41,12 +43,12 @@ sudo service postgresql restart
 #
 cp /home/ohc/odonto/deployment/config/ca-certificates.crt /usr/lib/ohc/etc/
 mkdir -p ~/.config/pip
-cp deployment/config/pip.conf ~/.config/pip/
+cp /home/ohc/odonto/deployment/config/pip.conf ~/.config/pip/
 
 #
 # Setup application
 #
-sudo mkdir /usr/lib/ohc
+sudo mkdir -p /usr/lib/ohc
 sudo chmod 0777 /usr/lib/ohc
 cd /usr/lib/ohc
 
@@ -54,11 +56,11 @@ cd /usr/lib/ohc
 rm -rf odonto
 git clone https://github.com/odonto/odonto.git
 
-sudo mkdir /usr/lib/ohc/log
+sudo mkdir -p /usr/lib/ohc/log
 sudo chmod 0777 /usr/lib/ohc/log
-sudo mkdir /usr/lib/ohc/var
+sudo mkdir -p /usr/lib/ohc/var
 sudo chmod 0777 /usr/lib/ohc/var
-sudo mkdir /usr/lib/ohc/etc
+sudo mkdir -p /usr/lib/ohc/etc
 sudo chmod 0777 /usr/lib/ohc/etc
 
 cp /home/ohc/odonto/deployment/config/gunicorn.conf \
@@ -111,7 +113,8 @@ sudo service nginx restart
 #
 # Configure Circus
 #
-sudo rm /etc/circus/circusd.ini
+sudo rm -f /etc/circus/circusd.ini
+sudo mkdir -p /etc/circus
 sudo ln -s /usr/lib/ohc/etc/circusd.ini /etc/circus/circusd.ini
-sudo ln -s /usr/lib/ohc/etc/circusd.ini /etc/init/circusd.conf
+sudo ln -s /usr/lib/ohc/etc/circus.service /etc/systemd/system/circus.service
 sudo service circus restart
