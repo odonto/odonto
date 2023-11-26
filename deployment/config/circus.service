@@ -5,7 +5,7 @@ After=syslog.target network.target nss-lookup.target
 [Service]
 Type=simple
 ExecReload=/home/ohc/.virtualenvs/odonto/bin/circusctl reload
-ExecStart=/home/ohc/.virtualenvs/odonto/bin/circusd /etc/circus/circus.ini
+ExecStart=/home/ohc/.virtualenvs/odonto/bin/circusd /etc/circus/circusd.ini
 Restart=always
 RestartSec=5
 
