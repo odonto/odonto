@@ -67,7 +67,7 @@ cp /home/ohc/odonto/deployment/config/gunicorn.conf \
    /home/ohc/odonto/deployment/config/gunicorn_conf.py \
    /home/ohc/odonto/deployment/config/nginx_site.conf \
    /home/ohc/odonto/deployment/config/circusd.ini \
-   /home/ohc/odonto/deployment/config/circus.conf /usr/lib/ohc/etc/
+   /home/ohc/odonto/deployment/config/circus.service /usr/lib/ohc/etc/
 
 . /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv -a /usr/lib/ohc/odonto odonto
 
