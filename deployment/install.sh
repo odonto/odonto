@@ -114,8 +114,10 @@ sudo service nginx restart
 # Configure Circus
 #
 sudo rm -f /etc/circus/circusd.ini
+sudo rm -f /etc/systemd/system/circus.service
 sudo mkdir -p /etc/circus
 sudo ln -s /usr/lib/ohc/etc/circusd.ini /etc/circus/circusd.ini
 sudo ln -s /usr/lib/ohc/etc/circus.service /etc/systemd/system/circus.service
 sudo systemctl daemon-reload
+sudo systemctl circus enable
 sudo service circus restart
