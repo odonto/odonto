@@ -91,6 +91,7 @@ sudo apt-get install -y \
      libxml2-dev \
      libxslt-dev
 
+/home/ohc/.virtualenvs/odonto/bin/pip install -U setuptools
 /home/ohc/.virtualenvs/odonto/bin/pip install -r /usr/lib/ohc/odonto/requirements.txt
 
 #
