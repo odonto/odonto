@@ -50,7 +50,7 @@ cp /home/ohc/odonto/deployment/config/pip.conf ~/.config/pip/
 #
 rm -rf /home/ohc/.pyenv
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-/home/ohc/.pyenv/bin/pyenv install 3.8.11
+/home/ohc/.pyenv/bin/pyenv install 3.8.18
 
 #
 # Setup application
