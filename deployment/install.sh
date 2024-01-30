@@ -46,6 +46,13 @@ mkdir -p ~/.config/pip
 cp /home/ohc/odonto/deployment/config/pip.conf ~/.config/pip/
 
 #
+# Setup Python
+#
+rm -rf /home/ohc/.pyenv
+git clone --branch v20160726 https://github.com/pyenv/pyenv.git ~/.pyenv
+/home/ohc/.pyenv/bin/pyenv install 3.8.18
+
+#
 # Setup application
 #
 sudo mkdir -p /usr/lib/ohc
@@ -69,7 +76,11 @@ cp /home/ohc/odonto/deployment/config/gunicorn.conf \
    /home/ohc/odonto/deployment/config/circusd.ini \
    /home/ohc/odonto/deployment/config/circus.service /usr/lib/ohc/etc/
 
-. /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv -a /usr/lib/ohc/odonto odonto
+sudo rm -rf /home/ohc/.virtualenvs/odonto
+. /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv \
+                                                           -a /usr/lib/ohc/odonto \
+                                                           -p /home/ohc/.pyenv/3.8.18/bin/python \
+                                                           odonto
 
 cp /home/ohc/odonto/deployment/config/local_settings.py /usr/lib/ohc/odonto/odonto/
 
