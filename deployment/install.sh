@@ -79,7 +79,7 @@ cp /home/ohc/odonto/deployment/config/gunicorn.conf \
 sudo rm -rf /home/ohc/.virtualenvs/odonto
 . /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv \
                                                            -a /usr/lib/ohc/odonto \
-                                                           -p /home/ohc/.pyenv/3.8.18/bin/python \
+                                                           -p /home/ohc/.pyenv/versions/3.8.18/bin/python \
                                                            odonto
 
 cp /home/ohc/odonto/deployment/config/local_settings.py /usr/lib/ohc/odonto/odonto/
