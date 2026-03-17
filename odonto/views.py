@@ -118,6 +118,8 @@ class AllOpenFP17s(AllUnsubmitted):
             fp17incompletetreatment__completion_or_last_visit=None)
         return qs
 
+    def unsubmitted_by_user_and_range(self, unsubmitted):
+        return {}
 
 
 
