@@ -17,6 +17,11 @@ urlpatterns = [
     url('^all-unsubmitted',
         views.AllUnsubmitted.as_view(),
         name='odonto-all-unsubmitted'),
+
+    url('^all-open',
+        views.AllOpen.as_view(),
+        name='odonto-all-open'),
+
     url('^open-fp17s',
         views.OpenFP17s.as_view(),
         name='odonto-open-fp17s'),

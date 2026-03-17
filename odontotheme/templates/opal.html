@@ -42,6 +42,11 @@
                 All unsubmitted <span class="badge hidden-md hidden-lg">{{ episode_counts.all_unsubmitted }}</span>
               </a>
             </li>
+            <li {% if request.resolver_match.url_name == "odonto-all-open" %}class="active"{% endif %}>
+              <a href="{% url 'odonto-all-open' %}">
+                All open <span class="badge hidden-md hidden-lg"></span>
+              </a>
+            </li>
             <li {% if request.resolver_match.url_name == "patient-charges" %}class="active"{% endif %}>
               <a href="{% url 'patient-charges' year=current_year month=current_month %}">
                 Patient charges

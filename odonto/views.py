@@ -106,7 +106,19 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
         ctx["performer_to_period_to_count"] = self.unsubmitted_by_user_and_range(
             ctx["unsubmitted"]
         )
+        ctx['title'] = "All unsubmitted FP17s and FP17Os"
         return ctx
+
+
+class AllOpenFP17s(AllUnsubmitted):
+
+    def get_unsubmitted(self):
+        qs = Episode.objects.filter(
+            stage="Open", category_name="FP17",
+            fp17incompletetreatment__completion_or_last_visit=None)
+        return qs
+
+
 
 
 class UnsubmittedFP17s(LoginRequiredMixin, TemplateView):
