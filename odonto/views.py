@@ -107,6 +107,7 @@ class AllUnsubmitted(LoginRequiredMixin, TemplateView):
             ctx["unsubmitted"]
         )
         ctx['title'] = "All unsubmitted FP17s and FP17Os"
+        ctx['summary'] = True
         return ctx
 
 

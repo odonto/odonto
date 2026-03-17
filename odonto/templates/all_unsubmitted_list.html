@@ -3,6 +3,8 @@
 {% block odonto_viewport %}
   <div class="content-offset">
     <h2>{{title }}</h2>
+    {% if summary %}
+
     <table class="table table-striped">
       <thead>
         <tr>
@@ -48,6 +50,7 @@
         {% endfor %}
       </tbody>
     </table>
+    {% endif %}
 
     <table class="table table-striped content-offset">
       <thead>
